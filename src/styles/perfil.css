@@ -1,0 +1,68 @@
+.contenedor-informacion-adicional {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.contenedor-informacion-interna {
+    width: 495px;
+    height: 436px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.head-informacion-acional {
+    width: 455px;
+    height: 50px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.head-informacion-acional h1 {
+    font-family: 'Poppins';
+    font-size: 20px;
+}
+
+.cuerpo-informacion-adicional {
+    width: 455px;
+    height: 300px;
+    max-height: 300px;
+    overflow-y: scroll;
+    margin-top: 10px;
+    background-color: white;
+}
+
+.tarjeta-informacion-adicional img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 100%;
+}
+
+.tarjeta-informacion-cuerpo h1{
+    font-family: 'Poppins';
+    font-size: 14px;
+}
+.tarjeta-informacion-cuerpo p{
+    font-family: 'Poppins';
+    font-size: 10px;
+}
+
+.tarjeta-informacion-fecha p{
+    font-family: 'Poppins';
+    font-size: 10px;
+}
+
+.tarjeta-informacion-adicional{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid black;
+}

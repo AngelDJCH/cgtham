@@ -1,0 +1,45 @@
+.cta {
+    background-color: #F5F3E7;
+    width: 100%;
+    height: 430px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.cta h1 {
+    font-family: 'Poppins';
+    font-size: 54px;
+    color: #41431B;
+    margin: 0;
+    padding: 0;
+}
+
+.cta h5 {
+    font-family: 'Poppins';
+    font-size: 28px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.cta button {
+    color: white;
+    border: none;
+    background-color: #FFD400;
+    width: 200px;
+    height: 60px;
+    font-family: 'Poppins';
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.cta button:hover {
+    transform: scale(1.1);
+    background-color: transparent;
+    color: #FFD400;
+    border: 2px solid #FFD400;
+}

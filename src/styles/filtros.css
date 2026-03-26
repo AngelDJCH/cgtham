@@ -1,0 +1,44 @@
+.filtro-contenedor{
+    margin-top: 100px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-family: 'Poppins';
+}
+
+.filtro-contenedor h1{
+    font-size: 40px;
+}
+
+.filtro-contenedor input{
+    width: 450px;
+    height: 50px;
+}
+
+.filtro-contenedor select{
+    width: 152px;
+    height: 50px;
+    background-color: #41431B;
+    color: white;
+}
+
+.filtro-contenedor .accion{
+    width: 152px;
+    height: 50px;
+    cursor: pointer;
+    background-color: #F5F3E7;
+}
+
+.filtro-contenedor input, select, .accion{
+    border-radius: 10px;
+    border: none;
+    font-family: 'Poppins';
+    font-size: 12px;
+    text-align: center;
+}
+
+.filtro-contenedor .accion:hover{
+    background-color: transparent;
+    border: 1px solid #41431B;
+    color: #41431B
+}

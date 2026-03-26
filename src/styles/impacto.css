@@ -1,0 +1,62 @@
+.impacto .etiqueta {
+    font-family: 'Poppins';
+    font-size: 20px;
+    padding: 0;
+    margin: 0;
+    color: #41431B;
+    display: flex;
+    justify-content: start;
+    margin-left: 2rem;
+}
+
+.impacto .subtitulo {
+    font-family: 'Poppins';
+    font-size: 28px;
+    text-align: center;
+}
+
+.impacto{
+    width: 100%;
+    height: auto;
+    background-color: #F5F3E7;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+.impacto-contenedor{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.icono{
+    width: 30px;
+    height: 30px;
+}
+
+.contenedor-li{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+
+.estadisticas-contenedor{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+}
+
+.estadisticas-contenedor ul{
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.video-contenedor video{
+    width: 100%;
+    height: 350px;
+}

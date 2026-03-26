@@ -1,0 +1,56 @@
+.hero {
+    width: 100%;
+    height: 100vh;
+    background-image: url('https://escapadas.mexicodesconocido.com.mx/wp-content/uploads/2020/10/Pico-de-Orizaba-17_MG.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    font-family: 'Poppins';
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap : 2rem
+}
+
+.hero .informacion h1 {
+    font-size: 64px;
+    margin: 0;
+    padding: 0;
+}
+
+.informacion {
+    color: white;
+    text-align: center;
+}
+
+.informacion p {
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.hero button {
+    color: white;
+    border: none;
+    background-color: #FFD400;
+    width: 200px;
+    height: 60px;
+    font-family: 'Poppins';
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.hero button:hover{
+    transform: scale(1.1);
+    background-color: transparent;
+    color: #FFD400;
+    border: 2px solid #FFD400;
+}
+
+.hero-estadisticas-contenedor{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

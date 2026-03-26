@@ -1,0 +1,84 @@
+.boton-accion {
+    background-color: #FFD400;
+    border: none;
+    width: 100px;
+    height: 50px;
+    border-radius: 10px;
+    color: #FFFF;
+    font-family: 'Poppins';
+    font-size: 14px;
+}
+
+body {
+    background-color: #AEB784;
+}
+
+.overllay {
+    position: fixed;
+    inset: 0;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    opacity: 0.5;
+}
+
+.overllay-contenedor {
+    position: fixed;
+    inset: 0;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.titulo-ventana{
+    text-align: center;
+}
+
+.contenedor-interno-ventana{
+    width: 50%;
+    height: auto;
+    background-color: #AEB784;
+    border-radius: 10px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.lista-informacion{
+    width: 80%;
+    text-align: justify;
+}
+
+.boton-ventana{
+    width: 100px;
+    height: 30px;
+    font-family: 'Poppins';
+    font-size: 16px;
+    color: white;
+    background-color: #41431B;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.boton-ventana:hover{
+    border: 1px solid #41431B;
+    color: #41431B;
+    background-color: transparent;
+}
+
+.descripcion-ventana{
+    text-align: justify;
+    width: 80%;
+}

@@ -1,0 +1,124 @@
+.contenedor-autenticacion{
+    margin-top: 100px;
+    width: 70%;
+    height: 450px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+}
+
+.autenticacion{
+    width: 100%;
+    height: 100vh;
+    background-color: #E3DBBB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.autenticacion-seccion2{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.autenticacion-seccion1{
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    object-fit: cover;
+}
+
+.autenticacion-seccion1 img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    
+}
+
+.a-titulo{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: 'Poppins';
+    font-size: 20px;
+}
+
+.a-inputs{
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.a-inputs input{
+    width: 15rem;
+    height: 1.4rem;
+    border: none;
+    border-bottom: 1px solid #FFD400;
+}
+
+.a-registros{
+    text-align: center;
+    font-family: 'Poppins';
+    font-size: 12px;
+}
+
+.a-botones{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.a-botones button{
+    width: 100px;
+    height: 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.a-botones .btn1{
+    background-color: #AEB784;
+}
+
+.a-botones .btn2{
+    background-color: #FFD400;
+}
+
+.btn1:hover{
+    color: #AEB784;
+    background-color: transparent;
+    border: 1px solid #AEB784;
+}
+
+.btn2:hover{
+    color: #FFD400;
+    background-color: transparent;
+    border: 1px solid #FFD400;
+}
+
+.contenedor-seccion1{
+    width: 100%;
+    height: 20%;
+}
+
+.contenedor-seccion2{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 80%;
+}
+
+.contenedor-seccion2-1{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
