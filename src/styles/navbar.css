@@ -49,6 +49,7 @@
 
 .seccion2 .opciones:hover {
     border-bottom: 3px solid #FFD400;
+    transition: all 0.3s ease;
 }
 
 .seccion2 button {
@@ -79,7 +80,7 @@
     right: 50px;
     top: 100px;
     background-color: #E3DBBB;
-    width: 100px;
+    width: auto;
     height: auto;
     border-radius: 10px;
 }

@@ -2,77 +2,81 @@ import { useEffect, useState } from "react";
 import NavBarAutenticado from "../components/NavBarAutenticado";
 import '../styles/mensajes.css'
 import ListaUsuarios from "../components/ListaUsuarios";
+import { getOrganizacion } from "../services/Organizacion";
+import { useAuth } from "../hooks/useAuth";
+import { findAllMensajesChat } from "../services/Mensajes";
+import { io } from "socket.io-client";
 
 export default function Mensajes() {
 
+    const socket = io('http://localhost:3040', {
+        transports : ['websocket']
+    })
+
     const [mensaje, setMensaje] = useState('')
+
+    const {user} = useAuth()
+
+    const [roomActual, setRoomActual] = useState('')
 
     let count = 0
 
     const [mensajes, setMensajes] = useState(
         [
-            {
-                id: 1,
-                contenido: 'Escribe un mensaje'
-            },
-            {
-                id: 1,
-                contenido: 'Escribe un mensaje'
-            },
-            {
-                id: 1,
-                contenido: 'Escribe un mensaje'
-            },
-            {
-                id: 1,
-                contenido: 'Escribe un mensaje'
-            },
-            {
-                id: 1,
-                contenido: 'Escribe un mensaje'
-            },
-            {
-                id: 1,
-                contenido: 'Escribe un mensaje'
-            },
-            {
-                id: 1,
-                contenido: 'Escribe un mensaje'
-            },
-            {
-                id: 1,
-                contenido: 'Escribe un mensaje'
-            },
-            {
-                id: 1,
-                contenido: 'Escribe un mensaje'
-            }
         ]
     )
 
+    const hanldeJoinRoom = async (rom1,rom2) => {
+        console.log(rom1, rom2)
+        socket.emit('join', {id_emisor: rom1, id_receptor:rom2})
+    }
+
+    const [organizacion, setOrganizacion] = useState(null)
+
     const [usuarioActivo, setUsuarioActivo] = useState(null)
+
+    useEffect(()=>{
+        socket.on('connect', ()=>{
+            console.log('El id del socket es: ',socket.id)
+            // hanldeJoinRoom()
+        })
+
+        socket.on('disconnect', ()=>{
+            console.log('El usuario se desconecto')
+        })
+    }, [])
+
+    useEffect(()=>{
+        const getOrganizacionById = async () => {
+            const data = await getOrganizacion(usuarioActivo)
+            setOrganizacion(data)
+            const mensajesData = await findAllMensajesChat(user.organizacion, usuarioActivo)
+            setMensajes(mensajesData)
+            hanldeJoinRoom(usuarioActivo, user.organizacion)
+        }
+        getOrganizacionById()
+    },[usuarioActivo])
 
 
     return (
         <div style={{ marginTop: '100px' }}>
             <NavBarAutenticado />
 
-            <ListaUsuarios left='10px' right='0' selectUsuario={(usuario)=>setUsuarioActivo(usuario)}/>
+            <ListaUsuarios mensaje={true} left='10px' right='0' selectUsuario={setUsuarioActivo}/>
 
             {usuarioActivo && (
                 <div className="mensaje-contenedor" style={{ display: 'flex', justifyContent: 'end' }}>
                     <div style={{ width: '990px', marginRight: '50px', backgroundColor: 'white', borderRadius: '10px' }}>
                         <div className="encabezado-mensajes">
-                            <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="imagen" />
-                            <h1>{usuarioActivo}</h1>
+                            <img src={organizacion?.logo} alt="imagen" />
+                            <h1>{user.organizacion === organizacion?.id ? `${organizacion?.nombre_comercial} (YO)` : `${organizacion?.nombre_comercial}`}</h1>
                         </div>
                         <div className="cuerpo-mensajes">
                             {
-                                mensajes.map(
+                                mensajes?.map(
                                     mensaje => {
-                                        count++
-                                        return <div style={{ display: 'flex', justifyContent: count % 2 == 0 ? 'end' : 'start', padding: '1rem' }}>
-                                            <p style={{ width: '200px', backgroundColor: count % 2 == 0 ? 'black' : 'red', color: 'white' }}>{mensaje.contenido}</p>
+                                        return <div style={{ display: 'flex', justifyContent: mensaje.id_emisor === user.organizacion  ? 'end' : 'start', padding: '1rem', minWidth:'100px', maxHeight:'300px', minHeight:'50px', maxHeight:'100px' }}>
+                                            <p style={{width:'100%',height:'100%',padding:'1rem',backgroundColor: mensaje.id_emisor === user.organizacion  ? '#AEB784' : '#41431B', color: 'white' }}>{mensaje.contenido}</p>
                                         </div>
                                     }
                                 )

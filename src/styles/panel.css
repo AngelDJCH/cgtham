@@ -1,0 +1,4 @@
+.tarjeta-panel:hover{
+    transform: translateY(-10px);
+    animation: all 0.5s ease;
+}

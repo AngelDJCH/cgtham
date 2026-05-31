@@ -6,24 +6,25 @@ import { getUsersCounts } from '../services/Usuario'
 import { getOrganizacionesCounts } from '../services/Organizacion'
 import { getConveniosCounts } from '../services/Convenio'
 import { useNavigate } from 'react-router-dom'
+import { getOfertasCounts } from '../services/OfertaLaboral'
 
 export default function Hero() {
-    const titulo = 'TRANSFORMA TU FUTURO'
-    const informacion = 'Plataforma que conecta estudiantes con residencias profesionales y empresas de la región.'
+    const titulo = 'TRANSFORMA EL FUTURO'
+    const informacion = 'Plataforma que conecta a empresas de la región de las altas montañas.'
 
     const [openObjetivos, setOpenObjetivos] = useState(false)
     const [openTour, setOpenTour] = useState(false)
 
-    const [countUsers, setCountUsers] = useState(0)
+    const [countEmpleos, setCountEmpleos] = useState(0)
     const [countOrganizaciones, setCountOrganizaciones] = useState(0)
     const [countConvenios, setCountConvenios] = useState(0)
 
     const navigate = useNavigate()
 
-    useEffect(()=>{
+    useEffect(() => {
         const getUsersCount = async () => {
-            const res = await getUsersCounts()
-            setCountUsers(res)
+            const res = await getOfertasCounts()
+            setCountEmpleos(res)
         }
 
         const getOrganizacionesCount = async () => {
@@ -39,7 +40,7 @@ export default function Hero() {
         getUsersCount()
         getOrganizacionesCount()
         getConveniosCount()
-    },[])
+    }, [])
 
     return (
         <div className="hero" id='inicio'>
@@ -60,16 +61,16 @@ export default function Hero() {
 
                 >TOUR</button>
                 <button
-                
-                    onClick={()=>{navigate('/login')}}
+
+                    onClick={() => { navigate('/login') }}
 
                 >UNIRME</button>
             </div>
 
             <div className='hero-estadisticas-contenedor'>
                 <div className='estadistica-li'>
-                    <h6>{countUsers}</h6>
-                    <p>Usuarios</p>
+                    <h6>{countEmpleos}</h6>
+                    <p>Empleos</p>
                 </div>
 
                 <div className='estadistica-li'>

@@ -11,7 +11,7 @@ export default function Cta(){
             <h5>¿Listo/a para ser parte de la transformación?</h5>
             <button
             
-             onClick={() => { navigate('/register') }}
+             onClick={() => { navigate('/register_org') }}
             
             >REGISTRARME</button>
         </div>

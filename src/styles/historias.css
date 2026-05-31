@@ -51,7 +51,6 @@
 .tabla-contenedor {
     width: 1000px;
     height: 427px;
-    max-height: 427px;
     overflow-x: scroll;
     overflow-y: scroll;
 }
@@ -76,4 +75,66 @@
     width: 80px;
     height: 80px;
     border-radius: 100%;
+}
+
+.comentarios-contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    flex-wrap: wrap-reverse;
+}
+
+.comentario-tarjeta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    height: 100%;
+    padding: 2rem;
+}
+
+.comentario-imagen-contenedor {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+.comentario-imagen-contenedor img {
+    width: 100px;
+    height: 110px;
+    object-fit: cover;
+    box-shadow: -8px -1px 7px -1px rgba(65, 67, 27, 0.55);
+    -webkit-box-shadow: -8px -1px 7px -1px rgba(65, 67, 27, 0.55);
+    -moz-box-shadow: -8px -1px 7px -1px rgba(65, 67, 27, 0.55);
+    ;
+    background-color: white;
+}
+
+.comentario-tarjeta h1 {
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+    font-family: 'Poppins';
+    font-weight: 10px;
+}
+
+.comentario-tarjeta h6 {
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+    font-family: 'Poppins';
+}
+
+.comentario-tarjeta p {
+    text-align: justify;
+    font-family: 'Poppins';
+    font-size: 12px;
+}
+
+.comentario-informacion-contenedor {
+    background-color: white;
+    padding: 1rem;
 }

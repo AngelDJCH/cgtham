@@ -1,0 +1,31 @@
+.btn-accion-2{
+    width: 100px;
+    height: 30px;
+    background-color: #FFD400;
+    border: none;
+    color: #41431B;
+    font-family: 'Poppins';
+    cursor: pointer;
+}
+
+.btn-accion-2:hover{
+    scale: 1.1;
+    color: white;
+    transition: all 0.2s ease;
+}
+
+.btn-accion-cancelar-1{
+    width: 100px;
+    height: 30px;
+    background-color: #ff0000;
+    border: none;
+    color: #41431B;
+    font-family: 'Poppins';
+    cursor: pointer;
+}
+
+.btn-accion-cancelar-1:hover{
+    scale: 1.1;
+    color: white;
+    transition: all 0.2s ease;
+}

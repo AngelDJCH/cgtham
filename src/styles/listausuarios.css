@@ -17,33 +17,58 @@
     justify-content: space-between;
 }
 
-.usuario-contenedor img {
+.usuario-contenedor p:hover {
+    scale: 1.001;
+    color: blue
+}
+
+.logo-organizacion-contenedor {
     width: 40px;
     height: 40px;
+}
+
+.logo-organizacion-contenedor img{
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     border-radius: 100%;
 }
 
 .lista {
     width: 1005;
     max-height: 90%;
-    overflow-y: scroll;
     background-color: white;
     border-radius: 10px;
 }
 
-.buscador{
+.lista:hover {
+    overflow-y: hidden;
+}
+
+.buscador {
     display: flex;
     justify-content: center;
 }
 
-.buscador input{
+.buscador input {
     width: 100%;
     height: 20px;
     border-radius: 10px;
     border: 1px solid white;
 }
 
-.listausuarios .icono{
+.listausuarios .icono {
     width: 20px;
     height: 20px;
+}
+
+.titulos-lista{
+    list-style: none;
+    width: 100%;
+    text-align: center;
+    font-family: 'Poppins';
+    font-size: 12px;
+    font-weight: 20px;
 }

@@ -9,9 +9,10 @@ export default function Configuracion(props) {
 
             </div>
 
-            <div className='configuracion-contenedor'>
+            <div className='overllay-contenedor'>
+                <div className='configuracion-contenedor'>
                 <div className='configuracion-contenedor-cuerpo'>
-                    <div>
+                    <div style={{inset:0}}>
                         <h1>Modo:</h1>
                         <ul style={{height:'auto'}} className='lista-opciones-configuracion'>
                             <li style={{backgroundColor:'black', color:'white'}} className='l-o-c-boton'>Oscuro</li>
@@ -24,6 +25,7 @@ export default function Configuracion(props) {
                         </ul>
                     </div>
                 </div>
+            </div>
             </div>
 
         </div>

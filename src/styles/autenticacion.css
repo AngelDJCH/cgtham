@@ -47,6 +47,7 @@
     text-align: center;
     font-family: 'Poppins';
     font-size: 20px;
+    color: #41431B;
 }
 
 .a-inputs{
@@ -66,6 +67,11 @@
     text-align: center;
     font-family: 'Poppins';
     font-size: 12px;
+}
+
+.a-registros p:hover{
+    color: #41431B;
+    scale: 1.1;
 }
 
 .a-botones{
@@ -106,7 +112,14 @@
 
 .contenedor-seccion1{
     width: 100%;
-    height: 20%;
+    height: 125px;
+}
+
+.contenedor-seccion1 img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .contenedor-seccion2{
@@ -117,8 +130,97 @@
     height: 80%;
 }
 
+.contenedor-seccion2 img{
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
+}
+
 .contenedor-seccion2-1{
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.datos{
+    font-family: 'Poppins';
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.datos input{
+    background-color: #E3DBBB;
+    border: none;
+    width: 200px;
+    height: 20px;
+    border-radius: 5px;
+}
+
+.datos h1{
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+}
+
+.contenedor-input{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contenedor-input-doble{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.contenedor-botones-accion{
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    height: 100px;
+    align-items: center;
+    gap: 1rem;
+    margin-right: 1rem;
+}
+
+.contenedor-botones-accion button{
+    font-family: 'Poppins';
+    border: none;
+    width: 150px;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.contenedor-botones-accion button:hover{
+    scale: 1.1;
+}
+
+.btn-regresar{
+    background-color: #AEB784;
+}
+
+.btn-regresar:hover{
+    background-color: transparent;
+    border: 1px solid #AEB784;
+}
+
+.btn-limpiar{
+    background-color: #e7e7e7;
+}
+
+.btn-limpiar:hover{
+    background-color: transparent;
+    border: 1px solid #e7e7e7;
+}
+
+.btn-registrar{
+    background-color: #FFD400;
+}
+
+.btn-registrar:hover{
+    background-color: transparent;
+    border: 1px solid #FFD400;
 }

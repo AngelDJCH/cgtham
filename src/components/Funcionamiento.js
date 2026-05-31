@@ -13,44 +13,14 @@ export default function Funcionamiento() {
             </div>
             <div className='funcionamiento-contenedor'>
                 <div className='funcionamiento-tarjeta'>
-                    <h6>Usuarios</h6>
-                    <div>
-                        <ol>
-                            <li>
-                                Crea tu cuenta
-                            </li>
-                            <li>
-                                Espera que tu organiación valide tu cuenta
-                            </li>
-                            <li>
-                                Empieza a transformar tu futuro
-                            </li>
-                        </ol>
-                    </div>
-                    <div className='funcionamiento-tarjeta-boton-contendor'>
-                        <button
-
-                            onClick={() => { navigate('/register') }}
-
-                        >
-                            REGISTRARME
-                        </button>
-                    </div>
-                </div>
-
-                <div className='roles-imagen'>
-                    <img src={imagenRoles} alt="imagenRoles" />
-                </div>
-
-                <div className='funcionamiento-tarjeta'>
                     <h6>Organizaciones</h6>
                     <div>
                         <ol>
                             <li>
-                                Ingresa los datos de tu organización
+                                Da click a "registrarme"
                             </li>
                             <li>
-                                Crea la cuenta del administrador
+                                Ingresa los datos de tu organización
                             </li>
                             <li>
                                 Espera la validación del sistema
@@ -66,7 +36,40 @@ export default function Funcionamiento() {
                             onClick={() => { navigate('/register_org') }}
 
                         >
-                            REGISTRAR
+                            REGISTRARME
+                        </button>
+                    </div>
+                </div>
+
+                <div className='roles-imagen'>
+                    <img src={imagenRoles} alt="imagenRoles" />
+                </div>
+
+                <div className='funcionamiento-tarjeta'>
+                    <h6>Administrador</h6>
+                    <div>
+                        <ol>
+                            <li>
+                                Ingresa con tu correo y contraseña
+                            </li>
+                            <li>
+                                Accede a los apartados de navegación
+                            </li>
+                            <li>
+                                Administra el sistema
+                            </li>
+                            <li>
+                                Transforma el futuro
+                            </li>
+                        </ol>
+                    </div>
+                    <div className='funcionamiento-tarjeta-boton-contendor'>
+                        <button
+
+                            onClick={() => { navigate('/login') }}
+
+                        >
+                            INGRESAR
                         </button>
                     </div>
                 </div>

@@ -1,0 +1,19 @@
+.btn-editar{
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+    border: none;
+    background-color: #AEB784;
+    cursor: pointer;
+}
+
+.btn-editar:hover{
+    border: 1px solid #AEB784;
+    background-color: transparent;
+    scale: 1.1;
+}
+
+
+.tarjeta-datos-oferta:hover{
+    scale: 1.1;
+}

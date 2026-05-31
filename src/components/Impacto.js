@@ -3,11 +3,12 @@ import '../styles/impacto.css'
 import { getUsersCounts } from "../services/Usuario"
 import { getOfertasCounts } from "../services/OfertaLaboral"
 import { getEventosCounts } from "../services/Evento"
+import { getOrganizacionesCounts } from "../services/Organizacion"
 
 export default function Impacto() {
     const video = 'cgtham.mp4'
 
-    const [usuarios, setUsuarios] = useState(0)
+    const [organizaciones, setOrganizaciones] = useState(0)
     const [empleos, setEmpleos] = useState(0)
     const [eventos, setEventos] = useState(0)
 
@@ -17,8 +18,8 @@ export default function Impacto() {
 
     useEffect(() => {
         const getUsuariosCount = async () => {
-            const res = await getUsersCounts()
-            setUsuarios(res)
+            const res = await getOrganizacionesCounts()
+            setOrganizaciones(res)
         }
 
         const getOfertasCount = async () => {
@@ -55,8 +56,8 @@ export default function Impacto() {
                         <li className="contenedor-li">
                             <img className="icono" src={imagenUsuarios} alt="logo1" />
                             <p>
-                                <strong>{`${usuarios}+ `}</strong>
-                                Usuarios activos
+                                <strong>{`${organizaciones}+ `}</strong>
+                                Organizaciones activas
                             </p>
                         </li>
                         <li className="contenedor-li">

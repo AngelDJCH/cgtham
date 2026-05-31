@@ -26,8 +26,8 @@ body {
 }
 
 .overllay-contenedor {
-    position: fixed;
-    inset: 0;
+    position: fixed !important;
+    inset: 0 !important;
     top: 0;
     left: 0;
     z-index: 999;
@@ -39,11 +39,11 @@ body {
     align-items: center;
 }
 
-.titulo-ventana{
+.titulo-ventana {
     text-align: center;
 }
 
-.contenedor-interno-ventana{
+.contenedor-interno-ventana {
     width: 50%;
     height: auto;
     background-color: #AEB784;
@@ -55,12 +55,12 @@ body {
     align-items: center;
 }
 
-.lista-informacion{
+.lista-informacion {
     width: 80%;
     text-align: justify;
 }
 
-.boton-ventana{
+.boton-ventana {
     width: 100px;
     height: 30px;
     font-family: 'Poppins';
@@ -72,13 +72,45 @@ body {
     border-radius: 10px;
 }
 
-.boton-ventana:hover{
+.boton-ventana:hover {
     border: 1px solid #41431B;
     color: #41431B;
     background-color: transparent;
 }
 
-.descripcion-ventana{
+.descripcion-ventana {
     text-align: justify;
     width: 80%;
+}
+
+.btn-accion {
+    color: white;
+    border: none;
+    background-color: #FFD400;
+    width: 200px;
+    height: 60px;
+    font-family: 'Poppins';
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-accion:hover {
+    transform: scale(1.1);
+    background-color: transparent;
+    color: #FFD400;
+    border: 2px solid #FFD400;
+}
+
+table tr td {
+    font-family: 'Fira Code';
+}
+
+table tr{
+        border-bottom: 1px solid black;
+    padding: 0.1rem;
+}
+
+::-webkit-scrollbar{
+    color: #41431B white;
 }

@@ -1,0 +1,31 @@
+.tarjeta-dato{
+    background-color: white;
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+    height: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px 5px 5px 5px;
+    font-family: 'Poppins';
+}
+
+body{
+    background-color: #AEB784 !important;
+}
+
+.tarjeta-dato:hover{
+    background-color: #41431B;
+    color: white;
+    transition: all 0.5s ease;
+}
+
+
+.tarjeta-dato h6{
+    margin: 0;
+    padding: 0;
+}

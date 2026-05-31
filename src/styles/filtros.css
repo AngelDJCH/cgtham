@@ -4,10 +4,15 @@
     justify-content: space-around;
     align-items: center;
     font-family: 'Poppins';
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .filtro-contenedor h1{
     font-size: 40px;
+    margin: 0;
+    padding: 0;
 }
 
 .filtro-contenedor input{
