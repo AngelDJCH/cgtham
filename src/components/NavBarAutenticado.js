@@ -18,22 +18,22 @@ export default function NavBarAutenticado() {
 
     const [logoOrganizacion, setLogo] = useState('')
 
-    const isMediumDevice = useMediaQuery("only screen and (max-width : 500px)")
+    const isMediumDevice = useMediaQuery("(max-width : 678px)")
 
-    useEffect(()=>{
+    useEffect(() => {
         const getLogo = async () => {
             const log = await getLogoByIdOrganizacion(user.organizacion)
             setLogo(log)
         }
 
         getLogo()
-    },[])
+    }, [])
 
     return (
         <div className="navbar">
             <div className="seccion1"
             >
-                <div style={{width:'50px', height:'50px'}}><img src={logo} alt="logo_cgtham" /></div>
+                <div style={{ width: '50px', height: '50px' }}><img src={logo} alt="logo_cgtham" /></div>
                 <h1>{nombre}</h1>
             </div>
             <div className="seccion2">
@@ -54,7 +54,7 @@ export default function NavBarAutenticado() {
 
                         ><a >Eventos</a></li>
                     )}
-                    {!isMediumDevice && user.tipo === 'Escuela' || user.tipo === 'Empresa' && (
+                    {/* {!isMediumDevice && user.tipo === 'Escuela' || user.tipo === 'Empresa' && (
                         <li
 
                             onClick={(e) => {
@@ -64,7 +64,7 @@ export default function NavBarAutenticado() {
                         >
                             <a>Ofertas Laborales</a>
                         </li>
-                    )}
+                    )} */}
                     {!isMediumDevice && user.rol.includes('ADMIN_SYS') && (
                         <li className='opciones'
 
@@ -101,15 +101,19 @@ export default function NavBarAutenticado() {
 
                         ><a >Comentarios</a></li>
                     )}
-                    <li
-                        onClick={() => {
-                            navigate(`/mensajes`)
-                        }}
-                    >
-                        <button className='btn-accion-2' style={{ width: '40px', height: '40px' }}>
-                            <img alt='Mensajes' src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0MTQzMUIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1tZXNzYWdlLWNpcmNsZS1pY29uIGx1Y2lkZS1tZXNzYWdlLWNpcmNsZSI+PHBhdGggZD0iTTIuOTkyIDE2LjM0MmEyIDIgMCAwIDEgLjA5NCAxLjE2N2wtMS4wNjUgMy4yOWExIDEgMCAwIDAgMS4yMzYgMS4xNjhsMy40MTMtLjk5OGEyIDIgMCAwIDEgMS4wOTkuMDkyIDEwIDEwIDAgMSAwLTQuNzc3LTQuNzE5Ii8+PC9zdmc+' />
-                        </button>
-                    </li>
+                    {
+                        !isMediumDevice && (
+                            <li
+                                onClick={() => {
+                                    navigate(`/mensajes`)
+                                }}
+                            >
+                                <button className='btn-accion-2' style={{ width: '40px', height: '40px' }}>
+                                    <img alt='Mensajes' src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0MTQzMUIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1tZXNzYWdlLWNpcmNsZS1pY29uIGx1Y2lkZS1tZXNzYWdlLWNpcmNsZSI+PHBhdGggZD0iTTIuOTkyIDE2LjM0MmEyIDIgMCAwIDEgLjA5NCAxLjE2N2wtMS4wNjUgMy4yOWExIDEgMCAwIDAgMS4yMzYgMS4xNjhsMy40MTMtLjk5OGEyIDIgMCAwIDEgMS4wOTkuMDkyIDEwIDEwIDAgMSAwLTQuNzc3LTQuNzE5Ii8+PC9zdmc+' />
+                                </button>
+                            </li>
+                        )
+                    }
                     <li>
                         <button
                             style={{ border: 'none', backgroundColor: 'transparent' }}

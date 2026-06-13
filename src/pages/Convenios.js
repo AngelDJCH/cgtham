@@ -152,7 +152,7 @@ export default function Convenios() {
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
-                            <div className="formulario-contenedor" style={{ height: isSmallDevice ? '100%' : null }}>
+                            <div className="formulario-contenedor" style={{ height: isSmallDevice ? '90%' : null }}>
                                 <div className="titulo-formulario"><h1>NUEVO CONVENIO</h1></div>
                                 <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
                                     <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
@@ -206,9 +206,13 @@ export default function Convenios() {
                                             <label htmlFor="documento" className="btn-accion-2" style={{ width: '50px', height: '30px' }}>
                                                 <strong>SUBIR</strong>
                                             </label>
-                                                                                                <button className="btn-accion-2"
+                                            {
+                                                isSmallDevice && (
+                                                    <button className="btn-accion-2"
                                                         onClick={() => { documento ? setOpenDocumento(true) : alert('DEBES SUBIR ALGUN DOCUMENTO') }}
                                                     ><strong>VER</strong></button>
+                                                )
+                                            }
                                         </div>
                                     </div>
                                     {
