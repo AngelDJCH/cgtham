@@ -7,10 +7,12 @@ import { getOrganizacionesCounts } from '../services/Organizacion'
 import { getConveniosCounts } from '../services/Convenio'
 import { useNavigate } from 'react-router-dom'
 import { getOfertasCounts } from '../services/OfertaLaboral'
+import { useMediaQuery } from '@uidotdev/usehooks'
 
 export default function Hero() {
     const titulo = 'TRANSFORMA EL FUTURO'
     const informacion = 'Plataforma que conecta a empresas de la región de las altas montañas.'
+    const isSmallDevice = useMediaQuery('(max-width:768px)');
 
     const [openObjetivos, setOpenObjetivos] = useState(false)
     const [openTour, setOpenTour] = useState(false)
@@ -43,7 +45,7 @@ export default function Hero() {
     }, [])
 
     return (
-        <div className="hero" id='inicio'>
+        <div className="hero" id='inicio' style={{paddingTop:isSmallDevice?'100px':'', height:isSmallDevice?'auto':''}}>
             <div className='informacion'>
                 <h1>{titulo}</h1>
                 <p>{informacion}</p>

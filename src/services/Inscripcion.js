@@ -6,15 +6,15 @@ export const createInscripcion = async (id_evento, id_organizacion) => {
         const day =  date.getDate()
         const year = date.getFullYear()
         const month = date.getMonth()
-        const inscripcion = await axiosInstance.post('/inscripciones/', {
+        const {status} = await axiosInstance.post('/inscripciones/', {
             estado: 'PENDIENTE',
-            fecha: `${year}-${month < 10 ? '0'+month : month}-${day}`,
+            fecha: `${year}-${month < 10 ? '0'+month : month}-${day < 10 ? '0'+day : day}`,
             id_evento: id_evento,
             id_organizacion: id_organizacion
         })
-        return inscripcion.data
+        return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }
 

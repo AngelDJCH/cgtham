@@ -45,12 +45,12 @@ function App() {
             </ProtectedRoute>
           }></Route>
           <Route path='/eventos' element={
-            <ProtectedRoute>
+            <ProtectedRoute redirectTo='/'>
               <Eventos />
             </ProtectedRoute>
           }></Route>
           <Route path='/ofertaslaborales' element={
-            <ProtectedRoute>
+            <ProtectedRoute redirectTo='/'>
               <OfertasLaborales />
             </ProtectedRoute>
           }></Route>

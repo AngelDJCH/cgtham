@@ -14,6 +14,7 @@ import { createEmpresa } from "../services/Empresa";
 import { createCamara } from "../services/Camara";
 import { createEscuela } from "../services/Escuela";
 import { uploadImg } from "../services/Upload";
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function AutenticacionPage() {
 
@@ -99,6 +100,8 @@ export default function AutenticacionPage() {
     const [openRegister, setOpenRegister] = useState(false)
 
     const [organizaciones, setOrganizaciones] = useState([])
+
+    const isSmallDevice = useMediaQuery('(max-width:768px)');
 
     const [datosPersonales, setDatosPersonales] = useState({
         nombre: '',
@@ -321,7 +324,7 @@ export default function AutenticacionPage() {
             {
 
                 openRegisterOrg && (
-                    <div className="contenedor-autenticacion" style={{ flexDirection: 'column', height: 'auto' }}>
+                    <div className="contenedor-autenticacion" style={{ flexDirection: 'column', height: 'auto', flexWrap:'wrap' }}>
                         <div className="contenedor-seccion1">
 
 
@@ -350,10 +353,10 @@ export default function AutenticacionPage() {
                                 )
                             }
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', flexWrap:'wrap', justifyContent:'center', alignItems:'center', width:'100%' }}>
 
-                            <div className="contenedor-seccion2">
-                                <div style={{ width: '20%', display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+                            <div className="contenedor-seccion2" style={{flexWrap:'wrap'}}>
+                                <div style={{ width: isSmallDevice ? '100%' : '20%', display: 'flex', justifyContent: 'center', marginTop: '1rem', flexWrap:'wrap' }}>
                                     <input type="file" accept=".png"
                                         id="upload-foto"
                                         style={{ display: 'none' }}
@@ -380,8 +383,8 @@ export default function AutenticacionPage() {
                                         )
                                     }
                                 </div>
-                                <div style={{ width: '80%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <div style={{ display: 'flex', width: '100%', justifyContent: 'space-around', marginTop: '2rem', flexWrap: 'wrap' }}>
+                                <div style={{ width: isSmallDevice ? '100%' : '80%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap:'wrap' }}>
+                                    <div style={{ display: 'flex', width: '100%', justifyContent: isSmallDevice ? 'center':'space-around', alignItems:isSmallDevice?'center':'', marginTop: '2rem', flexWrap: 'wrap', flexDirection:isSmallDevice?'column':'row' }}>
                                         <div className="datos">
                                             <h1>Datos Organización</h1>
                                             <div className="contenedor-input">
@@ -494,7 +497,7 @@ export default function AutenticacionPage() {
                                                 <input id="r_contrasenia" placeholder="Contraseña" onChange={(e) => { setDatosSeguridad({ ...datosSeguridad, contrasenia: e.target.value }) }} type="password" />
                                             </div>
                                         </div>
-                                        <div className="datos">
+                                        <div className="datos" style={{width:'200px'}}>
                                             <h1>Cloudinary</h1>
                                             <div style={{ display: 'flex', justifyContent: 'space-around', gap: '1rem', flexWrap: 'wrap' }}>
                                                 <input placeholder="CLOUD NAME" type="text" onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, cloud_name: e.target.value }) }} />
@@ -507,7 +510,7 @@ export default function AutenticacionPage() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="contenedor-botones-accion">
+                                <div className="contenedor-botones-accion" style={{display:'flex', flexDirection:isSmallDevice ? 'column' : 'row'}}>
                                     <button className="btn-regresar"
                                         onClick={() => { navigate(-1) }}
                                     >

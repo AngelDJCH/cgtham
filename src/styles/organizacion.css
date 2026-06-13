@@ -12,6 +12,8 @@
     align-items: center;
     border-radius: 5px 5px 5px 5px;
     font-family: 'Poppins';
+    overflow: scroll;
+    scrollbar-width: none;
 }
 
 body{

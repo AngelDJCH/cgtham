@@ -15,10 +15,12 @@ import '../styles/botones.css'
 import { getCloudDinary, updateCloudinaryByIdOrganizacion } from "../services/Cloudinary";
 import { uploadImgBanner, uploadImgLogo } from "../services/Upload";
 import { updateCuentaById, updateCuentaContraseniaById, updateCuentaCorreoById } from "../services/Cuenta";
-import { findAllByIdEscuela } from "../services/OfertaEducativa";
+import { createOfertaEducativa, findAllByIdEscuela } from "../services/OfertaEducativa";
 
 
 export default function Organizacion() {
+
+    const isSmallDevice = useMediaQuery('(max-width:768px)');
 
     const [sectores, setSectores] = useState([
         {
@@ -92,17 +94,14 @@ export default function Organizacion() {
     const [selectGiro, setSelectGiro] = useState('')
     const [ofertasEducativas, setOfertasEducativas] = useState([])
 
+    const [openCreateOfertaEducativa, setOpenCreateOfertaEducativa] = useState(false)
+
     const { id } = useParams()
     const [organizacion, setOrganizacion] = useState(null)
     const [contacto, setContacto] = useState(null)
     const [direccion, setDireccion] = useState(null)
     const [camara, setCarama] = useState(null)
-    const [empresa, setEmpresa] = useState({
-        id : '',
-        razon_social: '',
-        regimen_fiscal: '',
-        direccion_fiscal: ''
-    })
+    const [empresa, setEmpresa] = useState(null)
     const [escuela, setEscuela] = useState(null)
     const [cloudinary, setCloudinary] = useState(null)
 
@@ -112,6 +111,30 @@ export default function Organizacion() {
     const { user } = useAuth()
 
     const isMediumDevice = useMediaQuery("only screen and (max-width : 500px)")
+
+    const handleCreateOfertaEducativa = async () => {
+
+        const nombre = document.getElementById('nombre_oferta').value
+        const duracion = document.getElementById('duracion_oferta').value
+        const descripcion = document.getElementById('descripcion_oferta').value
+        const perfil = document.getElementById('perfil_oferta').value
+
+        const newOferta = await createOfertaEducativa({
+            nombre: nombre,
+            duracion: duracion,
+            descripcion: descripcion,
+            perfil: perfil,
+            id_escuela: user.organizacion
+        })
+        if (newOferta === 201) {
+            alert('SE PUBLICO LA OFERTA')
+        } else if (newOferta === 409) {
+            alert('OFERTA EDUCATIVA YA EXISTENTE')
+        } else {
+            alert('NO SE PUDO PUBLICAR LA OFERTA')
+        }
+    }
+
 
     const [oferta, setOferta] = useState({
         nombre: '',
@@ -207,6 +230,7 @@ export default function Organizacion() {
             })
             // if (datosCamara && datosCamara === 200) { alert('Datos actualizados correctamente') }
         }
+
         const datosContacto = await updateContactoById(contacto)
         // if(datosContacto && datosContacto === 200) {alert('Datos actualizados correctamente')}
         const contrasenia = document.getElementById('contrasenia').value
@@ -267,7 +291,9 @@ export default function Organizacion() {
             <NavBarAutenticado />
             {
                 !isMediumDevice && (
-                    <NavUser left='20px' />
+                    <div style={{ marginTop: '8rem' }}>
+                        <NavUser left='30px' />
+                    </div>
                 )
             }
             <div className="editar-perfil-contenedor" style={{ width: '100%' }}>
@@ -286,7 +312,7 @@ export default function Organizacion() {
                                 <label htmlFor="logo">
                                     <div style={{ width: '100%', height: '0px', transform: 'translateY(-70px)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1pbWFnZS11cC1pY29uIGx1Y2lkZS1pbWFnZS11cCI+PHBhdGggZD0iTTEwLjMgMjFINWEyIDIgMCAwIDEtMi0yVjVhMiAyIDAgMCAxIDItMmgxNGEyIDIgMCAwIDEgMiAydjEwbC0zLjEtMy4xYTIgMiAwIDAgMC0yLjgxNC4wMTRMNiAyMSIvPjxwYXRoIGQ9Im0xNCAxOS41IDMtMyAzIDMiLz48cGF0aCBkPSJNMTcgMjJ2LTUuNSIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PC9zdmc+"
-                                            style={{ position: 'absolute', display: 'flex', width: '40px', height: '40px' }}
+                                            style={{ position: 'absolute', display: 'flex', width: '40px', height: '40px', cursor: 'pointer' }}
                                         />
                                     </div>
                                 </label>
@@ -307,7 +333,7 @@ export default function Organizacion() {
                                 <label htmlFor="banner">
                                     <div style={{ width: '100%', height: '0px', transform: 'translateY(-70px)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1pbWFnZS11cC1pY29uIGx1Y2lkZS1pbWFnZS11cCI+PHBhdGggZD0iTTEwLjMgMjFINWEyIDIgMCAwIDEtMi0yVjVhMiAyIDAgMCAxIDItMmgxNGEyIDIgMCAwIDEgMiAydjEwbC0zLjEtMy4xYTIgMiAwIDAgMC0yLjgxNC4wMTRMNiAyMSIvPjxwYXRoIGQ9Im0xNCAxOS41IDMtMyAzIDMiLz48cGF0aCBkPSJNMTcgMjJ2LTUuNSIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PC9zdmc+"
-                                            style={{ position: 'absolute', display: 'flex', width: '40px', height: '40px' }}
+                                            style={{ position: 'absolute', display: 'flex', width: '40px', height: '40px', cursor: 'pointer' }}
                                         />
                                     </div>
                                 </label>
@@ -317,8 +343,8 @@ export default function Organizacion() {
                     <div className='contenedor-informacion-botones' >
                         <div className='informacion-contenedor'>
                             <h1 style={{ textAlign: isMediumDevice ? 'center' : null }}>{organizacion?.nombre_comercial}</h1>
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                <p style={{ minWidth: '500px', maxWidth: '500px', textAlign: 'justify' }}>{organizacion?.descripcion}</p>
+                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', width: '100%', justifyContent: 'center' }}>
+                                <p style={{ minWidth: '90%', maxWidth: '90%', textAlign: 'justify' }}>{organizacion?.descripcion}</p>
                             </div>
                         </div>
                     </div>
@@ -756,7 +782,7 @@ export default function Organizacion() {
                                  -> Perfil del egresado
                                 */
                             }
-                            <div style={{ display: 'flex', gap: '1rem', height: 'auto', padding: '0.9rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', height: 'auto', padding: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
                                 {
                                     ofertasEducativas.map(
                                         oferta =>
@@ -772,15 +798,17 @@ export default function Organizacion() {
                                                     </div>
                                                 </div>
 
-                                                <div>
-                                                    <h6 style={{ margin: 0 }}>Descripción:</h6>
-                                                    <textarea value={oferta?.descripcion} style={{ width: '97%', minWidth: '97%', maxWidth: '97%', height: '50px', minHeight: '50px', maxHeight: '50px', border: 'none' }} />
-                                                    <h6 style={{ margin: 0 }}>Duración:</h6>
-                                                    <p>{oferta?.duracion}</p>
-                                                </div>
-                                                <div>
-                                                    <h6 style={{ margin: 0 }}>Perfil egresado:</h6>
-                                                    <textarea value={oferta?.perfil} style={{ width: '97%', minWidth: '97%', maxWidth: '97%', height: '50px', minHeight: '50px', maxHeight: '50px', border: 'none' }} />
+                                                <div style={{ padding: '0.3rem' }}>
+                                                    <div>
+                                                        <h6 style={{ margin: 0 }}>Descripción:</h6>
+                                                        <textarea value={oferta?.descripcion} style={{ width: '97%', minWidth: '97%', maxWidth: '97%', height: '50px', minHeight: '50px', maxHeight: '50px', border: 'none' }} />
+                                                        <h6 style={{ margin: 0 }}>Duración:</h6>
+                                                        <p>{`${oferta?.duracion} años`}</p>
+                                                    </div>
+                                                    <div>
+                                                        <h6 style={{ margin: 0 }}>Perfil egresado:</h6>
+                                                        <textarea value={oferta?.perfil} style={{ width: '97%', minWidth: '97%', maxWidth: '97%', height: '50px', minHeight: '50px', maxHeight: '50px', border: 'none' }} />
+                                                    </div>
                                                 </div>
                                             </div>
                                     )
@@ -788,31 +816,130 @@ export default function Organizacion() {
                                 {
                                     user.tipo === 'Escuela' && organizacion?.id === user.organizacion && (
                                         <div>
-                                            <button className="btn-accion-2"><strong>AGREGAR</strong></button>
+                                            <button className="btn-accion-2"
+                                                onClick={() => {
+                                                    setOpenCreateOfertaEducativa(true)
+                                                }}
+                                            ><strong>AGREGAR</strong></button>
                                         </div>
                                     )
                                 }
-                                {/* <input id="foto_oferta" type="file" onChange={() => { }} style={{ display: 'none' }} /> */}
-                                {/* <label htmlFor="foto_oferta">
-                                    <img style={{}} />
-                                </label>
-                                <h6>Nombre</h6>
-                                <input type="text" style={{ width: '150px', height: '25px', borderRadius: '10px', border: 'none' }} />
-                                <h6>Descripción</h6>
-                                <textarea typeof="text" style={{ width: '150px', height: '100px', borderRadius: '10px', border: 'none' }} />
-                                <h6>Duración</h6>
-                                <input type="number" style={{ width: '50px', height: '25px', borderRadius: '10px', border: 'none' }} />
-                                <h6>Perfil del egresado:</h6>
-                                <textarea type="text" style={{ width: '150px', height: '100px', borderRadius: '10px', border: 'none' }} />
-                                <div>
-                                    <button className="btn-accion-cancelar-1">LIMPIAR</button>
-                                    <button className="btn-accion-2">GUARDAR</button>
-                                </div> */}
                             </div>
                         </div>
                     )
                 }
             </div>
+
+            {
+                openCreateOfertaEducativa && (
+                    <div>
+                        <div className="overllay"></div>
+                        <div className="overllay-contenedor">
+                            <div className="formulario-contenedor" style={{ height: isSmallDevice ? '100%' : null }}>
+                                <div className="titulo-formulario"><h1>NUEVO OFERTA EDUCATIVA</h1></div>
+                                <div className="formulario" style={{ width: isSmallDevice ? '100%' : null }}>
+                                    <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
+                                        <div className="contenedor-datos-interno">
+                                            <h6>Nombre:</h6>
+                                            <input placeholder="Nombre de la carrera o oferta educativa" id="nombre_oferta" />
+
+                                            <h6>Duración:</h6>
+                                            <input placeholder="Duración de la carrera o oferta educativa (años - Ejemplo: 4.5)" id="duracion_oferta" />
+
+                                            <h6>Descripción:</h6>
+                                            <textarea placeholder="Descripción de la carrera o oferta educativa" id="descripcion_oferta" />
+
+                                            <h6>Perfil del egresado:</h6>
+                                            <textarea placeholder="Perfil deñ egresado de la carrera o oferta educativa - Separados por ," id="perfil_oferta" />
+                                        </div>
+                                    </div>
+                                    {
+                                        !isSmallDevice && (
+                                            <div style={{ width: '250px', height: '100%' }}>
+                                                <p style={{ textAlign: 'justify' }}><strong>Nota: </strong>
+                                                    Una vez realizada publicada la oferta educativa, no se podran realizar modificaciones por el momento. Se recomienda revisar dicha oferta educativa antes de ser publicada.<br></br>
+                                                    En caso de presentar algún problema con el sistema o tener dudas, puedes reportarlo a <kbd><strong>cgtham@gmail.com</strong></kbd></p>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                                <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
+                                    <button className="btn-accion-cancelar-1"
+                                        onClick={() => { setOpenCreateOfertaEducativa(false) }}
+                                    >
+                                        <strong>
+                                            CERRAR
+                                        </strong>
+                                    </button>
+                                    <button
+                                        className="btn-accion-2"
+                                        onClick={() => { handleCreateOfertaEducativa() }}
+                                    >
+                                        <strong>
+                                            PUBLICAR
+                                        </strong>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    // <div>
+                    //     <div className="overllay"></div>
+                    //     <div className="overllay-contenedor">
+                    //         <div style={{ width: '650px', height: '350px', backgroundColor: 'white', borderRadius: '10px', padding: '0.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
+                    //             <div>
+                    //                 <h1 style={{ textAlign: 'center' }}>NUEVA OFERTA EDUCATIVA</h1>
+
+                    //                 <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                    //                     <div style={{ display: 'flex', width: '100%', justifyContent: 'space-evenly' }}>
+                    //                         <div>
+                    //                             <h6>Nombre:</h6>
+                    //                             <input placeholder="Nombre de la carrera o oferta educativa" id="nombre_oferta" />
+                    //                         </div>
+
+
+                    //                         <div>
+                    // <h6>Duración:</h6>
+                    // <input placeholder="Duración de la carrera o oferta educativa (años)" id="duracion_oferta" />
+                    //                         </div>
+                    //                     </div>
+
+                    //                     <div style={{ display: 'flex', width: '100%', justifyContent: 'space-evenly' }}>
+                    //                         <div>
+                    // <h6>Descripción:</h6>
+                    // <input placeholder="Descripción de la carrera o oferta educativa" id="descripcion_oferta" />
+                    //                         </div>
+                    //                         <div>
+                    // <h6>Perfil del egresado:</h6>
+                    // <input placeholder="Perfil deñ egresado de la carrera o oferta educativa" id="perfil_oferta" />
+                    //                         </div>
+                    //                     </div>
+                    //                 </div>
+
+                    //             </div>
+                    //             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    // <button className="btn-accion-cancelar-1"
+                    //     onClick={() => { setOpenCreateOfertaEducativa(false) }}
+                    // >
+                    //     <strong>
+                    //         CERRAR
+                    //     </strong>
+                    // </button>
+                    // <button
+                    //     className="btn-accion-2"
+                    //     onClick={() => { handleCreateOfertaEducativa() }}
+                    // >
+                    //     <strong>
+                    //         PUBLICAR
+                    //     </strong>
+                    // </button>
+                    //             </div>
+                    //         </div>
+                    //     </div>
+                    // </div>
+                )
+            }
 
         </div>
     )

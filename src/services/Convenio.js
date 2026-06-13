@@ -20,7 +20,7 @@ export const createConvenio = async (convenio, document) => {
         const { data } = await axiosInstance.post('/convenios/', dataConvenio)
         return data
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }
 

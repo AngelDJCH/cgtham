@@ -1,28 +1,39 @@
 import { useNavigate } from 'react-router-dom'
 import '../styles/navbar.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { logout } from '../services/Cuenta'
 import { useAuth } from '../hooks/useAuth'
 import { useMediaQuery } from '@uidotdev/usehooks'
+import { getLogoByIdOrganizacion } from '../services/Organizacion'
 
 export default function NavBarAutenticado() {
     const navigate = useNavigate()
 
     const [open, setOpen] = useState(false)
 
-    const logo = 'https://res.cloudinary.com/dfdfauyvo/image/upload/v1775272872/logo_cgtham_xdmb0v.png'
+    const logo = 'https://res.cloudinary.com/dfdfauyvo/image/upload/v1780874578/Gemini_Generated_Image_l40lrul40lrul40l_rx9sd3.png'
     const nombre = 'CGTHAM' || 'Comisión de Gestión de Talento Humano de las Altas Montañas'
 
     const { user } = useAuth()
 
+    const [logoOrganizacion, setLogo] = useState('')
+
     const isMediumDevice = useMediaQuery("only screen and (max-width : 500px)")
 
+    useEffect(()=>{
+        const getLogo = async () => {
+            const log = await getLogoByIdOrganizacion(user.organizacion)
+            setLogo(log)
+        }
+
+        getLogo()
+    },[])
 
     return (
         <div className="navbar">
             <div className="seccion1"
             >
-                <img src={logo} alt="" />
+                <div style={{width:'50px', height:'50px'}}><img src={logo} alt="logo_cgtham" /></div>
                 <h1>{nombre}</h1>
             </div>
             <div className="seccion2">
@@ -105,7 +116,7 @@ export default function NavBarAutenticado() {
                             onClick={(e) => { open === true ? setOpen(false) : setOpen(true) }}
 
                         >
-                            <img src={user?.foto} alt={''} style={{ width: '50px', height: '50px', borderRadius: '100%' }} />
+                            <img src={logoOrganizacion} alt={''} style={{ width: '50px', height: '50px', borderRadius: '100%' }} />
                         </button>
                     </li>
                 </ul>

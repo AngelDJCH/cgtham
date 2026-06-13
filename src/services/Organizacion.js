@@ -79,3 +79,22 @@ export const updateById = async (organizacion) => {
         console.log(error)
     }
 }
+
+export const updateEstadoByIdOrganizacion = async (id, estado) => {
+    try {
+        const {data} = await axiosInstance.put(`/organizaciones/estado/${id}`,{estado : estado})
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export const getLogoByIdOrganizacion = async (id) => {
+    try {
+        const {data} = await axiosInstance.get(`/organizaciones/logo/${id}`)
+        return data.logo
+    } catch (error) {
+        console.log(error)
+    }
+}

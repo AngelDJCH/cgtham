@@ -1,12 +1,13 @@
 .listausuarios {
-    height: 90vh;
-    max-height: 90vh;
+    height: 80vh;
+    max-height: 80vh;
+    min-height: 80vh;
     width: 296px;
     position: fixed;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    right: 10px;
+    right: 30px;
 }
 
 .usuario-contenedor {
@@ -15,6 +16,7 @@
     align-items: center;
     gap: 1rem;
     justify-content: space-between;
+    width: 90%;
 }
 
 .usuario-contenedor p:hover {
@@ -25,6 +27,7 @@
 .logo-organizacion-contenedor {
     width: 40px;
     height: 40px;
+    flex-shrink: 0;
 }
 
 .logo-organizacion-contenedor img{
@@ -34,17 +37,17 @@
     object-fit: cover;
     object-position: center;
     border-radius: 100%;
+    background-color: white;
 }
 
 .lista {
-    width: 1005;
+    width: 100%;
     max-height: 90%;
     background-color: white;
     border-radius: 10px;
-}
-
-.lista:hover {
-    overflow-y: hidden;
+    min-height: 90%;
+    overflow-y: scroll;
+    scrollbar-width: none;
 }
 
 .buscador {

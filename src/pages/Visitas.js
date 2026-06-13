@@ -6,6 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import { getAllOrganizaciones } from "../services/Organizacion";
 import { allVisitasByIdEmpresa, allVisitasByIdEscuela, createVisita } from "../services/Visita";
 import { wait } from "@testing-library/user-event/dist/utils";
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function Visitas() {
     const [filtro, setFiltro] = useState('')
@@ -16,6 +17,7 @@ export default function Visitas() {
     const [openCreateVisita, setOpenCreateVisita] = useState(false)
 
     const [organizaciones, setOrganizaciones] = useState([])
+    const isSmallDevice = useMediaQuery('(max-width:768px)');
 
     const [visitas, setVisitas] = useState([])
 
@@ -65,21 +67,37 @@ export default function Visitas() {
                 openCreateVisita && (
                     <div>
                         <div className="overllay"></div>
-                        <div className="overllay-contenedor">
-                            <div style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'white', padding: '1rem' }}>
-                                <div>
-                                    <h1>SOLICITUD</h1>
-                                    <h6>EMPRESA:</h6>
-                                    <select onChange={(e) => { setIdEmpresa(e.target.value) }}>
-                                        <option>----</option>
-                                        {
-                                            organizaciones.filter(org => org.tipo != 'Escuela').map(
-                                                org => <option value={org.id}>
-                                                    {org.nombre_comercial}
-                                                </option>
-                                            )
-                                        }
-                                    </select>
+                        <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+
+                            <div className="formulario-contenedor" style={{ height: isSmallDevice ? '100%' : null, height: isSmallDevice ? 'auto' : null }}>
+                                <div className="titulo-formulario"><h1>NUEVA SOLICITUD DE VISITA</h1></div>
+                                <div className="formulario" style={{ width: isSmallDevice ? '100%' : null, height: 'auto' }}>
+                                    <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null, scrollbarWidth: 'none' }}>
+                                        <div className="contenedor-datos-interno">
+                                            <h6>EMPRESA:</h6>
+                                            <select onChange={(e) => { setIdEmpresa(e.target.value) }} style={{ color: 'white', border: '2px solid #41431B', backgroundColor: '#8b8e5b' }}>
+                                                <option>Empresa:              ---</option>
+                                                {
+                                                    organizaciones.filter(org => org.tipo != 'Escuela').map(
+                                                        org => <option value={org.id}>
+                                                            {org.nombre_comercial}
+                                                        </option>
+                                                    )
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {
+                                        !isSmallDevice && (
+                                            <div style={{ width: '250px', height: '100%' }}>
+                                                <p style={{ textAlign: 'justify' }}><strong>Nota: </strong>
+                                                    Una vez realizada la solicitud, la empresa correspondiente evaluará la petición para aceptar y agendar la reunión o visita. Por favor, mantente a la espera de su respuesta. <br></br>
+                                                    En caso de presentar algún problema con el sistema o tener dudas, puedes reportarlo a <kbd><strong>cgtham@gmail.com</strong></kbd></p>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                                <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
                                     <button className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenCreateVisita(false) }}
                                     ><strong>CANCELAR</strong></button>
@@ -87,12 +105,43 @@ export default function Visitas() {
                                         onClick={() => { setOpenCreateVisita(false); handleVisitaCreate() }}
                                     ><strong>SOLICITAR</strong></button>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 )
             }
+
+            {/* {
+                openCreateVisita && (
+                    <div>
+                        <div className="overllay"></div>
+                        <div className="overllay-contenedor">
+                            <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', padding: '1rem', width:'300px', height:'150px', justifyContent:'space-around', borderRadius:'10px'}}>
+                                <h1 style={{textAlign:'center', margin:'0', color:'#41431B'}}>SOLICITUD</h1>
+                                <select onChange={(e) => { setIdEmpresa(e.target.value) }} style={{color:'white',border:'2px solid #41431B', backgroundColor:'#8b8e5b'}}>
+                                    <option>Empresa:              ---</option>
+                                    {
+                                        organizaciones.filter(org => org.tipo != 'Escuela').map(
+                                            org => <option value={org.id}>
+                                                {org.nombre_comercial}
+                                            </option>
+                                        )
+                                    }
+                                </select>
+                                <div style={{width:'100%', justifyContent:'space-around', display:'flex'}}>
+                                    <button className="btn-accion-cancelar-1"
+                                        onClick={() => { setOpenCreateVisita(false) }}
+                                    ><strong>CANCELAR</strong></button>
+                                    <button className="btn-accion-2"
+                                        onClick={() => { setOpenCreateVisita(false); handleVisitaCreate() }}
+                                    ><strong>SOLICITAR</strong></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                )
+            } */}
 
         </div>
     )

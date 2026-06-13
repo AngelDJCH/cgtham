@@ -9,6 +9,7 @@ import { useAuth } from "../hooks/useAuth";
 import PanelSistema from "../components/PanelSistema";
 import { useEffect, useState } from "react";
 import { getOfertasLaboralesAll } from "../services/OfertaLaboral";
+import VisualizarOferta from "../components/VisualizarOferta";
 
 export default function HomePage() {
 
@@ -16,6 +17,9 @@ export default function HomePage() {
 
     const { user } = useAuth()
     const [ofertasLaborales, setOfertasLaborales] = useState(null)
+
+    const [selectOferta, setSelectOferta] = useState(null)
+    const [openOferta, setOpenOferta] = useState(false)
 
     useEffect(() => {
         const getOfertas = async () => {
@@ -103,8 +107,8 @@ export default function HomePage() {
                                                     <div style={{ width: '80px', display: 'flex', gap: '0.2rem', justifyContent: 'center', alignItems: 'center', height: '30px', backgroundColor: '#ffffff' }}>
                                                         <button className="btn-accion-2"
                                                             onClick={() => {
-                                                                // setSelectOferta(o?.id)
-                                                                // setOpenOferta(true)
+                                                                setSelectOferta(o?.id)
+                                                                setOpenOferta(true)
                                                             }}
                                                         >
                                                             <strong>VER MAS</strong>
@@ -128,6 +132,12 @@ export default function HomePage() {
                             <PanelSistema />
                         </div>
                     </div>
+                )
+            }
+
+            {
+                openOferta && (
+                    <VisualizarOferta id_oferta={selectOferta} accion={setOpenOferta}/>
                 )
             }
         </div>

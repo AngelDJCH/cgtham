@@ -12,6 +12,7 @@ import VisualizarConvenio from './VisualizarConvenio.js'
 import { deleteCursoById, updateEstadoById } from '../services/Curso.js'
 import { deleteByIdForEscuelas, findById, updateEstadoRechazadaById, updateVisitaById } from '../services/Visita.js'
 import InscripcionAlterta from './InscripcionAlterta.js'
+import EditarComentario from './EditarComentario.js'
 
 export default function TablaContenido(props) {
     const navigate = useNavigate()
@@ -44,12 +45,14 @@ export default function TablaContenido(props) {
     const imgRechazar = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZjAwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS10cmFzaDItaWNvbiBsdWNpZGUtdHJhc2gtMiI+PHBhdGggZD0iTTEwIDExdjYiLz48cGF0aCBkPSJNMTQgMTF2NiIvPjxwYXRoIGQ9Ik0xOSA2djE0YTIgMiAwIDAgMS0yIDJIN2EyIDIgMCAwIDEtMi0yVjYiLz48cGF0aCBkPSJNMyA2aDE4Ii8+PHBhdGggZD0iTTggNlY0YTIgMiAwIDAgMSAyLTJoNGEyIDIgMCAwIDEgMiAydjIiLz48L3N2Zz4='
 
     const handleParticiparConvenio = async (id_convenio) => {
-        const res = await createConvenioOrganizacion('PARTICIPANTE', id_convenio, user.organizacion)
-        if (res.status === 201) {
+        const status = await createConvenioOrganizacion('PARTICIPANTE', id_convenio, user.organizacion)
+        if (status && status === 201) {
             navigate(0)
             alert('ESPERA A QUE LA ORGANIZACIÓN VALIDE TU PARTICIPACION')
+        }else if (status && status === 409){
+            alert('YA ESTAS EN LISTA DE ESPERA')
         } else {
-            alert('OCURRIO UN ERROR')
+            alert('OCURRIO UN ERROR EN EL SERVIDOR')
         }
     }
 
@@ -130,7 +133,7 @@ export default function TablaContenido(props) {
                     </thead>
                     <tbody>
                         {
-                            props.inscripcionesTabla?.filter(f => props.filtro.length === 0 || f.evento.titulo.includes(props.filtro)).map(
+                            props.inscripcionesTabla?.filter(f => props.filtro.length === 0 || f.evento.titulo.toLowerCase().includes(props.filtro.toLowerCase())).map(
                                 inscrpcion => <tr>
                                     <td defaultValue={inscrpcion.organizacion.id}>{inscrpcion.organizacion.nombre_comercial}</td>
                                     <td defaultValue>{inscrpcion.evento.titulo}</td>
@@ -141,6 +144,7 @@ export default function TablaContenido(props) {
                                             inscrpcion.inscripcion.estado != 'PENDIENTE' && (
                                                 <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
                                                     <button
+                                                        className='btn-accion-2'
                                                         value={inscrpcion.evento.id_evento}
                                                         onClick={(e) => {
                                                             setIdEvento(inscrpcion.evento.id_evento)
@@ -148,7 +152,9 @@ export default function TablaContenido(props) {
                                                         }}
 
                                                     >
-                                                        <img src={imgAprobar} style={{ width: '16px', height: '16px' }} />
+                                                        <strong>
+                                                            VER
+                                                        </strong>
                                                     </button>
                                                 </div>
                                             )
@@ -170,10 +176,9 @@ export default function TablaContenido(props) {
                                                         <strong>
                                                             VER
                                                         </strong>
-                                                        {/* <img src={imgAprobar} style={{ width: '16px', height: '16px' }} /> */}
                                                     </button>
                                                     <button
-                                                    className='btn-accion-cancelar-1'
+                                                        className='btn-accion-cancelar-1'
                                                         onClick={async () => {
 
                                                             const status = await deleteById(inscrpcion.inscripcion.id_inscripcion)
@@ -184,14 +189,6 @@ export default function TablaContenido(props) {
                                                         <strong>
                                                             CANCELAR
                                                         </strong>
-                                                        {/* <img
-                                                            onClick={async () => {
-
-                                                                const status = await deleteById(inscrpcion.inscripcion.id_inscripcion)
-                                                                navigate(0)
-
-                                                            }}
-                                                            src={imgRechazar} style={{ width: '16px', height: '16px' }} /> */}
                                                     </button>
                                                 </div>
                                             )
@@ -213,7 +210,6 @@ export default function TablaContenido(props) {
                                                 <button
                                                     className='btn-accion-2'
                                                     onClick={() => {
-                                                        console.log(comentario.id)
                                                         setIdComentario(comentario.id)
                                                         setOpenEditarComentario(true)
                                                     }}
@@ -288,15 +284,15 @@ export default function TablaContenido(props) {
                         }
 
                         {
-                            props?.eventosTabla?.filter(f => f.titulo.includes(props?.filtro) || props?.filtro.length === 0).map(
+                            props?.eventosTabla?.filter(f => f.titulo.toLowerCase().includes(props?.filtro.toLowerCase()) || props?.filtro.length === 0).map(
                                 evento => <tr>
                                     <td>
                                         {evento?.titulo}
                                     </td>
                                     <td>
                                         {
-                                            evento?.descripcion
-                                        }
+                                            evento?.descripcion.substring(0, 20)
+                                        } ...
                                     </td>
                                     <td>
                                         {
@@ -377,7 +373,7 @@ export default function TablaContenido(props) {
                                     <td>{convenio.titulo}</td>
                                     <td>{convenio.tipo}</td>
                                     <td>{convenio.subtipo}</td>
-                                    <td>{convenio.descripcion}</td>
+                                    <td>{convenio.descripcion.substring(0,50)} {convenio.descripcion.length > 50 ? '...' : ''}</td>
                                     <td><p
                                         style={{ cursor: 'pointer' }}
                                         onClick={() => { navigate(`/organizacion/${convenio.organizacion.id}`) }}
@@ -430,7 +426,7 @@ export default function TablaContenido(props) {
                             props.cursosTabla?.filter(e => e.estado === 'PUBLICADO').map(
                                 curso => <tr>
                                     <td>{curso.titulo}</td>
-                                    <td>{curso.descripcion}</td>
+                                    <td>{curso.descripcion.substring(0, 20)} ...</td>
                                     <td>{curso.publicado.split('T')[0]}</td>
                                     <td>{curso.inicio.split('T')[0]}</td>
                                     <td>{curso.final.split('T')[0]}</td>
@@ -442,11 +438,6 @@ export default function TablaContenido(props) {
                                                 props.id_curso(curso.id); props.open_curso(true)
                                             }}
                                         ><strong>VISUALIZAR</strong></button>
-                                        {user.tipo != 'Escuela' && (
-                                            <button
-                                                className="btn-accion-2"
-                                            ><strong>PARTICIPAR</strong></button>
-                                        )}
                                         {
                                             user.organizacion === curso.organizacion.id && (
                                                 <button className='btn-accion-cancelar-1'
@@ -509,7 +500,7 @@ export default function TablaContenido(props) {
             </div>
 
             {
-                openInscripcion && (<InscripcionAlterta id_evento={idEvento} nombre_evento={nombreEvento} accion={setOpenInscripcion} />)
+                openInscripcion && (<VisualizarEvento id_evento={idEvento} accion={setOpenInscripcion} />)
             }
 
             {
@@ -533,7 +524,7 @@ export default function TablaContenido(props) {
                                     <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                                         <div>
                                             <h6 style={{ margin: 0 }}>Solicitado:</h6>
-                                            <input type='date' defaultValue={visitaData.solicitado.split('T')[0]} />
+                                            <input type='date' defaultValue={visitaData.solicitado.split('T')[0]} disabled />
                                         </div>
                                         <div>
                                             <h6 style={{ margin: 0 }}>Agendar:</h6>
@@ -541,9 +532,6 @@ export default function TablaContenido(props) {
                                                 visitaData.agendado != null ? <input type='date' defaultChecked={visitaData.agendado.split('T')[0]} /> : <input type='date' id='fecha_visita' />
                                             }
                                         </div>
-                                        {/* {
-                                        visitaData.aprobado != null ? <input type='date' defaultChecked={visitaData.aprobado.split('T')[0]} /> : <input type='date' />
-                                    } */}
                                     </div>
                                 </div>
                                 <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'space-evenly' }}>
@@ -571,7 +559,7 @@ export default function TablaContenido(props) {
 
             {
                 openEvento && (
-                    <VisualizarEvento id_evento={idEvento} accion={setOpenEvento} />
+                    <VisualizarEvento id_evento={idEvento} accion={setOpenEvento} inscrito={true}/>
                 )
             }
 
@@ -583,37 +571,7 @@ export default function TablaContenido(props) {
 
             {
                 openEditarComentario && (
-                    <div>
-                        <div className='overllay'></div>
-                        <div className='overllay-contenedor'>
-                            <div style={{ width: '250px', height: '100px' }}>
-                                <h1 style={{ textAlign: 'center', margin: '0', padding: '0', fontFamily: 'Poppins', fontSize: '25px' }}>EDITAR COMENTARIO</h1>
-                                <textarea defaultValue={comentarioData?.contenido} onChange={(e) => { setComentarioData({ ...comentarioData, contenido: e.target.value }) }} style={{ width: '90%', height: '100px', maxWidth: '100%', maxHeight: '100px', minWidth: '100%', minHeight: '100px' }} />
-                                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-                                    <button
-                                        className='btn-accion-cancelar-1'
-                                        onClick={() => { setOpenEditarComentario(false) }}
-                                    ><strong>CANCELAR</strong></button>
-                                    <button
-                                        onClick={async () => {
-                                            if (comentarioData.contenido.length >= 13 && comentarioData.contenido.length <= 70) {
-                                                const res = await updateById(idComentario, comentarioData.contenido)
-                                                if (res.status === 200) {
-                                                    alert('COMENTARIO ACTUALIZADO')
-                                                    navigate(0)
-                                                } else {
-                                                    alert('NO SE PUDO ACTUALIZAR EL COMENTARIO')
-                                                }
-                                            } else {
-                                                alert('El comentario debe tener entre 13 y 70 caracteres')
-                                            }
-                                        }}
-                                        className='btn-accion-2'
-                                    ><strong>GUARDAR</strong></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <EditarComentario accion={setOpenEditarComentario} idComentario={idComentario} />
                 )
             }
 

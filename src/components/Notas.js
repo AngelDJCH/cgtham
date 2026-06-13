@@ -8,6 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import VisualizarFotos from "./VisualizarFotos";
 import '../styles/botones.css'
+import VisualizarEvento from "./VisualizarEvento";
 
 export default function Notas() {
 
@@ -63,16 +64,6 @@ export default function Notas() {
     eventosDB()
   }, [])
 
-  /*
-    useEffect(()=>{
-      const eventos = async () => {
-        const res = await getAllEventos()
-        setEventos(res)
-      }
-            eventos()
-    },[])
-  */
-
   return (
     <div className="notas">
 
@@ -97,7 +88,7 @@ export default function Notas() {
               </div>
             </div>
             <div style={{ width: '90%' }}>
-              <p style={{ fontFamily: 'Poppins', fontSize: '12px', textAlign: 'justify', maxHeight: '50px', minHeight: '50px', overflowY: 'scroll', scrollbarWidth:'none'}}>
+              <p style={{ fontFamily: 'Poppins', fontSize: '12px', textAlign: 'justify', maxHeight: '50px', minHeight: '50px', overflowY: 'scroll', scrollbarWidth: 'none' }}>
                 {evento.descripcion}
               </p>
             </div>
@@ -152,63 +143,8 @@ export default function Notas() {
       </div>
 
       {
-        /*
-              {
-        eventos.map(
-          evento =>
-            <div className="nota" key={evento.id}>
-              <div className="n-s1">
-                <img className="logo" src={evento.organizacion.foto} alt={evento.organizacion.nombre_comercial}/>
-                <h1
-                style={{cursor:'pointer'}}
-                onClick={()=>{
-                  navigate(`/organizacion/${evento.organizacion.id}`)
-                }}
-
-                >{evento.organizacion.nombre}</h1>
-              </div>
-              <div className="n-s2">
-                <p>{evento.descripcion}</p>
-              </div>
-              <div className="n-s3">
-                <div className="n-s3-s1">
-                  <img src={evento.fotos[0]} alt="imagenes" />
-                </div>
-                <div className="n-s3-s2">
-                  <div>
-                    <h1>{evento.nombre}</h1>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column'}}>
-                    <h1 style={{textAlign:'center'}}>{evento.titulo}</h1>
-                    <p><strong>Fecha Inicio:</strong> {evento.fecha_inicio.split('T')[0]}</p>
-                    <p><strong>Fecha Final:</strong> {evento.fecha_inicio.split('T')[0]}</p>
-                  </div>
-                  <div>
-                    <p><strong>Tipo:</strong>{evento.tipo}</p>
-                  </div>
-                  <div className="n-s3-s2-s4">
-                    <button
-
-                      value={evento.id + "*" + evento.titulo}
-                      onClick={(e) => {
-                        setOpenInscripcion(true);
-                        setIdEvento(e.target.value.split('*')[0])
-                        setNombreEvento(e.target.value.split('*')[1])
-                      }}
-                    >{
-                      user.organizacion === evento.organizacion.id ? 'VISUALIZAR' : 'PARTICIPAR'
-                    }</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+        openInscripcion && (openInscripcion && (<VisualizarEvento id_evento={idEvento} accion={setOpenInscripcion} />)
         )
-      }
-         */
-      }
-
-      {
-        openInscripcion && (<InscripcionAlterta id_evento={idEvento} nombre_evento={nombre_evento} accion={setOpenInscripcion} />)
       }
 
       {

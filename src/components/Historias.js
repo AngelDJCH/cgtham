@@ -43,52 +43,6 @@ export default function Historias() {
                     )
                 }                
             </div>
-            {
-                /*
-                
-                <div className="historias-tabla-contenedor">
-                <div className="tabla-contenedor">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    FOTO
-                                </th>
-                                <th>
-                                    NOMBRE
-                                </th>
-                                <th>
-                                    ORGANIZACION
-                                </th>
-                                <th>
-                                    FECHA
-                                </th>
-                                <th>
-                                    COMENTARIO
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                comentarios.map(
-                                    comentario => <tr key={comentario.id}>
-                                        <td><img src={comentario.foto} alt={comentario.nombre}/></td>
-                                        <td>{comentario.nombre}</td>
-                                        <td>{comentario.organizacion.nombre}</td>
-                                        <td>{comentario.fecha}</td>
-                                        <td>{comentario.contenido}</td>
-                                    </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <button className="historias-accion">
-                    <img src={imagenComentario} alt="icono" />
-                </button>
-            </div>
-                */
-            }
         </div>
     )
 }

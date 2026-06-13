@@ -16,10 +16,10 @@ export const createConvenioOrganizacion = async (rol, id_convenio, id_organizaci
             id_convenio: id_convenio,
             id_organizacion: id_organizacion
         }
-        const res = await axiosInstance.post('/conveniosOrganizaciones/', data)
-        return res
+        const {status} = await axiosInstance.post('/conveniosOrganizaciones/', data)
+        return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }
 

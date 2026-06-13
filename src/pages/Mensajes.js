@@ -1,106 +1,200 @@
 import { useEffect, useState } from "react";
 import NavBarAutenticado from "../components/NavBarAutenticado";
-import '../styles/mensajes.css'
+import '../styles/mensajes.css';
 import ListaUsuarios from "../components/ListaUsuarios";
 import { getOrganizacion } from "../services/Organizacion";
 import { useAuth } from "../hooks/useAuth";
-import { findAllMensajesChat } from "../services/Mensajes";
 import { io } from "socket.io-client";
+import { useNavigate } from "react-router-dom";
+
+const socket = io('http://localhost:3040', {
+    transports: ['websocket']
+});
 
 export default function Mensajes() {
+    const [mensaje, setMensaje] = useState('');
+    const { user } = useAuth();
+    const [idChat, setIdChat] = useState(' ');
+    const [mensajes, setMensajes] = useState([]);
+    const [organizacion, setOrganizacion] = useState(null);
+    const [usuarioActivo, setUsuarioActivo] = useState(null);
+    const [informacionSocket, setInformacionSocket] = useState('');
+    const [createChat, setCreateChat] = useState(false)
+    const navigate = useNavigate()
 
-    const socket = io('http://localhost:3040', {
-        transports : ['websocket']
-    })
+    // 1. Listeners Globales (Conexión, Desconexión y Chats entrantes)
+    useEffect(() => {
+        socket.on('connect', () => {
+            console.log('El id del socket es: ', socket.id);
+        });
 
-    const [mensaje, setMensaje] = useState('')
+        socket.on('disconnect', () => {
+            console.log('El usuario se desconectó');
+        });
 
-    const {user} = useAuth()
+        socket.on('chat', (data) => {
+            // Aseguramos el uso correcto de prevMensajes para evitar duplicados u obsoletos
+            setMensajes((prevMensajes) => [...prevMensajes, data]);
+        });
 
-    const [roomActual, setRoomActual] = useState('')
-
-    let count = 0
-
-    const [mensajes, setMensajes] = useState(
-        [
-        ]
-    )
-
-    const hanldeJoinRoom = async (rom1,rom2) => {
-        console.log(rom1, rom2)
-        socket.emit('join', {id_emisor: rom1, id_receptor:rom2})
-    }
-
-    const [organizacion, setOrganizacion] = useState(null)
-
-    const [usuarioActivo, setUsuarioActivo] = useState(null)
-
-    useEffect(()=>{
-        socket.on('connect', ()=>{
-            console.log('El id del socket es: ',socket.id)
-            // hanldeJoinRoom()
+        socket.on('newChat', (data) => {
+            setIdChat(data.chat_id)
         })
 
-        socket.on('disconnect', ()=>{
-            console.log('El usuario se desconecto')
-        })
-    }, [])
+        return () => {
+            socket.off('chat');
+            socket.off('connect');
+            socket.off('disconnect');
+        };
+    }, []);
 
-    useEffect(()=>{
+    // 2. Listener exclusivo del canal de la organización (Controlado y Auto-limpiable)
+    useEffect(() => {
+        if (!user?.organizacion) return;
+
+        const handleRoomResponse = (data) => {
+            setIdChat(data.chat_id);
+            setIdChat(data.chat_id);
+
+            // SÓLO agregamos al array si la respuesta realmente contiene un mensaje de chat válido
+            if (data && data.data && data) {
+                setMensajes(data.data);
+            } else {
+                setCreateChat(true)
+            }
+        };
+
+        // Escuchamos el evento
+        socket.on(user.organizacion, handleRoomResponse);
+
+        // LIMPIEZA: Apaga el escucha anterior cuando cambie de organización o se desmonte
+        return () => {
+            socket.off(user.organizacion, handleRoomResponse);
+        };
+    }, [user?.organizacion]);
+
+    // 3. Emitir el 'join' al cambiar de usuario seleccionado
+    useEffect(() => {
+        if (!usuarioActivo) return;
+
         const getOrganizacionById = async () => {
-            const data = await getOrganizacion(usuarioActivo)
-            setOrganizacion(data)
-            const mensajesData = await findAllMensajesChat(user.organizacion, usuarioActivo)
-            setMensajes(mensajesData)
-            hanldeJoinRoom(usuarioActivo, user.organizacion)
-        }
-        getOrganizacionById()
-    },[usuarioActivo])
+            const data = await getOrganizacion(usuarioActivo);
+            setOrganizacion(data);
 
+            // Limpiamos la pantalla de mensajes viejos al cambiar de chat
+            setMensajes([]);
+            // Notificamos al servidor del cambio de sala
+            socket.emit('join', { id_emisor: user?.organizacion, id_receptor: usuarioActivo });
+        };
+
+        getOrganizacionById();
+    }, [usuarioActivo]);
+
+    // 4. Enviar un nuevo mensaje
+    const handleCreateNewMessage = () => {
+        if (!mensaje.trim()) return;
+
+        socket.emit('chat', {
+            message: mensaje,
+            room: idChat,
+            id_emisor: user.organizacion,
+            id_receptor: usuarioActivo
+        });
+
+        setMensaje('');
+    };
+
+    const handleCreateNewChat = () => {
+        socket.emit('newChat', {
+            organizacion1: user.organizacion,
+            organizacion2: usuarioActivo
+        })
+        socket.emit('join', { id_emisor: usuarioActivo, id_receptor: user?.organizacion });
+    }
 
     return (
         <div style={{ marginTop: '100px' }}>
             <NavBarAutenticado />
 
-            <ListaUsuarios mensaje={true} left='10px' right='0' selectUsuario={setUsuarioActivo}/>
+            <ListaUsuarios mensaje={true} left='30px' right='0' selectUsuario={setUsuarioActivo} />
 
-            {usuarioActivo && (
-                <div className="mensaje-contenedor" style={{ display: 'flex', justifyContent: 'end' }}>
-                    <div style={{ width: '990px', marginRight: '50px', backgroundColor: 'white', borderRadius: '10px' }}>
-                        <div className="encabezado-mensajes">
-                            <img src={organizacion?.logo} alt="imagen" />
-                            <h1>{user.organizacion === organizacion?.id ? `${organizacion?.nombre_comercial} (YO)` : `${organizacion?.nombre_comercial}`}</h1>
-                        </div>
-                        <div className="cuerpo-mensajes">
+
+            {
+
+
+                usuarioActivo && (
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', height: '80vh' }}>
+                        <div style={{ width: '70%', marginRight: '25px', backgroundColor: 'white', borderRadius: '10px' }}>
+                            <div className="encabezado-mensajes" style={{ width: '100%' }}>
+                                <img src={organizacion?.logo} alt="imagen" style={{backgroundColor:'white'}}/>
+                                <h1>{user.organizacion === organizacion?.id ? `${organizacion?.nombre_comercial} (YO)` : `${organizacion?.nombre_comercial}`}</h1>
+                            </div>
+                            <div className="cuerpo-mensajes">
+                                {
+                                    mensajes.map((msg, index) => {
+                                        // Controlamos si viene como msg.contenido o msg.message
+                                        const textoMensaje = msg?.contenido || msg?.message;
+                                        const esEmisor = msg?.id_emisor === user.organizacion;
+
+                                        // Si por alguna razón el mensaje sigue vacío, no renderizamos nada estorboso
+                                        if (!textoMensaje) return null;
+
+                                        return (
+                                            <div key={index} style={{ display: 'flex', justifyContent: esEmisor ? 'end' : 'start', padding: '0.5rem', minWidth: '100px' }}>
+                                                <p style={{ maxWidth: '70%', padding: '1rem', backgroundColor: esEmisor ? '#AEB784' : '#41431B', color: 'white', borderRadius: '8px', margin: 0 }}>
+                                                    {textoMensaje}
+                                                </p>
+                                            </div>
+                                        );
+                                    })
+                                }
+                            </div>
                             {
-                                mensajes?.map(
-                                    mensaje => {
-                                        return <div style={{ display: 'flex', justifyContent: mensaje.id_emisor === user.organizacion  ? 'end' : 'start', padding: '1rem', minWidth:'100px', maxHeight:'300px', minHeight:'50px', maxHeight:'100px' }}>
-                                            <p style={{width:'100%',height:'100%',padding:'1rem',backgroundColor: mensaje.id_emisor === user.organizacion  ? '#AEB784' : '#41431B', color: 'white' }}>{mensaje.contenido}</p>
-                                        </div>
-                                    }
+                                idChat && (
+                                    <div className="acciones-mensajes">
+                                        <input
+                                            placeholder="Escribe un mensaje..."
+                                            value={mensaje}
+                                            onChange={(e) => setMensaje(e.target.value)}
+                                            onKeyDown={(e) => e.key === 'Enter' && handleCreateNewMessage()}
+                                        />
+                                        <img
+                                            onClick={handleCreateNewMessage}
+                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzMxNEMxQyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtc2VuZC1ob3Jpem9udGFsLWljb24gbHVjaWRlLXNlbmQtaG9yaXpvbnRhbCI+PHBhdGggZD0iTTMuNzE0IDMuMDQ4YS40OTguNDk4IDAgMCAwLS42ODMuNjI3bDIuODQzIDcuNjI3YTIgMiAwIDAgMSAwIDEuMzk2bC0yLjg0MiA3LjYyN2EuNDk4LjQ5OCAwIDAgMCAuNjgyLjYyN2wxOC04LjVhLjUuNSAwIDAgMCAwLS45MDR6Ii8+PHBhdGggZD0iTTYgMTJoMTYiLz48L3N2Zz4="
+                                            alt="icono"
+                                            style={{ cursor: 'pointer' }}
+                                        />
+                                    </div>
                                 )
                             }
                         </div>
-                        <div className="acciones-mensajes">
-                            <input placeholder="Escribe un mensaje..." value={mensaje} onChange={(e)=>setMensaje(e.target.value)}/>
-                            <img
-                            
-                            onClick={(e)=>{
-                                const mensajeNuevo = {
-                                    id : mensajes.length+1,
-                                    contenido : mensaje
-                                };    
-                                setMensajes([...mensajes, mensajeNuevo]);
-                                setMensaje('')
-                            
-                            }}
-                            
-                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzMxNEMxQyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtc2VuZC1ob3Jpem9udGFsLWljb24gbHVjaWRlLXNlbmQtaG9yaXpvbnRhbCI+PHBhdGggZD0iTTMuNzE0IDMuMDQ4YS40OTguNDk4IDAgMCAwLS42ODMuNjI3bDIuODQzIDcuNjI3YTIgMiAwIDAgMSAwIDEuMzk2bC0yLjg0MiA3LjYyN2EuNDk4LjQ5OCAwIDAgMCAuNjgyLjYyN2wxOC04LjVhLjUuNSAwIDAgMCAwLS45MDR6Ii8+PHBhdGggZD0iTTYgMTJoMTYiLz48L3N2Zz4=" alt="icono" />
+                    </div>
+                )
+            }
+
+            {
+                createChat && (<div>
+                    <div className="overllay"></div>
+                    <div className="overllay-contenedor">
+                        <div style={{
+                            width:'500px', display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', backgroundColor:'white',
+                            padding:'1rem', height:'auto', borderRadius:'10px'
+                        }}>
+                            <h1>¿QUIERES CREAR UN CHAT?</h1>
+                            <div style={{display:'flex', justifyContent:'center', gap:'1rem'}}>
+                                <button
+                                className="btn-accion-cancelar-1"
+                                    onClick={() => { setCreateChat(false)}}
+                                ><strong>NO</strong></button>
+                                <button
+                                    className="btn-accion-2"
+                                    onClick={() => { handleCreateNewChat(); setCreateChat(false)}}
+                                ><strong>SI</strong></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                </div>)
+            }
         </div>
-    )
+    );
 }

@@ -1,0 +1,22 @@
+.tarjeta-datos-titulos{
+    width: 95%;
+    height: 40px;
+    background-color: #41431B;
+    border-radius: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.tarjeta-datos-titulos img:hover{
+    scale: 1.1;
+}
+
+.tarjeta-datos-titulos h6{
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-family: 'Poppins';
+    font-size: 18px;
+}

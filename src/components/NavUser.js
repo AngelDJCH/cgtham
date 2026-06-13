@@ -33,6 +33,7 @@ export default function NavUser(props) {
             <ul>
 
                 <li
+                    id='header_list'
                     style={{ backgroundColor: '#E3DBBB', borderRadius: '10px 10px 0px 0px', display: 'flex', justifyContent: 'center' }}
                 >
                     <p><strong>OPCIONES</strong></p>
@@ -43,7 +44,6 @@ export default function NavUser(props) {
                         onClick={(e) => {
                             console.log(user)
                             navigate(`/organizacion/${user.organizacion}`)
-                            navigate(0)
                         }}
 
                     >
@@ -60,17 +60,6 @@ export default function NavUser(props) {
                     <img alt='mensajes' src={img_mensajes}/>
                     <p>Mensajes</p>
                 </li>
-
-                {
-                    /**
-                                     <li onClick={(e) => { navigate('/mensajes') }}>
-                    <img src={img_mensajes} alt='Mensajes' />
-                    <p>
-                        Mensajes
-                    </p>
-                </li>
-                     */
-                }
                 {
                     user.tipo != 'Escuela' && (
                         <li

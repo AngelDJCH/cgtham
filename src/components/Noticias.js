@@ -27,13 +27,14 @@ export default function Noticias() {
     }, [])
 
     const obtenerFoto = (evento) => {
-        if (evento?.fotos.length === 1) {
-            return <img src={`${evento?.fotos[0]}`} alt={`${evento.organizacion.nombre}`} />
-        }
-        return <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '100%' }}>
-            <img src={`${evento?.fotos[0]}`} style={{ width: '50%', height: 'auto' }} />
-            <img src={`${evento?.fotos[1]}`} style={{ width: '50%', height: 'auto' }} />
-        </div>
+        // if (evento?.fotos.length === 1) {
+            return <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '100%' }}>
+                <img style={{ width: '50%', height: 'auto' }} src={`${evento?.fotos[0]}`} alt={`${evento.organizacion.nombre}`} /></div>
+        // }
+        // return <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '100%' }}>
+        //     <img src={`${evento?.fotos[0]}`} style={{ width: '50%', height: 'auto' }} />
+        //     <img src={`${evento?.fotos[1]}`} style={{ width: '50%', height: 'auto' }} />
+        // </div>
     }
 
     const [selectIdEvento, setSelectIdEvento] = useState(null)
@@ -41,16 +42,6 @@ export default function Noticias() {
 
     const [eventos, setEventos] = useState(
         [
-            // {
-            //     id: 1,
-            //     nombre: 'Dia del Programador',
-            //     organizacion: {
-            //         id: 1,
-            //         nombre: 'Instituo Tecnologico de Orizaba',
-            //         imagen: 'https://images.unsplash.com/photo-1647006875983-1874b7aa7356?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-            //     },
-            //     imagen: 'https://images.unsplash.com/photo-1647006875983-1874b7aa7356?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-            // }
         ]
     )
 
@@ -84,13 +75,13 @@ export default function Noticias() {
                                         }
                                     </div>
                                     <div className="s4">
-                                        <button className="accion"
+                                        <button className="btn-accion-2"
                                             onClick={()=>{
                                                 setOpenEvento(true);
                                                 setSelectIdEvento(evento.id)
                                             }}
                                         >
-                                            VER
+                                            <strong>VER</strong>
                                         </button>
                                     </div>
                                 </div>

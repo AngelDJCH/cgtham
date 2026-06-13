@@ -45,7 +45,7 @@ export default function ListaUsuarios(props) {
             )
           }
           {
-            organizaciones?.filter(f => f.nombre_comercial.startsWith(busqueda)).filter(f => f.tipo === 'Cámara').map(
+            organizaciones?.filter(f => f.nombre_comercial.toLowerCase().startsWith(busqueda.toLowerCase())).filter(f => f.tipo === 'Cámara de Comercio').map(
               o => <li className='usuario-contenedor' key={o.id}>
                 <div className='logo-organizacion-contenedor'>
 
@@ -77,7 +77,7 @@ export default function ListaUsuarios(props) {
             )
           }
           {
-            organizaciones?.filter(f => f.nombre_comercial.startsWith(busqueda)).filter(f => f.tipo === 'Empresa').map(
+            organizaciones?.filter(f => f.nombre_comercial.toLowerCase().startsWith(busqueda.toLowerCase())).filter(f => f.tipo === 'Empresa').map(
               o => <li className='usuario-contenedor' key={o.id}>
                 <div className='logo-organizacion-contenedor'>
                   <img src={o.logo} alt={o.nombre_comercial} />
@@ -98,9 +98,6 @@ export default function ListaUsuarios(props) {
                       }}
                     />
                   )
-                }
-                {
-                  //<p><strong>{o.tipo}</strong></p>
                 }
               </li>
             )
@@ -113,7 +110,7 @@ export default function ListaUsuarios(props) {
           }
 
           {
-            organizaciones?.filter(f => f.nombre_comercial.startsWith(busqueda)).filter(f => f.tipo === 'Escuela').map(
+            organizaciones?.filter(f => f.nombre_comercial.toLowerCase().startsWith(busqueda.toLowerCase())).filter(f => f.tipo === 'Escuela').map(
               o => <li className='usuario-contenedor' key={o.id}>
                 <div className='logo-organizacion-contenedor'>
 
@@ -136,40 +133,9 @@ export default function ListaUsuarios(props) {
                     />
                   )
                 }
-                {
-                  //<p><strong>{o.tipo}</strong></p>
-                }
               </li>
+              
             )
-
-            /*
-            {
-            usuarios?.map(
-              usuario =>
-                <li className='usuario-contenedor'>
-                  <img src={usuario.foto} 
-                  
-                  onClick={()=>{
-                    navigate(`/perfil/${usuario.id}`)
-                  }}
-                  
-                  />
-                  <p>{usuario.nombre}</p>
-                  <img
-                    onClick={
-                      () => {
-                        if (props.selectUsuario) {
-                          props.selectUsuario(usuario.nombre)
-                        }
-                        navigate('/mensajes')
-                      }
-                    }
-
-                    className='icono' src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzMxNEMxQyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtc2VuZC1pY29uIGx1Y2lkZS1zZW5kIj48cGF0aCBkPSJNMTQuNTM2IDIxLjY4NmEuNS41IDAgMCAwIC45MzctLjAyNGw2LjUtMTlhLjQ5Ni40OTYgMCAwIDAtLjYzNS0uNjM1bC0xOSA2LjVhLjUuNSAwIDAgMC0uMDI0LjkzN2w3LjkzIDMuMThhMiAyIDAgMCAxIDEuMTEyIDEuMTF6Ii8+PHBhdGggZD0ibTIxLjg1NCAyLjE0Ny0xMC45NCAxMC45MzkiLz48L3N2Zz4=' alt='Mensaje' />
-                </li>
-            )
-          }
-            */
           }
         </ul>
       </div>

@@ -122,13 +122,72 @@ export default function Eventos(prop) {
             <NavBarAutenticado />
             <Filtros enableAccion={user.tipo === 'Escuela' ? true : false} titulo='Eventos' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='Crear evento' filtro={setFiltro} btn_accion={setOpenCreateEvento} />
 
-            <TablaContenido encabezados={['Titulo', 'Descripción', 'Tipo', user.tipo === 'Escuela' ? 'Estado' : null, 'Fecha Inicio', 'Fecha Final', 'Publicado', 'Acciones']} eventosTabla={eventos} filtro={filtro} />
+            <TablaContenido encabezados={['Titulo', 'Descripción', 'Tipo', user.tipo === 'Escuela' ? 'Estado' : null, 'Inicio', 'Final', 'Publicado', 'Acciones']} eventosTabla={eventos} filtro={filtro} />
             {
                 openCreateEvento && (
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
-                            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', width: '800px', backgroundColor: 'white', padding: '1rem', borderRadius: '10px' }}>
+                            <div className="formulario-contenedor">
+                                <div className="titulo-formulario"><h1>NUEVO EVENTO</h1></div>
+                                <div className="formulario">
+                                    <div className="contenedor-datos-formulario">
+                                        <div className="contenedor-datos-interno">
+                                            <h6>Titulo:</h6>
+                                            <input onChange={(e) => { setEvento({ ...evento, titulo: e.target.value }) }} type="text" placeholder="Titulo" />
+                                            <h6>Descripcion:</h6>
+                                            <textarea onChange={(e) => { setEvento({ ...evento, descripcion: e.target.value }) }} type="text" placeholder="Descripcion"/>
+                                            <h6>Tipo</h6>
+                                            <select onChange={(e) => { setEvento({ ...evento, tipo: e.target.value }) }}>
+                                                <option>
+                                                    TIPO
+                                                </option>
+                                                {
+                                                    imgTipoEvento.map(
+                                                        tipo => <option>
+                                                            {tipo.tipo}
+                                                        </option>
+                                                    )
+                                                }
+                                            </select>
+                                            <h6>Fecha:</h6>
+                                            <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                                                <h6>Inicio:</h6>
+                                                <input onChange={(e) => { setEvento({ ...evento, fecha_inicio: e.target.value }) }} type="date" style={{ minWidth: '100px', maxWidth: '100px', maxHeight: '25px', minHeight: '25px' }} />
+                                                <h6>Fin:</h6>
+                                                <input onChange={(e) => { setEvento({ ...evento, fecha_final: e.target.value }) }} type="date" style={{ minWidth: '100px', maxWidth: '100px', maxHeight: '25px', minHeight: '25px' }} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style={{ width: '250px', height: '350px' }}>
+                                        <img style={{ width: '100%', height: '90%', margin: 0 }} src={selectImagen ? selectImagen : "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="} />
+                                        <div style={{ display: 'flex' }}>
+                                            <div style={{ width: '50px', height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                <input id={`foto_${imagenes.length}`} type="file" accept=".png" style={{ display: 'none' }} onChange={handeChangeFoto} />
+                                                <label htmlFor={`foto_${imagenes.length}`}>
+                                                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlLXBsdXMtaWNvbiBsdWNpZGUtaW1hZ2UtcGx1cyI+PHBhdGggZD0iTTE2IDVoNiIvPjxwYXRoIGQ9Ik0xOSAydjYiLz48cGF0aCBkPSJNMjEgMTEuNVYxOWEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoNy41Ii8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48Y2lyY2xlIGN4PSI5IiBjeT0iOSIgcj0iMiIvPjwvc3ZnPg==" style={{ width: '32px', height: '32px' }} />
+                                                </label>
+                                            </div>
+                                            <div style={{ display: 'flex', minWidth: '90%', maxWidth: '90%', overflowX: 'scroll', gap: '0.4rem' }}>
+                                                {
+                                                    imagenes.map(
+                                                        img => <div>
+                                                            <label htmlFor={`foto_${img?.id}`} onClick={() => { setSelectImagen(img?.url) }}>
+                                                                <img src={img?.url} style={{ width: '32px', height: '32px', borderBottom: `2px solid ${img?.subida ? 'green' : 'red'}` }} />
+                                                            </label>
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style={{ width: '50%', height: '10vh', justifyContent:'flex-end', display:'flex', gap:'1rem'}}>
+                                    <button onClick={() => { setOpenCreateEvento(false); setImagenes([]); setSelectImagen(null) }} className="btn-accion-cancelar-1">CERRAR</button>
+                                    <button onClick={() => { setOpenCreateEvento(false); setImagenes([]); setSelectImagen(null); handleCreateEvento() }} className="btn-accion-2">GUARDAR</button>
+                                </div>
+                            </div>
+                            {/* <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', width: '800px', backgroundColor: 'white', padding: '1rem', borderRadius: '10px' }}>
                                 <div style={{ width: '400px', minHeight: '400px', maxHeight: '400px', overflowY: 'scroll', backgroundColor: '#AEB784', borderRadius: '10px' }}>
                                     <h6>Titulo:</h6>
                                     <input onChange={(e) => { setEvento({ ...evento, titulo: e.target.value }) }} type="text" placeholder="Titulo" style={{ minWidth: '80%', maxWidth: '80%', maxHeight: '25px', minHeight: '25px' }} />
@@ -181,7 +240,7 @@ export default function Eventos(prop) {
                                 <div style={{ width: '400px', height: '400px', display: 'flex', justifyContent: 'center', borderTop: '5px solid #AEB784' }}>
                                     <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', margin: 0 }} src={selectImagen ? selectImagen : "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="} />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 )

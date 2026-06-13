@@ -96,3 +96,43 @@ export const deleteCursoById = async (id_curso) => {
         console.log(error)
     }
 }
+
+
+export const createInscripcionCurso = async (id_curso, id_organizacion) => {
+    try {
+        const {status} = await axiosInstance.post('/inscripcionCurso/', {
+            id_curso : id_curso,
+            id_organizacion : id_organizacion
+        })
+        return status
+    } catch (error) {
+        return error.response.status
+    }
+}
+
+export const organizacionesParticipantes = async (id_curso) => {
+    try {
+        const {data} = await axiosInstance.get(`/inscripcionCurso/participantes/${id_curso}`)
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const organizacionesPendientes = async (id_curso) => {
+    try {
+        const {data} = await axiosInstance.get(`/inscripcionCurso/pendientes/${id_curso}`)
+        return data
+    } catch (error) {
+        console.log8(error)
+    }
+}
+
+export const updateInscripcionByEstado = async (id_inscripcion, estado) => {
+    try {
+        const {status} = await axiosInstance.put(`/inscripcionCurso/${id_inscripcion}`,{estado:estado})
+        return status
+    } catch (error) {
+        console.log(error)
+    }
+}

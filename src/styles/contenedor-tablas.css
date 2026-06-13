@@ -14,11 +14,13 @@
     border-radius: 10px;
     max-height: 80vh;
     overflow-y: scroll;
+    scrollbar-width: none;
 }
+
 
 .contenedor-tablas-interno table{
     width: 100%;
-    border-collapse: collapse;
+    border-collapse:collapse;
 }
 
 .contenedor-tablas-interno thead{

@@ -1,16 +1,29 @@
 import { useEffect, useState } from "react"
 import { eventoById, findParticipantesPendientesByIdEvento, updateEventoById } from "../services/Evento"
 import { useNavigate } from "react-router-dom"
-import { findParticipantesByIEvento } from "../services/Inscripcion"
+import { findParticipantesByIEvento, updateInscripcionByEstado } from "../services/Inscripcion"
+import { getFotosByIdEvento } from "../services/Foto"
+import { useAuth } from "../hooks/useAuth"
 
 export default function EditarEvento(props) {
+    const { user } = useAuth()
 
-    const [evento, setEvento] = useState(null)
+    const [evento, setEvento] = useState({
+        titulo: '',
+        descripcion: '',
+        tipo: '',
+        fecha_inicio: '',
+        fecha_final: '',
+        id_organizacion: user.organizacion
+    })
     const [participantes, setParticipantes] = useState([])
-
+    const [fotos, setFotos] = useState([])
+    const [fotoSeleccionada, setFotoSeleccionada] = useState('')
     const [administrar, setAdministar] = useState(false)
-
+    const [imagenes, setImagenes] = useState([])
+    const [imagen, setImagen] = useState(null)
     const [idEvento, setIdEvento] = useState('')
+    const [selectImagen, setSelectImagen] = useState(null)
 
     useEffect(() => {
         const getEvento = async () => {
@@ -23,7 +36,13 @@ export default function EditarEvento(props) {
             setParticipantes(res)
         }
 
+        const fotosEvento = async () => {
+            const res = await getFotosByIdEvento(props?.id_evento)
+            setFotos(res)
+            setFotoSeleccionada(res[0])
+        }
 
+        fotosEvento()
         getEvento()
         participantesEvento()
     }, [])
@@ -58,8 +77,20 @@ export default function EditarEvento(props) {
         }
     ]);
 
+
+
     const [inscripciones, setInscripciones] = useState([])
 
+    const handleUpdateEstadoById = async (id, estado) => {
+        const data = await updateInscripcionByEstado(id, estado)
+        if (data) {
+            navigate(0)
+            alert('INSCRIPCION ACEPTADA')
+        } else {
+            navigate(0)
+            alert('NO SE PUDO ACTUALIZAR LA INSCRIPCION')
+        }
+    }
 
     useEffect(() => {
         const getInscripciones = async () => {
@@ -83,90 +114,68 @@ export default function EditarEvento(props) {
         <div>
             <div className="overllay"></div>
             <div className="overllay-contenedor">
-                <div style={{ display: 'flex', flexDirection: 'column', width: '400px', backgroundColor: 'white', padding: '1rem', borderRadius: '10px', gap: '1rem' }}>
-                    <input type="text" defaultValue={evento?.titulo} style={{ border: 'none', borderBottom: '1px solid black', textAlign: 'center' }}
-                        onChange={(e) => {
-                            setEvento({
-                                ...evento,
-                                titulo: e.target.value
-                            })
-                        }}
-                    />
-                    <textarea type="text" defaultValue={evento?.descripcion} style={{ width: '100%', height: '50px', maxHeight: '50px', maxWidth: '100%', minHeight: '50px', minWidth: '100%', border: 'none', borderBottom: '1px solid black' }}
-                        onChange={(e) => {
-                            setEvento({
-                                ...evento,
-                                descripcion: e.target.value
-                            })
-                        }}
-                    />
-                    <select style={{ borderBottom: '1px solid black' }}
-                        onChange={(e) => {
-                            setEvento({
-                                ...evento,
-                                tipo: e.target.value
-                            })
-                        }}
-                    >
-                        {
-                            imgTipoEvento?.map(
-                                tipo => <option selected={tipo?.tipo === evento?.tipo}>
-                                    {tipo?.tipo}
-                                </option>
-                            )
-                        }
-                    </select>
-                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-                        <div>
-                            <p>Inicio:</p>
-                            <input type="date" defaultValue={evento?.fecha_inicio.split('T')[0]} style={{ border: '2px solid black', borderRadius: '5px', width: '150px' }}
-                                onChange={(e) => {
-                                    setEvento({
-                                        ...evento,
-                                        fecha_inicio: e.target.value
-                                    })
-                                }}
-                            />
-                        </div>
-                        <div>
-                            <p>Fin:</p>
-                            <input type="date" defaultValue={evento?.fecha_final.split('T')[0]} style={{ border: '2px solid black', borderRadius: '5px', width: '150px' }}
-                                onChange={(e) => {
-                                    setEvento({
-                                        ...evento,
-                                        fecha_final: e.target.value
-                                    })
-                                }}
-                            />
-                        </div>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem' }}>
-                        <p>Publicado:</p>
-                        <input type="date" defaultValue={evento?.fecha_publicacion.split('T')[0]} disabled />
-                    </div>
-                    <div>
-                        <button
-                            className="btn-accion-2"
-                            onClick={() => { setIdEvento(evento?.id); setAdministar(true) }}
-                        >
-                            <strong>ADMINISTRAR</strong>
-                        </button>
-                    </div>
-                    <div>
-                        <select>
-                            {
-                                participantes.map(
-                                    participante => <option>
-                                        {participante?.nombre_comercial}
+                <div className="formulario-contenedor">
+                    <div className="titulo-formulario"><h1>{evento?.titulo.substring(0, 25)}</h1></div>
+                    <div className="formulario">
+                        <div className="contenedor-datos-formulario">
+                            <div className="contenedor-datos-interno">
+                                <h6>Titulo:</h6>
+                                <input onChange={(e) => { setEvento({ ...evento, titulo: e.target.value }) }} type="text" defaultValue={evento?.titulo} placeholder="Titulo" />
+                                <h6>Descripcion:</h6>
+                                <textarea onChange={(e) => { setEvento({ ...evento, descripcion: e.target.value }) }} type="text" placeholder="Descripcion" defaultValue={evento?.descripcion} />
+                                <h6>Tipo:</h6>
+                                <select onChange={(e) => { setEvento({ ...evento, tipo: e.target.value }) }}>
+                                    <option>
+                                        TIPO
                                     </option>
-                                )
-                            }
-                        </select>
+                                    {
+                                        imgTipoEvento?.map(
+                                            tipo => <option selected={tipo?.tipo === evento?.tipo}>
+                                                {tipo?.tipo}
+                                            </option>
+                                        )
+                                    }
+                                </select>
+
+                                <h6>Participantes:</h6>
+                                <button
+                                    className="btn-accion-2"
+                                    onClick={() => { setIdEvento(evento?.id); setAdministar(true) }}
+                                >
+                                    <strong>ADMINISTRAR</strong>
+                                </button>
+                                <select>
+                                    {
+                                        participantes.map(
+                                            participante => <option>
+                                                {participante?.nombre_comercial}
+                                            </option>
+                                        )
+                                    }
+                                </select>
+                                <h6>Fecha:</h6>
+                                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                                    <h6>Inicio:</h6>
+                                    <input defaultValue={evento?.fecha_inicio.split('T')[0]} onChange={(e) => { setEvento({ ...evento, fecha_inicio: e.target.value }) }} type="date" style={{ minWidth: '100px', maxWidth: '100px', maxHeight: '25px', minHeight: '25px' }} />
+                                    <h6>Fin:</h6>
+                                    <input defaultValue={evento?.fecha_final.split('T')[0]} onChange={(e) => { setEvento({ ...evento, fecha_final: e.target.value }) }} type="date" style={{ minWidth: '100px', maxWidth: '100px', maxHeight: '25px', minHeight: '25px' }} />
+                                </div>
+                            </div>
+                        </div>
+                        <div style={{ width: '250px', height: '350px' }}>
+                            <img style={{ width: '100%', height: '90%', margin: 0 }} src={fotoSeleccionada ? fotoSeleccionada : "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="} />
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ display: 'flex', minWidth: '90%', maxWidth: '90%', overflowX: 'scroll', gap: '0.4rem' }}>
+                                    {
+                                        fotos?.map(
+                                            f => <img src={f} style={{ height: '40px', width: '40px', margin: '0' }} onClick={() => { setFotoSeleccionada(f) }} />
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <img src="" />
-                    </div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+                    <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
                         <button
                             className="btn-accion-cancelar-1"
                             onClick={() => { props?.accion(false) }}
@@ -179,7 +188,6 @@ export default function EditarEvento(props) {
                 </div>
             </div>
 
-
             {
                 administrar && (
                     <div>
@@ -189,7 +197,7 @@ export default function EditarEvento(props) {
                                 width: '90%', height: '80vh', padding: '1rem', backgroundColor: 'white', display: 'flex', flexDirection: 'column',
                                 justifyContent: 'space-around', alignItems: 'center', gap: '1rem'
                             }}>
-                                <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center'}}>
+                                <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <h1>INSCRIPCIONES DEL EVENTO</h1>
                                     <table className="contenedor-tablas-interno" style={{ minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
                                         <thead>
@@ -214,11 +222,17 @@ export default function EditarEvento(props) {
                                                         <th>
                                                             <button
                                                                 className="btn-accion-cancelar-1"
+                                                                onClick={() => {
+                                                                    handleUpdateEstadoById(inscripcion.id_inscripcion, 'RECHAZADO')
+                                                                }}
                                                             >
                                                                 <strong>RECHAZAR</strong>
                                                             </button>
                                                             <button
                                                                 className="btn-accion-2"
+                                                                onClick={() => {
+                                                                    handleUpdateEstadoById(inscripcion.id_inscripcion, 'APROBADA')
+                                                                }}
                                                             >
                                                                 <strong>APROBAR</strong>
                                                             </button>

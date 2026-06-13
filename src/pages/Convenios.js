@@ -7,12 +7,15 @@ import { useAuth } from "../hooks/useAuth";
 import { createConvenio } from "../services/Convenio";
 import { useNavigate } from "react-router-dom";
 import { uploadDocument } from "../services/Upload";
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function Convenios() {
+    const isSmallDevice = useMediaQuery('(max-width:768px)');
 
     const [documento, setDocumento] = useState(null)
+    const [openDocumento, setOpenDocumento] = useState(false)
 
-    const [openCreateEvento, setOpenCreateEvento] = useState(false)
+    const [openCreateConvenio, setOpenCreateConvenio] = useState(false)
     const { user } = useAuth()
     const [convenios, setConvenios] = useState([])
 
@@ -22,7 +25,7 @@ export default function Convenios() {
         tipo: '',
         subtipo: '',
         estado: true,
-        documento : '',
+        documento: '',
         fecha_inicio: '',
         fecha_final: ''
     })
@@ -142,64 +145,91 @@ export default function Convenios() {
     return (
         <div>
             <NavBarAutenticado />
-            <Filtros enableAccion={true} btn_accion={setOpenCreateEvento} titulo='Convenios' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='Crear convenio' />
+            <Filtros enableAccion={true} btn_accion={setOpenCreateConvenio} titulo='Convenios' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='Crear convenio' />
             <TablaContenido encabezados={['Titulo', 'Tipo', 'Subtipo', 'Descripcion', 'Anfitrion', 'Registro', 'Inicio', 'Fin', 'Acciones']} conveniosTabla={convenios} />
             {
-                openCreateEvento && (
+                openCreateConvenio && (
                     <div>
                         <div className="overllay"></div>
-                        <div className="overllay-contenedor" style={{ flexDirection: 'row' }}>
-                            <div style={{ width: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', backgroundColor: 'white', padding: '1rem', borderRadius: '10px', gap: '0.5rem' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                    <h6 style={{ margin: '0' }}>Titulo:</h6>
-                                    <input type="text" placeholder="Titulo del convenio"
-                                        onChange={(e) => { setConvenio({ ...convenio, titulo: e.target.value }) }}
-                                    />
-                                    <h6 style={{ margin: '0' }}>Descripción:</h6>
-                                    <textarea type="text" placeholder="Descripción del convenio" style={{ maxWidth: '100%', maxHeight: '200px', minWidth: '100%', minHeight: '200px' }}
-                                        onChange={(e) => { setConvenio({ ...convenio, descripcion: e.target.value }) }}
-                                    />
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                    <h6 style={{ margin: '0' }}>Tipo:</h6>
-                                    <select onChange={(e) => { setSelectTipo(e.target.value); setConvenio({ ...convenio, tipo: e.target.value }) }}>
-                                        <option>
-                                            TIPO
-                                        </option>
-                                        {
-                                            tiposConvenios?.map(
-                                                tipo => <option key={tipo.id}>{tipo.tipo}</option>
-                                            )
-                                        }
-                                    </select>
-                                    <h6 style={{ margin: '0' }}>Subtipo:</h6>
-                                    <select
-                                        onChange={(e) => { setConvenio({ ...convenio, subtipo: e.target.value }) }}
-                                    >
-                                        <option>
-                                            SUBTIPO
-                                        </option>
-                                        {
-                                            selectTipo.length >= 1 && tiposConvenios?.filter(t => t.tipo === selectTipo).map(
-                                                t => {
-                                                    return t.subtipos.map(
-                                                        s => <option key={s.id}>{s.subtipo}</option>
+                        <div className="overllay-contenedor">
+                            <div className="formulario-contenedor" style={{ height: isSmallDevice ? '100%' : null }}>
+                                <div className="titulo-formulario"><h1>NUEVO CONVENIO</h1></div>
+                                <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
+                                    <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
+                                        <div className="contenedor-datos-interno">
+                                            <h6 style={{ margin: '0' }}>Titulo:</h6>
+                                            <input type="text" placeholder="Titulo del convenio"
+                                                onChange={(e) => { setConvenio({ ...convenio, titulo: e.target.value }) }}
+                                            />
+                                            <h6 style={{ margin: '0' }}>Descripción:</h6>
+                                            <textarea type="text" placeholder="Descripción del convenio"
+                                                onChange={(e) => { setConvenio({ ...convenio, descripcion: e.target.value }) }}
+                                            />
+                                            <h6 style={{ margin: '0' }}>Tipo:</h6>
+                                            <select onChange={(e) => { setSelectTipo(e.target.value); setConvenio({ ...convenio, tipo: e.target.value }) }}>
+                                                <option>
+                                                    TIPO
+                                                </option>
+                                                {
+                                                    tiposConvenios?.map(
+                                                        tipo => <option key={tipo.id}>{tipo.tipo}</option>
                                                     )
                                                 }
-                                            )
-                                        }
-                                    </select>
+                                            </select>
+                                            <h6 style={{ margin: '0' }}>Subtipo:</h6>
+                                            <select
+                                                onChange={(e) => { setConvenio({ ...convenio, subtipo: e.target.value }) }}
+                                            >
+                                                <option>
+                                                    SUBTIPO
+                                                </option>
+                                                {
+                                                    selectTipo.length >= 1 && tiposConvenios?.filter(t => t.tipo === selectTipo).map(
+                                                        t => {
+                                                            return t.subtipos.map(
+                                                                s => <option key={s.id}>{s.subtipo}</option>
+                                                            )
+                                                        }
+                                                    )
+                                                }
+                                            </select>
+                                            <h6 style={{ margin: '0' }}>Fechas:</h6>
+
+                                            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+                                                <h6 style={{ margin: '0' }}>Inicio:</h6>
+                                                <input className="input-date" type="date" onChange={(e) => setConvenio({ ...convenio, fecha_inicio: e.target.value })} />
+                                                <h6 style={{ margin: '0' }}>Fin:</h6>
+                                                <input className="input-date" type="date" onChange={(e) => { setConvenio({ ...convenio, fecha_final: e.target.value }) }} />
+                                            </div>
+                                            <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Documento:</h6>
+                                            <input id="documento" style={{ display: 'none' }} type="file" accept="pdf" onChange={handleUploadDocument} />
+                                            <label htmlFor="documento" className="btn-accion-2" style={{ width: '50px', height: '30px' }}>
+                                                <strong>SUBIR</strong>
+                                            </label>
+                                                                                                <button className="btn-accion-2"
+                                                        onClick={() => { documento ? setOpenDocumento(true) : alert('DEBES SUBIR ALGUN DOCUMENTO') }}
+                                                    ><strong>VER</strong></button>
+                                        </div>
+                                    </div>
+                                    {
+                                        !isSmallDevice && (
+                                            <div style={{ width: '250px', height: '100%' }}>
+                                                <div style={{ width: '100%', height: '90%', backgroundColor: 'gray' }}>
+                                                    <embed src={documento} width={'100%'} height={'100%'}></embed>
+                                                </div>
+                                                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                                    <button className="btn-accion-2"
+                                                        onClick={() => { documento ? setOpenDocumento(true) : alert('DEBES SUBIR ALGUN DOCUMENTO') }}
+                                                    ><strong>VER</strong></button>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
                                 </div>
-                                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-                                    <h6 style={{ margin: '0' }}>Inicio:</h6>
-                                    <input type="date" onChange={(e) => setConvenio({ ...convenio, fecha_inicio: e.target.value })} />
-                                    <h6 style={{ margin: '0' }}>Fin:</h6>
-                                    <input type="date" onChange={(e) => { setConvenio({ ...convenio, fecha_final: e.target.value }) }} />
-                                </div>
-                                <div style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+                                <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
                                     <button
                                         className="btn-accion-cancelar-1"
-                                        onClick={() => { setOpenCreateEvento(false) }}
+                                        onClick={() => { setOpenCreateConvenio(false) }}
                                     ><strong>CERRAR</strong></button>
                                     <button
                                         onClick={async () => {
@@ -211,9 +241,8 @@ export default function Convenios() {
                                                 const document = await uploadDocument(documento, user.organizacion)
                                                 const resConvenio = await createConvenio(convenio, document)
                                                 const id_convenio_res = resConvenio.id
-                                                console.log(resConvenio)
                                                 const resConvenioOrganizacion = await createConvenioOrganizacion('ANFITRION', id_convenio_res, user.organizacion)
-                                                if (resConvenioOrganizacion.status === 201) {
+                                                if (resConvenioOrganizacion === 201) {
                                                     navigate(0)
                                                 } else {
                                                     alert('Ocurrio un error')
@@ -226,9 +255,22 @@ export default function Convenios() {
                                     ><strong>CREAR</strong></button>
                                 </div>
                             </div>
-                            <div style={{ width: '400px', height: '400px' }}>
-                                <embed src={documento ? documento : null} width={'100%'} height={'100%'}></embed>
-                                <input id="documento" style={{ display: 'flex' }} type="file" accept="pdf" onChange={handleUploadDocument} />
+                        </div></div>
+
+                )
+            }
+
+            {
+                openDocumento && (
+                    <div>
+                        <div className="overllay"></div>
+                        <div className="overllay-contenedor">
+                            <div style={{ width: '90%', height: '90%' }}>
+                                <embed src={documento} width={'100%'} height={'100%'}></embed>
+                                <div><button
+                                    className="btn-accion-cancelar-1"
+                                    onClick={() => { setOpenDocumento(false) }}
+                                ><strong>CERRAR</strong></button></div>
                             </div>
                         </div>
                     </div>

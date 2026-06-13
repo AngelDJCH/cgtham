@@ -8,3 +8,18 @@ export const findAllByIdEscuela = async (id_escuela) => {
         console.log(error)
     }
 }
+
+export const createOfertaEducativa = async (oferta) => {
+    try {
+        const {status} = await axiosInstance.post('/ofertaseducativas/',{
+            nombre : oferta.nombre,
+            descripcion : oferta.descripcion,
+            duracion : oferta.duracion,
+            perfil : oferta.perfil,
+            id_escuela : oferta.id_escuela
+        })
+        return status
+    } catch (error) {
+        return error.response.status
+    }
+}
