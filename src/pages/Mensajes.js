@@ -6,8 +6,9 @@ import { getOrganizacion } from "../services/Organizacion";
 import { useAuth } from "../hooks/useAuth";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
-
-const socket = io('http://localhost:3040', {
+//https://websocket-cgtham.onrender.com
+//http://localhost:3040
+const socket = io('https://websocket-cgtham.onrender.com', {
     transports: ['websocket']
 });
 

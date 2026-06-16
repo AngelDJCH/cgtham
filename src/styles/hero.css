@@ -13,6 +13,7 @@
     gap : 2rem
 }
 
+/* Tus estilos actuales (para computadoras/pantallas grandes) */
 .hero .informacion h1 {
     font-size: 64px;
     margin: 0;
@@ -28,6 +29,20 @@
     font-size: 16px;
     margin: 0;
     padding: 0;
+}
+
+
+@media (max-width: 768px) {
+    .hero .informacion h1 {
+
+        font-size: 36px; 
+        line-height: 1.2; 
+    }
+
+    .informacion p {
+        font-size: 15px;
+        padding: 0 10px; 
+    }
 }
 
 .hero button {

@@ -32,6 +32,13 @@
     color: #41431B
 }
 
+@media (max-width: 768px) {
+    .seccion1 h1 {
+        font-size: 18px;
+        line-height: 1.2;
+    }
+}
+
 .seccion2 {
     display: flex;
     padding-right: 2rem;

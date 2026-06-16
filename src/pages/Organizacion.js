@@ -239,10 +239,12 @@ export default function Organizacion() {
             id: user.organizacion
         })
 
-        const datosSeguridadContrasenia = await updateCuentaContraseniaById({
-            contrasenia: contrasenia,
-            id: user.organizacion
-        })
+        if (contrasenia.length > 0) {
+            const datosSeguridadContrasenia = await updateCuentaContraseniaById({
+                contrasenia: contrasenia,
+                id: user.organizacion
+            })
+        }
         // if(datosSeguridad && datosSeguridad === 200) alert('Datos actualizados')
         const cloudData = await updateCloudinaryByIdOrganizacion(cloudinary)
         // if(cloudData && cloudData === 200) alert('Datos actualizados correctamente')

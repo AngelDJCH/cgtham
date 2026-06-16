@@ -3,7 +3,7 @@ import { axiosInstance } from "./Axios"
 
 export const uploadImg = async (data_img) => {
     try {
-        const res = await axios.post('http://localhost:80/api/v1/uploadCloudinary/upload', {
+        const res = await axiosInstance.post('/uploadCloudinary/upload', {
             imagen_url : data_img
         })
 

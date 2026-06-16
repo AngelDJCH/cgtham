@@ -17,11 +17,13 @@ export default function NavBar(props) {
             <div className="seccion1"
             >
                 <div style={{ width: '50px', height: '50px' }}><img src={logo} alt="" /></div>
-                <h1
+  
+                        <h1
 
-                    onClick={() => { navigate('/') }}
+                            onClick={() => { navigate('/') }}
 
-                >{nombre}</h1>
+                        >{nombre}</h1>
+  
             </div>
             <div className="seccion2">
                 <ul>

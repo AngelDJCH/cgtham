@@ -8,6 +8,7 @@ import '../styles/botones.css'
 import { createEvento, deleteEventoById } from "../services/Evento";
 import { useNavigate } from "react-router-dom";
 import { uploadFotoEvento } from "../services/Foto";
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function Eventos(prop) {
 
@@ -116,6 +117,7 @@ export default function Eventos(prop) {
 
         user.tipo === 'Escuela' ? getEventos() : getEventosAll()
     }, [])
+    const isSmallDevice = useMediaQuery('(max-width:768px)');
 
     return (
         <div>
@@ -128,15 +130,15 @@ export default function Eventos(prop) {
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
-                            <div className="formulario-contenedor">
+                            <div className="formulario-contenedor" style={{ height: isSmallDevice ? '90%' : null }}>
                                 <div className="titulo-formulario"><h1>NUEVO EVENTO</h1></div>
-                                <div className="formulario">
-                                    <div className="contenedor-datos-formulario">
+                                <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
+                                    <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
                                         <div className="contenedor-datos-interno">
                                             <h6>Titulo:</h6>
                                             <input onChange={(e) => { setEvento({ ...evento, titulo: e.target.value }) }} type="text" placeholder="Titulo" />
                                             <h6>Descripcion:</h6>
-                                            <textarea onChange={(e) => { setEvento({ ...evento, descripcion: e.target.value }) }} type="text" placeholder="Descripcion"/>
+                                            <textarea onChange={(e) => { setEvento({ ...evento, descripcion: e.target.value }) }} type="text" placeholder="Descripcion" />
                                             <h6>Tipo</h6>
                                             <select onChange={(e) => { setEvento({ ...evento, tipo: e.target.value }) }}>
                                                 <option>
@@ -157,32 +159,62 @@ export default function Eventos(prop) {
                                                 <h6>Fin:</h6>
                                                 <input onChange={(e) => { setEvento({ ...evento, fecha_final: e.target.value }) }} type="date" style={{ minWidth: '100px', maxWidth: '100px', maxHeight: '25px', minHeight: '25px' }} />
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div style={{ width: '250px', height: '350px' }}>
-                                        <img style={{ width: '100%', height: '90%', margin: 0 }} src={selectImagen ? selectImagen : "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="} />
-                                        <div style={{ display: 'flex' }}>
-                                            <div style={{ width: '50px', height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                                <input id={`foto_${imagenes.length}`} type="file" accept=".png" style={{ display: 'none' }} onChange={handeChangeFoto} />
-                                                <label htmlFor={`foto_${imagenes.length}`}>
-                                                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlLXBsdXMtaWNvbiBsdWNpZGUtaW1hZ2UtcGx1cyI+PHBhdGggZD0iTTE2IDVoNiIvPjxwYXRoIGQ9Ik0xOSAydjYiLz48cGF0aCBkPSJNMjEgMTEuNVYxOWEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoNy41Ii8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48Y2lyY2xlIGN4PSI5IiBjeT0iOSIgcj0iMiIvPjwvc3ZnPg==" style={{ width: '32px', height: '32px' }} />
-                                                </label>
-                                            </div>
-                                            <div style={{ display: 'flex', minWidth: '90%', maxWidth: '90%', overflowX: 'scroll', gap: '0.4rem' }}>
-                                                {
-                                                    imagenes.map(
-                                                        img => <div>
-                                                            <label htmlFor={`foto_${img?.id}`} onClick={() => { setSelectImagen(img?.url) }}>
-                                                                <img src={img?.url} style={{ width: '32px', height: '32px', borderBottom: `2px solid ${img?.subida ? 'green' : 'red'}` }} />
-                                                            </label>
+                                            {
+                                                isSmallDevice && (
+                                                    <div style={{ width: '250px', height: '350px' }}>
+                                                        <img style={{ width: '100%', height: '90%', margin: 0 }} src={selectImagen ? selectImagen : "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="} />
+                                                        <div style={{ display: 'flex' }}>
+                                                            <div style={{ width: '50px', height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                                <input id={`foto_${imagenes.length}`} type="file" accept=".png" style={{ display: 'none' }} onChange={handeChangeFoto} />
+                                                                <label htmlFor={`foto_${imagenes.length}`}>
+                                                                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlLXBsdXMtaWNvbiBsdWNpZGUtaW1hZ2UtcGx1cyI+PHBhdGggZD0iTTE2IDVoNiIvPjxwYXRoIGQ9Ik0xOSAydjYiLz48cGF0aCBkPSJNMjEgMTEuNVYxOWEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoNy41Ii8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48Y2lyY2xlIGN4PSI5IiBjeT0iOSIgcj0iMiIvPjwvc3ZnPg==" style={{ width: '32px', height: '32px' }} />
+                                                                </label>
+                                                            </div>
+                                                            <div style={{ display: 'flex', minWidth: '90%', maxWidth: '90%', overflowX: 'scroll', gap: '0.4rem' }}>
+                                                                {
+                                                                    imagenes.map(
+                                                                        img => <div>
+                                                                            <label htmlFor={`foto_${img?.id}`} onClick={() => { setSelectImagen(img?.url) }}>
+                                                                                <img src={img?.url} style={{ width: '32px', height: '32px', borderBottom: `2px solid ${img?.subida ? 'green' : 'red'}` }} />
+                                                                            </label>
+                                                                        </div>
+                                                                    )
+                                                                }
+                                                            </div>
                                                         </div>
-                                                    )
-                                                }
-                                            </div>
+                                                    </div>
+                                                )
+                                            }
                                         </div>
                                     </div>
+                                    {
+                                        !isSmallDevice && (
+                                            <div style={{ width: '250px', height: '350px' }}>
+                                                <img style={{ width: '100%', height: '90%', margin: 0 }} src={selectImagen ? selectImagen : "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="} />
+                                                <div style={{ display: 'flex' }}>
+                                                    <div style={{ width: '50px', height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                        <input id={`foto_${imagenes.length}`} type="file" accept=".png" style={{ display: 'none' }} onChange={handeChangeFoto} />
+                                                        <label htmlFor={`foto_${imagenes.length}`}>
+                                                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlLXBsdXMtaWNvbiBsdWNpZGUtaW1hZ2UtcGx1cyI+PHBhdGggZD0iTTE2IDVoNiIvPjxwYXRoIGQ9Ik0xOSAydjYiLz48cGF0aCBkPSJNMjEgMTEuNVYxOWEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoNy41Ii8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48Y2lyY2xlIGN4PSI5IiBjeT0iOSIgcj0iMiIvPjwvc3ZnPg==" style={{ width: '32px', height: '32px' }} />
+                                                        </label>
+                                                    </div>
+                                                    <div style={{ display: 'flex', minWidth: '90%', maxWidth: '90%', overflowX: 'scroll', gap: '0.4rem' }}>
+                                                        {
+                                                            imagenes.map(
+                                                                img => <div>
+                                                                    <label htmlFor={`foto_${img?.id}`} onClick={() => { setSelectImagen(img?.url) }}>
+                                                                        <img src={img?.url} style={{ width: '32px', height: '32px', borderBottom: `2px solid ${img?.subida ? 'green' : 'red'}` }} />
+                                                                    </label>
+                                                                </div>
+                                                            )
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
                                 </div>
-                                <div style={{ width: '50%', height: '10vh', justifyContent:'flex-end', display:'flex', gap:'1rem'}}>
+                                <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
                                     <button onClick={() => { setOpenCreateEvento(false); setImagenes([]); setSelectImagen(null) }} className="btn-accion-cancelar-1">CERRAR</button>
                                     <button onClick={() => { setOpenCreateEvento(false); setImagenes([]); setSelectImagen(null); handleCreateEvento() }} className="btn-accion-2">GUARDAR</button>
                                 </div>

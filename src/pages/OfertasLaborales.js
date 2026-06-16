@@ -8,9 +8,11 @@ import { getOrganizacion } from "../services/Organizacion";
 import { useAuth } from "../hooks/useAuth";
 import { uploadDocument } from "../services/Upload";
 import VisualizarOferta from "../components/VisualizarOferta";
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function OfertasLaborales() {
 
+    const isSmallDevice = useMediaQuery('(max-width:768px)');
 
     const [documento, setDocumento] = useState(null)
 
@@ -239,16 +241,16 @@ export default function OfertasLaborales() {
                         <div className="overllay"></div>
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
-                            <div className="formulario-contenedor">
+                            <div className="formulario-contenedor" style={{ width: isSmallDevice ? '90%' : null, height: isSmallDevice ? '90%' : null }}>
                                 <div className="titulo-formulario"><h1>NUEVA OFERTA LABORAL</h1></div>
-                                <div className="formulario">
-                                    <div className="contenedor-datos-formulario">
+                                <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
+                                    <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
                                         <div className="contenedor-datos-interno">
                                             <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Titulo:</h6>
-                                            <input placeholder="Titulo" onChange={(e) => { setOfertaData({ ...ofertaData, titulo: e.target.value }) }} style={{width:'100%'}}/>
+                                            <input placeholder="Titulo" onChange={(e) => { setOfertaData({ ...ofertaData, titulo: e.target.value }) }} style={{ width: '100%' }} />
                                             <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Descripcion:</h6>
-                                            <textarea onChange={(e) => { setOfertaData({ ...ofertaData, descripcion: e.target.value }) }} placeholder="Descripcion"  />
-                                            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly' }}>
+                                            <textarea onChange={(e) => { setOfertaData({ ...ofertaData, descripcion: e.target.value }) }} placeholder="Descripcion" />
+                                            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', flexWrap:'wrap' }}>
                                                 <div>
                                                     <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Salario:</h6>
                                                     <input placeholder="Salario" onChange={(e) => { setOfertaData({ ...ofertaData, salario: e.target.value }) }} />
@@ -273,7 +275,7 @@ export default function OfertasLaborales() {
                                                     )
                                                 }
                                             </select>
-                                            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly' }}>
+                                            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', flexWrap:'wrap' }}>
                                                 <div>
                                                     <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Jornada:</h6>
                                                     <select onChange={(e) => { setOfertaData({ ...ofertaData, jornada: e.target.value }) }}>
@@ -320,26 +322,37 @@ export default function OfertasLaborales() {
                                             <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Tecnicas</h6>
                                             <textarea onChange={(e) => { setOfertaData({ ...ofertaData, habilidades_tecnicas: e.target.value }) }} placeholder="Habilidades Tecnicas - Separados por ," />
                                             <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Blandas</h6>
-                                            <textarea onChange={(e) => { setOfertaData({ ...ofertaData, habilidades_blandas: e.target.value }) }} placeholder="Habilidades Blandas - Separados por ,"  />
+                                            <textarea onChange={(e) => { setOfertaData({ ...ofertaData, habilidades_blandas: e.target.value }) }} placeholder="Habilidades Blandas - Separados por ," />
                                             <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Documento:</h6>
                                             <input id="documento" style={{ display: 'none' }} type="file" accept="pdf" onChange={handleUploadDocument} />
                                             <label htmlFor="documento" className="btn-accion-2" style={{ width: '50px', height: '30px' }}>
                                                 <strong>SUBIR</strong>
                                             </label>
+                                            {
+                                                isSmallDevice && (
+                                                    <button className="btn-accion-2"
+                                                        onClick={() => { documento ? setOpenDocumento(true) : alert('DOCUMENTO NO DISPONIBLE') }}
+                                                    ><strong>VER</strong></button>
+                                                )
+                                            }
                                         </div>
                                     </div>
-                                    <div style={{ width: '250px', height: '100%' }}>
-                                        <div style={{ width: '100%', height: '90%', backgroundColor: 'gray' }}>
-                                            <embed src={documento} width={'100%'} height={'100%'}></embed>
-                                        </div>
-                                        <div style={{display:'flex', justifyContent:'flex-end'}}>
-                                            <button className="btn-accion-2"
-                                                onClick={() => { documento ? setOpenDocumento(true) : alert('DEBES SUBIR ALGUN DOCUMENTO') }}
-                                            ><strong>VER</strong></button>
-                                        </div>
-                                    </div>
+                                    {
+                                        !isSmallDevice && (
+                                            <div style={{ width: '250px', height: '100%' }}>
+                                                <div style={{ width: '100%', height: '90%', backgroundColor: 'gray' }}>
+                                                    <embed src={documento} width={'100%'} height={'100%'}></embed>
+                                                </div>
+                                                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                                    <button className="btn-accion-2"
+                                                        onClick={() => { documento ? setOpenDocumento(true) : alert('DEBES SUBIR ALGUN DOCUMENTO') }}
+                                                    ><strong>VER</strong></button>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
                                 </div>
-                                <div style={{ width: '50%', height: '10vh', justifyContent:'flex-end', display:'flex', gap:'1rem'}}>
+                                <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
                                     <button
                                         className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenCreateOferta(false); setDocumento(null) }}

@@ -1,4 +1,4 @@
-.contenedor-autenticacion{
+.contenedor-autenticacion {
     margin-top: 100px;
     width: 70%;
     height: 450px;
@@ -7,7 +7,7 @@
     display: flex;
 }
 
-.autenticacion{
+.autenticacion {
     width: 100%;
     height: 100vh;
     background-color: #E3DBBB;
@@ -16,7 +16,7 @@
     align-items: center;
 }
 
-.autenticacion-seccion2{
+.autenticacion-seccion2 {
     width: 60%;
     display: flex;
     flex-direction: column;
@@ -24,7 +24,7 @@
     align-items: center;
 }
 
-.autenticacion-seccion1{
+.autenticacion-seccion1 {
     width: 40%;
     height: 100%;
     display: flex;
@@ -34,14 +34,13 @@
     object-fit: cover;
 }
 
-.autenticacion-seccion1 img{
+.autenticacion-seccion1 img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    
 }
 
-.a-titulo{
+.a-titulo {
     margin: 0;
     padding: 0;
     text-align: center;
@@ -50,31 +49,31 @@
     color: #41431B;
 }
 
-.a-inputs{
+.a-inputs {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
 }
 
-.a-inputs input{
+.a-inputs input {
     width: 15rem;
     height: 1.4rem;
     border: none;
     border-bottom: 1px solid #FFD400;
 }
 
-.a-registros{
+.a-registros {
     text-align: center;
     font-family: 'Poppins';
     font-size: 12px;
 }
 
-.a-registros p:hover{
+.a-registros p:hover {
     color: #41431B;
     scale: 1.1;
 }
 
-.a-botones{
+.a-botones {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -82,7 +81,7 @@
     gap: 2rem;
 }
 
-.a-botones button{
+.a-botones button {
     width: 100px;
     height: 30px;
     border: none;
@@ -90,39 +89,39 @@
     border-radius: 10px;
 }
 
-.a-botones .btn1{
+.a-botones .btn1 {
     background-color: #AEB784;
 }
 
-.a-botones .btn2{
+.a-botones .btn2 {
     background-color: #FFD400;
 }
 
-.btn1:hover{
+.btn1:hover {
     color: #AEB784;
     background-color: transparent;
     border: 1px solid #AEB784;
 }
 
-.btn2:hover{
+.btn2:hover {
     color: #FFD400;
     background-color: transparent;
     border: 1px solid #FFD400;
 }
 
-.contenedor-seccion1{
+.contenedor-seccion1 {
     width: 100%;
     height: 125px;
 }
 
-.contenedor-seccion1 img{
+.contenedor-seccion1 img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
 }
 
-.contenedor-seccion2{
+.contenedor-seccion2 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -130,33 +129,33 @@
     height: 80%;
 }
 
-.contenedor-seccion2 img{
+.contenedor-seccion2 img {
     width: 120px;
     height: 120px;
     border-radius: 100%;
 }
 
-.contenedor-seccion2-1{
+.contenedor-seccion2-1 {
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
 }
 
-.contenedor-input{
+.contenedor-input {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     width: 200px;
 }
 
-.contenedor-input-doble{
+.contenedor-input-doble {
     display: flex;
     width: 100%;
     justify-content: space-between;
 }
 
-.contenedor-botones-accion{
+.contenedor-botones-accion {
     width: 100%;
     display: flex;
     justify-content: end;
@@ -166,7 +165,7 @@
     margin-right: 1rem;
 }
 
-.contenedor-botones-accion button{
+.contenedor-botones-accion button {
     font-family: 'Poppins';
     border: none;
     width: 150px;
@@ -174,33 +173,62 @@
     border-radius: 10px;
 }
 
-.contenedor-botones-accion button:hover{
+.contenedor-botones-accion button:hover {
     scale: 1.1;
 }
 
-.btn-regresar{
+.btn-regresar {
     background-color: #AEB784;
 }
 
-.btn-regresar:hover{
+.btn-regresar:hover {
     background-color: transparent;
     border: 1px solid #AEB784;
 }
 
-.btn-limpiar{
+.btn-limpiar {
     background-color: #e7e7e7;
 }
 
-.btn-limpiar:hover{
+.btn-limpiar:hover {
     background-color: transparent;
     border: 1px solid #e7e7e7;
 }
 
-.btn-registrar{
+.btn-registrar {
     background-color: #FFD400;
 }
 
-.btn-registrar:hover{
+.btn-registrar:hover {
     background-color: transparent;
     border: 1px solid #FFD400;
+}
+
+/* =======================================================
+   MEDIA QUERY: SIEMPRE AL FINAL DEL ARCHIVO
+   ======================================================= */
+@media (max-width: 768px) {
+    .contenedor-autenticacion {
+        flex-direction: column;
+        width: 90%;        
+        height: auto;        
+        padding: 1rem 0;    
+        margin-top: 0px;
+    }
+
+    .autenticacion {
+        height: auto;       
+        min-height: 100vh;   
+        padding: 2rem 0;
+    }
+
+    .autenticacion-seccion1 {
+        width: 100%;
+        height: 100px;      
+    }
+
+    .autenticacion-seccion2 {
+        width: 100%;
+        padding: 2rem 0;     
+    }
 }

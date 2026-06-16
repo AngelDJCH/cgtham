@@ -1,6 +1,6 @@
 {
   "name": "cgtham",
-  "version": "0.1.0",
+  "version": "no0.1.0",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.13.6",
+    "dotenv": "^17.4.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.1",
@@ -43,5 +44,14 @@
   },
   "devDependencies": {
     "ajv": "^8.20.0"
+  },
+  "overrides": {
+    "nth-check": "^2.1.1",
+    "postcss": "^8.4.38",
+    "serialize-javascript": "^6.0.2",
+    "js-yaml": "^4.1.0",
+    "ws": "^8.17.1",
+    "uuid": "^9.0.1",
+    "@tootallnate/once": "^2.0.1"
   }
 }
