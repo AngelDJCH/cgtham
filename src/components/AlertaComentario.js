@@ -63,7 +63,7 @@ export default function AlertaComentario(
                                     //alert('CONTENEDIO CORRECTO')
                                     create()
                                     props.btn_accion(false)
-                                    navigate(0)
+                                    // navigate(0)
                                 } else {
                                     alert('DEBE TENER MAS DE 10 Y MENOR DE 70 CARACTERES')
                                 }
