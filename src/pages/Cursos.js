@@ -210,23 +210,25 @@ export default function Cursos() {
                         <div className="overllay"></div>
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
-                            <div className="formulario-contenedor">
+                            <div className="formulario-contenedor" style={{ width: isSmallDevice ? '90%' : null, height: isSmallDevice ? '90%' : null }}>
                                 <div className="titulo-formulario"><h1>SOLICITAR CURSO</h1></div>
-                                <div className="formulario">
-                                    <div className="contenedor-datos-formulario">
+                                <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
+                                    <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
                                         <div className="contenedor-datos-interno">
-                                            <h6>Titulo</h6>
+                                            <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Titulo</h6>
                                             <input placeholder="Titulo" type="text" onChange={(e) => { setCursoSolicitud({ ...cursoSolicitud, titulo: e.target.value }) }} />
-                                            <h6>Descripción</h6>
+                                            <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Descripción</h6>
                                             <textarea placeholder="Descripcion" type="text" onChange={(e) => { setCursoSolicitud({ ...cursoSolicitud, descripcion: e.target.value }) }} />
-                                            <h6>Organización</h6>
+                                            <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Organización</h6>
                                             <select
 
                                                 onChange={(e) => {
-                                                    const organizacion = organizaciones.filter(f => f.nombre_comercial === e.target.value)
-                                                    console.log('La organizacion es: ', organizacion)
+                                                    if (e.target.value != '----') {
+                                                        const organizacion = organizaciones.filter(f => f.nombre_comercial === e.target.value)
+                                                        console.log('La organizacion es: ', organizacion)
 
-                                                    setCursoSolicitud({ ...cursoSolicitud, id_organizacion: organizacion[0].id })
+                                                        setCursoSolicitud({ ...cursoSolicitud, id_organizacion: organizacion[0].id })
+                                                    }
                                                 }}
                                             >
 
@@ -241,16 +243,6 @@ export default function Cursos() {
                                             </select>
                                         </div>
                                     </div>
-
-                                    <div style={{ width: '250px', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <p style={{ textAlign: 'justify' }}>
-                                            <strong>Nota: </strong> Recuerda que el solicitar el curso a una institución educativa no asegura de forma inmediata su compromiso por impartir dicho curso.
-                                            <br /> Depende de su programa de estudios, asi mismo como el tiempo para asignar fechas.
-                                            <br />
-                                            En caso de algun problema o inconveniente, debera ser reportado al siguiente correo <kbd><strong>cgtham@gmail.com</strong></kbd>
-                                        </p>
-                                    </div>
-
                                 </div>
                                 <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
                                     <button
@@ -269,6 +261,69 @@ export default function Cursos() {
                             </div>
                         </div>
                     </div>
+                    // <div>
+                    //     <div className="overllay"></div>
+                    //     <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+
+                    //         <div className="formulario-contenedor">
+                    //             <div className="titulo-formulario"><h1>SOLICITAR CURSO</h1></div>
+                    //             <div className="formulario">
+                    //                 <div className="contenedor-datos-formulario">
+                    //                     <div className="contenedor-datos-interno">
+                    // <h6>Titulo</h6>
+                    // <input placeholder="Titulo" type="text" onChange={(e) => { setCursoSolicitud({ ...cursoSolicitud, titulo: e.target.value }) }} />
+                    // <h6>Descripción</h6>
+                    // <textarea placeholder="Descripcion" type="text" onChange={(e) => { setCursoSolicitud({ ...cursoSolicitud, descripcion: e.target.value }) }} />
+                    // <h6>Organización</h6>
+                    // <select
+
+                    //     onChange={(e) => {
+                    //         const organizacion = organizaciones.filter(f => f.nombre_comercial === e.target.value)
+                    //         console.log('La organizacion es: ', organizacion)
+
+                    //         setCursoSolicitud({ ...cursoSolicitud, id_organizacion: organizacion[0].id })
+                    //     }}
+                    // >
+
+                    //     <option>----</option>
+                    //     {
+                    //         organizaciones.filter(tipo => tipo.tipo === 'Escuela').map(
+                    //             org => <option>
+                    //                 {org.nombre_comercial}
+                    //             </option>
+                    //         )
+                    //     }
+                    // </select>
+                    //                     </div>
+                    //                 </div>
+
+                    //                 <div style={{ width: '250px', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    //                     <p style={{ textAlign: 'justify' }}>
+                    //                         <strong>Nota: </strong> Recuerda que el solicitar el curso a una institución educativa no asegura de forma inmediata su compromiso por impartir dicho curso.
+                    //                         <br /> Depende de su programa de estudios, asi mismo como el tiempo para asignar fechas.
+                    //                         <br />
+                    //                         En caso de algun problema o inconveniente, debera ser reportado al siguiente correo <kbd><strong>cgtham@gmail.com</strong></kbd>
+                    //                     </p>
+                    //                 </div>
+
+                    //             </div>
+                    //             <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
+                    // <button
+                    //     className="btn-accion-cancelar-1"
+                    //     onClick={() => {
+                    //         setOpenSolicitar(false)
+                    //     }}
+                    // ><strong>CERRAR</strong></button>
+                    // <button
+                    //     className="btn-accion-2"
+                    //     onClick={() => { handleSolicitar() }}
+                    // >
+                    //     <strong>SOLICITAR</strong>
+                    // </button>
+                    //             </div>
+                    //         </div>
+                    //     </div>
+                    // </div>
 
                 )
             }
@@ -342,7 +397,7 @@ export default function Cursos() {
                                     }
 
                                 </div>
-                                <div style={{ width: isSmallDevice ? '100%': '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
+                                <div style={{ width: isSmallDevice ? '100%' : '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
                                     <button
                                         className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenCurso(false); setEnable(false) }}
@@ -374,9 +429,9 @@ export default function Cursos() {
                                 width: '90%', height: '80vh', padding: '1rem', backgroundColor: 'white', display: 'flex', flexDirection: 'column',
                                 justifyContent: 'space-around', alignItems: 'center', gap: '1rem'
                             }}>
-                                <div style={{ width: '100%', height: '100%', minWidth:'100%', maxWidth:'100%', overflowX:'scroll', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <div style={{ width: '100%', height: '100%', minWidth: '100%', maxWidth: '100%', overflowX: 'scroll', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <h1>SOLICITUDES DE CURSOS</h1>
-                                    <table className="contenedor-tablas-interno" style={{minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
+                                    <table className="contenedor-tablas-interno" style={{ minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
                                         <thead>
                                             <tr>
                                                 <th>Titulo</th>
@@ -442,7 +497,7 @@ export default function Cursos() {
                                 width: '90%', height: '80vh', padding: '1rem', backgroundColor: 'white', display: 'flex', flexDirection: 'column',
                                 justifyContent: 'space-around', alignItems: 'center', gap: '1rem'
                             }}>
-                                <div style={{ width: '100%', minWidth:'100%', maxWidth:'100%', overflowX:'scroll', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <div style={{ width: '100%', minWidth: '100%', maxWidth: '100%', overflowX: 'scroll', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <h1>INSCRIPCIONES DEL CURSO</h1>
                                     <table className="contenedor-tablas-interno" style={{ minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
                                         <thead>

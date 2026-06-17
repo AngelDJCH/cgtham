@@ -15,7 +15,7 @@ export default function Filtros(props) {
                     <input placeholder={props.placeholder} onChange={((e)=>{props.filtro(e.target.value)})}/>
                 )
             }
-            <select>
+            {/* <select>
                 <option>
                     FILTRAR
                 </option>
@@ -25,7 +25,7 @@ export default function Filtros(props) {
                         opcion => <option>{opcion}</option>
                     )
                 }
-            </select>
+            </select> */}
             {
                 props.accion && props?.enableAccion && user.rol.includes('ADMIN_ORG')&& (
                     <button className="accion"

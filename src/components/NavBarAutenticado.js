@@ -31,10 +31,12 @@ export default function NavBarAutenticado() {
 
     return (
         <div className="navbar">
-            <div className="seccion1"
+            <div className="seccion1" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
             >
                 <div style={{ width: '50px', height: '50px' }}><img src={logo} alt="logo_cgtham" /></div>
-                <h1>{nombre}</h1>
+                <h1
+                    onClick={(e) => { navigate('/home') }}
+                >{nombre}</h1>
             </div>
             <div className="seccion2">
                 <ul>
@@ -54,17 +56,6 @@ export default function NavBarAutenticado() {
 
                         ><a >Eventos</a></li>
                     )}
-                    {/* {!isMediumDevice && user.tipo === 'Escuela' || user.tipo === 'Empresa' && (
-                        <li
-
-                            onClick={(e) => {
-                                navigate('/ofertaslaborales')
-                            }}
-
-                        >
-                            <a>Ofertas Laborales</a>
-                        </li>
-                    )} */}
                     {!isMediumDevice && user.rol.includes('ADMIN_SYS') && (
                         <li className='opciones'
 
@@ -182,7 +173,7 @@ export default function NavBarAutenticado() {
                                     ><a >Historicos</a></li>
                                 )
                             }
-                            {!isMediumDevice && user.rol.includes('ADMIN_SYS') && (
+                            {!isMediumDevice && (
                                 <li className='opciones'
 
                                     onClick={(e) => {
@@ -191,7 +182,7 @@ export default function NavBarAutenticado() {
 
                                 ><a >Comentarios</a></li>
                             )}
-                            {!isMediumDevice && user.rol.includes('ADMIN_SYS') && (
+                            {!isMediumDevice && (
                                 <li className='opciones'
 
                                     onClick={(e) => {
@@ -200,7 +191,7 @@ export default function NavBarAutenticado() {
 
                                 ><a >Convenios</a></li>
                             )}
-                            {!isMediumDevice && user.rol.includes('ADMIN_SYS') && (
+                            {isMediumDevice && (
                                 <li className='opciones'
 
                                     onClick={(e) => {
@@ -209,7 +200,7 @@ export default function NavBarAutenticado() {
 
                                 ><a >Cursos</a></li>
                             )}
-                            {!isMediumDevice && user.rol.includes('ADMIN_SYS') && (
+                            {isMediumDevice && (
                                 <li className='opciones'
 
                                     onClick={(e) => {
