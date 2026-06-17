@@ -261,70 +261,6 @@ export default function Cursos() {
                             </div>
                         </div>
                     </div>
-                    // <div>
-                    //     <div className="overllay"></div>
-                    //     <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-
-                    //         <div className="formulario-contenedor">
-                    //             <div className="titulo-formulario"><h1>SOLICITAR CURSO</h1></div>
-                    //             <div className="formulario">
-                    //                 <div className="contenedor-datos-formulario">
-                    //                     <div className="contenedor-datos-interno">
-                    // <h6>Titulo</h6>
-                    // <input placeholder="Titulo" type="text" onChange={(e) => { setCursoSolicitud({ ...cursoSolicitud, titulo: e.target.value }) }} />
-                    // <h6>Descripción</h6>
-                    // <textarea placeholder="Descripcion" type="text" onChange={(e) => { setCursoSolicitud({ ...cursoSolicitud, descripcion: e.target.value }) }} />
-                    // <h6>Organización</h6>
-                    // <select
-
-                    //     onChange={(e) => {
-                    //         const organizacion = organizaciones.filter(f => f.nombre_comercial === e.target.value)
-                    //         console.log('La organizacion es: ', organizacion)
-
-                    //         setCursoSolicitud({ ...cursoSolicitud, id_organizacion: organizacion[0].id })
-                    //     }}
-                    // >
-
-                    //     <option>----</option>
-                    //     {
-                    //         organizaciones.filter(tipo => tipo.tipo === 'Escuela').map(
-                    //             org => <option>
-                    //                 {org.nombre_comercial}
-                    //             </option>
-                    //         )
-                    //     }
-                    // </select>
-                    //                     </div>
-                    //                 </div>
-
-                    //                 <div style={{ width: '250px', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    //                     <p style={{ textAlign: 'justify' }}>
-                    //                         <strong>Nota: </strong> Recuerda que el solicitar el curso a una institución educativa no asegura de forma inmediata su compromiso por impartir dicho curso.
-                    //                         <br /> Depende de su programa de estudios, asi mismo como el tiempo para asignar fechas.
-                    //                         <br />
-                    //                         En caso de algun problema o inconveniente, debera ser reportado al siguiente correo <kbd><strong>cgtham@gmail.com</strong></kbd>
-                    //                     </p>
-                    //                 </div>
-
-                    //             </div>
-                    //             <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
-                    // <button
-                    //     className="btn-accion-cancelar-1"
-                    //     onClick={() => {
-                    //         setOpenSolicitar(false)
-                    //     }}
-                    // ><strong>CERRAR</strong></button>
-                    // <button
-                    //     className="btn-accion-2"
-                    //     onClick={() => { handleSolicitar() }}
-                    // >
-                    //     <strong>SOLICITAR</strong>
-                    // </button>
-                    //             </div>
-                    //         </div>
-                    //     </div>
-                    // </div>
-
                 )
             }
 
@@ -335,11 +271,11 @@ export default function Cursos() {
                         <div className="overllay"></div>
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
-                            <div className="formulario-contenedor" style={{ height: isSmallDevice ? '90%' : null }}>
-                                <div className="titulo-formulario"><h1>{curso?.titulo.substring(0, 45)}</h1></div>
+                            <div className="formulario-contenedor" style={{ width: isSmallDevice ? '90%' : null, height: isSmallDevice ? '90%' : null }}>
+                                <div className="titulo-formulario"><h1>SOLICITUD DE VISITA</h1></div>
                                 <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
                                     <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
-                                        <div className="contenedor-datos-interno">
+                                        <div className="contenedor-datos-interno" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                             <h6>Titulo</h6>
                                             <input placeholder="Titulo" type="text" onChange={(e) => { setCurso({ ...curso, titulo: e.target.value }) }} defaultValue={curso?.titulo} disabled={!enable} />
                                             <h6>Descripción</h6>

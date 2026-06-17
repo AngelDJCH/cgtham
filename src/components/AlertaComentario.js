@@ -20,7 +20,7 @@ export default function AlertaComentario(
     const create = async () => {
         const res = await createComentario(contenido, user.organizacion)
         if (res != 201) alert('No se pudo crear el comentario - Error')
-
+        if(res === 201) alert('SE CREO EL COMENTARIO')
     }
 
     return (

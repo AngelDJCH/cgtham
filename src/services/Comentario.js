@@ -38,10 +38,11 @@ export const createComentario = async (contenido, id_usuario) => {
             id_usuario : id_usuario
         }
 
-        const res = await axiosInstance.post('/comentarios/', dataComentario)
-        return res.status
+        const {status} = await axiosInstance.post('/comentarios/', dataComentario)
+        return status
     } catch (error) {
         console.log(error)
+        return error.response.status
     }
 }
 
