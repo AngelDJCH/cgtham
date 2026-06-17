@@ -6,6 +6,7 @@ import { getOrganizacion } from "../services/Organizacion";
 import { useAuth } from "../hooks/useAuth";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "@uidotdev/usehooks";
 //https://websocket-cgtham.onrender.com
 //http://localhost:3040
 const socket = io('https://websocket-cgtham.onrender.com', {
@@ -13,6 +14,8 @@ const socket = io('https://websocket-cgtham.onrender.com', {
 });
 
 export default function Mensajes() {
+    const isSmallDevice = useMediaQuery('(max-width:768px)')
+
     const [mensaje, setMensaje] = useState('');
     const { user } = useAuth();
     const [idChat, setIdChat] = useState(' ');
@@ -117,18 +120,21 @@ export default function Mensajes() {
         <div style={{ marginTop: '100px' }}>
             <NavBarAutenticado />
 
-            <ListaUsuarios mensaje={true} left='30px' right='0' selectUsuario={setUsuarioActivo} />
-
+            {
+                !isSmallDevice && (
+                    <ListaUsuarios mensaje={true} left='30px' right='0' selectUsuario={setUsuarioActivo} />
+                )
+            }
 
             {
-
-
                 usuarioActivo && (
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', height: '80vh' }}>
-                        <div style={{ width: '70%', marginRight: '25px', backgroundColor: 'white', borderRadius: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: isSmallDevice ? 'center' : 'flex-end', width: '100%', height: isSmallDevice ? '65vh' : '80vh' }}>
+                        <div style={{ width: isSmallDevice ? '90%' : '70%', marginRight: isSmallDevice ? null : '25px', backgroundColor: 'white', borderRadius: '10px', height: '100%' }}>
                             <div className="encabezado-mensajes" style={{ width: '100%' }}>
-                                <img src={organizacion?.logo} alt="imagen" style={{backgroundColor:'white'}}/>
-                                <h1>{user.organizacion === organizacion?.id ? `${organizacion?.nombre_comercial} (YO)` : `${organizacion?.nombre_comercial}`}</h1>
+                                <div style={{ width: '35px', height: '35px' }}>
+                                    <img src={organizacion?.logo} alt="imagen" style={{ backgroundColor: 'white' }} />
+                                </div>
+                                <h1 style={{ margin: '0', fontSize: isSmallDevice ? '18px' : '20px' }}>{user.organizacion === organizacion?.id ? `${organizacion?.nombre_comercial} (YO)` : `${organizacion?.nombre_comercial}`}</h1>
                             </div>
                             <div className="cuerpo-mensajes">
                                 {
@@ -159,12 +165,14 @@ export default function Mensajes() {
                                             onChange={(e) => setMensaje(e.target.value)}
                                             onKeyDown={(e) => e.key === 'Enter' && handleCreateNewMessage()}
                                         />
-                                        <img
-                                            onClick={handleCreateNewMessage}
-                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzMxNEMxQyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtc2VuZC1ob3Jpem9udGFsLWljb24gbHVjaWRlLXNlbmQtaG9yaXpvbnRhbCI+PHBhdGggZD0iTTMuNzE0IDMuMDQ4YS40OTguNDk4IDAgMCAwLS42ODMuNjI3bDIuODQzIDcuNjI3YTIgMiAwIDAgMSAwIDEuMzk2bC0yLjg0MiA3LjYyN2EuNDk4LjQ5OCAwIDAgMCAuNjgyLjYyN2wxOC04LjVhLjUuNSAwIDAgMCAwLS45MDR6Ii8+PHBhdGggZD0iTTYgMTJoMTYiLz48L3N2Zz4="
-                                            alt="icono"
-                                            style={{ cursor: 'pointer' }}
-                                        />
+                                        <div style={{ width: '25px', height: '25px' }}>
+                                            <img
+                                                onClick={handleCreateNewMessage}
+                                                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzMxNEMxQyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtc2VuZC1ob3Jpem9udGFsLWljb24gbHVjaWRlLXNlbmQtaG9yaXpvbnRhbCI+PHBhdGggZD0iTTMuNzE0IDMuMDQ4YS40OTguNDk4IDAgMCAwLS42ODMuNjI3bDIuODQzIDcuNjI3YTIgMiAwIDAgMSAwIDEuMzk2bC0yLjg0MiA3LjYyN2EuNDk4LjQ5OCAwIDAgMCAuNjgyLjYyN2wxOC04LjVhLjUuNSAwIDAgMCAwLS45MDR6Ii8+PHBhdGggZD0iTTYgMTJoMTYiLz48L3N2Zz4="
+                                                alt="icono"
+                                                style={{ cursor: 'pointer' }}
+                                            />
+                                        </div>
                                     </div>
                                 )
                             }
@@ -178,18 +186,18 @@ export default function Mensajes() {
                     <div className="overllay"></div>
                     <div className="overllay-contenedor">
                         <div style={{
-                            width:'500px', display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', backgroundColor:'white',
-                            padding:'1rem', height:'auto', borderRadius:'10px'
+                            width: '500px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white',
+                            padding: '1rem', height: 'auto', borderRadius: '10px'
                         }}>
                             <h1>¿QUIERES CREAR UN CHAT?</h1>
-                            <div style={{display:'flex', justifyContent:'center', gap:'1rem'}}>
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
                                 <button
-                                className="btn-accion-cancelar-1"
-                                    onClick={() => { setCreateChat(false)}}
+                                    className="btn-accion-cancelar-1"
+                                    onClick={() => { setCreateChat(false) }}
                                 ><strong>NO</strong></button>
                                 <button
                                     className="btn-accion-2"
-                                    onClick={() => { handleCreateNewChat(); setCreateChat(false)}}
+                                    onClick={() => { handleCreateNewChat(); setCreateChat(false) }}
                                 ><strong>SI</strong></button>
                             </div>
                         </div>
