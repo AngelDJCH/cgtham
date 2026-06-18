@@ -10,6 +10,6 @@ export const eventosByIdOrganizacion = async (id_organizacion) => {
         const {data} = await axiosInstance.get(`/eventos/organizacion/${id_organizacion}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER EL EVENTO')
     }
 }

@@ -5,7 +5,7 @@ export const getFotosByIdEvento = async (id_evento) => {
         const {data} = await axiosInstance.get(`/fotos/${id_evento}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LAS FOTOS DEL EVENTO')
     }
 }
 
@@ -18,6 +18,6 @@ export const uploadFotoEvento = async (data_img, id_evento, id_organizacion) => 
         })
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR SUBIR LAS FOTO DEL EVENTO')
     }
 }

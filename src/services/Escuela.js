@@ -5,7 +5,7 @@ export const getEscuela = async (id_escuela) => {
         const {data} = await axiosInstance.get(`/escuelas/${id_escuela}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LA ESCUELA')
     }
 }
 
@@ -18,7 +18,7 @@ export const createEscuela = async (id_organizacion, tipo_institucion, url_sitio
         })
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL CREAR LA ESCUELA')
     }
 }
 
@@ -31,6 +31,6 @@ export const updateEscuelaById = async (escuela) => {
         const {status} = await axiosInstance.put(`/escuelas/${escuela.id}`, escuelaData)
         return status
     } catch (error) {
-        console.log(error)   
+        return error.response.status
     }
 }

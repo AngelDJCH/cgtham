@@ -10,7 +10,7 @@ export const getOfertasLaboralesAll = async () => {
         const {data} = await axiosInstance.get('/ofertaslaborales/')
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LAS OFERTAS EDUCATIVAS')
     }
 }
 
@@ -19,7 +19,7 @@ export const getOfertasLaboralesByIdOrganizacion  =async (id_organizacion) => {
         const {data} = await axiosInstance.get(`/ofertaslaborales/organizacion/${id_organizacion}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LAS OFERTAS EDUCAIVAS DE LA ORGANIZACION')
     }
 }
 
@@ -28,7 +28,7 @@ export const getOfertasLaboralesByIdUsuario = async (id_usuario) => {
         const {data} = await axiosInstance.get(`/postulaciones/experiencia/${id_usuario}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LAS OFERTAS EDUCATIVAS DE LA ORGANIZACION')
     }
 }
 
@@ -37,7 +37,7 @@ export const getOfertaById = async (id_oferta) => {
         const {data} = await axiosInstance.get(`/ofertaslaborales/${id_oferta}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LOS DATOS DE LA OFERTA LABORAL')
     }
 }
 
@@ -65,7 +65,7 @@ export const createOfertaLaboral = async (oferta) => {
         const {data} = await axiosInstance.post(`/ofertaslaborales`, ofertaData)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL CREAR LA OFERTA LABORAL')
     }
 }
 
@@ -74,6 +74,6 @@ export const deleteOferta = async (id) => {
         const {status} = await axiosInstance.delete(`/ofertaslaborales/${id}`)
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }

@@ -9,7 +9,7 @@ export const createVisita = async (id_escuela, id_empresa) => {
         })
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }
 
@@ -19,7 +19,7 @@ export const deleteByIdForEscuelas = async (id_visita) => {
         const {status} = await axiosInstance.delete(`/visitas/${id_visita}`)
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }
 
@@ -28,7 +28,7 @@ export const allVisitasByIdEscuela = async (id_escuela) => {
         const {data} = await axiosInstance.get(`/visitas/escuela/${id_escuela}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER TODAS LAS VISITAS')
     }
 }
 
@@ -37,7 +37,7 @@ export const allVisitasByIdEmpresa = async (id_empresa) => {
         const {data} = await axiosInstance.get(`/visitas/empresa/${id_empresa}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER TODAS LAS VISITAS')
     }
 }
 
@@ -46,7 +46,7 @@ export const updateEstadoRechazadaById = async (id_visita) => {
         const {status} = await axiosInstance.put(`/visitas/estado/${id_visita}`)
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }
 
@@ -55,7 +55,7 @@ export const findById = async (id_visita) => {
         const {data} = await axiosInstance.get(`/visitas/${id_visita}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LA VISITA')
     }
 }
 
@@ -64,6 +64,6 @@ export const updateVisitaById = async (fecha_visita, id) => {
         const {status} = await axiosInstance.put(`/visitas/${id}`, {fecha_visita : fecha_visita})
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }

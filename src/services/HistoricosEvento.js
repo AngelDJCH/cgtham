@@ -5,6 +5,6 @@ export const findAllHistoricosEventos = async () => {
         const {data} = await axiosInstance.get('/historicoseventos/')
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LOS HISTORICOS DE EVENTOS')
     }
 }

@@ -23,7 +23,7 @@ export const findAllInscripciones = async (id_organizacion) => {
         const inscripciones = await axiosInstance.get(`/inscripciones/organizaciones/${id_organizacion}`)
         return inscripciones.data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER TODAS LAS INSCRIPCIONES')
     }
 }
 
@@ -32,7 +32,7 @@ export const findAllByIdUsuario = async (id_usuario) => {
         const { data } = await axiosInstance.get(`/inscripciones/usuario/${id_usuario}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER TODAS LAS INSCRIPCIONES')
     }
 }
 
@@ -44,7 +44,7 @@ export const updateInscripcionByEstado = async (id_inscripcion, estado) => {
         const { status } = await axiosInstance.put(`/inscripciones/estado/${id_inscripcion}`, data_update)
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }
 
@@ -53,7 +53,7 @@ export const findParticipantesByIEvento = async (id_evento) => {
         const { data } = await axiosInstance.get(`/inscripciones/participantes/${id_evento}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LOS PARTICIPANTES DEL EVENTO')
     }
 }
 
@@ -61,7 +61,7 @@ export const findInscripcionesByIdEvento = async (id_evento) => {
     try {
         const { data } = await axiosInstance.get()
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LAS INSCRIPCIONES DEL EVENTO')
     }
 }
 
@@ -70,6 +70,6 @@ export const deleteById = async (id_inscripcion) => {
         const res = await axiosInstance.delete(`/inscripciones/${id_inscripcion}`)
         return res.status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }

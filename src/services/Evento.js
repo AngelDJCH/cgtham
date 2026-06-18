@@ -16,7 +16,7 @@ export const createEvento = async (evento) => {
         const {data} = await axiosInstance.post('/eventos/', dataEvento)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL CREAR UN EVENTO')
     }
 }
 
@@ -46,7 +46,7 @@ export const eventoById = async (id_evento) => {
         const {data} = await axiosInstance.get(`/eventos/${id_evento}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER UN EVENTO')
     }
 }
 
@@ -62,7 +62,7 @@ export const updateEventoById = async (evento) => {
         const res = await axiosInstance.put(`/eventos/${evento.id}`, dataEvento)
         return res
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL ACTUALIZAR EL EVENTO')
     }
 }
 
@@ -71,7 +71,7 @@ export const deleteEventoById = async (id_evento) => {
         const res = await axiosInstance.delete(`/eventos/${id_evento}`)
         return res
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL ELIMINAR EL EVENTO')
     }
 }
 
@@ -80,7 +80,7 @@ export const findParticipantesPendientesByIdEvento = async (id_evento) => {
         const {data} = await axiosInstance.get(`/inscripciones/pendientes/${id_evento}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LOS PARTICIPANTES PENDIENTES DEL EVENTO')
     }
 }
 
@@ -89,6 +89,6 @@ export const getDashEventos = async () => {
         const {data} = await axiosInstance.get('/eventos/dash')
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LOS EVENTOS')
     }
 }

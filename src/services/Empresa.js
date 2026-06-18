@@ -5,7 +5,7 @@ export const getEmpresa = async (id_empresa) => {
         const {data} = await axiosInstance.get(`/empresas/${id_empresa}`)
         return data
     } catch (error) {
-        console.log(error)
+       alert('OCURRIO UN ERROR AL OBTENER LA EMPRESA')
     }
 }
 
@@ -19,7 +19,7 @@ export const createEmpresa = async (id_organizacion, razon_social, regimen_fisca
         })
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL CREAR LA EMPRESA')
     }
 }
 
@@ -34,6 +34,6 @@ export const updateEmpresaById = async (empresa) => {
         const {status} = await axiosInstance.put(`/empresas/${empresa.id}`, empresaData)
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }

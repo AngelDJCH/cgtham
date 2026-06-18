@@ -29,7 +29,7 @@ export const findById = async (id_convenio) => {
         const { data } = await axiosInstance.get(`/convenios/${id_convenio}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER EL CONVENIO')
     }
 }
 
@@ -38,7 +38,7 @@ export const deleteByIdConvenio = async (id_convenio) => {
         const { status } = await axiosInstance.delete(`/convenios/${id_convenio}`)
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }
 
@@ -47,7 +47,7 @@ export const updateConvenioById = async (id_convenio, convenio) => {
         const { status } = await axiosInstance.put(`/convenios/${id_convenio}`, convenio)
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }
 
@@ -56,6 +56,6 @@ export const getDashConvenios = async () => {
         const {data} = await axiosInstance.get('/convenios/dash')
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LOS CONVENIOS')
     }
 }

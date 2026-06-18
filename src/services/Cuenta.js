@@ -16,7 +16,7 @@ export const logout = async () => {
         console.log(res)
         return res.status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }
 
@@ -31,7 +31,7 @@ export const createCuenta = async (correo, contrasenia, roles, id_organizacion) 
         const resCuenta = await axiosInstance.post('/cuentas/', data)
         return resCuenta ? resCuenta : alert('ERROR AL CREAR LA ORGANIZACION')
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL CREAR LA CUENTA')
     }
 }
 
@@ -43,7 +43,7 @@ export const updateCuentaCorreoById = async (cuenta) => {
         const {status} = await axiosInstance.put(`/cuentas/correo/${cuenta.id}`, cuentaData)
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }
 
@@ -55,6 +55,6 @@ export const updateCuentaContraseniaById = async (cuenta) => {
         const {status} = await axiosInstance.put(`/cuentas/contrasenia/${cuenta.id}`, cuentaData)
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }

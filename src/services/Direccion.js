@@ -5,7 +5,7 @@ export const getDireccion = async (id_direccion) => {
         const {data} = await axiosInstance.get(`/direcciones/${id_direccion}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LA DIRECCION')
     }
 }
 
@@ -25,7 +25,7 @@ export const createDireccion = async (
         const id_direccion = await axiosInstance.post('/direcciones/', data)
         return id_direccion.data     
     } catch (error) {
-        
+        alert('OCURRIO UN ERROR AL CREAR UNA DIRECCION')
     }
 }
 
@@ -44,6 +44,6 @@ export const updateDireccionById = async (direccion) => {
         const {status} = await axiosInstance.put(`/direcciones/${direccion.id}`, direccionData)
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }

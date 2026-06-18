@@ -5,7 +5,7 @@ export const getCamara = async (id_comercio) => {
         const {data} = await axiosInstance.get(`/camaras/${id_comercio}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LA CAMARA DE COMERCIO')
     }
 }
 
@@ -18,7 +18,7 @@ export const createCamara = async (id, nombre, presidente) => {
         })
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL CREAR LA CAMARA DE COMERCIO')
     }
 }
 
@@ -32,6 +32,6 @@ export const updateCamaraById = async (camara) => {
         const {status} = await axiosInstance.put(`/camaras/${camara.id}`, camaraData)
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }

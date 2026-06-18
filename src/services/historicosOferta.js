@@ -5,6 +5,6 @@ export const findAllHistoricosOferta = async () => {
         const {data} = await axiosInstance.get('/historicosofertaslaborales/')
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LOS HISTORICOS DE LAS OFERTAS LABORALES')
     }
 }

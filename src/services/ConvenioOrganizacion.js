@@ -5,7 +5,7 @@ export const findAll = async () => {
         const { data } = await axiosInstance.get('/convenios')
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LOS DATOS DEL CONVENIO')
     }
 }
 
@@ -28,7 +28,7 @@ export const findAllParticipantes = async (id_convenio) => {
         const { data } = await axiosInstance.get(`/conveniosOrganizaciones/participantes/${id_convenio}`)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER LOS PARTICIPANTES')
     }
 }
 
@@ -37,7 +37,7 @@ export const deleteById = async (id_convenio_organizacion) => {
         const { status } = await axiosInstance.delete(`/conveniosOrganizaciones/${id_convenio_organizacion}`)
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }
 
@@ -46,6 +46,6 @@ export const updateEstadoById = async (id_convenio_organizacion) => {
         const { status } = await axiosInstance.put(`/conveniosOrganizaciones/estado/${id_convenio_organizacion}`, { estado: true })
         return status
     } catch (error) {
-        console.log(error)
+        return error.response.status
     }
 }

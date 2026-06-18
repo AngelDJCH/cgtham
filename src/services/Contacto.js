@@ -7,7 +7,7 @@ export const getContacto = async (id_contacto) => {
         console.log(data)
         return data
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL OBTENER EL CONTACTO')
     }
 }
 
@@ -21,7 +21,7 @@ export const createContacto = async (correo, telefono) => {
         const id_contacto = await axiosInstance.post('/contactos/', data)
         return id_contacto.data
     } catch (error) {
-        
+        alert('OCURRIO UN ERROR AL CREAR EL CONTACTO')
     }
 }
 
@@ -35,6 +35,6 @@ export const updateContactoById = async (contacto) => {
         const {status} = await axiosInstance.put(`/contactos/${contacto.id}`, contactoData)
         return status
     } catch (error) {
-        console.log(error)
+        alert('OCURRIO UN ERROR AL ACTUALIZAR EL CONTACTO')
     }
 }
