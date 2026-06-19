@@ -26,6 +26,7 @@ export default function EditarEvento(props) {
     const [idEvento, setIdEvento] = useState('')
     const [selectImagen, setSelectImagen] = useState(null)
     const isSmallDevice = useMediaQuery('(max-width:768px)');
+    const isMediumDevice = useMediaQuery('(max-width: 1024px)');
 
     useEffect(() => {
         const getEvento = async () => {
@@ -116,10 +117,10 @@ export default function EditarEvento(props) {
         <div>
             <div className="overllay"></div>
             <div className="overllay-contenedor">
-                <div className="formulario-contenedor" style={{ height: isSmallDevice ? '90%' : null }}>
+                <div className="formulario-contenedor" style={{ width: (isSmallDevice || isMediumDevice) ? '90%' : null, height: (isSmallDevice || isMediumDevice) ? '90%' : null }}>
                     <div className="titulo-formulario"><h1>{evento?.titulo.substring(0, 25)}</h1></div>
-                    <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
-                        <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
+                    <div className="formulario" style={{ height: (isSmallDevice || isMediumDevice) ? '80%' : null, width: (isSmallDevice || isMediumDevice) ? '100%' : null }}>
+                        <div className="contenedor-datos-formulario" style={{ width: (isSmallDevice || isMediumDevice) ? '100%' : null }}>
                             <div className="contenedor-datos-interno">
                                 <h6>Titulo:</h6>
                                 <input onChange={(e) => { setEvento({ ...evento, titulo: e.target.value }) }} type="text" defaultValue={evento?.titulo} placeholder="Titulo" />
@@ -163,7 +164,7 @@ export default function EditarEvento(props) {
                                     <input defaultValue={evento?.fecha_final.split('T')[0]} onChange={(e) => { setEvento({ ...evento, fecha_final: e.target.value }) }} type="date" style={{ minWidth: '100px', maxWidth: '100px', maxHeight: '25px', minHeight: '25px' }} />
                                 </div>
                                 {
-                                    isSmallDevice && (
+                                    (isSmallDevice || isMediumDevice) && (
                                         <div style={{ width: '250px', height: '350px' }}>
                                             <img style={{ width: '100%', height: '90%', margin: 0 }} src={fotoSeleccionada ? fotoSeleccionada : "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="} />
                                             <div style={{ display: 'flex' }}>
@@ -181,7 +182,7 @@ export default function EditarEvento(props) {
                             </div>
                         </div>
                         {
-                            !isSmallDevice && (
+                            (!isSmallDevice && !isMediumDevice) && (
                                 <div style={{ width: '250px', height: '350px' }}>
                                     <img style={{ width: '100%', height: '90%', margin: 0 }} src={fotoSeleccionada ? fotoSeleccionada : "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="} />
                                     <div style={{ display: 'flex' }}>

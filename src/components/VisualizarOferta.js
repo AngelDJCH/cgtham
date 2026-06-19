@@ -11,6 +11,7 @@ export default function VisualizarOferta(props) {
     const [organizacion, setOrganizacion] = useState(null)
     const [loading, setLoading] = useState(true) // Estado para controlar la carga inicial
     const isSmallDevice = useMediaQuery('(max-width:768px)');
+    const isMediumDevice = useMediaQuery('(max-width: 1024px)');
 
     const [oferta, setOferta] = useState({
         id: '',
@@ -62,11 +63,11 @@ export default function VisualizarOferta(props) {
         <div>
             <div className="overllay"></div>
             <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row' }}>
-                <div style={{ width: '400px', backgroundColor: 'white', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', height: isSmallDevice ? 'auto' : '600px' }}>
-                    <div style={{ width: '100%', height: isSmallDevice ? '50px' : '150px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px' }}>
+                <div style={{ width: (isSmallDevice || isMediumDevice) ? '90%' : '400px', backgroundColor: 'white', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', height: (isSmallDevice || isMediumDevice) ? '90vh' : '600px' }}>
+                    <div style={{ width: '100%', height: (isSmallDevice || isMediumDevice) ? '20%' : '150px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px' }}>
                         <img src={organizacion?.banner} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', borderTopLeftRadius: '10px', borderTopRightRadius: '10px' }} alt="banner" />
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', justifyContent: 'space-between', height: (isSmallDevice || isMediumDevice) ? '10%' : null }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                             <div style={{ width: '50px', height: '50px' }}>
                                 <img src={organizacion?.logo} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', borderRadius: '100%' }} alt="logo" />
@@ -82,7 +83,7 @@ export default function VisualizarOferta(props) {
                         <h1 style={{ margin: '0', padding: '0', fontFamily: 'Poppins', fontSize: '18px', marginLeft: '1rem' }}>{oferta?.titulo}</h1>
                     </div>
 
-                    <div style={{ padding: '0.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', minHeight: isSmallDevice ? '150px' : '250px', maxHeight: isSmallDevice ? '150px' : '250px', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
+                    <div style={{ padding: '0.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', minHeight: (isSmallDevice || isMediumDevice) ? '40%' : '250px', maxHeight: isSmallDevice ? '150px' : '250px', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
                         <div style={{ width: '100%', height: '60px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', borderTop: '1px solid black', paddingTop: '0.5rem' }}>
                             <h6 style={{ margin: '0', textAlign: 'justify', width: '90%' }}>Descripción:</h6>
                             <textarea style={{ minWidth: '90%', maxWidth: '90%', minHeight: '50px', maxHeight: '50px', border: 'none', textAlign: 'center' }} value={oferta?.descripcion} />
@@ -131,7 +132,7 @@ export default function VisualizarOferta(props) {
                         </div>
 
                         {
-                            isSmallDevice && (
+                            (isSmallDevice || isMediumDevice) && (
                                 <div>
                                     {oferta?.documento && (
                                         <a
@@ -149,68 +150,7 @@ export default function VisualizarOferta(props) {
 
                     </div>
 
-                    {/* <div>
-                        <h1 style={{ margin: '0', padding: '0', fontFamily: 'Poppins', fontSize: '18px', marginLeft: '1rem' }}>Oferta: {oferta?.titulo}</h1>
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <p style={{ width: '90%', height: '50px', maxHeight: '50px', overflowY: 'scroll', textAlign: 'justify', scrollbarWidth: 'none' }}>Descripción: {oferta?.descripcion}</p>
-                        </div>
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.2rem' }}>
-                        <div style={{ display: 'flex', gap: '0.3rem', width: '190px', backgroundColor: '#AEB784', height: '40px', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            
-                            <p><strong>Salario:</strong> <strong>$</strong>{oferta?.salario}</p>
-                        </div>
-                        <div style={{ display: 'flex', gap: '0.3rem', width: '190px', backgroundColor: '#AEB784', height: '40px', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            
-                            <p><strong>Jornada:</strong> {oferta?.jornada}</p>
-                        </div>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.2rem' }}>
-                        <div style={{ display: 'flex', gap: '0.3rem', width: '190px', backgroundColor: '#AEB784', height: '40px', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            
-                            <p><strong>Contrato:</strong> {oferta?.tipo_contrato}</p>
-                        </div>
-                        <div style={{ display: 'flex', gap: '0.3rem', width: '190px', backgroundColor: '#AEB784', height: '40px', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            
-                            <p><strong>Vacantes:</strong> {oferta?.vacantes}</p>
-                        </div>
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                        <p><strong>Habilidades:</strong></p>
-                        <select style={{ width: '100px' }}>
-                            <option>TECNICAS</option>
-                            {oferta?.habilidades_tecnicas ? oferta.habilidades_tecnicas.split(',').map((h, i) => <option key={i}>{h}</option>) : null}
-                        </select>
-                        <select style={{ width: '100px' }}>
-                            <option>BLANDAS</option>
-                            {oferta?.habilidades_blandas ? oferta.habilidades_blandas.split(',').map((h, i) => <option key={i}>{h}</option>) : null}
-                        </select>
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.2rem' }}>
-                        <div style={{ display: 'flex', gap: '0.3rem', width: '190px', backgroundColor: '#AEB784', height: '40px', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            
-                            <p><strong>Área:</strong> {oferta?.departamento_area}</p>
-                        </div>
-                        <div style={{ display: 'flex', gap: '0.3rem', width: '190px', backgroundColor: '#AEB784', height: '40px', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            
-                            <p><strong>Modalidad:</strong> {oferta?.modalidad}</p>
-                        </div>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.2rem' }}>
-                        <div style={{ display: 'flex', gap: '0.3rem', width: '190px', backgroundColor: '#AEB784', height: '40px', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            
-                            <p><strong>Experiencia:</strong> {oferta?.experiencia}</p>
-                        </div>
-                        <div style={{ display: 'flex', gap: '0.3rem', width: '190px', backgroundColor: '#AEB784', height: '40px', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            
-                            <p><strong>Publicado:</strong> {oferta?.fecha_publicacion ? oferta.fecha_publicacion.split('T')[0] : ''}</p>
-                        </div>
-                    </div> */}
-
-                    <div style={{ padding: '0.5rem', display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ padding: '0.5rem', display: 'flex', justifyContent: 'center', height:(isSmallDevice || isMediumDevice) ? '20%' : null}}>
                         <button className="btn-accion-cancelar-1" onClick={() => { props.accion(false) }}>
                             <strong>CERRAR</strong>
                         </button>
@@ -227,7 +167,7 @@ export default function VisualizarOferta(props) {
                 </div>
 
                 {
-                    !isSmallDevice && (
+                    (!isSmallDevice || !isMediumDevice) && (
                         <div style={{ width: '500px', height: 'auto', backgroundColor: '#f0f0f0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <div style={{ width: '100%', height: '600px' }}>
                                 {loading ? (

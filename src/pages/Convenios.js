@@ -10,7 +10,7 @@ import { uploadDocument } from "../services/Upload";
 import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function Convenios() {
-    const isSmallDevice = useMediaQuery('(max-width:768px)');
+    const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width:1024px)');
 
     const [documento, setDocumento] = useState(null)
     const [openDocumento, setOpenDocumento] = useState(false)
@@ -152,7 +152,7 @@ export default function Convenios() {
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
-                            <div className="formulario-contenedor" style={{ height: isSmallDevice ? '90%' : null }}>
+                            <div className="formulario-contenedor" style={{ height: isSmallDevice ? '90%' : null, width : isSmallDevice ? '100%' : null}}>
                                 <div className="titulo-formulario"><h1>NUEVO CONVENIO</h1></div>
                                 <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
                                     <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>

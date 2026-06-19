@@ -149,7 +149,7 @@ export default function Cursos() {
 
         getSolicitudes()
     }, [])
-    const isSmallDevice = useMediaQuery('(max-width:768px)');
+    const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width : 1024px)');
 
     return (
         <div>
@@ -161,7 +161,7 @@ export default function Cursos() {
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
-                            <div className="formulario-contenedor" style={{ width: isSmallDevice ? '90%' : null, height: isSmallDevice ? '90%' : null }}>
+                            <div className="formulario-contenedor" style={{ width: isSmallDevice ? '100%' : null, height: isSmallDevice ? '90%' : null }}>
                                 <div className="titulo-formulario"><h1>NUEVO CURSO</h1></div>
                                 <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
                                     <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
@@ -271,7 +271,7 @@ export default function Cursos() {
                         <div className="overllay"></div>
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
-                            <div className="formulario-contenedor" style={{ width: isSmallDevice ? '90%' : null, height: isSmallDevice ? '90%' : null }}>
+                            <div className="formulario-contenedor" style={{ width: isSmallDevice ? '100%' : null, height: isSmallDevice ? '90%' : null }}>
                                 <div className="titulo-formulario"><h1>{curso?.titulo?.substring(0,50)}</h1></div>
                                 <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
                                     <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>

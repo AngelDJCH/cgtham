@@ -110,7 +110,7 @@ export default function Organizacion() {
 
     const { user } = useAuth()
 
-    const isMediumDevice = useMediaQuery("only screen and (max-width : 500px)")
+    const isMediumDevice = useMediaQuery("(max-width : 768px) or (max-width : 1024px)")
 
     const handleCreateOfertaEducativa = async () => {
 

@@ -18,7 +18,7 @@ import { useMediaQuery } from '@uidotdev/usehooks'
 export default function TablaContenido(props) {
     const navigate = useNavigate()
     const { user } = useAuth()
-    const isSmallDevice = useMediaQuery('(max-width:768px)');
+    const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width : 1024px)');
 
     const [openEvento, setOpenEvento] = useState(false)
     const [openEditarEvento, setOpenEditarEvento] = useState(false)
@@ -572,56 +572,6 @@ export default function TablaContenido(props) {
                             </div>
                         </div>
                     </div>
-
-                    // <div>
-                    //     <div className='overllay'></div>
-                    //     <div className='overllay-contenedor'>
-                    //         <div style={{ width: '450px', height: 'auto', backgroundColor: 'white', padding: '1rem', }}>
-                    // <div style={{ width: '100%', height: '100px' }}>
-                    //     <img src={visitaData.escuela?.banner} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    // </div>
-                    //             <div style={{ display: 'flex' }}>
-                    //                 <div style={{ width: '50px', height: '50px' }}>
-                    //                     <img src={visitaData.escuela?.logo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    //                 </div>
-                    // <h1 style={{ margin: 0, padding: 0 }}>{visitaData.escuela?.nombre}</h1>
-                    //             </div>
-                    // <p><strong>Estado: </strong>{visitaData.estado}</p>
-                    //             <div>
-                    //                 <h6 style={{ margin: 0 }}>FECHAS</h6>
-                    // <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                    //     <div>
-                    //         <h6 style={{ margin: 0 }}>Solicitado:</h6>
-                    //         <input type='date' defaultValue={visitaData.solicitado.split('T')[0]} disabled />
-                    //     </div>
-                    //     <div>
-                    //         <h6 style={{ margin: 0 }}>Agendar:</h6>
-                    //         {
-                    //             visitaData.agendado != null ? <input type='date' defaultChecked={visitaData.agendado.split('T')[0]} /> : <input type='date' id='fecha_visita' />
-                    //         }
-                    //     </div>
-                    // </div>
-                    //             </div>
-                    //             <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'space-evenly' }}>
-                    // <button
-                    //     className='btn-accion-cancelar-1'
-                    //     onClick={() => { setOpenVisita(false) }}
-                    // >
-                    //     <strong>CANCELAR</strong>
-                    // </button>
-                    // <button
-                    //     className='btn-accion-2'
-                    //     onClick={() => {
-                    //         const f_visita = document.getElementById('fecha_visita').value
-                    //         handleUpdateById(f_visita, visitaData.id)
-                    //     }}
-                    // >
-                    //     <strong>GUARDAR</strong>
-                    // </button>
-                    //             </div>
-                    //         </div>
-                    //     </div>
-                    // </div>
                 )
             }
 

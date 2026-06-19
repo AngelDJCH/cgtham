@@ -110,39 +110,6 @@ export default function Visitas() {
                     </div>
                 )
             }
-
-            {/* {
-                openCreateVisita && (
-                    <div>
-                        <div className="overllay"></div>
-                        <div className="overllay-contenedor">
-                            <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', padding: '1rem', width:'300px', height:'150px', justifyContent:'space-around', borderRadius:'10px'}}>
-                                <h1 style={{textAlign:'center', margin:'0', color:'#41431B'}}>SOLICITUD</h1>
-                                <select onChange={(e) => { setIdEmpresa(e.target.value) }} style={{color:'white',border:'2px solid #41431B', backgroundColor:'#8b8e5b'}}>
-                                    <option>Empresa:              ---</option>
-                                    {
-                                        organizaciones.filter(org => org.tipo != 'Escuela').map(
-                                            org => <option value={org.id}>
-                                                {org.nombre_comercial}
-                                            </option>
-                                        )
-                                    }
-                                </select>
-                                <div style={{width:'100%', justifyContent:'space-around', display:'flex'}}>
-                                    <button className="btn-accion-cancelar-1"
-                                        onClick={() => { setOpenCreateVisita(false) }}
-                                    ><strong>CANCELAR</strong></button>
-                                    <button className="btn-accion-2"
-                                        onClick={() => { setOpenCreateVisita(false); handleVisitaCreate() }}
-                                    ><strong>SOLICITAR</strong></button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                )
-            } */}
-
         </div>
     )
 }
