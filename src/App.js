@@ -35,7 +35,7 @@ function App() {
             </ProtectedRoute>
           }></Route>
           <Route path='/mensajes' element={
-            <ProtectedRoute redirectTo={'/home'} roles={['ADMIN_ORG']}>
+            <ProtectedRoute redirectTo={'/home'} roles={['ADMIN_ORG', 'ADMIN_SYS']}>
               <Mensajes />
             </ProtectedRoute>
           }></Route>

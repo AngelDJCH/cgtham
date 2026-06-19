@@ -33,112 +33,138 @@ export default function ListaUsuarios(props) {
   }, [])
 
   return (
-    <div className='listausuarios' style={{ left: `${props.left}`, right: `${props.right}` }}>
-      <div className='buscador'>
-        <input placeholder='Ingresa el nombre de la organización' style={{ textAlign: 'center' }} onChange={(e) => setBusqueda(e.target.value)} />
-      </div>
-      <div className='lista'>
-        <ul>
-          {
-            !busqueda && (
-              <li className='titulos-lista'><strong>CÁMARAS DE COMERCIO</strong></li>
-            )
-          }
-          {
-            organizaciones?.filter(f => f.nombre_comercial.toLowerCase().startsWith(busqueda.toLowerCase())).filter(f => f.tipo === 'Cámara de Comercio').map(
-              o => <li className='usuario-contenedor' key={o.id}>
-                <div className='logo-organizacion-contenedor'>
+    <div className='listausuarios' style={{ position: props.position, width: props.width ? props.width : null, left: `${props.left}`, right: `${props.right}`, height: props.height, maxHeight: props.height, minHeight: props.height }}>
 
-                  <img src={o.logo} alt={o.nombre_comercial} />
-                </div>
-                <div style={{ display: 'flex', alignItems: 'start', width: '200px' }}>
-                  <p
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      navigate(`/organizacion/${o.id}`)
-                    }}
-                  >{o.nombre_comercial}</p>
-                </div>
-                {
-                  props?.mensaje && (
-                    <img src={img_mensaje} style={{ marginRight: '0.2rem', cursor: 'pointer' }}
-                      onClick={() => {
-                        props.selectUsuario(o.id)
-                      }}
-                    />
-                  )
-                }
-              </li>
-            )
-          }
-          {
-            !busqueda && (
-              <li className='titulos-lista'><strong>EMPRESAS</strong></li>
-            )
-          }
-          {
-            organizaciones?.filter(f => f.nombre_comercial.toLowerCase().startsWith(busqueda.toLowerCase())).filter(f => f.tipo === 'Empresa').map(
-              o => <li className='usuario-contenedor' key={o.id}>
-                <div className='logo-organizacion-contenedor'>
-                  <img src={o.logo} alt={o.nombre_comercial} />
-                </div>
-                <div style={{ display: 'flex', alignItems: 'start', width: '200px' }}>
-                  <p
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      navigate(`/organizacion/${o.id}`)
-                    }}
-                  >{o.nombre_comercial}</p>
-                </div>
-                {
-                  props?.mensaje && (
-                    <img src={img_mensaje} style={{ marginRight: '0.2rem', cursor: 'pointer' }}
-                      onClick={() => {
-                        props.selectUsuario(o.id)
-                      }}
-                    />
-                  )
-                }
-              </li>
-            )
-          }
+      {
+        props.isSmallDevice && (
+          <div style={{ width: '100%', maxWidth: '100%', minWidth: '100%', height: '50px', gap: '1rem', display: 'flex', padding: '1rem', justifyContent: 'center', alignItems: 'center', overflowX: 'auto' }}>
+            {
+              organizaciones?.map(
+                o =>
+                  <div style={{ width: '45px', height: '45px', cursor: 'pointer' }}
+                    onClick={() => { props.selectUsuario(o.id) }}
+                  >
+                    <img src={o.logo} style={{ width: '100%', height: '100%', borderRadius: '100%' }} />
+                  </div>
+              )
+            }
+          </div>
+        )
+      }
 
-          {
-            !busqueda && (
-              <li className='titulos-lista'><strong>ESCUELAS</strong></li>
-            )
-          }
+      {
+        !props.isSmallDevice && (
+          <div className='buscador'>
+            <input placeholder='Ingresa el nombre de la organización' style={{ textAlign: 'center' }} onChange={(e) => setBusqueda(e.target.value)} />
+          </div>
+        )
+      }
+      {
+        !props.isSmallDevice && (
+          <div className='lista'>
+            <ul>
+              {
+                !busqueda && (
+                  <li className='titulos-lista'><strong>CÁMARAS DE COMERCIO</strong></li>
+                )
+              }
+              {
+                organizaciones?.filter(f => f.nombre_comercial.toLowerCase().startsWith(busqueda.toLowerCase())).filter(f => f.tipo === 'Cámara de Comercio').map(
+                  o => <li className='usuario-contenedor' key={o.id}>
+                    <div className='logo-organizacion-contenedor'>
 
-          {
-            organizaciones?.filter(f => f.nombre_comercial.toLowerCase().startsWith(busqueda.toLowerCase())).filter(f => f.tipo === 'Escuela').map(
-              o => <li className='usuario-contenedor' key={o.id}>
-                <div className='logo-organizacion-contenedor'>
+                      <img src={o.logo} alt={o.nombre_comercial} />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'start', width: '200px' }}>
+                      <p
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          navigate(`/organizacion/${o.id}`)
+                        }}
+                      >{o.nombre_comercial}</p>
+                    </div>
+                    {
+                      props?.mensaje && (
+                        <img src={img_mensaje} style={{ marginRight: '0.2rem', cursor: 'pointer' }}
+                          onClick={() => {
+                            props.selectUsuario(o.id)
+                          }}
+                        />
+                      )
+                    }
+                  </li>
+                )
+              }
+              {
+                !busqueda && (
+                  <li className='titulos-lista'><strong>EMPRESAS</strong></li>
+                )
+              }
+              {
+                organizaciones?.filter(f => f.nombre_comercial.toLowerCase().startsWith(busqueda.toLowerCase())).filter(f => f.tipo === 'Empresa').map(
+                  o => <li className='usuario-contenedor' key={o.id}>
+                    <div className='logo-organizacion-contenedor'>
+                      <img src={o.logo} alt={o.nombre_comercial} />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'start', width: '200px' }}>
+                      <p
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          navigate(`/organizacion/${o.id}`)
+                        }}
+                      >{o.nombre_comercial}</p>
+                    </div>
+                    {
+                      props?.mensaje && (
+                        <img src={img_mensaje} style={{ marginRight: '0.2rem', cursor: 'pointer' }}
+                          onClick={() => {
+                            props.selectUsuario(o.id)
+                          }}
+                        />
+                      )
+                    }
+                  </li>
+                )
+              }
 
-                  <img src={o.logo} alt={o.nombre_comercial} />
-                </div>
-                <div style={{ display: 'flex', alignItems: 'start', width: '200px' }}>
-                  <p
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      navigate(`/organizacion/${o.id}`)
-                    }}
-                  >{o.nombre_comercial}</p>
-                </div>
-                {
-                  props?.mensaje && (
-                    <img src={img_mensaje} style={{ marginRight: '0.2rem', cursor: 'pointer' }}
-                      onClick={() => {
-                        props.selectUsuario(o.id)
-                      }}
-                    />
-                  )
-                }
-              </li>
-              
-            )
-          }
-        </ul>
-      </div>
+              {
+                !busqueda && (
+                  <li className='titulos-lista'><strong>ESCUELAS</strong></li>
+                )
+              }
+
+              {
+                organizaciones?.filter(f => f.nombre_comercial.toLowerCase().startsWith(busqueda.toLowerCase())).filter(f => f.tipo === 'Escuela').map(
+                  o => <li className='usuario-contenedor' key={o.id}>
+                    <div className='logo-organizacion-contenedor'>
+
+                      <img src={o.logo} alt={o.nombre_comercial} />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'start', width: '200px' }}>
+                      <p
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          navigate(`/organizacion/${o.id}`)
+                        }}
+                      >{o.nombre_comercial}</p>
+                    </div>
+                    {
+                      props?.mensaje && (
+                        <img src={img_mensaje} style={{ marginRight: '0.2rem', cursor: 'pointer' }}
+                          onClick={() => {
+                            props.selectUsuario(o.id)
+                          }}
+                        />
+                      )
+                    }
+                  </li>
+
+                )
+              }
+            </ul>
+          </div>
+        )
+      }
     </div>
   )
 }

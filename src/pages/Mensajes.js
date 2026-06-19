@@ -14,7 +14,7 @@ const socket = io('https://websocket-cgtham.onrender.com', {
 });
 
 export default function Mensajes() {
-    const isSmallDevice = useMediaQuery('(max-width:768px)')
+    const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width : 1024px)')
 
     const [mensaje, setMensaje] = useState('');
     const { user } = useAuth();
@@ -122,9 +122,17 @@ export default function Mensajes() {
 
             {
                 !isSmallDevice && (
-                    <ListaUsuarios mensaje={true} left='30px' right='0' selectUsuario={setUsuarioActivo} />
+                    <ListaUsuarios isSmallDevice={false} mensaje={true} left='30px' right='0' selectUsuario={setUsuarioActivo} />
                 )
             }
+
+            {
+                isSmallDevice && (
+                    <ListaUsuarios position={'relative'} height={'auto'} width={'90%'} isSmallDevice={true} mensaje={true} left='0' right='0' selectUsuario={setUsuarioActivo} />
+                )
+            }
+
+
 
             {
                 usuarioActivo && (
