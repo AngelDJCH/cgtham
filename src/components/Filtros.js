@@ -7,9 +7,9 @@ export default function Filtros(props) {
 
     return (
         <div className="filtro-contenedor">
-            <h1>
+            <h2 className='subtitulo'>
                 {props.titulo}
-            </h1>
+            </h2>
             {
                 props.filtro && (
                     <input placeholder={props.placeholder} onChange={((e)=>{props.filtro(e.target.value)})}/>

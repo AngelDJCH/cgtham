@@ -115,16 +115,15 @@ export default function Noticias() {
                                 </button>
                             </div>
                             <div style={{ width: '90%', height: '80vh', maxHeight: '80vh', overflowY: 'scroll', backgroundColor: 'white'}}>
-                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                    <table className="contenedor-tablas-interno" style={{ minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll', width:'100%' }}>
                                     <thead style={{ backgroundColor: 'black', color: 'white' }}>
                                         <tr>
                                             <th>Titulo</th>
                                             <th>Descripcion</th>
                                             <th>Tipo</th>
                                             <th>Organizacion</th>
-                                            <th>Fecha Inicio</th>
-                                            <th>Fecha Fin</th>
-                                            <th>Acciones</th>
+                                            <th>Inicio</th>
+                                            <th>Fin</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -137,18 +136,6 @@ export default function Noticias() {
                                                     <td>{eventoTabla.organizacion.nombre}</td>
                                                     <td>{eventoTabla.fecha_inicio.split('T')[0]}</td>
                                                     <td>{eventoTabla.fecha_final.split('T')[0]}</td>
-                                                    <td>
-                                                        {(() => {
-                                                            const inicio = new Date(eventoTabla.fecha_inicio.split('T')[0]);
-                                                            const final = new Date(eventoTabla.fecha_final.split('T')[0]);
-
-                                                            return (ahora >= inicio && ahora <= final) ? (
-                                                                <button className="btn-inscripcion">INSCRIBIRME</button>
-                                                            ) : (
-                                                                "No disponible"
-                                                            );
-                                                        })()}
-                                                    </td>
                                                 </tr>
                                             )
                                         }

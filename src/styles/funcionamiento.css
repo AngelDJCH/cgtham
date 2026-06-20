@@ -86,6 +86,7 @@
 }
 
 .lista-funcionamiento{
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -96,6 +97,26 @@
     background-color: white;
     display: flex;
     justify-content: center;
+}
+
+@media(max-width:768px), (max-width:1024px){
+    .lista-funcionamiento{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .lista-funcionamiento div{
+        width: 90%;
+    }
+
+    .funcionamiento-tarjeta{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 .lista-funcionamiento div p{

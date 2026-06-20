@@ -173,7 +173,7 @@ export default function AutenticacionPage() {
             setUser(res.data)
             res.status === 200 ? navigate('/home') : <div></div>
         } catch (error) {
-
+            alert('CREDENCIALES INCORRECTAS')
         }
     }
 
@@ -519,7 +519,7 @@ export default function AutenticacionPage() {
                                     <button className="btn-limpiar">
                                         LIMPIAR
                                     </button>
-                                    <button className="btn-registrar"
+                                    <button className="btn2"
                                         onClick={() => {
                                             handeCreateOrganizacion()
                                         }}

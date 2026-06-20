@@ -253,15 +253,15 @@ export default function OfertasLaborales() {
                                             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', flexWrap:'wrap' }}>
                                                 <div>
                                                     <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Salario:</h6>
-                                                    <input placeholder="Salario" onChange={(e) => { setOfertaData({ ...ofertaData, salario: e.target.value }) }} />
+                                                    <input type="number" placeholder="Salario" onChange={(e) => { setOfertaData({ ...ofertaData, salario: e.target.value }) }} />
                                                 </div>
                                                 <div>
                                                     <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Experencia</h6>
-                                                    <input onChange={(e) => { setOfertaData({ ...ofertaData, experiencia: e.target.value }) }} placeholder="Experencia (en años : 1)" />
+                                                    <input type="number" onChange={(e) => { setOfertaData({ ...ofertaData, experiencia: e.target.value }) }} placeholder="Experencia (en años : 1)" />
                                                 </div>
                                                 <div>
                                                     <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Vacantes:</h6>
-                                                    <input placeholder="Vacantes" onChange={(e) => { setOfertaData({ ...ofertaData, vacantes: e.target.value }) }} />
+                                                    <input type="number" placeholder="Vacantes" onChange={(e) => { setOfertaData({ ...ofertaData, vacantes: e.target.value }) }} />
                                                 </div>
                                             </div>
                                             <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Area</h6>
