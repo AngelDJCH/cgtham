@@ -6,10 +6,9 @@
     color: #41431B;
     display: flex;
     justify-content: start;
-    margin-left: 2rem;
 }
 
-.noticias-subtitulo {
+.subtitulo {
     font-family: 'Poppins';
     font-size: 28px;
     margin: 0;

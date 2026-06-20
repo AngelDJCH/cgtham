@@ -18,7 +18,7 @@ export default function NavBarAutenticado() {
 
     const [logoOrganizacion, setLogo] = useState('')
 
-    const isMediumDevice = useMediaQuery("(max-width : 678px)")
+    const isMediumDevice = useMediaQuery("(max-width : 678px) or (max-width : 1024px)")
 
     useEffect(() => {
         const getLogo = async () => {
@@ -92,10 +92,10 @@ export default function NavBarAutenticado() {
 
                         ><a >Comentarios</a></li>
                     )}
-                    
+
                     {
-                        isMediumDevice && (
-                                                        <li
+                        !isMediumDevice && (
+                            <li
                                 onClick={() => {
                                     navigate(`/mensajes`)
                                 }}
@@ -106,8 +106,8 @@ export default function NavBarAutenticado() {
                             </li>
                         )
                     }
-                        
-                    
+
+
                     <li>
                         <button
                             style={{ border: 'none', backgroundColor: 'transparent' }}

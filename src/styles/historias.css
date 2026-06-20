@@ -14,10 +14,9 @@
     color: #41431B;
     display: flex;
     justify-content: end;
-    margin-right: 2rem;
 }
 
-.historias-subtitulo {
+.subtitulo {
     font-family: 'Poppins';
     font-size: 28px;
     text-align: center;
@@ -135,6 +134,7 @@
 }
 
 .comentario-informacion-contenedor {
+    width: 50%;
     background-color: white;
     padding: 1rem;
 }

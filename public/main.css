@@ -221,3 +221,29 @@ table tr td {
     justify-content: center;
 }
 
+
+@media (max-width: 768px) and (max-width:1024px) {
+    .subtitulo h2 {
+        font-size: 36px;
+        line-height: 1.2;
+    }
+
+    .etiqueta {
+        margin: 0;
+    }
+
+    .etiqueta h5 {
+        font-size: 18px;
+        line-height: 1.2;
+    }
+
+    .texto-informativo {
+        font-size: 15px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .texto-informativo-lista {
+        font-size: 15px;
+    }
+}

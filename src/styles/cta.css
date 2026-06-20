@@ -9,7 +9,7 @@
     gap: 2rem;
 }
 
-.cta h1 {
+.cta h5 {
     font-family: 'Poppins';
     font-size: 54px;
     color: #41431B;
@@ -17,7 +17,7 @@
     padding: 0;
 }
 
-.cta h5 {
+.cta h2 {
     font-family: 'Poppins';
     font-size: 28px;
     margin: 0;

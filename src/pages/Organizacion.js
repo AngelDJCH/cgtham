@@ -267,21 +267,23 @@ export default function Organizacion() {
             setSelectSector(resOrg?.sector)
             setSelectGiro(resOrg?.giro)
             console.log(resOrg)
-            if (resOrg?.tipo === 'Empresa') {
-                const resEm = await getEmpresa(resOrg?.id)
-                setEmpresa(resEm)
-            } else if (resOrg?.tipo === 'Escuela') {
-                const resEsc = await getEscuela(resOrg?.id)
-                setEscuela(resEsc)
-                const getOfertasEducativas = async () => {
-                    const data = await findAllByIdEscuela(resEsc.id)
-                    setOfertasEducativas(data)
-                }
+            if (resOrg?.tipo != 'Comité') {
+                if (resOrg?.tipo === 'Empresa') {
+                    const resEm = await getEmpresa(resOrg?.id)
+                    setEmpresa(resEm)
+                } else if (resOrg?.tipo === 'Escuela') {
+                    const resEsc = await getEscuela(resOrg?.id)
+                    setEscuela(resEsc)
+                    const getOfertasEducativas = async () => {
+                        const data = await findAllByIdEscuela(resEsc.id)
+                        setOfertasEducativas(data)
+                    }
 
-                getOfertasEducativas()
-            } else {
-                const resCam = await getCamara(resOrg?.id)
-                setCarama(resCam)
+                    getOfertasEducativas()
+                } else {
+                    const resCam = await getCamara(resOrg?.id)
+                    setCarama(resCam)
+                }
             }
         }
         organizacionData()

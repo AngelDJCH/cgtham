@@ -62,7 +62,7 @@ export default function Sectores() {
                 <h2>¡Estamos en expansión!</h2>
             </div>
             <div className="descripcion">
-                <p>Las mejores alianzas para desarrollar grandes profesionales</p>
+                <p className="texto-informativo">Las mejores alianzas para desarrollar grandes profesionales</p>
             </div>
 
             <div className="contenedor-sectores">

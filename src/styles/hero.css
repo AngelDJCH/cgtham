@@ -34,14 +34,8 @@
 
 @media (max-width: 768px) {
     .hero .informacion h1 {
-
         font-size: 36px; 
         line-height: 1.2; 
-    }
-
-    .informacion p {
-        font-size: 15px;
-        padding: 0 10px; 
     }
 }
 

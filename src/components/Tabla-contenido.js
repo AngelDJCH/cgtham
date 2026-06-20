@@ -349,7 +349,7 @@ export default function TablaContenido(props) {
                                             )
                                         }
                                         {
-                                            evento?.id_organizacion != user.organizacion && (
+                                            evento?.id_organizacion != user.organizacion && (user.tipo === 'Empresa' || user.tipo === 'Cámara de Comercio') && (
                                                 <button
                                                     className='btn-accion-2'
                                                     onClick={() => {

@@ -48,7 +48,7 @@ export default function Hero() {
         <div className="hero" id='inicio' style={{paddingTop:isSmallDevice?'100px':'', height:isSmallDevice?'auto':''}}>
             <div className='informacion'>
                 <h1>{titulo}</h1>
-                <p>{informacion}</p>
+                <p className='texto-informativo'>{informacion}</p>
             </div>
 
             <div className='botones-contenedor'>

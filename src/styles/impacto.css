@@ -1,4 +1,4 @@
-.impacto .etiqueta {
+.etiqueta {
     font-family: 'Poppins';
     font-size: 20px;
     padding: 0;
@@ -6,10 +6,9 @@
     color: #41431B;
     display: flex;
     justify-content: start;
-    margin-left: 2rem;
 }
 
-.impacto .subtitulo {
+.subtitulo {
     font-family: 'Poppins';
     font-size: 28px;
     text-align: center;

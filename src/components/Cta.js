@@ -7,8 +7,10 @@ export default function Cta(){
 
     return(
         <div className='cta'>
-            <h1>¡UNETE!</h1>
-            <h5>¿Listo/a para ser parte de la transformación?</h5>
+            <div className='subtitulo'>
+                <h5>¡UNETE!</h5>
+            </div>
+            <h2 className='texto-informativo'>¿Listo/a para ser parte de la transformación?</h2>
             <button
             
              onClick={() => { navigate('/register_org') }}

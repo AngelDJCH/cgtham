@@ -13,9 +13,11 @@ export default function Funcionamiento() {
             </div>
             <div className='funcionamiento-contenedor'>
                 <div className='funcionamiento-tarjeta'>
-                    <h6>Organizaciones</h6>
+                    <div className='subtitulo'>
+                        <h2>Organizaciones</h2>
+                    </div>
                     <div>
-                        <ol>
+                        <ol className='texto-informativo-lista'>
                             <li>
                                 Da click a "registrarme"
                             </li>
@@ -46,9 +48,11 @@ export default function Funcionamiento() {
                 </div>
 
                 <div className='funcionamiento-tarjeta'>
-                    <h6>Administrador</h6>
+                    <div className='subtitulo'>
+                        <h2>Administrador</h2>
+                    </div>
                     <div>
-                        <ol>
+                        <ol className='texto-informativo-lista'>
                             <li>
                                 Ingresa con tu correo y contraseña
                             </li>

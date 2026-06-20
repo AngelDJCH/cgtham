@@ -32,53 +32,58 @@ export default function Historicos() {
             <div className="contenedor-historicos">
                 <div className="contenedor-historico">
                     <h1>EVENTOS</h1>
-                    <table className="tabla-historico">
-                        <thead>
-                            <tr>
-                                <th>Organizacion</th>
-                                <th>Titulo</th>
-                                <th>Accion</th>
-                                <th>Fecha</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                eventos?.map(
-                                    evento => <tr>
-                                        <td>{evento.organizacion}</td>
-                                        <td>{evento.titulo}</td>
-                                        <td>{evento.accion}</td>
-                                        <td>{evento.fecha.split('T')[0]}</td>
-                                    </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
+                    <div className="tabla-historico">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Organizacion</th>
+                                    <th>Titulo</th>
+                                    <th>Accion</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    eventos?.map(
+                                        evento => <tr>
+                                            <td>{evento.organizacion}</td>
+                                            <td>{evento.titulo}</td>
+                                            <td>{evento.accion}</td>
+                                            <td>{evento.fecha.split('T')[0]}</td>
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div className="contenedor-historico">
                     <h1>OFERTAS LABORALES</h1>
-                    <table className="tabla-historico">
-                        <thead>
-                            <tr>
-                                <th>Organizacion</th>
-                                <th>Titulo</th>
-                                <th>Accion</th>
-                                <th>Fecha</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                ofertas.map(
-                                    oferta => <tr>
-                                        <td>{oferta.organizacion}</td>
-                                        <td>{oferta.titulo}</td>
-                                        <td>{oferta.accion}</td>
-                                        <td>{oferta.fecha.split('T')[0]}</td>
-                                    </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
+                    <div className="tabla-historico">
+
+                        <table >
+                            <thead>
+                                <tr>
+                                    <th>Organizacion</th>
+                                    <th>Titulo</th>
+                                    <th>Accion</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    ofertas.map(
+                                        oferta => <tr>
+                                            <td>{oferta.organizacion}</td>
+                                            <td>{oferta.titulo}</td>
+                                            <td>{oferta.accion}</td>
+                                            <td>{oferta.fecha.split('T')[0]}</td>
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

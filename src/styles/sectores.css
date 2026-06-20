@@ -1,4 +1,4 @@
-.sectores .etiqueta {
+.etiqueta {
     font-family: 'Poppins';
     font-size: 20px;
     padding: 0;
@@ -6,7 +6,6 @@
     color: #41431B;
     display: flex;
     justify-content: center;
-    margin-right: 2rem;
 }
 
 .sectores .subtitulo {
@@ -91,3 +90,5 @@
     color: #E3DBBB;
     border: 1px solid #E3DBBB;
 }
+
+

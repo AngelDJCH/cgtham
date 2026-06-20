@@ -52,7 +52,7 @@ export default function Noticias() {
                     Lo más reciente
                 </h5>
             </div>
-            <div className="noticias-subtitulo">
+            <div className="subtitulo">
                 <h2>Noticias y Eventos</h2>
             </div>
             <div className="contenedor-noticias">

@@ -24,7 +24,7 @@ export default function Historias() {
             <div className="etiqueta">
                 <h5>Historias de exito</h5>
             </div>
-            <div className="historias-subtitulo">
+            <div className="subtitulo">
                 <h2>Voces de nuestra comunidad</h2>
             </div>
             <div className="comentarios-contenedor">

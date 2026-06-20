@@ -272,7 +272,7 @@ export default function Cursos() {
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
                             <div className="formulario-contenedor" style={{ width: isSmallDevice ? '100%' : null, height: isSmallDevice ? '90%' : null }}>
-                                <div className="titulo-formulario"><h1>{curso?.titulo?.substring(0,50)}</h1></div>
+                                <div className="titulo-formulario"><h1>{curso?.titulo?.substring(0, 50)}</h1></div>
                                 <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
                                     <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
                                         <div className="contenedor-datos-interno" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -338,16 +338,23 @@ export default function Cursos() {
                                         className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenCurso(false); setEnable(false) }}
                                     ><strong>CERRAR</strong></button>
-                                    {user.tipo === 'Escuela' ? <button
-                                        onClick={() => {
-                                            enable ? setEnable(false) : setEnable(true);
-                                            if (enable) { handleUpdate() }
-                                        }}
-                                        className="btn-accion-2"
-                                    ><strong>{enable ? 'GUARDAR' : 'EDITAR'}</strong></button> : <button
-                                        className="btn-accion-2"
-                                        onClick={() => { handleParticipar(curso?.id) }}
-                                    ><strong>PARTICIPAR</strong></button>}
+                                    {user.tipo === 'Escuela'
+                                        && (<button
+                                            onClick={() => {
+                                                enable ? setEnable(false) : setEnable(true);
+                                                if (enable) { handleUpdate() }
+                                            }}
+                                            className="btn-accion-2"
+                                        ><strong>{enable ? 'GUARDAR' : 'EDITAR'}</strong></button>)
+                                    }
+                                    {
+                                        user.tipo != 'Escuela' && user.tipo != 'Comité' && (
+                                            <button
+                                                className="btn-accion-2"
+                                                onClick={() => { handleParticipar(curso?.id) }}
+                                            ><strong>PARTICIPAR</strong></button>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>

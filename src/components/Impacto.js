@@ -52,7 +52,7 @@ export default function Impacto() {
                     </video>
                 </div>
                 <div className="estadisticas-contenedor">
-                    <ul>
+                    <ul className="texto-informativo-lista">
                         <li className="contenedor-li">
                             <img className="icono" src={imagenUsuarios} alt="logo1" />
                             <p>

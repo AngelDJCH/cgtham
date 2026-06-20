@@ -105,7 +105,7 @@ export default function Organizaciones() {
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
-                            <div style={{ width: '80%', height: '80%', maxHeight: '80%', minHeight: '80%', backgroundColor: 'white', borderRadius: '10px', overflowY: 'scroll', scrollbarWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <div style={{ width: '80%', height: '80%', maxHeight: '80%', minHeight: '80%', backgroundColor: 'white', borderRadius: '10px', overflowY: 'scroll', scrollbarWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding:'1rem' }}>
                                 <div style={{ width: '100%', height: '150px' }}>
                                     <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} src={organizacion?.organizacion?.banner} />
                                 </div>
