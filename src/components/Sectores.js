@@ -100,7 +100,7 @@ export default function Sectores() {
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
-                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '1rem', backgroundColor: '#AEB784', borderRadius: '10px', padding: '1rem' }}>
+                            <div className="sector-ventana-emergente">
                                 <h1 style={{ fontFamily: 'Poppins', color: '#E3DBBB', textAlign: 'center' }}>
                                     {sectorData.nombre}
                                 </h1>

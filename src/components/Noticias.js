@@ -28,8 +28,8 @@ export default function Noticias() {
 
     const obtenerFoto = (evento) => {
         // if (evento?.fotos.length === 1) {
-            return <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '100%' }}>
-                <img style={{ width: '50%', height: 'auto' }} src={`${evento?.fotos[0]}`} alt={`${evento.organizacion.nombre}`} /></div>
+            return <div style={{ display: 'flex', justifyContent: 'center', width: '150px', height: '250px' }}>
+                <img style={{ width: '100%', height: '100%' }} src={`${evento?.fotos[0]}`} alt={`${evento.organizacion.nombre}`} /></div>
         // }
         // return <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '100%' }}>
         //     <img src={`${evento?.fotos[0]}`} style={{ width: '50%', height: 'auto' }} />

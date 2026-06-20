@@ -20,7 +20,7 @@ export default function Footer() {
             <div className='f-contenedor-seccion'>
                 <div className='f-contenedor-logo-titulo'>
                     <img src={logo} alt='logo' />
-                    <h6>CGTHAMs</h6>
+                    <h6>CGTHAM</h6>
                 </div>
                 <div className='f-contenedor-informacion'>
                     <p>

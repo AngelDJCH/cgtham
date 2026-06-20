@@ -1,23 +1,24 @@
+import '../styles/tour.css'
+
 export default function Tour(props) {
     return (
         <div>
 
-            <div className="overllay">
-
-            </div>
+            <div className="overllay" />
 
             <div className="overllay-contenedor">
+                <div className='tour'>
+                    <video className='video-tour' controls>
+                        <source
+                            src="Tour.mp4"
+                        ></source>
+                    </video>
+                    <button
+                        className="btn-accion"
+                        onClick={() => { props?.accion(false) }}
 
-                <video style={{width:'100vh', height:'80vh'}} controls>
-                    <source
-                        src="Tour.mp4"
-                    ></source>
-                </video>
-                <button
-
-                    onClick={() => { props?.accion(false) }}
-
-                >CERRAR</button>
+                    >CERRAR</button>
+                </div>
             </div>
         </div>
     )

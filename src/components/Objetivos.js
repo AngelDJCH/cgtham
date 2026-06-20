@@ -14,7 +14,10 @@ export default function Objetivos(props){
                         <p style={{width:'90%', textAlign:'justify', maxHeight:'30vh', overflowY:'scroll'}}>Ser reconocidos como el pilar estratégico fundamental de la organización, consolidando un modelo de gestión de talento humano innovador, humano y de vanguardia. Aspiramos a ser un referente nacional por nuestra cultura de alto desempeño, liderazgo inspirador y por convertir a nuestra institución en el mejor lugar para trabajar.</p>
                     </div>
                 </div>
-                <button onClick={(e)=>{props.accion(false)}}>CERRAR</button>
+                <button
+                style={{marginTop:'1rem'}}
+                className="btn-accion"
+                onClick={(e)=>{props.accion(false)}}>CERRAR</button>
             </div>
         </div>
     )

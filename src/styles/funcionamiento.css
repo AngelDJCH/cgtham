@@ -45,25 +45,6 @@
     font-size: 16px;
 }
 
-.funcionamiento button {
-    color: white;
-    border: none;
-    background-color: #FFD400;
-    width: 200px;
-    height: 60px;
-    font-family: 'Poppins';
-    font-size: 16px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.funcionamiento button:hover {
-    transform: scale(1.1);
-    background-color: transparent;
-    color: #FFD400;
-    border: 2px solid #FFD400;
-}
-
 .funcionamiento-tarjeta-boton-contendor{
     display: flex;
     justify-content: center;
@@ -92,14 +73,36 @@
 }
 
 .estadistica-li p{
-    color: white;
+    color: #cacaca;
     margin: 0;
     padding: 0;
 }
 
 .estadistica-li h6{
     font-size: 36px;
-    color: #41431B;
+    color: #ffffff;
     margin: 0;
     padding: 0;
+}
+
+.lista-funcionamiento{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.lista-funcionamiento div{
+    width: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+}
+
+.lista-funcionamiento div p{
+    color : #41431B
+}
+
+.lista-funcionamiento div:hover{
+    background-color: transparent;
+    border: 2px solid #41431B
 }

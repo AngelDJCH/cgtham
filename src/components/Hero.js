@@ -45,7 +45,7 @@ export default function Hero() {
     }, [])
 
     return (
-        <div className="hero" id='inicio' style={{paddingTop:isSmallDevice?'100px':'', height:isSmallDevice?'auto':''}}>
+        <div className="hero" id='inicio' style={{ paddingTop: isSmallDevice ? '100px' : '', height: isSmallDevice ? 'auto' : '' }}>
             <div className='informacion'>
                 <h1>{titulo}</h1>
                 <p className='texto-informativo'>{informacion}</p>
@@ -53,17 +53,17 @@ export default function Hero() {
 
             <div className='botones-contenedor'>
                 <button
-
+                    className='btn-accion'
                     onClick={(e) => { setOpenObjetivos(true) }}
 
                 >OBJETIVOS</button>
                 <button
-
+                    className='btn-accion'
                     onClick={() => { setOpenTour(true) }}
 
                 >TOUR</button>
                 <button
-
+                    className='btn-accion'
                     onClick={() => { navigate('/login') }}
 
                 >UNIRME</button>

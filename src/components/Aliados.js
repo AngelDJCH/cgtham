@@ -143,7 +143,7 @@ export default function Aliados() {
     ]);
 
     return (
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '25vh' }}>
+        <div className="aliados-contenedor">
             <div className="carousel">
                 <div className="group">
                     {

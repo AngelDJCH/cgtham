@@ -16,27 +16,27 @@ export default function Funcionamiento() {
                     <div className='subtitulo'>
                         <h2>Organizaciones</h2>
                     </div>
-                    <div>
-                        <ol className='texto-informativo-lista'>
-                            <li>
-                                Da click a "registrarme"
-                            </li>
-                            <li>
+                    <div className='texto-informativo-lista lista-funcionamiento'>
+                        <div>
+                            <p>Da click a "registrarme"</p>
+                        </div>
+                        <div>
+                            <p>
                                 Ingresa los datos de tu organización
-                            </li>
-                            <li>
-                                Espera la validación del sistema
-                            </li>
-                            <li>
-                                Transforma el futuro
-                            </li>
-                        </ol>
+                            </p>
+                        </div>
+                        <div>
+                            <p>Espera la validación del sistema</p>
+                        </div>
+                        <div>
+                            <p>Transforma el futuro</p>
+                        </div>
                     </div>
-                    <div className='funcionamiento-tarjeta-boton-contendor'>
+                    <div className='funcionamiento-tarjeta-boton-contendor' style={{marginTop:'1rem'}}>
                         <button
 
                             onClick={() => { navigate('/register_org') }}
-
+                            className='btn-accion'
                         >
                             REGISTRARME
                         </button>
@@ -52,25 +52,26 @@ export default function Funcionamiento() {
                         <h2>Administrador</h2>
                     </div>
                     <div>
-                        <ol className='texto-informativo-lista'>
-                            <li>
-                                Ingresa con tu correo y contraseña
-                            </li>
-                            <li>
-                                Accede a los apartados de navegación
-                            </li>
-                            <li>
-                                Administra el sistema
-                            </li>
-                            <li>
-                                Transforma el futuro
-                            </li>
+                        <ol className='texto-informativo-lista lista-funcionamiento'>
+                            <div>
+                                <p> Ingresa con tu correo y contraseña</p>
+                            </div>
+                            <div>
+                                <p> Accede a los apartados de navegación</p>
+                            </div>
+                            <div>
+                                <p>Administra el sistema</p>
+                            </div>
+                            <div>
+                                <p>Transforma el futuro</p>
+                            </div>
                         </ol>
                     </div>
                     <div className='funcionamiento-tarjeta-boton-contendor'>
                         <button
 
                             onClick={() => { navigate('/login') }}
+                            className='btn-accion'
 
                         >
                             INGRESAR

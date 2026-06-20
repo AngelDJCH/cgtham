@@ -37,29 +37,17 @@
         font-size: 36px; 
         line-height: 1.2; 
     }
-}
-
-.hero button {
-    color: white;
-    border: none;
-    background-color: #FFD400;
-    width: 200px;
-    height: 60px;
-    font-family: 'Poppins';
-    font-size: 16px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.hero button:hover{
-    transform: scale(1.1);
-    background-color: transparent;
-    color: #FFD400;
-    border: 2px solid #FFD400;
+    .hero-estadisticas-contenedor{
+            margin-bottom: 1rem;
+    }
 }
 
 .hero-estadisticas-contenedor{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+}
+
+.botones-contenedor{
+    width: 90%;
 }

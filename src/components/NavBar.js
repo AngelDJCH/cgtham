@@ -9,7 +9,7 @@ export default function NavBar(props) {
     const logo = 'logo_cgtham.png'
     const nombre = 'CGTHAM' || 'Comisión de Gestión de Talento Humano de las Altas Montañas'
 
-    const isSmallDevice = useMediaQuery('(max-width:768px)');
+    const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width:1024px)');
 
 
     return (
@@ -67,11 +67,11 @@ export default function NavBar(props) {
                         props?.opcionesNav && (
                             <li>
                                 <button
-
+                                    className='btn-accion'
                                     onClick={(e) => { navigate('/login') }}
 
                                 >
-                                    INICIAR SESIÓN
+                                    LOGIN
                                 </button>
                             </li>
 

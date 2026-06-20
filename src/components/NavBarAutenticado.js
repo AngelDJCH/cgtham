@@ -212,6 +212,15 @@ export default function NavBarAutenticado() {
 
                                 ><a >Visitas</a></li>
                             )}
+                            {isMediumDevice && (
+                                <li className='opciones'
+
+                                    onClick={(e) => {
+                                        navigate('/mensajes')
+                                    }}
+
+                                ><a >Mensajes</a></li>
+                            )}
                             <li
                                 onClick={async (e) => {
 
