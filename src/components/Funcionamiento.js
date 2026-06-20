@@ -32,7 +32,7 @@ export default function Funcionamiento() {
                             <p>Transforma el futuro</p>
                         </div>
                     </div>
-                    <div className='funcionamiento-tarjeta-boton-contendor' style={{marginTop:'1rem'}}>
+                    <div className='funcionamiento-tarjeta-boton-contendor'>
                         <button
 
                             onClick={() => { navigate('/register_org') }}
@@ -51,21 +51,19 @@ export default function Funcionamiento() {
                     <div className='subtitulo'>
                         <h2>Administrador</h2>
                     </div>
-                    <div>
-                        <ol className='texto-informativo-lista lista-funcionamiento'>
-                            <div>
-                                <p> Ingresa con tu correo y contraseña</p>
-                            </div>
-                            <div>
-                                <p> Accede a los apartados de navegación</p>
-                            </div>
-                            <div>
-                                <p>Administra el sistema</p>
-                            </div>
-                            <div>
-                                <p>Transforma el futuro</p>
-                            </div>
-                        </ol>
+                    <div className='texto-informativo-lista lista-funcionamiento'>
+                        <div>
+                            <p> Ingresa con tu correo y contraseña</p>
+                        </div>
+                        <div>
+                            <p> Accede a los apartados de navegación</p>
+                        </div>
+                        <div>
+                            <p>Administra el sistema</p>
+                        </div>
+                        <div>
+                            <p>Transforma el futuro</p>
+                        </div>
                     </div>
                     <div className='funcionamiento-tarjeta-boton-contendor'>
                         <button

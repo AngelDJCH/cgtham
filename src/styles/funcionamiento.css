@@ -23,9 +23,14 @@
     gap:2rem
 }
 
-.roles-imagen img {
+.roles-imagen{
     width: 300px;
     height: 300px;
+}
+
+.roles-imagen img {
+    width: 100%;
+    height: 100%;
 }
 
 .funcionamiento-tarjeta {
@@ -39,15 +44,10 @@
     font-size: 38px;
 }
 
-.funcionamiento-tarjeta li {
-    font-family: 'Poppins';
-    text-align: center;
-    font-size: 16px;
-}
-
 .funcionamiento-tarjeta-boton-contendor{
     display: flex;
     justify-content: center;
+    margin-top: 1rem;
 }
 
 .hero .botones-contenedor{
