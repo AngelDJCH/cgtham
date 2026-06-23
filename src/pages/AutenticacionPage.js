@@ -18,6 +18,9 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function AutenticacionPage() {
 
+    const imgLogoDefault = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlLXVwLWljb24gbHVjaWRlLWltYWdlLXVwIj48cGF0aCBkPSJNMTAuMyAyMUg1YTIgMiAwIDAgMS0yLTJWNWEyIDIgMCAwIDEgMi0yaDE0YTIgMiAwIDAgMSAyIDJ2MTBsLTMuMS0zLjFhMiAyIDAgMCAwLTIuODE0LjAxNEw2IDIxIi8+PHBhdGggZD0ibTE0IDE5LjUgMy0zIDMgMyIvPjxwYXRoIGQ9Ik0xNyAyMnYtNS41Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjkiIHI9IjIiLz48L3N2Zz4="
+    const imgBannerDefault = "https://plus.unsplash.com/premium_photo-1772877094825-2908e6cfd259?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+
     const [sectores, setSectores] = useState([
         {
             id: 1,
@@ -324,7 +327,7 @@ export default function AutenticacionPage() {
             {
 
                 openRegisterOrg && (
-                    <div className="contenedor-autenticacion" style={{ flexDirection: 'column', height: 'auto', flexWrap:'wrap' }}>
+                    <div className="contenedor-autenticacion" style={{ flexDirection: 'column', height: 'auto', flexWrap: 'wrap' }}>
                         <div className="contenedor-seccion1">
 
 
@@ -338,7 +341,7 @@ export default function AutenticacionPage() {
                                     <label
                                         htmlFor="upload-banner"
                                     >
-                                        <img src="https://plus.unsplash.com/premium_photo-1772877094825-2908e6cfd259?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+                                        <img src={imgBannerDefault} />
                                     </label>
                                 )
                             }
@@ -353,10 +356,10 @@ export default function AutenticacionPage() {
                                 )
                             }
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', flexWrap:'wrap', justifyContent:'center', alignItems:'center', width:'100%' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
 
-                            <div className="contenedor-seccion2" style={{flexWrap:'wrap'}}>
-                                <div style={{ width: isSmallDevice ? '100%' : '20%', display: 'flex', justifyContent: 'center', marginTop: '1rem', flexWrap:'wrap' }}>
+                            <div className="contenedor-seccion2" style={{ flexWrap: 'wrap' }}>
+                                <div style={{ width: isSmallDevice ? '100%' : '20%', display: 'flex', justifyContent: 'center', marginTop: '1rem', flexWrap: 'wrap' }}>
                                     <input type="file" accept=".png"
                                         id="upload-foto"
                                         style={{ display: 'none' }}
@@ -368,7 +371,7 @@ export default function AutenticacionPage() {
                                             <label
                                                 htmlFor="upload-foto"
                                             >
-                                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlLXVwLWljb24gbHVjaWRlLWltYWdlLXVwIj48cGF0aCBkPSJNMTAuMyAyMUg1YTIgMiAwIDAgMS0yLTJWNWEyIDIgMCAwIDEgMi0yaDE0YTIgMiAwIDAgMSAyIDJ2MTBsLTMuMS0zLjFhMiAyIDAgMCAwLTIuODE0LjAxNEw2IDIxIi8+PHBhdGggZD0ibTE0IDE5LjUgMy0zIDMgMyIvPjxwYXRoIGQ9Ik0xNyAyMnYtNS41Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjkiIHI9IjIiLz48L3N2Zz4=" />
+                                                <img src={imgLogoDefault} />
                                             </label>
                                         )
                                     }
@@ -383,15 +386,15 @@ export default function AutenticacionPage() {
                                         )
                                     }
                                 </div>
-                                <div style={{ width: isSmallDevice ? '100%' : '80%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap:'wrap' }}>
-                                    <div style={{ display: 'flex', width: '100%', justifyContent: isSmallDevice ? 'center':'space-around', alignItems:isSmallDevice?'center':'', marginTop: '2rem', flexWrap: 'wrap', flexDirection:isSmallDevice?'column':'row' }}>
+                                <div style={{ width: isSmallDevice ? '100%' : '80%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
+                                    <div style={{ display: 'flex', width: '100%', justifyContent: isSmallDevice ? 'center' : 'space-around', alignItems: isSmallDevice ? 'center' : '', marginTop: '2rem', flexWrap: 'wrap', flexDirection: isSmallDevice ? 'column' : 'row' }}>
                                         <div className="datos">
                                             <h1>Datos Organización</h1>
                                             <div className="contenedor-input">
                                                 <input id="r_nombre" placeholder="Nombre comercial" onChange={(e) => { setDatosPersonales({ ...datosPersonales, nombre: e.target.value }) }} type="text" />
-                                                <input id="r_apellido_paterno" placeholder="Descripcion" onChange={(e) => { setDatosPersonales({ ...datosPersonales, descripcion: e.target.value }) }} type="text" />
+                                                <input id="r_descripcion" placeholder="Descripcion" onChange={(e) => { setDatosPersonales({ ...datosPersonales, descripcion: e.target.value }) }} type="text" />
                                                 <input id="r_rfc" placeholder="RFC" onChange={(e) => { setDatosPersonales({ ...datosPersonales, rfc: e.target.value }) }} />
-                                                <select onChange={(e) => setSelectTipo(e.target.value)}>
+                                                <select id="r_tipo_org" onChange={(e) => setSelectTipo(e.target.value)}>
                                                     <option selected>
                                                         TIPO
                                                     </option>
@@ -405,7 +408,7 @@ export default function AutenticacionPage() {
                                                         Cámara de Comercio
                                                     </option>
                                                 </select>
-                                                <select onChange={(e) => setSelectSector(e.target.value)}>
+                                                <select id="r_sector_org" onChange={(e) => setSelectSector(e.target.value)}>
                                                     <option selected>
                                                         SECTOR
                                                     </option>
@@ -417,7 +420,7 @@ export default function AutenticacionPage() {
                                                         )
                                                     }
                                                 </select>
-                                                <select onChange={(e) => { setSelectGiro(e.target.value) }}>
+                                                <select id="r_giro_org" onChange={(e) => { setSelectGiro(e.target.value) }}>
                                                     <option>
                                                         GIRO
                                                     </option>
@@ -434,13 +437,13 @@ export default function AutenticacionPage() {
                                                         )
                                                     }
                                                 </select>
-                                                <input placeholder="Tamaño" type="number" onChange={(e) => { setDatosPersonales({ ...datosPersonales, tamaño: e.target.value }) }} />
+                                                <input id="r_tamaño" placeholder="Tamaño" type="number" onChange={(e) => { setDatosPersonales({ ...datosPersonales, tamaño: e.target.value }) }} />
                                                 {
                                                     selectTipo === 'Empresa' && (
                                                         <div className="datos">
-                                                            <input placeholder="Razón social" onChange={(e) => { setEmpresa({ ...empresa, razon_social: e.target.value }) }} />
-                                                            <input placeholder="Regimen fiscal" onChange={(e) => { setEmpresa({ ...empresa, regimen_fiscal: e.target.value }) }} />
-                                                            <input placeholder="Dirección fiscal" onChange={(e) => { setEmpresa({ ...empresa, direccion_fiscal: e.target.value }) }} />
+                                                            <input id="r_razon_social" placeholder="Razón social" onChange={(e) => { setEmpresa({ ...empresa, razon_social: e.target.value }) }} />
+                                                            <input id="r_regimen_fiscal" placeholder="Regimen fiscal" onChange={(e) => { setEmpresa({ ...empresa, regimen_fiscal: e.target.value }) }} />
+                                                            <input id="r_direccion_fiscal" placeholder="Dirección fiscal" onChange={(e) => { setEmpresa({ ...empresa, direccion_fiscal: e.target.value }) }} />
                                                         </div>
                                                     )
                                                 }
@@ -452,15 +455,15 @@ export default function AutenticacionPage() {
                                                                 <option>Publica</option>
                                                                 <option>Privada</option>
                                                             </select>
-                                                            <input placeholder="Sitio web" onChange={(e) => { setEscuela({ ...escuela, url: e.target.value }) }} />
+                                                            <input id="r_sitio" placeholder="Sitio web" onChange={(e) => { setEscuela({ ...escuela, url: e.target.value }) }} />
                                                         </div>
                                                     )
                                                 }
                                                 {
                                                     selectTipo === 'Cámara de Comercio' && (
                                                         <div className="datos">
-                                                            <input placeholder="Nombre" onChange={(e) => { setCamara({ ...camara, nombre: e.target.value }) }} />
-                                                            <input placeholder="Presidente" onChange={(e) => { setCamara({ ...camara, presidente: e.target.value }) }} />
+                                                            <input id="r_nombre_camara" placeholder="Nombre" onChange={(e) => { setCamara({ ...camara, nombre: e.target.value }) }} />
+                                                            <input id="r_presidente" placeholder="Presidente" onChange={(e) => { setCamara({ ...camara, presidente: e.target.value }) }} />
                                                         </div>
                                                     )
                                                 }
@@ -469,7 +472,7 @@ export default function AutenticacionPage() {
                                         <div className="datos">
                                             <h1>Datos Ubicación</h1>
                                             <div className="contenedor-input">
-                                                <input placeholder="Calle" onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, calle: e.target.value }) }} type="text" />
+                                                <input id="r_calle" placeholder="Calle" onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, calle: e.target.value }) }} type="text" />
                                                 <div className="contenedor-input-doble">
                                                     <input id="r_numero" placeholder="Numero" style={{ width: '80px' }} onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, numero: e.target.value }) }} type="number" />
                                                     <input id="r_colonia" placeholder="Colonia" style={{ width: '100px' }} onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, colonia: e.target.value }) }} type="text" />
@@ -497,12 +500,12 @@ export default function AutenticacionPage() {
                                                 <input id="r_contrasenia" placeholder="Contraseña" onChange={(e) => { setDatosSeguridad({ ...datosSeguridad, contrasenia: e.target.value }) }} type="password" />
                                             </div>
                                         </div>
-                                        <div className="datos" style={{width:'200px'}}>
+                                        <div className="datos" style={{ width: '200px' }}>
                                             <h1>Cloudinary</h1>
                                             <div style={{ display: 'flex', justifyContent: 'space-around', gap: '1rem', flexWrap: 'wrap' }}>
-                                                <input placeholder="CLOUD NAME" type="text" onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, cloud_name: e.target.value }) }} />
-                                                <input placeholder="API KEY" type="password" onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, api_key: e.target.value }) }} />
-                                                <input placeholder="API SECRET" type="password" onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, api_secret: e.target.value }) }} />
+                                                <input id="cloud_name" placeholder="CLOUD NAME" type="text" onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, cloud_name: e.target.value }) }} defaultValue={datosCloudinary.cloud_name} />
+                                                <input id="api_key" placeholder="API KEY" type="password" onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, api_key: e.target.value }) }} defaultValue={datosCloudinary.api_key} />
+                                                <input id="api_secret" placeholder="API SECRET" type="password" onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, api_secret: e.target.value }) }} defaultValue={datosCloudinary.api_secret} />
                                             </div>
                                             <p
                                                 style={{ fontSize: '11px' }}
@@ -510,16 +513,111 @@ export default function AutenticacionPage() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="contenedor-botones-accion" style={{display:'flex', flexDirection:isSmallDevice ? 'column' : 'row'}}>
+                                <div className="contenedor-botones-accion" style={{ display: 'flex', flexDirection: isSmallDevice ? 'column' : 'row' }}>
                                     <button className="btn-regresar"
                                         onClick={() => { navigate(-1) }}
                                     >
                                         REGRESAR
                                     </button>
-                                    <button className="btn-limpiar">
+                                    <button className="btn-limpiar"
+
+                                        onClick={(e) => {
+                                            e.preventDefault()
+
+                                            setFoto(null)
+                                            setBanner(null)
+
+                                            document.getElementById('r_nombre').value = ''
+                                            document.getElementById('r_descripcion').value = ''
+                                            document.getElementById('r_rfc').value = ''
+
+                                            if (selectTipo === 'Escuela') {
+                                                document.getElementById('r_sitio').value = ''
+                                            } else if (selectTipo === 'Empresa') {
+                                                document.getElementById('r_razon_social').value = ''
+                                                document.getElementById('r_regimen_fiscal').value = ''
+                                                document.getElementById('r_direccion_fiscal').value = ''
+                                            } else if (selectTipo === 'Cámara de Comercio') {
+                                                document.getElementById('r_nombre_camara').value = ''
+                                                document.getElementById('r_presidente').value = ''
+                                            }
+
+                                            document.getElementById('r_tipo_org').selectedIndex = 0
+                                            document.getElementById('r_sector_org').selectedIndex = 0
+                                            document.getElementById('r_giro_org').selectedIndex = 0
+
+                                            setSelectTipo('')
+
+                                            document.getElementById('r_tamaño').value = ''
+
+                                            document.getElementById('r_calle').value = ''
+                                            document.getElementById('r_numero').value = ''
+                                            document.getElementById('r_colonia').value = ''
+                                            document.getElementById('r_ciudad').value = ''
+                                            document.getElementById('r_cp').value = ''
+                                            document.getElementById('r_estado').value = ''
+                                            document.getElementById('r_pais').value = ''
+
+
+                                            document.getElementById('r_correo').value = ''
+                                            document.getElementById('r_telefono').value = ''
+
+
+                                            document.getElementById('r_contrasenia').value = ''
+
+                                            document.getElementById('cloud_name').value = ''
+                                            document.getElementById('api_key').value = ''
+                                            document.getElementById('api_secret').value = ''
+
+                                            setDatosPersonales(
+                                                {
+                                                    nombre: '',
+                                                    descripcion: '',
+                                                    apellido_materno: '',
+                                                    rfc: '',
+                                                    tamaño: ''
+                                                }
+                                            )
+
+                                            setDatosUbicacion(
+                                                {
+                                                    calle: '',
+                                                    numero: '',
+                                                    colonia: '',
+                                                    codigo_postal: '',
+                                                    ciudad: '',
+                                                    estado: '',
+                                                    pais: ''
+                                                }
+                                            )
+
+                                            setDatosContacto(
+                                                {
+                                                    correo: '',
+                                                    telefono: ''
+                                                }
+                                            )
+
+                                            setDatosSeguridad(
+                                                {
+                                                    contrasenia: ''
+                                                }
+                                            )
+
+                                            setDatosCloudinary(
+                                                {
+                                                    cloud_name: '',
+                                                    api_key: '',
+                                                    api_secret: ''
+                                                }
+                                            )
+
+                                        }}
+
+                                    >
                                         LIMPIAR
                                     </button>
-                                    <button className="btn2"
+                                    <button className="btn-accion"
                                         onClick={() => {
                                             handeCreateOrganizacion()
                                         }}
