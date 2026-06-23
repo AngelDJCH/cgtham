@@ -85,7 +85,7 @@ export default function VisualizarEvento(props) {
             <div className="overllay"></div>
             <div className="overllay-contenedor">
                 <div className="formulario-contenedor" style={{ width: (isSmallDevice || isMediumDevice) ? '90%' : null, height: (isSmallDevice || isMediumDevice) ? '90%' : null }}>
-                    <div className="titulo-formulario"><h1>{evento?.titulo.substring(0, 25)}</h1></div>
+                    <div className="titulo-formulario"><h1 className="subtitulo">{evento?.titulo.substring(0, 25)}</h1></div>
                     <div className="formulario" style={{ height: (isSmallDevice || isMediumDevice) ? '80%' : null, width: (isSmallDevice || isMediumDevice) ? '100%' : null }}>
                         <div className="contenedor-datos-formulario" style={{ width: (isSmallDevice || isMediumDevice) ? '100%' : null }}>
                             <div className="contenedor-datos-interno">

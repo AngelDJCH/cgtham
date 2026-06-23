@@ -91,14 +91,14 @@ export default function Eventos(prop) {
                 for (const i of imagenes) {
                     await uploadFotoEvento(i.url, res.id, user.organizacion)
                 }
-
-                alert('Fotos cargadas con exito')
             } catch (error) {
                 const eliminado = await deleteEventoById(res.id)
+                navigate(0)
                 alert('NO SE PUDO CREAR EL EVENTO')
             }
 
-            //navigate(0)
+            navigate(0)
+            alert('EVENTO PUBLICADO - (FOTOS SUBIDAS CON EXITO)')
         } else {
             alert('NO SE PUDO CREAR EL EVENTO')
         }

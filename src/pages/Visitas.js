@@ -70,7 +70,7 @@ export default function Visitas() {
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
                             <div className="formulario-contenedor" style={{ height: isSmallDevice ? '100%' : null, height: isSmallDevice ? 'auto' : null }}>
-                                <div className="titulo-formulario"><h1>NUEVA SOLICITUD DE VISITA</h1></div>
+                                <div className="titulo-formulario"><h1 className="subtitulo">NUEVA SOLICITUD DE VISITA</h1></div>
                                 <div className="formulario" style={{ width: isSmallDevice ? '100%' : null, height: 'auto' }}>
                                     <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null, scrollbarWidth: 'none' }}>
                                         <div className="contenedor-datos-interno">
@@ -78,13 +78,22 @@ export default function Visitas() {
                                             <select onChange={(e) => { setIdEmpresa(e.target.value) }} style={{ color: 'white', border: '2px solid #41431B', backgroundColor: '#8b8e5b' }}>
                                                 <option>Empresa:              ---</option>
                                                 {
-                                                    organizaciones.filter(org => org.tipo != 'Escuela').map(
+                                                    organizaciones.filter(org => org.tipo != 'Escuela' && org.tipo != 'Comité').map(
                                                         org => <option value={org.id}>
                                                             {org.nombre_comercial}
                                                         </option>
                                                     )
                                                 }
                                             </select>
+                                            {
+                                                isSmallDevice && (
+                                                    <div style={{ width: '100%', height: '100%' }}>
+                                                        <p style={{ textAlign: 'justify' }}><strong>Nota: </strong>
+                                                            Una vez realizada la solicitud, la empresa correspondiente evaluará la petición para aceptar y agendar la reunión o visita. Por favor, mantente a la espera de su respuesta. <br></br>
+                                                            En caso de presentar algún problema con el sistema o tener dudas, puedes reportarlo a <kbd><strong>cgtham@gmail.com</strong></kbd></p>
+                                                    </div>
+                                                )
+                                            }
                                         </div>
                                     </div>
                                     {
@@ -97,7 +106,7 @@ export default function Visitas() {
                                         )
                                     }
                                 </div>
-                                <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
+                                <div style={{ width: isSmallDevice ? '100%' : '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
                                     <button className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenCreateVisita(false) }}
                                     ><strong>CANCELAR</strong></button>

@@ -77,7 +77,7 @@ export const deleteEventoById = async (id_evento) => {
 
 export const findParticipantesPendientesByIdEvento = async (id_evento) => {
     try {
-        const {data} = await axiosInstance.get(`/inscripciones/pendientes/${id_evento}`)
+        const {data} = await axiosInstance.get(`/inscripcionesEvento/pendientes/${id_evento}`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER LOS PARTICIPANTES PENDIENTES DEL EVENTO')

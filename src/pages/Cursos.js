@@ -211,7 +211,7 @@ export default function Cursos() {
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
                             <div className="formulario-contenedor" style={{ width: isSmallDevice ? '90%' : null, height: isSmallDevice ? '90%' : null }}>
-                                <div className="titulo-formulario"><h1>SOLICITAR CURSO</h1></div>
+                                <div className="titulo-formulario"><h1 className="subtitulo">SOLICITAR CURSO</h1></div>
                                 <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
                                     <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
                                         <div className="contenedor-datos-interno">
@@ -272,7 +272,7 @@ export default function Cursos() {
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
                             <div className="formulario-contenedor" style={{ width: isSmallDevice ? '100%' : null, height: isSmallDevice ? '90%' : null }}>
-                                <div className="titulo-formulario"><h1>{curso?.titulo?.substring(0, 50)}</h1></div>
+                                <div className="titulo-formulario"><h1 className="subtitulo">{curso?.titulo?.substring(0, 50)}</h1></div>
                                 <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
                                     <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
                                         <div className="contenedor-datos-interno" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -373,7 +373,7 @@ export default function Cursos() {
                                 justifyContent: 'space-around', alignItems: 'center', gap: '1rem'
                             }}>
                                 <div style={{ width: '100%', height: '100%', minWidth: '100%', maxWidth: '100%', overflowX: 'scroll', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <h1>SOLICITUDES DE CURSOS</h1>
+                                    <h1 className="subtitulo">SOLICITUDES DE CURSOS</h1>
                                     <table className="contenedor-tablas-interno" style={{ minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
                                         <thead>
                                             <tr>

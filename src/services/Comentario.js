@@ -51,6 +51,7 @@ export const findAllComentariosByUsuario = async (id_organizacion) => {
         const { data } = await axiosInstance.get(`/comentarios/organizacion/${id_organizacion}`)
         return data
     } catch (error) {
+        console.log(error)
         alert('OCURRIO UN ERROR AL OBTENER LOS COMENTARIOS')
     }
 }

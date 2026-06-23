@@ -242,7 +242,7 @@ export default function OfertasLaborales() {
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
                             <div className="formulario-contenedor" style={{ width: isSmallDevice ? '90%' : null, height: isSmallDevice ? '90%' : null }}>
-                                <div className="titulo-formulario"><h1>NUEVA OFERTA LABORAL</h1></div>
+                                <div className="titulo-formulario"><h1 className="subtitulo">NUEVA OFERTA LABORAL</h1></div>
                                 <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
                                     <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
                                         <div className="contenedor-datos-interno">
