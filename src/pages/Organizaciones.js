@@ -24,7 +24,7 @@ export default function Organizaciones() {
 
     const handleUpdateEstado = async (id, estado) => {
         const data = await updateEstadoByIdOrganizacion(id, estado)
-        if(data){
+        if (data) {
             navigate(0)
             alert('ORGANIZACION ACTUALIZADA')
         }
@@ -61,7 +61,7 @@ export default function Organizaciones() {
                     {
                         organizaciones?.map(
                             org => <div
-                                style={{ width: '200px', height: '150px', backgroundColor: '#41431B', border: '4px solid #41431B', display:'flex', flexDirection:'column', justifyContent:'space-between'}}>
+                                style={{ width: '200px', height: '150px', backgroundColor: '#41431B', border: '4px solid #41431B', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <div style={{ width: '100%', height: '50px' }}>
                                     <img src={org.organizacion.banner} style={{ width: '100%', borderRadius: '10px', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
                                 </div>
@@ -78,21 +78,6 @@ export default function Organizaciones() {
                                         <strong
                                         >VISUALIZAR</strong>
                                     </button>
-
-                                    {/* {
-                                        org?.organizacion.estado===false && (
-                                            <button className="btn-accion-2">
-                                                <strong>ACEPTAR</strong>
-                                            </button>
-                                        )
-                                    }
-                                    {
-                                        org?.organizacion.estado===false && (
-                                            <button className="btn-accion-cancelar-1">
-                                                <strong>RECHAZAR</strong>
-                                            </button>
-                                        )
-                                    } */}
                                 </div>
                             </div>
                         )
@@ -105,15 +90,15 @@ export default function Organizaciones() {
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
-                            <div style={{ width: '80%', height: '80%', maxHeight: '80%', minHeight: '80%', backgroundColor: 'white', borderRadius: '10px', overflowY: 'scroll', scrollbarWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding:'1rem' }}>
-                                <div style={{ width: '100%', height: '150px' }}>
+                            <div style={{ width: '80%', height: '80%', maxHeight: '80%', minHeight: '80%', backgroundColor: 'white', borderRadius: '10px', overflowY: 'scroll', scrollbarWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '1rem' }}>
+                                <div style={{ width: '100%', height: '150px', backgroundColor:'#41431B' }}>
                                     <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} src={organizacion?.organizacion?.banner} />
                                 </div>
-                                <div style={{ display: 'flex', gap: '1rem', marginLeft: '1rem' }}>
-                                    <div style={{ width: '125px', height: '125px', transform: 'translateY(-50%)' }}>
+                                <div style={{ display: 'flex', gap: '1rem', marginLeft: '1rem', alignItems: 'center', transform: 'translateY(-50%)' }}>
+                                    <div style={{ width: '125px', height: '125px' }}>
                                         <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', borderRadius: '100%' }} src={organizacion?.organizacion?.logo} />
                                     </div>
-                                    <div>
+                                    <div className="titulo-organizacion">
                                         <h1 style={{ margin: 0 }}>{organizacion?.organizacion.nombre}</h1>
                                     </div>
                                 </div>
@@ -128,34 +113,34 @@ export default function Organizaciones() {
 
                                     {
                                         openDatosGenerales && (
-                                            <div>
-                                                <div>
+                                            <div className="contenedor-datos">
+                                                <div className="subcontenedor-datos">
                                                     <h6>Descripcion:</h6>
-                                                    <textarea style={{ minWidth: '200px', maxWidth: '200px', minHeight: '40px', maxHeight: '40px' }} defaultValue={organizacion?.organizacion?.descripcion} />
+                                                    <textarea defaultValue={organizacion?.organizacion?.descripcion} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Tipo:</h6>
-                                                    <p>{organizacion?.organizacion?.tipo}</p>
+                                                    <input value={organizacion?.organizacion?.tipo} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Sector:</h6>
-                                                    <p>{organizacion?.organizacion?.sector}</p>
+                                                    <input value={organizacion?.organizacion?.sector} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Tamaño:</h6>
-                                                    <p>{organizacion?.organizacion?.tamaño}</p>
+                                                    <input value={organizacion?.organizacion?.tamaño} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Giro:</h6>
-                                                    <p>{organizacion?.organizacion?.giro}</p>
+                                                    <input value={organizacion?.organizacion?.giro} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>RFC:</h6>
-                                                    <p>{organizacion?.organizacion?.rfc}</p>
+                                                    <input value={organizacion?.organizacion?.rfc} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Estado:</h6>
-                                                    <p>{organizacion?.organizacion?.estado ? 'ACTIVA' : 'PENDIENTE'}</p>
+                                                    <input value={organizacion?.organizacion?.estado ? 'ACTIVA' : 'PENDIENTE'} />
                                                 </div>
                                             </div>
                                         )
@@ -170,14 +155,14 @@ export default function Organizaciones() {
 
                                     {
                                         openDatosContacto && (
-                                            <div>
-                                                <div>
+                                            <div className="contenedor-datos">
+                                                <div className="subcontenedor-datos">
                                                     <h6>Correo:</h6>
-                                                    <p>{organizacion?.contacto?.correo}</p>
+                                                    <input value={organizacion?.contacto?.correo} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Telefono:</h6>
-                                                    <p>{organizacion?.contacto?.telefono}</p>
+                                                    <input value={organizacion?.contacto?.telefono} />
                                                 </div>
                                             </div>
                                         )
@@ -193,34 +178,34 @@ export default function Organizaciones() {
 
                                     {
                                         openDatosUbicacion && (
-                                            <div>
-                                                <div>
+                                            <div className="contenedor-datos">
+                                                <div className="subcontenedor-datos">
                                                     <h6>Calle:</h6>
-                                                    <p>{organizacion?.direccion?.calle}</p>
+                                                    <input value={organizacion?.direccion?.calle} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Numero:</h6>
-                                                    <p>{organizacion?.direccion?.numero}</p>
+                                                    <input value={organizacion?.direccion?.numero} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Colonia:</h6>
-                                                    <p>{organizacion?.direccion?.colonia}</p>
+                                                    <input value={organizacion?.direccion?.colonia} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Codigo Postal:</h6>
-                                                    <p>{organizacion?.direccion?.codigo_postal}</p>
+                                                    <input value={organizacion?.direccion?.codigo_postal} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Ciudad:</h6>
-                                                    <p>{organizacion?.direccion?.ciudad}</p>
+                                                    <input value={organizacion?.direccion?.ciudad} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Estado:</h6>
-                                                    <p>{organizacion?.direccion?.estado}</p>
+                                                    <input value={organizacion?.direccion?.estado} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Pais:</h6>
-                                                    <p>{organizacion?.direccion?.pais}</p>
+                                                    <input value={organizacion?.direccion?.pais} />
                                                 </div>
                                             </div>
                                         )
@@ -236,18 +221,18 @@ export default function Organizaciones() {
 
                                     {
                                         openDatosHosting && (
-                                            <div>
-                                                <div>
+                                            <div className="contenedor-datos">
+                                                <div className="subcontenedor-datos">
                                                     <h6>Nombre:</h6>
-                                                    <p>{organizacion?.cloud?.nombre}</p>
+                                                    <input type="password" value={organizacion?.cloud?.nombre} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Clave:</h6>
-                                                    <p>{organizacion?.cloud?.clave}</p>
+                                                    <input type="password" value={organizacion?.cloud?.clave} />
                                                 </div>
-                                                <div>
+                                                <div className="subcontenedor-datos">
                                                     <h6>Clave Secreta:</h6>
-                                                    <p>{organizacion?.cloud?.clave_secreta}</p>
+                                                    <input type="password" value={organizacion?.cloud?.clave_secreta} />
                                                 </div>
                                             </div>
                                         )
@@ -255,7 +240,7 @@ export default function Organizaciones() {
 
                                 </div>
 
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '1.8rem', gap: '1rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '1.8rem', gap: '1rem', marginTop:'1rem' }}>
                                     <button className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenOrganizacion(false); setSelectIdOrganizacion(null); setOrganizacion(null) }}
                                     >

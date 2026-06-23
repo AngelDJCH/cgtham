@@ -1,4 +1,4 @@
-.tarjeta-datos-titulos{
+.tarjeta-datos-titulos {
     width: 95%;
     height: 40px;
     background-color: #41431B;
@@ -9,14 +9,63 @@
     gap: 0.5em;
 }
 
-.tarjeta-datos-titulos img:hover{
+.tarjeta-datos-titulos img:hover {
     scale: 1.1;
 }
 
-.tarjeta-datos-titulos h6{
+.tarjeta-datos-titulos h6 {
     margin: 0;
     padding: 0;
     color: white;
     font-family: 'Poppins';
     font-size: 18px;
+}
+
+.contenedor-datos {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+}
+
+.subcontenedor-datos {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.subcontenedor-datos textarea {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: 50px;
+    min-height: 50px;
+    max-height: 50px;
+}
+
+.subcontenedor-datos input{
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: 25px;
+    min-height: 25px;
+    max-height: 25px;
+}
+
+.titulo-organizacion{
+    background-color: #41431B;
+    border-radius: 10px;
+    padding: 1rem;
+    color: white;
+}
+
+@media(max-width:768px), (max-width:1024px){
+    .titulo-organizacion h1{
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .titulo-organizacion {
+        width: 50%;
+    }
 }

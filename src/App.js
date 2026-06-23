@@ -21,6 +21,7 @@ import { ProtectedRoute } from './components/ProtectedRoute.js'
 import { AuthProvider } from './context/AuthContext.js';
 import Cursos from './pages/Cursos.js';
 import Visitas from './pages/Visitas.js';
+import NotFound from './components/NotFound.js';
 
 function App() {
   return (
@@ -87,7 +88,7 @@ function App() {
               <ProtectedRoute
                 redirectTo={'/'}
               >
-                <Visitas/>
+                <Visitas />
               </ProtectedRoute>
             }
           >
@@ -98,11 +99,12 @@ function App() {
               <ProtectedRoute
                 redirectTo={'/'}
               >
-                <Cursos/>
+                <Cursos />
               </ProtectedRoute>
             }
           >
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -251,22 +251,9 @@ export default function TablaContenido(props) {
                                     <td>{comentario.comentario.contenido}</td>
                                     <td>{comentario.comentario.fecha.split('T')[0]}</td>
                                     <td>{comentario.comentario.estado}</td>
-                                    <td style={{ display: 'flex', gap: '1rem' }}>
+                                    <td style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
                                         <button
-                                            onClick={async () => {
-                                                try {
-                                                    const status = await updateComentarioByEstado(comentario.comentario.id, 'Aprobado', user.id)
-                                                    if (status === 200) alert('COMENTARIO APROBADO')
-                                                    navigate(0)
-                                                } catch (error) {
-                                                    console.log(error)
-                                                }
-                                            }}
-                                            style={{ borderRadius: '2px', backgroundColor: 'white', border: 'none', cursor: 'pointer' }}
-                                        >
-                                            <img src={imgAprobar} style={{ width: '16px', height: '16px' }} />
-                                        </button>
-                                        <button
+                                            className='btn-accion-cancelar-1'
                                             onClick={async () => {
                                                 try {
                                                     const status = await updateComentarioByEstado(comentario.comentario.id, 'Rechazado', user.id)
@@ -276,9 +263,22 @@ export default function TablaContenido(props) {
                                                     alert('OCURRIO UN ERROR')
                                                 }
                                             }}
-                                            style={{ borderRadius: '2px', backgroundColor: 'white', border: 'none', cursor: 'pointer' }}
                                         >
-                                            <img src={imgRechazar} style={{ width: '16px', height: '16px' }} />
+                                            <strong>RECHAZAR</strong>
+                                        </button>
+                                        <button
+                                            className='btn-accion-2'
+                                            onClick={async () => {
+                                                try {
+                                                    const status = await updateComentarioByEstado(comentario.comentario.id, 'Aprobado', user.id)
+                                                    if (status === 200) alert('COMENTARIO APROBADO')
+                                                    navigate(0)
+                                                } catch (error) {
+                                                    console.log(error)
+                                                }
+                                            }}
+                                        >
+                                            <strong>ACEPTAR</strong>
                                         </button>
                                     </td>
                                 </tr>
@@ -331,7 +331,7 @@ export default function TablaContenido(props) {
                                                     }}
                                                     className='btn-accion-2'
                                                 >
-                                                    EDITAR
+                                                    <strong>EDITAR</strong>
                                                 </button>
                                             )
                                         }
@@ -344,7 +344,7 @@ export default function TablaContenido(props) {
                                                     }}
                                                     className='btn-accion-cancelar-1'
                                                 >
-                                                    ELIMINAR
+                                                    <strong>ELIMINAR</strong>
                                                 </button>
                                             )
                                         }
