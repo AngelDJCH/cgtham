@@ -4,7 +4,7 @@ export const axiosInstance = axios.create(
     {
         //http://localhost:80/api/v1
         //https://api-cgtham.onrender.com/api/v1
-        baseURL :  'https://api-cgtham.onrender.com/api/' , 
+        baseURL :  'https://api-cgtham.onrender.com/api/v1' , 
         withCredentials: true
     }
 )
