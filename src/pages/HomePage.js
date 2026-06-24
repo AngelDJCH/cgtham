@@ -32,7 +32,7 @@ export default function HomePage() {
     }, [])
 
     return (
-        <div className="home">
+        <div className="home" style={{ marginBottom: '1rem' }}>
             <NavBarAutenticado />
             {
                 user.rol.includes('ADMIN_ORG') && (
@@ -75,7 +75,7 @@ export default function HomePage() {
                                                 </div>
                                                 <div style={{ width: '100%', padding: isSmallDevice || isMediumDevice ? '0rem' : '0.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center', alignItems: 'center' }}>
 
-                                                    <div style={{ width: '100%', padding: isSmallDevice || isMediumDevice ? '1rem' : '0.5rem', display: 'flex', flexWrap: 'wrap', gap:isSmallDevice ? '1rem' :  '0.4rem', justifyContent: 'center', alignItems: 'center' }}>
+                                                    <div style={{ width: '100%', padding: isSmallDevice || isMediumDevice ? '1rem' : '0.5rem', display: 'flex', flexWrap: 'wrap', gap: isSmallDevice ? '1rem' : '0.4rem', justifyContent: 'center', alignItems: 'center' }}>
                                                         <div className="tarjeta-datos-oferta" style={{ width: isSmallDevice ? '100%' : '80px', display: 'flex', gap: '0.2rem', justifyContent: 'center', alignItems: 'center', height: '30px', backgroundColor: '#ffffff' }}>
                                                             <div>
                                                                 <h6 style={{ fontSize: '10px', margin: 0, padding: 0, textAlign: 'center' }}><strong>VACANTES</strong></h6>
@@ -103,11 +103,11 @@ export default function HomePage() {
                                                         <div className="tarjeta-datos-oferta" style={{ width: '80px', display: 'flex', gap: '0.2rem', justifyContent: 'center', alignItems: 'center', height: '30px', backgroundColor: '#ffffff' }}>
                                                             <div>
                                                                 <h6 style={{ fontSize: '10px', margin: 0, padding: 0, textAlign: 'center' }}><strong>AREA</strong></h6>
-                                                                <h6 style={{ color: '#41431B', fontSize: '10px', margin: 0, padding: 0, textAlign: 'center' }}>{o?.departamento_area?.substring(0,10)}...</h6>
+                                                                <h6 style={{ color: '#41431B', fontSize: '10px', margin: 0, padding: 0, textAlign: 'center' }}>{o?.departamento_area?.substring(0, 10)}...</h6>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                        <div className="tarjeta-datos-oferta" style={{ width:  '80px', display: 'flex', gap: '0.2rem', justifyContent: 'center', alignItems: 'center', height: '30px', backgroundColor: '#ffffff', marginBottom:'1rem'}}>
+                                                    <div className="tarjeta-datos-oferta" style={{ width: '80px', display: 'flex', gap: '0.2rem', justifyContent: 'center', alignItems: 'center', height: '30px', backgroundColor: '#ffffff', marginBottom: '1rem' }}>
                                                         <button className="btn-accion-2"
                                                             onClick={() => {
                                                                 setSelectOferta(o?.id)

@@ -160,7 +160,7 @@ export default function OfertasLaborales() {
                         ofertasLaborales?.filter(f => filtro?.length === 0 || f.titulo.includes(filtro)).map(
                             o => <div style={{ width: '250px', height: '200px', backgroundColor: '#AEB784', borderRadius: '10px' }}>
                                 <div style={{ padding: '0.5rem', backgroundColor: '#41431B', borderTopLeftRadius: '10px', borderTopRightRadius: '10px' }}>
-                                    <h1 style={{ color: '#AEB784', fontFamily: 'Poppins', fontSize: '16px', margin: '0', padding: '0' }}>{o?.titulo}</h1>
+                                    <h1 style={{ color: '#AEB784', fontFamily: 'Poppins', fontSize: '16px', margin: '0', padding: '0' }}>{o?.titulo?.substring(0,15)} {o?.titulo?.length > 15 ? '...' : ''}</h1>
                                 </div>
                                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '0.3rem' }}>
 
