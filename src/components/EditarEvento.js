@@ -222,50 +222,52 @@ export default function EditarEvento(props) {
                             }}>
                                 <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <h1>INSCRIPCIONES DEL EVENTO</h1>
-                                    <table className="contenedor-tablas-interno" style={{ minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
-                                        <thead>
-                                            <tr
-                                                style={{ color: 'white', backgroundColor: '#41431B' }}
-                                            >
-                                                <th>ID</th>
-                                                <th>Logo</th>
-                                                <th>Organizacion</th>
-                                                <th>Fecha</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                inscripciones?.map(
-                                                    inscripcion => <tr>
-                                                        <td>{inscripcion.id_inscripcion}</td>
-                                                        <td><img src={inscripcion.organizacion.logo} style={{ width: '32px', height: '32px' }} /></td>
-                                                        <td>{inscripcion.organizacion.nombre_comercial}</td>
-                                                        <td>{inscripcion.fecha.split('T')[0]}</td>
-                                                        <th>
-                                                            <button
-                                                                className="btn-accion-cancelar-1"
-                                                                onClick={() => {
-                                                                    handleUpdateEstadoById(inscripcion.id_inscripcion, 'RECHAZADO')
-                                                                }}
-                                                            >
-                                                                <strong>RECHAZAR</strong>
-                                                            </button>
-                                                            <button
-                                                                className="btn-accion-2"
-                                                                onClick={() => {
-                                                                    handleUpdateEstadoById(inscripcion.id_inscripcion, 'APROBADA')
-                                                                }}
-                                                            >
-                                                                <strong>APROBAR</strong>
-                                                            </button>
-                                                        </th>
-                                                    </tr>
-                                                )
-                                            }
-                                        </tbody>
+                                    <div style={{display:'flex', justifyContent:'center',width:'90%',maxWidth:'90%',minWidth:'90%', overflowX:'auto'}}>
+                                        <table className="contenedor-tablas-interno" style={{ minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
+                                            <thead>
+                                                <tr
+                                                    style={{ color: 'white', backgroundColor: '#41431B' }}
+                                                >
+                                                    <th>ID</th>
+                                                    <th>Logo</th>
+                                                    <th>Organizacion</th>
+                                                    <th>Fecha</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    inscripciones?.map(
+                                                        inscripcion => <tr>
+                                                            <td>{inscripcion.id_inscripcion}</td>
+                                                            <td><img src={inscripcion.organizacion.logo} style={{ width: '32px', height: '32px' }} /></td>
+                                                            <td>{inscripcion.organizacion.nombre_comercial}</td>
+                                                            <td>{inscripcion.fecha.split('T')[0]}</td>
+                                                            <th>
+                                                                <button
+                                                                    className="btn-accion-cancelar-1"
+                                                                    onClick={() => {
+                                                                        handleUpdateEstadoById(inscripcion.id_inscripcion, 'RECHAZADO')
+                                                                    }}
+                                                                >
+                                                                    <strong>RECHAZAR</strong>
+                                                                </button>
+                                                                <button
+                                                                    className="btn-accion-2"
+                                                                    onClick={() => {
+                                                                        handleUpdateEstadoById(inscripcion.id_inscripcion, 'APROBADA')
+                                                                    }}
+                                                                >
+                                                                    <strong>APROBAR</strong>
+                                                                </button>
+                                                            </th>
+                                                        </tr>
+                                                    )
+                                                }
+                                            </tbody>
 
-                                    </table>
+                                        </table>
+                                    </div>
                                 </div>
                                 <button
                                     onClick={() => { setAdministar(false) }}

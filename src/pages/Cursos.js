@@ -374,7 +374,8 @@ export default function Cursos() {
                             }}>
                                 <div style={{ width: '100%', height: '100%', minWidth: '100%', maxWidth: '100%', overflowX: 'scroll', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <h1 className="subtitulo">SOLICITUDES DE CURSOS</h1>
-                                    <table className="contenedor-tablas-interno" style={{ minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
+                                    <div style={{display:'flex', justifyContent:'center',width:'90%',maxWidth:'90%',minWidth:'90%', overflowX:'auto'}}>
+                                        <table className="contenedor-tablas-interno" style={{ minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
                                         <thead>
                                             <tr>
                                                 <th>Titulo</th>
@@ -415,6 +416,7 @@ export default function Cursos() {
                                             }
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                                 <button
                                     onClick={() => {
