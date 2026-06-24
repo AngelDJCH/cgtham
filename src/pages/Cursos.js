@@ -374,48 +374,48 @@ export default function Cursos() {
                             }}>
                                 <div style={{ width: '100%', height: '100%', minWidth: '100%', maxWidth: '100%', overflowX: 'scroll', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <h1 className="subtitulo">SOLICITUDES DE CURSOS</h1>
-                                    <div style={{display:'flex', justifyContent:'center',width:'90%',maxWidth:'90%',minWidth:'90%', overflowX:'auto'}}>
-                                        <table className="contenedor-tablas-interno" style={{width : '100%',minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
-                                        <thead>
-                                            <tr>
-                                                <th>Titulo</th>
-                                                <th>Descripcion</th>
-                                                <th>Fecha Peticion</th>
-                                                <th>Fecha Inicio</th>
-                                                <th>Fecha Fin</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                solicitudes.map(s => <tr>
-                                                    <td>
-                                                        {s.titulo}
-                                                    </td>
-                                                    <td>
-                                                        {s.descripcion}
-                                                    </td>
-                                                    <td>
-                                                        {s.publicado.split('T')[0]}
-                                                    </td>
-                                                    <td>AUN SIN DEFINIR</td>
-                                                    <td>AUN SIN DEFINIR</td>
-                                                    <td>
-                                                        <button className="btn-accion-2"
-                                                            onClick={() => {
-                                                                setIdCurso(s.id)
-                                                                setOpenCurso(true);
-                                                                setOpenSolicitudes(false)
-                                                            }}
-                                                        ><strong>ACEPTAR</strong></button>
-                                                        <button className="btn-accion-cancelar-1"
-                                                            onClick={() => { handleRechazarCurso(s.id) }}
-                                                        ><strong>RECHAZAR</strong></button>
-                                                    </td>
-                                                </tr>)
-                                            }
-                                        </tbody>
-                                    </table>
+                                    <div style={{ width: '100%', minWidth: '100%', width: '100%', overflowX: 'scroll' }}>
+                                        <table className="contenedor-tablas-interno" style={{ width: '100%', minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
+                                            <thead>
+                                                <tr>
+                                                    <th>Titulo</th>
+                                                    <th>Descripcion</th>
+                                                    <th>Fecha Peticion</th>
+                                                    <th>Fecha Inicio</th>
+                                                    <th>Fecha Fin</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    solicitudes.map(s => <tr>
+                                                        <td>
+                                                            {s.titulo}
+                                                        </td>
+                                                        <td>
+                                                            {s.descripcion}
+                                                        </td>
+                                                        <td>
+                                                            {s.publicado.split('T')[0]}
+                                                        </td>
+                                                        <td>AUN SIN DEFINIR</td>
+                                                        <td>AUN SIN DEFINIR</td>
+                                                        <td>
+                                                            <button className="btn-accion-2"
+                                                                onClick={() => {
+                                                                    setIdCurso(s.id)
+                                                                    setOpenCurso(true);
+                                                                    setOpenSolicitudes(false)
+                                                                }}
+                                                            ><strong>ACEPTAR</strong></button>
+                                                            <button className="btn-accion-cancelar-1"
+                                                                onClick={() => { handleRechazarCurso(s.id) }}
+                                                            ><strong>RECHAZAR</strong></button>
+                                                        </td>
+                                                    </tr>)
+                                                }
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                                 <button

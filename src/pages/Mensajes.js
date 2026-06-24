@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@uidotdev/usehooks";
 //https://websocket-cgtham.onrender.com
 //http://localhost:3040
-const socket = io('https://websocket-cgtham.onrender.com', {
+const socket = io('http://localhost:3040', {
     transports: ['websocket']
 });
 
