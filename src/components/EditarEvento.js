@@ -222,8 +222,8 @@ export default function EditarEvento(props) {
                             }}>
                                 <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <h1>INSCRIPCIONES DEL EVENTO</h1>
-                                    <div style={{display:'flex', justifyContent:'center',width:'90%',maxWidth:'90%',minWidth:'90%', overflowX:'auto'}}>
-                                        <table className="contenedor-tablas-interno" style={{ minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
+                                    <div style={{ width: '100%', minWidth: '100%', width: '100%', overflowX: 'scroll' }}>
+                                        <table className="contenedor-tablas-interno" style={{width : '100%',minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
                                             <thead>
                                                 <tr
                                                     style={{ color: 'white', backgroundColor: '#41431B' }}
