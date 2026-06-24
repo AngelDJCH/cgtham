@@ -168,7 +168,7 @@ export default function Organizacion() {
                             ...organizacion,
                             logo: res
                         })
-                        alert('FOTO GUARDADA EXITOSAMENTE')
+                        alert('LOGO GUARDADO EXITOSAMENTE')
                     }
                 }
             } catch (error) {
@@ -202,7 +202,7 @@ export default function Organizacion() {
                             ...organizacion,
                             banner: res
                         })
-                        alert('FOTO GUARDADA EXITOSAMENTE')
+                        alert('BANNER GUARDADO EXITOSAMENTE')
                     }
                 }
             } catch (error) {
@@ -212,45 +212,49 @@ export default function Organizacion() {
     }
 
     const handleUpdateOrganizacionData = async () => {
+
+        let notificacionData = ''
+
         const datosOrganizacion = await updateById(organizacion)
-        // if(datosOrganizacion && datosOrganizacion === 200){alert<('Datos actualizados correctamente')}
+        if (datosOrganizacion === 200) { notificacionData = notificacionData.concat('DATOS DE ORGANIZACIÓN ACTUALIZADOS \n') }
         if (user.tipo === 'Escuela') {
             const datosEscuela = await updateEscuelaById({
                 ...(escuela || {}), id: organizacion.id
             })
-            // if (datosEscuela && datosEscuela === 200) { alert('Datos actualizados correctamente') }
+            if (datosEscuela && datosEscuela === 200) { notificacionData = notificacionData.concat('DATOS DE ESCUELA ACTUALIZADOS \n') }
         } else if (user.tipo === 'Empresa') {
             const datosEmpresa = await updateEmpresaById({
                 ...(empresa || {}), id: organizacion.id
             })
-            // if (datosEmpresa && datosEmpresa === 200) { alert('Datos actualizados correctamente') }
-        } else {
+            if (datosEmpresa === 200) { notificacionData = notificacionData.concat('DATOS DE EMPRESA ACTUALIZADOS \n') }
+        } else if (user.tipo === 'Cámara de Comercio') {
             const datosCamara = await updateCamaraById({
                 ...(camara || {}), id: organizacion.id
             })
-            // if (datosCamara && datosCamara === 200) { alert('Datos actualizados correctamente') }
+            if (datosCamara === 200) { notificacionData = notificacionData.concat('DATOS DE CÁMARA DE COMERCIO ACTUALIZADOS \n') }
         }
 
         const datosContacto = await updateContactoById(contacto)
-        // if(datosContacto && datosContacto === 200) {alert('Datos actualizados correctamente')}
+        if (datosContacto === 200) { notificacionData = notificacionData.concat('DATOS DE CONTACTO ACTUALIZADOS \n') }
         const contrasenia = document.getElementById('contrasenia').value
         const datosSeguridadCorreo = await updateCuentaCorreoById({
             correo: contacto.correo,
             id: user.organizacion
         })
-
+        if (datosSeguridadCorreo === 200) { notificacionData = notificacionData.concat('DATOS DE CORREO ACTUALIZADOS \n') }
         if (contrasenia.length > 0) {
             const datosSeguridadContrasenia = await updateCuentaContraseniaById({
                 contrasenia: contrasenia,
                 id: user.organizacion
             })
+            if (datosSeguridadContrasenia === 200) { notificacionData = notificacionData.concat('DATOS DE CONTRASEÑA ACTUALIZADOS \n') }
         }
-        // if(datosSeguridad && datosSeguridad === 200) alert('Datos actualizados')
         const cloudData = await updateCloudinaryByIdOrganizacion(cloudinary)
-        // if(cloudData && cloudData === 200) alert('Datos actualizados correctamente')
+        if (cloudData === 200) { notificacionData.concat('DATOS DE CLOUDINARY (HOSTING) ACTUALIZADOS \n') }
         const direccionData = await updateDireccionById(direccion)
-        // if(direccionData && direccionData === 200) alert('Datos actualizados')
-        // navigate(0)
+        if (direccionData === 200) { notificacionData = notificacionData.concat('DATOS DE DIRECCIÓN ACTUALIZADOS \n') }
+        navigate(0)
+        alert(notificacionData)
     }
 
     useEffect(() => {
@@ -621,87 +625,114 @@ export default function Organizacion() {
                                         <option selected={organizacion?.tipo === 'Cámara de Comercio'} disabled={organizacion?.tipo != 'Cámara de Comercio'}>
                                             Cámara de Comercio
                                         </option>
-                                    </select>
-                                    <h6 style={{ margin: 0, padding: 0 }}>Sector: </h6>
-                                    <select onChange={(e) => { setSelectSector(e.target.value); setOrganizacion({ ...organizacion, sector: e.target.value }) }}>
-                                        <option selected>
-                                            SECTOR
-                                        </option>
                                         {
-                                            selectTipo != 'TIPO' && sectores.filter(seleccionado => seleccionado.tipo === selectTipo).map(
-                                                s => <option key={s.id} selected={organizacion?.sector === s.nombre}>
-                                                    {s.nombre}
+                                            user.tipo === 'Comité' && (
+                                                <option selected={organizacion?.tipo === 'Comité'}>
+                                                    Comité (ADMINISTRADOR)
                                                 </option>
                                             )
                                         }
                                     </select>
-                                    <h6 style={{ margin: 0, padding: 0 }}>Giro: </h6>
-                                    <select onChange={(e) => { setOrganizacion({ ...organizacion, giro: e.target.value }) }}>
-                                        <option>
-                                            GIRO
-                                        </option>
-                                        {
-                                            selectTipo && selectSector && sectores.filter(
-                                                s => s.tipo === selectTipo && s.nombre === selectSector
-                                            ).map(
-                                                s => {
-                                                    const giros = s.giros
-                                                    return giros.map(
-                                                        g => <option selected={organizacion?.giro === g.nombre}>{g.nombre}</option>
+                                    {
+                                        user.tipo != 'Comité' && (
+                                            <h6 style={{ margin: 0, padding: 0 }}>Sector: </h6>
+                                        )
+                                    }
+                                    {
+                                        user.tipo != 'Comité' && (
+                                            <select onChange={(e) => { setSelectSector(e.target.value); setOrganizacion({ ...organizacion, sector: e.target.value }) }}>
+                                                <option selected>
+                                                    SECTOR
+                                                </option>
+                                                {
+                                                    selectTipo != 'TIPO' && sectores.filter(seleccionado => seleccionado.tipo === selectTipo).map(
+                                                        s => <option key={s.id} selected={organizacion?.sector === s.nombre}>
+                                                            {s.nombre}
+                                                        </option>
                                                     )
                                                 }
-                                            )
-                                        }
-                                    </select>
+                                            </select>
+                                        )
+                                    }
+                                    {
+                                        user.tipo != 'Comité' && (
+                                            <h6 style={{ margin: 0, padding: 0 }}>Giro: </h6>
+                                        )
+                                    }
+                                    {
+                                        user.tipo != 'Comité' && (
+                                            <select onChange={(e) => { setOrganizacion({ ...organizacion, giro: e.target.value }) }}>
+                                                <option>
+                                                    GIRO
+                                                </option>
+                                                {
+                                                    selectTipo && selectSector && sectores.filter(
+                                                        s => s.tipo === selectTipo && s.nombre === selectSector
+                                                    ).map(
+                                                        s => {
+                                                            const giros = s.giros
+                                                            return giros.map(
+                                                                g => <option selected={organizacion?.giro === g.nombre}>{g.nombre}</option>
+                                                            )
+                                                        }
+                                                    )
+                                                }
+                                            </select>
+                                        )
+                                    }
                                     <h6 style={{ margin: 0, padding: 0 }}>Tamaño: </h6>
                                     <input type="number" placeholder="Tamaño" defaultValue={organizacion?.tamaño} onChange={(e) => { setOrganizacion({ ...organizacion, tamaño: e.target.value }) }} />
                                     <h6 style={{ margin: 0, padding: 0 }}>RFC: </h6>
                                     <input type="text" placeholder="RFC" defaultValue={organizacion?.rfc} onChange={(e) => { setOrganizacion({ ...organizacion, rfc: e.target.value }) }} />
                                 </div>
                             </div>
-                            <div className="datos" style={{ backgroundColor: 'white', padding: '1rem', margin: '0.4rem', borderRadius: '10px', width: '220px' }}>
-                                <div className="datos" style={{ backgroundColor: 'white', padding: '1rem', margin: '0.4rem', borderRadius: '10px' }}>
-                                    <h1>Datos Extra</h1>
-                                    <div className="contenedor-input">
-                                        {
-                                            selectTipo === 'Empresa' && (
-                                                <div className="datos">
-                                                    <h6 style={{ margin: 0, padding: 0 }}>Razón social: </h6>
-                                                    <input placeholder="Razón social" defaultValue={empresa?.razon_social} onChange={(e) => { setEmpresa({ ...empresa, razon_social: e.target.value }) }} />
-                                                    <h6 style={{ margin: 0, padding: 0 }}>Regimen fiscal: </h6>
-                                                    <input placeholder="Regimen fiscal" defaultValue={empresa?.regimen_fiscal} onChange={(e) => { setEmpresa({ ...empresa, regimen_fiscal: e.target.value }) }} />
-                                                    <h6 style={{ margin: 0, padding: 0 }}>Dirección fiscal: </h6>
-                                                    <input placeholder="Dirección fiscal" defaultValue={empresa?.direccion_fiscal} onChange={(e) => { setEmpresa({ ...empresa, direccion_fiscal: e.target.value }) }} />
-                                                </div>
-                                            )
-                                        }
-                                        {
-                                            selectTipo === 'Escuela' && (
-                                                <div className="datos">
-                                                    <h6 style={{ margin: 0, padding: 0 }}>Tipo de Institución: </h6>
-                                                    <select onChange={(e) => { setEscuela({ ...escuela, tipo_institucion: e.target.value }) }}>
-                                                        <option>TIPO</option>
-                                                        <option selected={escuela?.tipo_institucion === 'Publica'}>Publica</option>
-                                                        <option selected={escuela?.tipo_institucion === 'Privada'}>Privada</option>
-                                                    </select>
-                                                    <h6 style={{ margin: 0, padding: 0 }}>URL de Sitio Oficial: </h6>
-                                                    <input placeholder="Sitio web" defaultValue={escuela?.url_sitio} onChange={(e) => { setEscuela({ ...escuela, url_sitio: e.target.value }) }} />
-                                                </div>
-                                            )
-                                        }
-                                        {
-                                            selectTipo === 'Cámara de Comercio' && (
-                                                <div className="datos">
-                                                    <h6 style={{ margin: 0, padding: 0 }}>Nombre: </h6>
-                                                    <input placeholder="Nombre" defaultValue={camara?.nombre} onChange={(e) => { setCarama({ ...camara, nombre: e.target.value }) }} />
-                                                    <h6 style={{ margin: 0, padding: 0 }}>Nombre del presidente: </h6>
-                                                    <input placeholder="Presidente" defaultValue={camara?.presidente} onChange={(e) => { setCarama({ ...camara, presidente: e.target.value }) }} />
-                                                </div>
-                                            )
-                                        }
+                            {
+                                user.tipo != 'Comité' && (
+                                    <div className="datos" style={{ backgroundColor: 'white', padding: '1rem', margin: '0.4rem', borderRadius: '10px', width: '220px' }}>
+                                        <div className="datos" style={{ backgroundColor: 'white', padding: '1rem', margin: '0.4rem', borderRadius: '10px' }}>
+                                            <h1>Datos Extra</h1>
+                                            <div className="contenedor-input">
+                                                {
+                                                    selectTipo === 'Empresa' && (
+                                                        <div className="datos">
+                                                            <h6 style={{ margin: 0, padding: 0 }}>Razón social: </h6>
+                                                            <input placeholder="Razón social" defaultValue={empresa?.razon_social} onChange={(e) => { setEmpresa({ ...empresa, razon_social: e.target.value }) }} />
+                                                            <h6 style={{ margin: 0, padding: 0 }}>Regimen fiscal: </h6>
+                                                            <input placeholder="Regimen fiscal" defaultValue={empresa?.regimen_fiscal} onChange={(e) => { setEmpresa({ ...empresa, regimen_fiscal: e.target.value }) }} />
+                                                            <h6 style={{ margin: 0, padding: 0 }}>Dirección fiscal: </h6>
+                                                            <input placeholder="Dirección fiscal" defaultValue={empresa?.direccion_fiscal} onChange={(e) => { setEmpresa({ ...empresa, direccion_fiscal: e.target.value }) }} />
+                                                        </div>
+                                                    )
+                                                }
+                                                {
+                                                    selectTipo === 'Escuela' && (
+                                                        <div className="datos">
+                                                            <h6 style={{ margin: 0, padding: 0 }}>Tipo de Institución: </h6>
+                                                            <select onChange={(e) => { setEscuela({ ...escuela, tipo_institucion: e.target.value }) }}>
+                                                                <option>TIPO</option>
+                                                                <option selected={escuela?.tipo_institucion === 'Publica'}>Publica</option>
+                                                                <option selected={escuela?.tipo_institucion === 'Privada'}>Privada</option>
+                                                            </select>
+                                                            <h6 style={{ margin: 0, padding: 0 }}>URL de Sitio Oficial: </h6>
+                                                            <input placeholder="Sitio web" defaultValue={escuela?.url_sitio} onChange={(e) => { setEscuela({ ...escuela, url_sitio: e.target.value }) }} />
+                                                        </div>
+                                                    )
+                                                }
+                                                {
+                                                    selectTipo === 'Cámara de Comercio' && (
+                                                        <div className="datos">
+                                                            <h6 style={{ margin: 0, padding: 0 }}>Nombre: </h6>
+                                                            <input placeholder="Nombre" defaultValue={camara?.nombre} onChange={(e) => { setCarama({ ...camara, nombre: e.target.value }) }} />
+                                                            <h6 style={{ margin: 0, padding: 0 }}>Nombre del presidente: </h6>
+                                                            <input placeholder="Presidente" defaultValue={camara?.presidente} onChange={(e) => { setCarama({ ...camara, presidente: e.target.value }) }} />
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                )
+                            }
                             <div className="datos" style={{ backgroundColor: 'white', padding: '1rem', margin: '0.4rem', borderRadius: '10px', width: '220px' }}>
                                 <h1> Datos Contacto</h1>
                                 <div className="contenedor-input">

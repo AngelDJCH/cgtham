@@ -156,7 +156,7 @@ export default function PanelSistema() {
                                 <p style={{ textAlign: 'center', margin: 0, fontSize: '13px' }}><strong>{comentario.organizacion.nombre}</strong></p>
                             </div>
                             <div style={{ width: '60%' }}>
-                                <p style={{ margin: 0, fontSize: '13px' }}>{comentario.comentario.contenido}</p>
+                                <p style={{ margin: 0, fontSize: '13px' }}>{comentario.comentario.contenido.substring(0,25)}</p>
                             </div>
                         </div>
                     ))}

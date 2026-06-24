@@ -71,37 +71,5 @@ export default function EditarComentario(props) {
                 </div>
             </div>
         </div>
-        //         <div>
-        //             <div className='overllay'></div>
-        //             <div className='overllay-contenedor'>
-        //                 <div style={{                    width: '200px',display: 'flex', flexDirection: 'column', backgroundColor: '#AEB784', borderRadius: '10px', padding: '2.5rem', justifyContent: 'center', gap: '1rem'
-        //  }}>
-        // <h1 style={{ textAlign: 'center', margin: '0', padding: '0', fontFamily: 'Poppins', fontSize: '25px' }}>EDITAR COMENTARIO</h1>
-        // <textarea defaultValue={comentarioData?.contenido} onChange={(e) => { setComentarioData({ ...comentarioData, contenido: e.target.value }) }} style={{ width: '90%', height: '100px', maxWidth: '100%', maxHeight: '100px', minWidth: '100%', minHeight: '100px' }} />
-        // <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-        // <button
-        //     className='btn-accion-cancelar-1'
-        //     onClick={() => { props?.accion(false) }}
-        // ><strong>CANCELAR</strong></button>
-        // <button
-        //     onClick={async () => {
-        //         if (comentarioData.contenido.length >= 13 && comentarioData.contenido.length <= 70) {
-        //             const res = await updateById(props?.idComentario, comentarioData.contenido)
-        //             if (res.status === 200) {
-        //                 alert('COMENTARIO ACTUALIZADO')
-        //                 navigate(0)
-        //             } else {
-        //                 alert('NO SE PUDO ACTUALIZAR EL COMENTARIO')
-        //             }
-        //         } else {
-        //             alert('El comentario debe tener entre 13 y 70 caracteres')
-        //         }
-        //     }}
-        //     className='btn-accion-2'
-        // ><strong>GUARDAR</strong></button>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </div>
     )
 }
