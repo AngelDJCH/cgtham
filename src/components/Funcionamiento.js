@@ -7,7 +7,7 @@ export default function Funcionamiento() {
     const navigate = useNavigate()
 
     return (
-        <div className='funcionamiento'>
+        <div className='funcionamiento' id='funcionamiento'>
             <div className='etiqueta'>
                 <h5>¿Cómo funciona?</h5>
             </div>

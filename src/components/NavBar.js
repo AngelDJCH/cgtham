@@ -50,6 +50,13 @@ export default function NavBar(props) {
 
                         )
                     }
+
+                    {
+                        !isSmallDevice && props?.opcionesNav && (
+                            <li className='opciones'><a href='#funcionamiento'>Funcionamiento</a></li>
+
+                        )
+                    }
                     {
                         !isSmallDevice && props?.opcionesNav && (
                             <li className='opciones'><a href='#historias'>Comunidad</a></li>

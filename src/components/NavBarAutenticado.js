@@ -65,14 +65,14 @@ export default function NavBarAutenticado() {
 
                         ><a >Organizaciones</a></li>
                     )}
-                    {!isMediumDevice && (
+                    {!isMediumDevice && user.tipo === 'Escuela' && (
                         <li className='opciones'
 
                             onClick={(e) => {
-                                navigate(`/organizacion/${user.organizacion}`)
+                                navigate(`/cursos`)
                             }}
 
-                        ><a >Organizacion</a></li>
+                        ><a >Cursos</a></li>
                     )}
                     {!isMediumDevice && user.rol.includes('ADMIN_SYS') && (
                         <li className='opciones'
