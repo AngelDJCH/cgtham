@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import { deleteComentarioById, getComentarioById, updateById, updateComentarioByEstado } from '../services/Comentario'
 import { useAuth } from '../hooks/useAuth'
 import { deleteById, updateInscripcionByEstado } from '../services/Inscripcion'
-import EditarEvento from './EditarEvento.js'
 import VisualizarEvento from './VisualizarEvento'
 import { deleteEventoById } from '../services/Evento.js'
 import { createConvenioOrganizacion } from '../services/ConvenioOrganizacion.js'
@@ -501,7 +500,7 @@ export default function TablaContenido(props) {
 
             {
                 openEditarEvento && (
-                    <EditarEvento id_evento={idEvento} accion={setOpenEditarEvento} />
+                    <VisualizarEvento id_evento={idEvento} accion={setOpenEditarEvento} />
                 )
             }
 

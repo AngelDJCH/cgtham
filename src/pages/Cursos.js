@@ -28,6 +28,8 @@ export default function Cursos() {
 
     const [administrar, setAdministrar] = useState(false)
 
+    const [loading, setLoading] = useState(true)
+
     const [participantes, setParticipantes] = useState([])
 
     const [curso, setCurso] = useState({
@@ -129,6 +131,7 @@ export default function Cursos() {
             pendientesCurso()
             participantesCurso()
             findById()
+            setLoading(false)
         }
     }, [idCurso])
 
@@ -185,7 +188,7 @@ export default function Cursos() {
                                     </div>
                                 </div>
 
-                                <div style={{ width: '100%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
+                                <div className="contenedor-botones-formulario" style={{ width: '100%' }}>
                                     <button
                                         className="btn-accion-cancelar-1"
                                         onClick={() => {
@@ -244,7 +247,7 @@ export default function Cursos() {
                                         </div>
                                     </div>
                                 </div>
-                                <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
+                                <div className="contenedor-botones-formulario">
                                     <button
                                         className="btn-accion-cancelar-1"
                                         onClick={() => {
@@ -271,92 +274,97 @@ export default function Cursos() {
                         <div className="overllay"></div>
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
-                            <div className="formulario-contenedor" style={{ width: isSmallDevice ? '100%' : null, height: isSmallDevice ? '90%' : null }}>
-                                <div className="titulo-formulario"><h1 className="subtitulo">{curso?.titulo?.substring(0, 50)}</h1></div>
-                                <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
-                                    <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
-                                        <div className="contenedor-datos-interno" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                            <h6>Titulo</h6>
-                                            <input placeholder="Titulo" type="text" onChange={(e) => { setCurso({ ...curso, titulo: e.target.value }) }} defaultValue={curso?.titulo} disabled={!enable} />
-                                            <h6>Descripción</h6>
-                                            <textarea onChange={(e) => { setCurso({ ...curso, descripcion: e.target.value }) }} defaultValue={curso?.descripcion} disabled={!enable} />
-                                            <div>
-                                                <h6>Participantes:</h6>
-                                                <select style={{ width: '100%' }}>
-                                                    {
-                                                        (participantes === null || participantes.length === 0) ? <option>'SIN PARTICIPANTES'</option> : participantes?.map(
-                                                            participante => (<option>
-                                                                {participante.nombre}
-                                                            </option>)
-                                                        )
-                                                    }
-                                                </select>
-                                                {
-                                                    curso?.organizacion?.id === user?.organizacion && (
+                            {
+                                !loading ? (
+                                    <div className="formulario-contenedor" style={{ width: isSmallDevice ? '100%' : null, height: isSmallDevice ? '90%' : null }}>
+                                        <div className="titulo-formulario"><h1 className="subtitulo">{curso?.titulo?.substring(0, 50)}</h1></div>
+                                        <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
+                                            <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
+                                                <div className="contenedor-datos-interno" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                                    <h6>Titulo</h6>
+                                                    <input placeholder="Titulo" type="text" onChange={(e) => { setCurso({ ...curso, titulo: e.target.value }) }} defaultValue={curso?.titulo} disabled={!enable} />
+                                                    <h6>Descripción</h6>
+                                                    <textarea onChange={(e) => { setCurso({ ...curso, descripcion: e.target.value }) }} defaultValue={curso?.descripcion} disabled={!enable} />
+                                                    <div>
+                                                        <h6>Participantes:</h6>
+                                                        <select style={{ width: '100%' }}>
+                                                            {
+                                                                (participantes === null || participantes.length === 0) ? <option>'SIN PARTICIPANTES'</option> : participantes?.map(
+                                                                    participante => (<option>
+                                                                        {participante.nombre}
+                                                                    </option>)
+                                                                )
+                                                            }
+                                                        </select>
+                                                        {
+                                                            curso?.organizacion?.id === user?.organizacion && (
+                                                                <div>
+                                                                    <button
+                                                                        className="btn-accion-2"
+                                                                        onClick={() => { setAdministrar(true) }}
+                                                                    >
+                                                                        <strong>
+                                                                            ADMINISTRAR
+                                                                        </strong>
+                                                                    </button>
+                                                                </div>
+                                                            )
+                                                        }
+                                                    </div>
+                                                    <h6>Fecha</h6>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                                                         <div>
-                                                            <button
-                                                                className="btn-accion-2"
-                                                                onClick={() => { setAdministrar(true) }}
-                                                            >
-                                                                <strong>
-                                                                    ADMINISTRAR
-                                                                </strong>
-                                                            </button>
+                                                            <p>Inicio:</p>
+                                                            <input onChange={(e) => { setCurso({ ...curso, inicio: e.target.value }) }} type="date" defaultValue={curso?.inicio.split('T')[0]} disabled={!enable} />
                                                         </div>
-                                                    )
-                                                }
-                                            </div>
-                                            <h6>Fecha</h6>
-                                            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                                                <div>
-                                                    <p>Inicio:</p>
-                                                    <input onChange={(e) => { setCurso({ ...curso, inicio: e.target.value }) }} type="date" defaultValue={curso?.inicio.split('T')[0]} disabled={!enable} />
-                                                </div>
-                                                <div>
-                                                    <p>Final:</p>
-                                                    <input onChange={(e) => { setCurso({ ...curso, final: e.target.value }) }} type="date" defaultValue={curso?.final.split('T')[0]} disabled={!enable} />
+                                                        <div>
+                                                            <p>Final:</p>
+                                                            <input onChange={(e) => { setCurso({ ...curso, final: e.target.value }) }} type="date" defaultValue={curso?.final.split('T')[0]} disabled={!enable} />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
+
+                                            {
+                                                !isSmallDevice && (
+                                                    <div style={{ width: '250px', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                        <p style={{ textAlign: 'justify' }}>
+                                                            <strong>Nota: </strong>{user.tipo != 'Escuela' ? ' Recuerda que el solicitar tu participación al curso a una institución educativa no asegura de forma inmediata tu inscripción a dicho curso.' : ''}
+                                                            <br />
+                                                            En caso de algun problema o inconveniente, debera ser reportado al siguiente correo <kbd><strong>cgtham@gmail.com</strong></kbd>
+                                                        </p>
+                                                    </div>
+                                                )
+                                            }
+
+                                        </div>
+                                        <div className="contenedor-botones-formulario">
+                                            <button
+                                                className="btn-accion-cancelar-1"
+                                                onClick={() => { setLoading(true);setOpenCurso(false); setEnable(false) }}
+                                            ><strong>CERRAR</strong></button>
+                                            {user.tipo === 'Escuela'
+                                                && (<button
+                                                    onClick={() => {
+                                                        setLoading(true);
+                                                        enable ? setEnable(false) : setEnable(true);
+                                                        if (enable) { handleUpdate() }
+                                                    }}
+                                                    className="btn-accion-2"
+                                                ><strong>{enable ? 'GUARDAR' : 'EDITAR'}</strong></button>)
+                                            }
+                                            {
+                                                user.tipo != 'Escuela' && user.tipo != 'Comité' && (
+                                                    <button
+                                                        className="btn-accion-2"
+                                                        onClick={() => { setLoading(true);handleParticipar(curso?.id) }}
+                                                    ><strong>PARTICIPAR</strong></button>
+                                                )
+                                            }
                                         </div>
                                     </div>
-
-                                    {
-                                        !isSmallDevice && (
-                                            <div style={{ width: '250px', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                                <p style={{ textAlign: 'justify' }}>
-                                                    <strong>Nota: </strong>{user.tipo != 'Escuela' ? ' Recuerda que el solicitar tu participación al curso a una institución educativa no asegura de forma inmediata tu inscripción a dicho curso.' : ''}
-                                                    <br />
-                                                    En caso de algun problema o inconveniente, debera ser reportado al siguiente correo <kbd><strong>cgtham@gmail.com</strong></kbd>
-                                                </p>
-                                            </div>
-                                        )
-                                    }
-
-                                </div>
-                                <div style={{ width: isSmallDevice ? '100%' : '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
-                                    <button
-                                        className="btn-accion-cancelar-1"
-                                        onClick={() => { setOpenCurso(false); setEnable(false) }}
-                                    ><strong>CERRAR</strong></button>
-                                    {user.tipo === 'Escuela'
-                                        && (<button
-                                            onClick={() => {
-                                                enable ? setEnable(false) : setEnable(true);
-                                                if (enable) { handleUpdate() }
-                                            }}
-                                            className="btn-accion-2"
-                                        ><strong>{enable ? 'GUARDAR' : 'EDITAR'}</strong></button>)
-                                    }
-                                    {
-                                        user.tipo != 'Escuela' && user.tipo != 'Comité' && (
-                                            <button
-                                                className="btn-accion-2"
-                                                onClick={() => { handleParticipar(curso?.id) }}
-                                            ><strong>PARTICIPAR</strong></button>
-                                        )
-                                    }
-                                </div>
-                            </div>
+                                ) : <p>Cargando...</p>
+                            }
                         </div>
                     </div>
                 )

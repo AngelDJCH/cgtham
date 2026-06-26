@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import '../styles/notas.css'
 import InscripcionAlterta from "./InscripcionAlterta";
-import EditarEvento from "./EditarEvento"
 import { eventoOrganizacion } from "../services/EventoOrganizacion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
@@ -149,7 +148,7 @@ export default function Notas() {
 
       {
         openEditar && (
-          <EditarEvento id_evento={idEvento} accion={setOpenEditar} />
+          <VisualizarEvento id_evento={idEvento} accion={setOpenEditar} />
         )
       }
 

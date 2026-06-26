@@ -38,9 +38,9 @@ export default function VisualizarVisita(props) {
             <div className="overllay"></div>
             <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
-                <div className="formulario-contenedor" style={{ width: isSmallDevice ? '90%' : null, height: isSmallDevice ? '90%' : null }}>
+                <div className="formulario-contenedor">
                     <div className="titulo-formulario"><h1 className='subtitulo'>SOLICITUD DE VISITA</h1></div>
-                    <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
+                    <div className="formulario">
                         <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
                             <div className="contenedor-datos-interno" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
 
@@ -78,7 +78,7 @@ export default function VisualizarVisita(props) {
                             )
                         }
                     </div>
-                    <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
+                    <div className="contenedor-botones-formulario">
                         <button
                             className='btn-accion-cancelar-1'
                             onClick={() => { props.accion(false) }}

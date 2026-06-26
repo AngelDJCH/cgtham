@@ -879,7 +879,7 @@ export default function Organizacion() {
                                             <input placeholder="Nombre de la carrera o oferta educativa" id="nombre_oferta" />
 
                                             <h6>Duración:</h6>
-                                            <input placeholder="Duración de la carrera o oferta educativa (años - Ejemplo: 4.5)" id="duracion_oferta" />
+                                            <input type="number" placeholder="Duración de la carrera o oferta educativa (años - Ejemplo: 4.5)" id="duracion_oferta" />
 
                                             <h6>Descripción:</h6>
                                             <textarea placeholder="Descripción de la carrera o oferta educativa" id="descripcion_oferta" />

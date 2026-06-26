@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import { eventoById, updateEventoById } from "../services/Evento"
 import { useNavigate } from "react-router-dom"
-import { findParticipantesByIEvento } from "../services/Inscripcion"
+import { findParticipantesByIEvento, updateInscripcionByEstado } from "../services/Inscripcion"
 import { getFotosByIdEvento } from "../services/Foto"
 import '../styles/botones.css'
 import { useAuth } from "../hooks/useAuth"
@@ -10,14 +10,31 @@ import InscripcionAlterta from "./InscripcionAlterta"
 import { useMediaQuery } from "@uidotdev/usehooks"
 
 export default function VisualizarEvento(props) {
-    const [evento, setEvento] = useState(null)
+
+    const [loading, setLoading] = useState(true)
+
+    const { user } = useAuth()
+
+    const [inscripciones, setInscripciones] = useState([])
+
+    const [evento, setEvento] = useState({
+        titulo: '',
+        descripcion: '',
+        tipo: '',
+        fecha_inicio: '',
+        fecha_final: '',
+        id_organizacion: ''
+    })
+
+    const [administrar, setAdministar] = useState(false)
+
     const [participantes, setParticipantes] = useState([])
     const [fotos, setFotos] = useState([])
     const [fotoSeleccionada, setFotoSeleccionada] = useState('')
-    const { user } = useAuth()
     const [openInscripcion, setOpenInscripcion] = useState(false)
     const [idEvento, setIdEvento] = useState(null)
 
+    const imgDefaultSelect = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="
 
     const navigate = useNavigate()
 
@@ -49,15 +66,9 @@ export default function VisualizarEvento(props) {
         }
     ]);
 
-    const handeUpdateEvento = async () => {
-        const res = await updateEventoById(evento)
-        if (res.status === 200) navigate(0)
-        if (res.status != 200) alert('NO SE PUDO MODIFICAR EL EVENTO')
-    }
-
     useEffect(() => {
         const getEvento = async () => {
-            const res = await eventoById(props?.id_evento)
+            const res = await eventoById(props.id_evento)
             setEvento(res)
         }
 
@@ -75,103 +86,212 @@ export default function VisualizarEvento(props) {
         getEvento()
         fotosEvento()
         participantesEvento()
+        setLoading(false)
     }, [])
     const isSmallDevice = useMediaQuery('(max-width:768px)');
     const isMediumDevice = useMediaQuery('(max-width: 1024px)');
 
+
+    const handleUpdateEstadoById = async (id, estado) => {
+        const data = await updateInscripcionByEstado(id, estado)
+        if (data) {
+            navigate(0)
+            alert('INSCRIPCION ACEPTADA')
+        } else {
+            navigate(0)
+            alert('NO SE PUDO ACTUALIZAR LA INSCRIPCION')
+        }
+    }
+    const handeUpdateEvento = async () => {
+        const res = await updateEventoById({ ...evento, id_organizacion: user?.organizacion })
+        if (res.status === 200) navigate(0)
+        if (res.status != 200) alert('NO SE PUDO MODIFICAR EL EVENTO')
+    }
+
     return (
         <div>
-
             <div className="overllay"></div>
             <div className="overllay-contenedor">
-                <div className="formulario-contenedor" style={{ width: (isSmallDevice || isMediumDevice) ? '90%' : null, height: (isSmallDevice || isMediumDevice) ? '90%' : null }}>
-                    <div className="titulo-formulario"><h1 className="subtitulo">{evento?.titulo.substring(0, 25)}</h1></div>
-                    <div className="formulario" style={{ height: (isSmallDevice || isMediumDevice) ? '80%' : null, width: (isSmallDevice || isMediumDevice) ? '100%' : null }}>
-                        <div className="contenedor-datos-formulario" style={{ width: (isSmallDevice || isMediumDevice) ? '100%' : null }}>
-                            <div className="contenedor-datos-interno">
-                                <h6>Titulo:</h6>
-                                <input type="text" value={evento?.titulo} placeholder="Titulo" />
-                                <h6>Descripcion:</h6>
-                                <textarea type="text" placeholder="Descripcion" value={evento?.descripcion} />
-                                <h6>Tipo:</h6>
-                                <select>
-                                    <option>
-                                        {evento?.tipo}
-                                    </option>
-                                </select>
-
-                                <h6>Participantes:</h6>
-                                <select>
-                                    {
-                                        participantes.map(
-                                            participante => <option>
-                                                {participante?.nombre_comercial}
+                {
+                    !loading ? (
+                        <div className="formulario-contenedor">
+                            <div className="titulo-formulario"><h1 className="subtitulo">{evento?.titulo.substring(0, 25)}</h1></div>
+                            <div className="formulario">
+                                <div className="contenedor-datos-formulario" style={{ width: (isSmallDevice || isMediumDevice) ? '100%' : null }}>
+                                    <div className="contenedor-datos-interno">
+                                        <h6>Titulo:</h6>
+                                        <input type="text" value={evento?.titulo} placeholder="Titulo" />
+                                        <h6>Descripcion:</h6>
+                                        <textarea type="text" placeholder="Descripcion" value={evento?.descripcion} />
+                                        <h6>Tipo:</h6>
+                                        <select>
+                                            <option>
+                                                {evento?.tipo}
                                             </option>
-                                        )
-                                    }
-                                </select>
-                                <h6>Fecha:</h6>
-                                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <h6>Inicio:</h6>
-                                    <input value={evento?.fecha_inicio.split('T')[0]} type="date" style={{ minWidth: '100px', maxWidth: '100px', maxHeight: '25px', minHeight: '25px' }} />
-                                    <h6>Fin:</h6>
-                                    <input value={evento?.fecha_final.split('T')[0]} type="date" style={{ minWidth: '100px', maxWidth: '100px', maxHeight: '25px', minHeight: '25px' }} />
+                                        </select>
+
+                                        <h6>Participantes:</h6>
+                                        {
+                                            (user?.organizacion === evento?.id_organizacion) && (
+                                                <button
+                                                    className="btn-accion-2"
+                                                    onClick={() => { setIdEvento(evento?.id); setAdministar(true) }}
+                                                >
+                                                    <strong>ADMINISTRAR</strong>
+                                                </button>
+                                            )
+                                        }
+
+                                        <select>
+                                            {
+                                                participantes.map(
+                                                    participante => <option>
+                                                        {participante?.nombre_comercial}
+                                                    </option>
+                                                )
+                                            }
+                                        </select>
+                                        <h6>Fecha:</h6>
+                                        <div className="group-two-input">
+                                            <h6>Inicio:</h6>
+                                            <input value={evento?.fecha_inicio.split('T')[0]} type="date" style={{ minWidth: '100px', maxWidth: '100px', maxHeight: '25px', minHeight: '25px' }} />
+                                            <h6>Fin:</h6>
+                                            <input value={evento?.fecha_final.split('T')[0]} type="date" style={{ minWidth: '100px', maxWidth: '100px', maxHeight: '25px', minHeight: '25px' }} />
+                                        </div>
+                                        {
+                                            (isSmallDevice || isMediumDevice) && (
+                                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                    <div style={{ width: '250px', height: '350px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                                        <img style={{ width: '100%', height: '90%', margin: 0 }} src={fotoSeleccionada ? fotoSeleccionada : "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="} />
+                                                        <div style={{ display: 'flex', width: '100%' }}>
+                                                            <div style={{ display: 'flex', minWidth: '90%', maxWidth: '90%', overflowX: 'scroll', gap: '0.4rem' }}>
+                                                                {
+                                                                    fotos?.map(
+                                                                        f => <img src={f} style={{ height: '40px', width: '40px', margin: '0' }} onClick={() => { setFotoSeleccionada(f) }} />
+                                                                    )
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
                                 </div>
                                 {
-                                     (isSmallDevice || isMediumDevice) && (
-                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                            <div style={{ width: '250px', height: '350px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                                <img style={{ width: '100%', height: '90%', margin: 0 }} src={fotoSeleccionada ? fotoSeleccionada : "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="} />
-                                                <div style={{ display: 'flex', width: '100%' }}>
-                                                    <div style={{ display: 'flex', minWidth: '90%', maxWidth: '90%', overflowX: 'scroll', gap: '0.4rem' }}>
-                                                        {
-                                                            fotos?.map(
-                                                                f => <img src={f} style={{ height: '40px', width: '40px', margin: '0' }} onClick={() => { setFotoSeleccionada(f) }} />
-                                                            )
-                                                        }
-                                                    </div>
+                                    (!isSmallDevice && !isMediumDevice) && (
+                                        <div style={{ width: '250px', height: '350px' }}>
+                                            <img style={{ width: '100%', height: '90%', margin: 0 }} src={fotoSeleccionada ? fotoSeleccionada : imgDefaultSelect} />
+                                            <div style={{ display: 'flex' }}>
+                                                <div style={{ display: 'flex', minWidth: '90%', maxWidth: '90%', overflowX: 'scroll', gap: '0.4rem' }}>
+                                                    {
+                                                        fotos?.map(
+                                                            f => <img src={f} style={{ height: '40px', width: '40px', margin: '0' }} onClick={() => { setFotoSeleccionada(f) }} />
+                                                        )
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
                                     )
                                 }
                             </div>
+                            <div className="contenedor-botones-formulario">
+                                <button
+                                    onClick={() => {
+                                        props?.accion(false)
+                                    }}
+                                    className="btn-accion-cancelar-1"
+                                ><strong>CERRAR</strong></button>
+
+                                {
+                                    !props?.inscrito && user?.organizacion != evento?.id_organizacion && (
+                                        <button
+                                            className="btn-accion-2"
+                                            onClickCapture={() => { if (user?.organizacion != undefined) { setIdEvento(evento?.id); setOpenInscripcion(true) } else { alert('DEBES DE INICIAR SESION PRIMERO') } }}
+                                        ><strong>PARTICIPAR</strong></button>
+                                    )
+                                }
+                                {
+                                    user?.organizacion === evento?.id_organizacion && (
+                                        <button
+                                            className="btn-accion-2"
+                                            onClick={handeUpdateEvento}
+                                        ><strong>GUARDAR</strong></button>
+                                    )
+                                }
+                            </div>
                         </div>
-                        {
-                             (!isSmallDevice && !isMediumDevice) && (
-                                <div style={{ width: '250px', height: '350px' }}>
-                                    <img style={{ width: '100%', height: '90%', margin: 0 }} src={fotoSeleccionada ? fotoSeleccionada : "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="} />
-                                    <div style={{ display: 'flex' }}>
-                                        <div style={{ display: 'flex', minWidth: '90%', maxWidth: '90%', overflowX: 'scroll', gap: '0.4rem' }}>
-                                            {
-                                                fotos?.map(
-                                                    f => <img src={f} style={{ height: '40px', width: '40px', margin: '0' }} onClick={() => { setFotoSeleccionada(f) }} />
-                                                )
-                                            }
-                                        </div>
+                    ) : <p>CARGANDO...</p>
+                }
+            </div>
+
+            {
+                administrar && (
+                    <div>
+                        <div className="overllay"></div>
+                        <div className="overllay-contenedor">
+                            <div style={{
+                                width: '90%', height: '80vh', padding: '1rem', backgroundColor: 'white', display: 'flex', flexDirection: 'column',
+                                justifyContent: 'space-around', alignItems: 'center', gap: '1rem'
+                            }}>
+                                <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <h1>INSCRIPCIONES DEL EVENTO</h1>
+                                    <div style={{ width: '100%', minWidth: '100%', width: '100%', overflowX: 'scroll' }}>
+                                        <table className="contenedor-tablas-interno" style={{ width: '100%', minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll' }}>
+                                            <thead>
+                                                <tr
+                                                    style={{ color: 'white', backgroundColor: '#41431B' }}
+                                                >
+                                                    <th>ID</th>
+                                                    <th>Logo</th>
+                                                    <th>Organizacion</th>
+                                                    <th>Fecha</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    inscripciones?.map(
+                                                        inscripcion => <tr>
+                                                            <td>{inscripcion.id_inscripcion}</td>
+                                                            <td><img src={inscripcion.organizacion.logo} style={{ width: '32px', height: '32px' }} /></td>
+                                                            <td>{inscripcion.organizacion.nombre_comercial}</td>
+                                                            <td>{inscripcion.fecha.split('T')[0]}</td>
+                                                            <th>
+                                                                <button
+                                                                    className="btn-accion-cancelar-1"
+                                                                    onClick={() => {
+                                                                        handleUpdateEstadoById(inscripcion.id_inscripcion, 'RECHAZADO')
+                                                                    }}
+                                                                >
+                                                                    <strong>RECHAZAR</strong>
+                                                                </button>
+                                                                <button
+                                                                    className="btn-accion-2"
+                                                                    onClick={() => {
+                                                                        handleUpdateEstadoById(inscripcion.id_inscripcion, 'APROBADA')
+                                                                    }}
+                                                                >
+                                                                    <strong>APROBAR</strong>
+                                                                </button>
+                                                            </th>
+                                                        </tr>
+                                                    )
+                                                }
+                                            </tbody>
+
+                                        </table>
                                     </div>
                                 </div>
-                            )
-                        }
-                    </div>
-                    <div style={{ width:  (isSmallDevice || isMediumDevice) ? '100%' : '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
-                        <button
-                            onClick={() => {
-                                props?.accion(false)
-                            }}
-                            className="btn-accion-cancelar-1"
-                        ><strong>CERRAR</strong></button>
-                        {
-                            !props?.inscrito && user?.organizacion != evento?.id_organizacion && (
                                 <button
-                                    className="btn-accion-2"
-                                    onClickCapture={() => { if (user?.organizacion != undefined) { setIdEvento(evento?.id); setOpenInscripcion(true) } else { alert('DEBES DE INICIAR SESION PRIMERO') } }}
-                                ><strong>PARTICIPAR</strong></button>
-                            )
-                        }
+                                    onClick={() => { setAdministar(false) }}
+                                    className="btn-accion-cancelar-1"
+                                ><strong>CERRAR</strong></button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                )
+            }
             {
                 openInscripcion && (
                     <InscripcionAlterta id_evento={idEvento} nombre_evento={evento?.titulo} accion={setOpenInscripcion} />

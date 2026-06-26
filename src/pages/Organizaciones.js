@@ -91,7 +91,7 @@ export default function Organizaciones() {
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
                             <div style={{ width: '80%', height: '80%', maxHeight: '80%', minHeight: '80%', backgroundColor: 'white', borderRadius: '10px', overflowY: 'scroll', scrollbarWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '1rem' }}>
-                                <div style={{ width: '100%', height: '150px', backgroundColor:'#41431B' }}>
+                                <div style={{ width: '100%', height: '150px', backgroundColor: '#41431B' }}>
                                     <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} src={organizacion?.organizacion?.banner} />
                                 </div>
                                 <div style={{ display: 'flex', gap: '1rem', marginLeft: '1rem', alignItems: 'center', transform: 'translateY(-50%)' }}>
@@ -240,13 +240,13 @@ export default function Organizaciones() {
 
                                 </div>
 
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '1.8rem', gap: '1rem', marginTop:'1rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '1.8rem', gap: '1rem', marginTop: '1rem' }}>
                                     <button className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenOrganizacion(false); setSelectIdOrganizacion(null); setOrganizacion(null) }}
                                     >
                                         <strong>CERRAR</strong>
                                     </button>
-                                    {
+                                    {/* {
                                         organizacion?.organizacion?.estado === false && (
                                             <button className="btn-accion-cancelar-1"
                                                 onClick={() => { setOpenOrganizacion(false); setSelectIdOrganizacion(null); setOrganizacion(null) }}
@@ -254,13 +254,22 @@ export default function Organizaciones() {
                                                 <strong>RECHAZAR</strong>
                                             </button>
                                         )
-                                    }
+                                    } */}
                                     {
                                         organizacion?.organizacion?.estado === false && (
                                             <button className="btn-accion-2"
                                                 onClick={() => { setOpenOrganizacion(false); setSelectIdOrganizacion(null); setOrganizacion(null); setOpenDatosGenerales(false); setOpenDatosContacto(false); setOpenDatosUbicacion(false); setOpenDatosHosting(false); handleUpdateEstado(organizacion?.organizacion?.id, true) }}
                                             >
-                                                <strong>ACEPTAR</strong>
+                                                <strong>ACTIVAR</strong>
+                                            </button>
+                                        )
+                                    }
+                                    {
+                                        organizacion?.organizacion?.estado === true && (
+                                            <button className="btn-accion-2"
+                                                onClick={() => { setOpenOrganizacion(false); setSelectIdOrganizacion(null); setOrganizacion(null); setOpenDatosGenerales(false); setOpenDatosContacto(false); setOpenDatosUbicacion(false); setOpenDatosHosting(false); handleUpdateEstado(organizacion?.organizacion?.id, false) }}
+                                            >
+                                                <strong>SUSPENDER</strong>
                                             </button>
                                         )
                                     }

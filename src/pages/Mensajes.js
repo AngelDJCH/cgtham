@@ -142,7 +142,7 @@ export default function Mensajes() {
                                 <div style={{ width: '35px', height: '35px' }}>
                                     <img src={organizacion?.logo} alt="imagen" style={{ backgroundColor: 'white' }} />
                                 </div>
-                                <h1 style={{ margin: '0', fontSize: isSmallDevice ? '18px' : '20px' }}>{user.organizacion === organizacion?.id ? `${organizacion?.nombre_comercial} (YO)` : `${organizacion?.nombre_comercial}`}</h1>
+                                <h1 style={{ margin: '0', fontSize: isSmallDevice ? '18px' : '20px' }}>{user.organizacion === organizacion?.id ? `(YO)` : `${organizacion?.nombre_comercial}`}</h1>
                             </div>
                             <div className="cuerpo-mensajes">
                                 {

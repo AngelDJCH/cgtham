@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import '../styles/navuser.css'
-import Configuracion from './Configuracion'
 import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth.js'
 
@@ -51,7 +50,9 @@ export default function NavUser(props) {
                         <p>Organizacion</p>
                     </li> : null
                 }
-                <li
+                {
+                    user.tipo != 'Comité' && (
+                        <li
                 
                 onClick={()=>{
                     navigate(`/mensajes`)
@@ -60,6 +61,8 @@ export default function NavUser(props) {
                     <img alt='mensajes' src={img_mensajes}/>
                     <p>Mensajes</p>
                 </li>
+                    )
+                }
                 {
                     user.tipo != 'Escuela' && (
                         <li

@@ -195,7 +195,7 @@ export default function Convenios() {
                                             </select>
                                             <h6 style={{ margin: '0' }}>Fechas:</h6>
 
-                                            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+                                            <div className="group-two-input">
                                                 <h6 style={{ margin: '0' }}>Inicio:</h6>
                                                 <input className="input-date" type="date" onChange={(e) => setConvenio({ ...convenio, fecha_inicio: e.target.value })} />
                                                 <h6 style={{ margin: '0' }}>Fin:</h6>

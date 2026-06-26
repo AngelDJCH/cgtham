@@ -204,7 +204,7 @@ export default function AutenticacionPage() {
                 setArchivoBanner(reader.result)
             }
             reader.readAsDataURL(archivo)
-            setBanner(URL.createObjectURL(archivo)); // Solo para la vista previa
+            setBanner(URL.createObjectURL(archivo));
         }
     };
 
@@ -217,7 +217,7 @@ export default function AutenticacionPage() {
                 setArchivoFoto(reader.result)
             }
             reader.readAsDataURL(archivo)
-            setFoto(URL.createObjectURL(archivo)); // Solo para la vista previa
+            setFoto(URL.createObjectURL(archivo)); 
         }
     };
 

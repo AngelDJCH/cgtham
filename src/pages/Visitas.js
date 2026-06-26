@@ -106,7 +106,7 @@ export default function Visitas() {
                                         )
                                     }
                                 </div>
-                                <div style={{ width: isSmallDevice ? '100%' : '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
+                                <div className="contenedor-botones-formulario">
                                     <button className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenCreateVisita(false) }}
                                     ><strong>CANCELAR</strong></button>

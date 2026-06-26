@@ -1,5 +1,4 @@
 import { useMediaQuery } from "@uidotdev/usehooks";
-import AccionRapida from "../components/AccionRapida";
 import ListaUsuarios from "../components/ListaUsuarios";
 import NavBarAutenticado from "../components/NavBarAutenticado";
 import NavUser from "../components/NavUser";
