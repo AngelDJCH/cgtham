@@ -21,7 +21,7 @@ export const createContacto = async (correo, telefono) => {
         const id_contacto = await axiosInstance.post('/contactos/', data)
         return id_contacto.data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL CREAR EL CONTACTO')
+        return null
     }
 }
 
@@ -36,5 +36,14 @@ export const updateContactoById = async (contacto) => {
         return status
     } catch (error) {
         alert('OCURRIO UN ERROR AL ACTUALIZAR EL CONTACTO')
+    }
+}
+
+export const deleteContactoById = async (id) => {
+    try {
+        const {status} = await axiosInstance.delete(`/contactos/${id}`)
+        return status
+    } catch (error) {
+        return error.response.status
     }
 }

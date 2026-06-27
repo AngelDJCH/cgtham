@@ -19,7 +19,7 @@ export const createEmpresa = async (id_organizacion, razon_social, regimen_fisca
         })
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL CREAR LA EMPRESA')
+       return null
     }
 }
 

@@ -20,18 +20,17 @@ export const logout = async () => {
     }
 }
 
-export const createCuenta = async (correo, contrasenia, roles, id_organizacion) => {
+export const createCuenta = async (correo, contrasenia, id_organizacion) => {
     try {
         const data = {
             correo : correo,
             contrasenia : contrasenia,
-            roles : roles,
             id_organizacion : id_organizacion
         }
         const resCuenta = await axiosInstance.post('/cuentas/', data)
-        return resCuenta ? resCuenta : alert('ERROR AL CREAR LA ORGANIZACION')
+        return resCuenta
     } catch (error) {
-        alert('OCURRIO UN ERROR AL CREAR LA CUENTA')
+        return null
     }
 }
 

@@ -19,7 +19,7 @@ export const createCloudinary = async (nombre, clave, clave_secreta, id_organiza
         })
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL CREAR LOS DATOS DE HOST (CLOUD DINARY)')
+        return null
     }
 }
 

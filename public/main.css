@@ -336,6 +336,7 @@ table tr td {
 .seccion1-contenedor {
     background-color: #E3DBBB;
     border-radius: 0px 0px 10px 10px;
+    width: 990px;
 }
 
 .seccion2-contenedor {

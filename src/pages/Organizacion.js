@@ -292,13 +292,13 @@ export default function Organizacion() {
         }
         organizacionData()
     }, [])
-
+    const isLargeDevice = useMediaQuery('(min-width: 1400px)');
 
     return (
         <div style={{ marginTop: '100px', marginRight: '50px', width: isMediumDevice ? '100%' : null }}>
             <NavBarAutenticado />
             {
-                !isMediumDevice && (
+                isLargeDevice && (
                     <div style={{ marginTop: '8rem' }}>
                         <NavUser left='30px' />
                     </div>

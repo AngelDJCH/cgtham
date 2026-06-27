@@ -9,7 +9,7 @@ export const uploadImg = async (data_img) => {
 
         return res.data.url
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LA URL DE LA IMAGEN')
+        return null
     }
 }
 

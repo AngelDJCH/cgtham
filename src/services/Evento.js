@@ -59,10 +59,10 @@ export const updateEventoById = async (evento) => {
             fecha_inicio : evento.fecha_inicio.split('T')[0],
             fecha_final : evento.fecha_final.split('T')[0]
         }
-        const res = await axiosInstance.put(`/eventos/${evento.id}`, dataEvento)
-        return res
+        const {status} = await axiosInstance.put(`/eventos/${evento.id}`, dataEvento)
+        return status
     } catch (error) {
-        alert('OCURRIO UN ERROR AL ACTUALIZAR EL EVENTO')
+        return error.response.status
     }
 }
 

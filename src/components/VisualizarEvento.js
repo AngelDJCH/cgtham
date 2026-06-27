@@ -103,9 +103,15 @@ export default function VisualizarEvento(props) {
         }
     }
     const handeUpdateEvento = async () => {
-        const res = await updateEventoById({ ...evento, id_organizacion: user?.organizacion })
-        if (res.status === 200) navigate(0)
-        if (res.status != 200) alert('NO SE PUDO MODIFICAR EL EVENTO')
+        const status = await updateEventoById({ ...evento, id_organizacion: user?.organizacion })
+        if (status === 200) {
+            alert('Evento modificado');
+            navigate(0)
+        } else {
+            navigate(0); alert('NO SE PUDO MODIFICAR EL EVENTO')
+        }
+        // if (status === 200) navigate(0)
+        // if (status != 200) navigate(0) ; alert('NO SE PUDO MODIFICAR EL EVENTO')
     }
 
     return (

@@ -58,7 +58,7 @@ export const createOrganizaion = async (nombre_comercial, descripcion, tipo, sec
         })
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL CREAR LA ORGANIZACION')
+        return null
     }
 }
 
@@ -96,5 +96,14 @@ export const getLogoByIdOrganizacion = async (id) => {
         return data.logo
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER EL LOGO DE LA ORGANIZACION')
+    }
+}
+
+export const deleteOrganizacionById = async (id) => {
+    try {
+        const {status} = await axiosInstance.delete(`/organizaciones/${id}`) 
+        return status       
+    } catch (error) {
+        return error.response.status
     }
 }

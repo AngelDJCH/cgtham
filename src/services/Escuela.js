@@ -18,7 +18,7 @@ export const createEscuela = async (id_organizacion, tipo_institucion, url_sitio
         })
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL CREAR LA ESCUELA')
+        return null
     }
 }
 

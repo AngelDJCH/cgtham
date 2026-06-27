@@ -18,7 +18,7 @@ export const createCamara = async (id, nombre, presidente) => {
         })
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL CREAR LA CAMARA DE COMERCIO')
+        return null
     }
 }
 

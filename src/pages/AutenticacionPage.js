@@ -4,11 +4,11 @@ import '../styles/autenticacion.css'
 import { useEffect, useRef, useState } from "react";
 import { createCuenta, login } from "../services/Cuenta";
 import { useAuth } from "../hooks/useAuth";
-import { createOrganizaion, getAllOrganizaciones } from "../services/Organizacion";
+import { createOrganizaion, deleteOrganizacionById, getAllOrganizaciones } from "../services/Organizacion";
 import { axiosInstance } from "../services/Axios";
 import { createUsuario } from "../services/Usuario";
-import { createContacto } from "../services/Contacto";
-import { createDireccion } from "../services/Direccion";
+import { createContacto, deleteContactoById } from "../services/Contacto";
+import { createDireccion, deleteDireccionById } from "../services/Direccion";
 import { createCloudinary } from "../services/Cloudinary";
 import { createEmpresa } from "../services/Empresa";
 import { createCamara } from "../services/Camara";
@@ -217,38 +217,54 @@ export default function AutenticacionPage() {
                 setArchivoFoto(reader.result)
             }
             reader.readAsDataURL(archivo)
-            setFoto(URL.createObjectURL(archivo)); 
+            setFoto(URL.createObjectURL(archivo));
         }
     };
+
+    const deleteRegister = async ({ contacto, direccion, organizacion }) => {
+        let resOrg = null
+        if (organizacion) resOrg = await deleteOrganizacionById(organizacion.id)
+        if (resOrg!=204 && contacto) await deleteContactoById(contacto.id)
+        if (resOrg!=204 &&direccion) await deleteDireccionById(direccion.id)
+        return
+    }
 
     const handeCreateOrganizacion = async () => {
         try {
             const logoUrl = await uploadImg(archivoFoto)
+            if (logoUrl === null) return
             const bannerUrl = await uploadImg(archivoBanner)
-
+            if (bannerUrl === null) return
             const contactoApi = await createContacto(datosContacto.correo, datosContacto.telefono)
+            if (contactoApi === null) return
+            // if((logoUrl === null) || (bannerUrl === null)) {await deleteContactoById(contactoApi.id);return}
             const direccionApi = await createDireccion(datosUbicacion.calle, datosUbicacion.numero, datosUbicacion.colonia,
                 datosUbicacion.codigo_postal, datosUbicacion.ciudad, datosUbicacion.estado, datosUbicacion.pais
             )
+            if (direccionApi === null) deleteRegister({ contacto: contactoApi, direccion: null, organizacion: null })
             const organizacionAPI = await createOrganizaion(datosPersonales.nombre, datosPersonales.descripcion, selectTipo, selectSector,
                 datosPersonales.tamaño, selectGiro, datosPersonales.rfc, logoUrl, bannerUrl, contactoApi?.id, direccionApi?.id
             )
+            if (organizacionAPI === null) deleteRegister({ contacto: contactoApi, direccion: direccionApi, organizacion: null })
 
             const cloudinariApi = await createCloudinary(datosCloudinary.cloud_name, datosCloudinary.api_key, datosCloudinary.api_secret, organizacionAPI?.id)
-
+            if (cloudinariApi === null) deleteRegister({ contacto: contactoApi, direccion: direccionApi, organizacion: organizacionAPI })
             let empresaApi = null;
             let escuelaApi = null;
             let camaraApi = null;
             if (selectTipo === 'Empresa') {
-                empresaApi = createEmpresa(organizacionAPI?.id, empresa.razon_social, empresa.regimen_fiscal, empresa.direccion_fiscal)
+                empresaApi = await createEmpresa(organizacionAPI?.id, empresa.razon_social, empresa.regimen_fiscal, empresa.direccion_fiscal)
+                if (empresaApi === null) deleteRegister({ contacto: contactoApi, direccion: direccionApi, organizacion: organizacionAPI })
             } else if (selectTipo === 'Escuela') {
-                escuelaApi = createEscuela(organizacionAPI?.id, escuela.tipo, escuela.url)
+                escuelaApi = await createEscuela(organizacionAPI?.id, escuela.tipo, escuela.url)
+                if (escuelaApi === null) deleteRegister({ contacto: contactoApi, direccion: direccionApi, organizacion: organizacionAPI })
             } else {
-                camaraApi = createCamara(organizacionAPI?.id, camara.nombre, camara.presidente)
+                camaraApi = await createCamara(organizacionAPI?.id, camara.nombre, camara.presidente)
+                if (camaraApi === null) deleteRegister({ contacto: contactoApi, direccion: direccionApi, organizacion: organizacionAPI })
             }
 
-            const cuentaApi = await createCuenta(datosContacto.correo, datosSeguridad.contrasenia, ['ADMIN_ORG'], organizacionAPI?.id)
-
+            const cuentaApi = await createCuenta(datosContacto.correo, datosSeguridad.contrasenia, organizacionAPI?.id)
+            if (cuentaApi === null) deleteRegister({ contacto: contactoApi, direccion: direccionApi, organizacion: organizacionAPI })
             if (cuentaApi.status === 201 && contactoApi && direccionApi && organizacionAPI && cloudinariApi || (empresaApi || escuelaApi || camaraApi)) {
                 alert('ORGANIZACION CREADA')
             }
