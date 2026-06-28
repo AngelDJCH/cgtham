@@ -466,7 +466,7 @@ export default function AutenticacionPage() {
                                                         <div className="datos">
                                                             <select onChange={(e) => { setEscuela({ ...escuela, tipo: e.target.value }) }}>
                                                                 <option>TIPO</option>
-                                                                <option>Publica</option>
+                                                                <option>Pública</option>
                                                                 <option>Privada</option>
                                                             </select>
                                                             <input id="r_sitio" placeholder="Sitio web" onChange={(e) => { setEscuela({ ...escuela, url: e.target.value }) }} />

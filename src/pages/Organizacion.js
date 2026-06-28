@@ -710,7 +710,7 @@ export default function Organizacion() {
                                                             <h6 style={{ margin: 0, padding: 0 }}>Tipo de Institución: </h6>
                                                             <select onChange={(e) => { setEscuela({ ...escuela, tipo_institucion: e.target.value }) }}>
                                                                 <option>TIPO</option>
-                                                                <option selected={escuela?.tipo_institucion === 'Publica'}>Publica</option>
+                                                                <option selected={escuela?.tipo_institucion === 'Pública'}>Publica</option>
                                                                 <option selected={escuela?.tipo_institucion === 'Privada'}>Privada</option>
                                                             </select>
                                                             <h6 style={{ margin: 0, padding: 0 }}>URL de Sitio Oficial: </h6>
