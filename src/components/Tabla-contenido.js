@@ -445,7 +445,7 @@ export default function TablaContenido(props) {
                         }
 
                         {
-                            user.tipo != 'Comité' && props.visitasTabla?.filter(f=>f.empresa.nombre.includes(props?.filtro)).map(
+                            user.tipo != 'Comité' && props.visitasTabla?.filter(f=>props.filtro ? f.empresa.nombre.includes(props?.filtro) : f).map(
                                 visita => <tr>
                                     <td>{visita.id}</td>
                                     <td>{visita.escuela ? visita.escuela.nombre : visita.empresa.nombre}</td>
