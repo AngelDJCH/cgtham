@@ -871,7 +871,7 @@ export default function Organizacion() {
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
                             <div className="formulario-contenedor" style={{ height: isSmallDevice ? '100%' : null }}>
-                                <div className="titulo-formulario"><h1>NUEVO OFERTA EDUCATIVA</h1></div>
+                                <div className="titulo-formulario"><h1>NUEVA OFERTA EDUCATIVA</h1></div>
                                 <div className="formulario" style={{ width: isSmallDevice ? '100%' : null }}>
                                     <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
                                         <div className="contenedor-datos-interno">
