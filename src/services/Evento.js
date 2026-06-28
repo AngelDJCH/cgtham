@@ -80,7 +80,7 @@ export const findParticipantesPendientesByIdEvento = async (id_evento) => {
         const {data} = await axiosInstance.get(`/inscripcionesEvento/pendientes/${id_evento}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LOS PARTICIPANTES PENDIENTES DEL EVENTO')
+        return null
     }
 }
 

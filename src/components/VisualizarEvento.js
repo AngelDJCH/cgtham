@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react"
-import { eventoById, updateEventoById } from "../services/Evento"
+import { eventoById, findParticipantesPendientesByIdEvento, updateEventoById } from "../services/Evento"
 import { useNavigate } from "react-router-dom"
 import { findParticipantesByIEvento, updateInscripcionByEstado } from "../services/Inscripcion"
 import { getFotosByIdEvento } from "../services/Foto"
@@ -88,6 +88,19 @@ export default function VisualizarEvento(props) {
         participantesEvento()
         setLoading(false)
     }, [])
+
+
+    useEffect(()=>{
+        const pendientes = async()=>{
+            const res = await findParticipantesPendientesByIdEvento(props?.id_evento)
+
+            console.log(res)
+            setInscripciones(res)
+        }
+
+        pendientes()
+    },[props?.id_evento])
+
     const isSmallDevice = useMediaQuery('(max-width:768px)');
     const isMediumDevice = useMediaQuery('(max-width: 1024px)');
 
