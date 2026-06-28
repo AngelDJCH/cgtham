@@ -6,7 +6,7 @@ import { getOfertasCounts } from "../services/OfertaLaboral"
 import { getOrganizacionesCounts } from "../services/Organizacion"
 import { useNavigate } from "react-router-dom"
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
-import { getDashConvenios } from "../services/Convenio"
+import { getConveniosCounts, getDashConvenios } from "../services/Convenio"
 import { findAllComentariosByAdministrador } from "../services/Comentario"
 
 export default function PanelSistema() {
@@ -15,6 +15,7 @@ export default function PanelSistema() {
     const [countOfertas, setCountOfertas] = useState(0)
     const [countOrganizaciones, setCountOrganizaciones] = useState(0)
     const [dashComentarios, setDashComentarios] = useState([])
+    const [countConvenios, setCountConvenios] = useState(0)
 
     const COLORES = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
 
@@ -46,6 +47,11 @@ export default function PanelSistema() {
             setCountOrganizaciones(res)
         }
 
+        const coutCon = async () => {
+            const res = await getConveniosCounts()
+            setCountConvenios(res)
+        }
+
         const dashConvenios = async () => {
             const res = await getDashConvenios()
             const datosLimpios = res.map(item => ({
@@ -68,7 +74,7 @@ export default function PanelSistema() {
             const res = await findAllComentariosByAdministrador()
             setDashComentarios(res)
         }
-
+        coutCon()
         countE()
         countO()
         countOrg()
@@ -111,7 +117,7 @@ export default function PanelSistema() {
                 <h1 style={{ fontFamily: 'Poppins', fontSize: '20px', textAlign: 'center' }}>CONVENIOS</h1>
                 <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
                     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWhlYXJ0LWhhbmRzaGFrZS1pY29uIGx1Y2lkZS1oZWFydC1oYW5kc2hha2UiPjxwYXRoIGQ9Ik0xOS40MTQgMTQuNDE0QzIxIDEyLjgyOCAyMiAxMS41IDIyIDkuNWE1LjUgNS41IDAgMCAwLTkuNTkxLTMuNjc2LjYuNiAwIDAgMS0uODE4LjAwMUE1LjUgNS41IDAgMCAwIDIgOS41YzAgMi4zIDEuNSA0IDMgNS41bDUuNTM1IDUuMzYyYTIgMiAwIDAgMCAyLjg3OS4wNTIgMi4xMiAyLjEyIDAgMCAwLS4wMDQtMyAyLjEyNCAyLjEyNCAwIDEgMCAzLTMgMi4xMjQgMi4xMjQgMCAwIDAgMy4wMDQgMCAyIDIgMCAwIDAgMC0yLjgyOGwtMS44ODEtMS44ODJhMi40MSAyLjQxIDAgMCAwLTMuNDA5IDBsLTEuNzEgMS43MWEyIDIgMCAwIDEtMi44MjggMCAyIDIgMCAwIDEgMC0yLjgyOGwyLjgyMy0yLjc2MiIvPjwvc3ZnPg==" alt="icono" />
-                    <p>{countEventos}</p>
+                    <p>{countConvenios}</p>
                     <button onClick={() => { handleNavigate('/convenios') }} className="btn-accion-2"><strong>Ir</strong></button>
                 </div>
             </div>
@@ -156,7 +162,7 @@ export default function PanelSistema() {
                                 <p style={{ textAlign: 'center', margin: 0, fontSize: '13px' }}><strong>{comentario.organizacion.nombre}</strong></p>
                             </div>
                             <div style={{ width: '60%' }}>
-                                <p style={{ margin: 0, fontSize: '13px' }}>{comentario.comentario.contenido.substring(0,25)}</p>
+                                <p style={{ margin: 0, fontSize: '13px' }}>{comentario.comentario.contenido.substring(0, 25)}</p>
                             </div>
                         </div>
                     ))}

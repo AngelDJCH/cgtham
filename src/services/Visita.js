@@ -32,6 +32,15 @@ export const allVisitasByIdEscuela = async (id_escuela) => {
     }
 }
 
+export const allVisitasForAdministrador = async () => {
+    try {
+        const {data} = await axiosInstance.get(`/visitas/administrador`)
+        return data
+    } catch (error) {
+        alert('OCURRIO UN ERROR AL OBTENER TODAS LAS VISITAS')
+    }
+}
+
 export const allVisitasByIdEmpresa = async (id_empresa) => {
     try {
         const {data} = await axiosInstance.get(`/visitas/empresa/${id_empresa}`)

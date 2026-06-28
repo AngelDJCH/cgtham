@@ -14,6 +14,7 @@ import InscripcionAlterta from './InscripcionAlterta.js'
 import EditarComentario from './EditarComentario.js'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import VisualizarVisita from './VisualizarVisita.js'
+import { deleteByIdConvenio } from '../services/Convenio.js'
 
 export default function TablaContenido(props) {
     const navigate = useNavigate()
@@ -372,8 +373,16 @@ export default function TablaContenido(props) {
                                             <strong>VISUALIZAR</strong>
                                         </button>
                                         {
-                                            convenio.organizacion.id === user.organizacion && !user.rol.includes('ADMIN_SYS') && (
+                                            convenio.organizacion.id === user.organizacion || user.rol.includes('ADMIN_SYS') && (
                                                 <button
+                                                    onClick={async () => {
+                                                        const res = await deleteByIdConvenio(convenio?.id)
+                                                        if (res === 204) {
+                                                            navigate(0)
+                                                        } else {
+                                                            alert('NO SE PUDO ELIMINAR EL CONVENIO')
+                                                        }
+                                                    }}
                                                     className='btn-accion-cancelar-1'
                                                 >
                                                     <strong>ELIMINAR</strong>
@@ -422,7 +431,7 @@ export default function TablaContenido(props) {
                                             }}
                                         ><strong>VISUALIZAR</strong></button>
                                         {
-                                            user.organizacion === curso.organizacion.id && (
+                                           ( user.organizacion === curso.organizacion.id || user.tipo === 'Comité' ) && (
                                                 <button className='btn-accion-cancelar-1'
                                                     onClick={() => { handleEliminarCurso(curso.id) }}
                                                 >
@@ -436,7 +445,7 @@ export default function TablaContenido(props) {
                         }
 
                         {
-                            props.visitasTabla?.map(
+                            user.tipo != 'Comité' && props.visitasTabla?.map(
                                 visita => <tr>
                                     <td>{visita.id}</td>
                                     <td>{visita.escuela ? visita.escuela.nombre : visita.empresa.nombre}</td>
@@ -478,6 +487,32 @@ export default function TablaContenido(props) {
                                 </tr>
                             )
                         }
+
+                        {
+                            user.tipo === 'Comité' && props.visitasTabla?.map(
+                                visita => <tr>
+                                    <td>{visita?.id}</td>
+                                    <td>{visita?.escuela}</td>
+                                    <td>{visita?.empresa}</td>
+                                    <td><button
+                                        className='btn-accion-cancelar-1'
+                                        onClick={async(e)=>{
+                                            e.preventDefault()
+                                            const status = await deleteByIdForEscuelas(visita?.id)
+                                            if(status===204){
+                                                navigate(0)
+                                                alert('VISITA ELIMINADA')
+                                            }else{
+                                                alert('LA VISITA NO SE PUDO ELIMINAR')
+                                            }
+                                        }}
+                                    >
+                                        <strong>
+                                            ELIMINAR
+                                        </strong>
+                                    </button></td>
+                                </tr>)
+                        }
                     </tbody>
                 </table>
             </div>
@@ -488,7 +523,7 @@ export default function TablaContenido(props) {
 
             {
                 openVisita && (
-                    <VisualizarVisita idVisita={idVisita} accion={setOpenVisita}/>
+                    <VisualizarVisita idVisita={idVisita} accion={setOpenVisita} />
                 )
             }
 

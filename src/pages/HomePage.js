@@ -12,7 +12,7 @@ import VisualizarOferta from "../components/VisualizarOferta";
 
 export default function HomePage() {
 
-    const isMediumDevice = useMediaQuery("only screen and (max-width : 992px)")
+    const isMediumDevice = useMediaQuery("(max-width : 768px) or (max-width : 992px)")
     const isSmallDevice = useMediaQuery("(max-width : 768px)")
 
     const { user } = useAuth()

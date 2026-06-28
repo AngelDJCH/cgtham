@@ -4,7 +4,7 @@ import NavBarAutenticado from "../components/NavBarAutenticado";
 import TablaContenido from "../components/Tabla-contenido";
 import { useAuth } from "../hooks/useAuth";
 import { getAllOrganizaciones } from "../services/Organizacion";
-import { allVisitasByIdEmpresa, allVisitasByIdEscuela, createVisita } from "../services/Visita";
+import { allVisitasByIdEmpresa, allVisitasByIdEscuela, allVisitasForAdministrador, createVisita } from "../services/Visita";
 import { wait } from "@testing-library/user-event/dist/utils";
 import { useMediaQuery } from "@uidotdev/usehooks";
 
@@ -47,12 +47,20 @@ export default function Visitas() {
             setVisitas(data)
         }
 
+        const vistAdministrador = async () => {
+            const data = await allVisitasForAdministrador()
+            setVisitas(data)
+        }
+
 
         if (user.tipo === 'Escuela') {
             vistEscuela()
-        } else {
+        } else if((user.tipo === 'Empresa') || (user.tipo === 'Cámara de Comercio')) {
             vistEmpresa()
+        }else{
+            vistAdministrador()
         }
+        
         orgs()
     }, [])
 
@@ -60,7 +68,7 @@ export default function Visitas() {
         <div>
             <NavBarAutenticado />
             <Filtros btn_accion={setOpenCreateVisita} accion='SOLICITAR' enableAccion={user.tipo === 'Escuela' ? true : false} titulo='Visitas' filtro={user.tipo === 'Escuela' ? setFiltro : null} placeholder={user.tipo === 'Escuela' ? 'Escribe el nombre de la empresa' : null} />
-            <TablaContenido visitasTabla={visitas} encabezados={user.tipo === 'Escuela' ? ['ID', 'Empresa', 'Solicitado', 'Aprobado', 'Agendado', 'Estado', 'Acciones'] : ['ID', 'Escuela', 'Solicitado', 'Aprobado', 'Agendado', 'Estado', 'Acciones']} />
+            <TablaContenido visitasTabla={visitas} encabezados={user.tipo === 'Escuela' ? ['ID', 'Empresa', 'Solicitado', 'Aprobado', 'Agendado', 'Estado', 'Acciones'] : user.tipo === 'Empresa' || user.tipo === 'Cámara de Comercio' ? ['ID', 'Escuela', 'Solicitado', 'Aprobado', 'Agendado', 'Estado', 'Acciones'] : ['ID', 'Escuela', 'Empresa', 'Acciones']} />
 
 
             {

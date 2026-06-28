@@ -10,6 +10,11 @@ export default function Historicos() {
     const [eventos, setEventos] = useState([])
     const [ofertas, setOfertas] = useState([])
 
+    const handleCreatePdf = (e)=>{
+        e.preventDefault()
+        alert('ACCIÓN NO DISPONIBLE')
+    }
+
     useEffect(() => {
         const hEventos = async () => {
             const res = await findAllHistoricosEventos()
@@ -38,7 +43,7 @@ export default function Historicos() {
                         gap: '0.5rem'
                     }}>
                         <h1>EVENTOS</h1>
-                        <img src={imgFileDownloandPdf} style={{ width: '24px', height: '24px', cursor:'pointer'}} />
+                        <img src={imgFileDownloandPdf} onClick={handleCreatePdf} style={{ width: '24px', height: '24px', cursor:'pointer'}} />
                     </div>
                     <div className="tabla-historico">
                         <table>
@@ -73,7 +78,7 @@ export default function Historicos() {
                         gap: '0.5rem'
                     }}>
                         <h1>OFERTAS LABORALES</h1>
-                        <img src={imgFileDownloandPdf} style={{ width: '24px', height: '24px', cursor:'pointer' }} />
+                        <img src={imgFileDownloandPdf} onClick={handleCreatePdf} style={{ width: '24px', height: '24px', cursor:'pointer' }} />
                     </div>
                     <div className="tabla-historico">
 

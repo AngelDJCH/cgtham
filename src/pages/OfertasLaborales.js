@@ -12,7 +12,7 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function OfertasLaborales() {
 
-    const isSmallDevice = useMediaQuery('(max-width:768px)');
+    const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width:1024px)');
 
     const [documento, setDocumento] = useState(null)
 
@@ -160,7 +160,7 @@ export default function OfertasLaborales() {
                         ofertasLaborales?.filter(f => filtro?.length === 0 || f.titulo.includes(filtro)).map(
                             o => <div style={{ width: '250px', height: '200px', backgroundColor: '#AEB784', borderRadius: '10px' }}>
                                 <div style={{ padding: '0.5rem', backgroundColor: '#41431B', borderTopLeftRadius: '10px', borderTopRightRadius: '10px' }}>
-                                    <h1 style={{ color: '#AEB784', fontFamily: 'Poppins', fontSize: '16px', margin: '0', padding: '0' }}>{o?.titulo?.substring(0,15)} {o?.titulo?.length > 15 ? '...' : ''}</h1>
+                                    <h1 style={{ color: '#AEB784', fontFamily: 'Poppins', fontSize: '16px', margin: '0', padding: '0' }}>{o?.titulo?.substring(0, 15)} {o?.titulo?.length > 15 ? '...' : ''}</h1>
                                 </div>
                                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '0.3rem' }}>
 
@@ -196,7 +196,7 @@ export default function OfertasLaborales() {
                                     <div className="tarjeta-datos-oferta" style={{ width: '100px', display: 'flex', gap: '0.2rem', justifyContent: 'center', alignItems: 'center', height: '30px', backgroundColor: '#ffffff' }}>
                                         <div>
                                             <h6 style={{ fontSize: '10px', margin: 0, padding: 0, textAlign: 'center' }}><strong>AREA</strong></h6>
-                                            <h6 style={{ color: '#41431B', fontSize: '10px', margin: 0, padding: 0, textAlign: 'center' }}>{o?.departamento_area?.substring(0,10)}...</h6>
+                                            <h6 style={{ color: '#41431B', fontSize: '10px', margin: 0, padding: 0, textAlign: 'center' }}>{o?.departamento_area?.substring(0, 10)}...</h6>
                                         </div>
                                     </div>
                                     <div style={{ width: '150px', display: 'flex', gap: '0.2rem', justifyContent: 'center', alignItems: 'center', height: '30px', backgroundColor: '#ffffff' }}>
@@ -250,7 +250,7 @@ export default function OfertasLaborales() {
                                             <input placeholder="Titulo" onChange={(e) => { setOfertaData({ ...ofertaData, titulo: e.target.value }) }} style={{ width: '100%' }} />
                                             <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Descripcion:</h6>
                                             <textarea onChange={(e) => { setOfertaData({ ...ofertaData, descripcion: e.target.value }) }} placeholder="Descripcion" />
-                                            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', flexWrap:'wrap' }}>
+                                            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
                                                 <div>
                                                     <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Salario:</h6>
                                                     <input type="number" placeholder="Salario" onChange={(e) => { setOfertaData({ ...ofertaData, salario: e.target.value }) }} />
@@ -275,7 +275,7 @@ export default function OfertasLaborales() {
                                                     )
                                                 }
                                             </select>
-                                            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', flexWrap:'wrap' }}>
+                                            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
                                                 <div>
                                                     <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Jornada:</h6>
                                                     <select onChange={(e) => { setOfertaData({ ...ofertaData, jornada: e.target.value }) }}>
@@ -367,96 +367,6 @@ export default function OfertasLaborales() {
                                     </button>
                                 </div>
                             </div>
-
-                            {/* <div style={{ width: '350px', height: '500px', maxHeight: '500px', minHeight: '500px', overflowY: 'scroll', backgroundColor: 'white', padding: '0.5rem', borderRadius: '10px', scrollbarWidth: 'thin' }}>
-                                <div className="datos">
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Titulo:</h6>
-                                    <input placeholder="Titulo" onChange={(e) => { setOfertaData({ ...ofertaData, titulo: e.target.value }) }} />
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Descripcion:</h6>
-                                    <textarea onChange={(e) => { setOfertaData({ ...ofertaData, descripcion: e.target.value }) }} placeholder="Descripcion" style={{ minWidth: '100%', maxWidth: '100%', minHeight: '50px', maxHeight: '50px' }} />
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Salario:</h6>
-                                    <input placeholder="Salario" onChange={(e) => { setOfertaData({ ...ofertaData, salario: e.target.value }) }} />
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Jornada:</h6>
-                                    <select onChange={(e) => { setOfertaData({ ...ofertaData, jornada: e.target.value }) }}>
-                                        <option>---</option>
-                                        {
-                                            opcionesFiltros?.jornada?.map(
-                                                j => <option>
-                                                    {j.opcion}
-                                                </option>
-                                            )
-                                        }
-                                    </select>
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Contrato:</h6>
-                                    <select onChange={(e) => { setOfertaData({ ...ofertaData, tipo_contrato: e.target.value }) }}>
-                                        <option>---</option>
-                                        {
-                                            opcionesFiltros.tipo_contrato.map(
-                                                t => <option>
-                                                    {t.opcion}
-                                                </option>
-                                            )
-                                        }
-                                    </select>
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Vacantes:</h6>
-                                    <input placeholder="Vacantes" onChange={(e) => { setOfertaData({ ...ofertaData, vacantes: e.target.value }) }} />
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Beneficios</h6>
-                                    <textarea onChange={(e) => { setOfertaData({ ...ofertaData, beneficios: e.target.value }) }} placeholder="Beneficios - Separados por ," style={{ minWidth: '100%', maxWidth: '100%', minHeight: '50px', maxHeight: '50px' }} />
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '20px' }}>Habilidades</h6>
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Tecnicas</h6>
-                                    <textarea onChange={(e) => { setOfertaData({ ...ofertaData, habilidades_tecnicas: e.target.value }) }} placeholder="Habilidades Tecnicas - Separados por ," style={{ minWidth: '100%', maxWidth: '100%', minHeight: '50px', maxHeight: '50px' }} />
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Blandas</h6>
-                                    <textarea onChange={(e) => { setOfertaData({ ...ofertaData, habilidades_blandas: e.target.value }) }} placeholder="Habilidades Blandas - Separados por ," style={{ minWidth: '100%', maxWidth: '100%', minHeight: '50px', maxHeight: '50px' }} />
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Area</h6>
-                                    <select onChange={(e) => { setOfertaData({ ...ofertaData, departamento_area: e.target.value }) }}>
-                                        <option>---</option>
-                                        {
-                                            opcionesFiltros.departamento_area.map(
-                                                d => <option>
-                                                    {d.opcion}
-                                                </option>
-                                            )
-                                        }
-                                    </select>
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Modalidad</h6>
-                                    <select onChange={(e) => { setOfertaData({ ...ofertaData, modalidad: e.target.value }) }}>
-                                        <option>---</option>
-                                        {
-                                            opcionesFiltros.modalidad.map(
-                                                m => <option>
-                                                    {m.opcion}
-                                                </option>
-                                            )
-                                        }
-                                    </select>
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Experencia</h6>
-                                    <input onChange={(e) => { setOfertaData({ ...ofertaData, experiencia: e.target.value }) }} placeholder="Experencia" />
-                                </div>
-                                <div>
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Documento:</h6>
-                                    <input id="documento" style={{ display: 'none'}} type="file" accept="pdf" onChange={handleUploadDocument}/>
-                                    <label htmlFor="documento" className="btn-accion-2" style={{width:'50px', height:'30px'}}>
-                                        <strong>SUBIR</strong>
-                                    </label>
-                                </div>
-                                <div style={{ width: '100%', justifyContent: 'space-around', display: 'flex', marginTop: '1rem' }}>
-                                    <button
-                                        className="btn-accion-cancelar-1"
-                                        onClick={() => { setOpenCreateOferta(false); setDocumento(null) }}
-                                    >
-                                        <strong>CANCELAR</strong>
-                                    </button>
-                                    <button
-                                        onClick={() => { handleCreateOferta() }}
-                                        className="btn-accion-2"
-                                    >
-                                        <strong>CREAR</strong>
-                                    </button>
-                                </div>
-                            </div>
-                            <div style={{ width: '350px', height: '500px' }}>
-                                <embed src={documento} width={'100%'} height={'100%'}></embed>
-                            </div> */}
                         </div>
                     </div>
                 )
