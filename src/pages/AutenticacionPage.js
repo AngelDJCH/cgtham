@@ -297,7 +297,7 @@ export default function AutenticacionPage() {
     }, [])
 
     return (
-        <div className="autenticacion" style={{ height: openRegisterOrg ? 'auto' : null }}>
+        <div className="autenticacion" style={{ height: openRegisterOrg ? 'auto' : null, paddingBottom:'2rem'}}>
             <NavBar opcionesNav={false} />
             {
                 openLogin && (
@@ -345,8 +345,6 @@ export default function AutenticacionPage() {
                 openRegisterOrg && (
                     <div className="contenedor-autenticacion" style={{ flexDirection: 'column', height: 'auto', flexWrap: 'wrap' }}>
                         <div className="contenedor-seccion1">
-
-
                             <input type="file" accept=".png"
                                 id="upload-banner"
                                 onChange={handleChangeBanner}
