@@ -47,7 +47,7 @@ export default function NavBarAutenticado() {
 
                         ><a >Inicio</a></li>
                     )}
-                    {!isMediumDevice && (
+                    {!isMediumDevice && user?.tipo === 'Escuela' && (
                         <li className='opciones'
 
                             onClick={(e) => {
@@ -55,6 +55,33 @@ export default function NavBarAutenticado() {
                             }}
 
                         ><a >Eventos</a></li>
+                    )}
+                    {!isMediumDevice && user?.tipo === 'Empresa' && (
+                        <li className='opciones'
+
+                            onClick={(e) => {
+                                navigate('/ofertaslaborales')
+                            }}
+
+                        ><a >Ofertas Laborales</a></li>
+                    )}
+                    {!isMediumDevice && (user?.tipo === 'Empresa' || user?.tipo === 'Cámara de Comercio') && (
+                        <li className='opciones'
+
+                            onClick={(e) => {
+                                navigate('/convenios')
+                            }}
+
+                        ><a >Convenios</a></li>
+                    )}
+                    {!isMediumDevice && user?.tipo === 'Empresa' && (
+                        <li className='opciones'
+
+                            onClick={(e) => {
+                                navigate('/visitas')
+                            }}
+
+                        ><a >Visitas</a></li>
                     )}
                     {!isMediumDevice && user.rol.includes('ADMIN_SYS') && (
                         <li className='opciones'
