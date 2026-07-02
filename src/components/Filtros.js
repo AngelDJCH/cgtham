@@ -3,7 +3,7 @@ import '../styles/filtros.css'
 
 export default function Filtros(props) {
 
-    const {user} = useAuth()
+    const { user } = useAuth()
 
     return (
         <div className="filtro-contenedor">
@@ -12,22 +12,11 @@ export default function Filtros(props) {
             </h2>
             {
                 props.filtro && (
-                    <input placeholder={props.placeholder} onChange={((e)=>{props.filtro(e.target.value)})}/>
+                    <input placeholder={props.placeholder} onChange={((e) => { props.filtro(e.target.value) })} />
                 )
             }
-            {/* <select>
-                <option>
-                    FILTRAR
-                </option>
-
-                {
-                    props.opciones?.map(
-                        opcion => <option>{opcion}</option>
-                    )
-                }
-            </select> */}
             {
-                props.accion && props?.enableAccion && user.rol.includes('ADMIN_ORG')&& (
+                props.accion && props?.enableAccion && user.rol.includes('ADMIN_ORG') && (
                     <button className="accion"
 
                         onClick={(e) => {
@@ -45,7 +34,7 @@ export default function Filtros(props) {
                 props?.btn_accion_solicitud && (
                     <button
                         className='accion'
-                        onClick={(e)=>{
+                        onClick={(e) => {
                             e.preventDefault()
                             props?.btn_accion_solicitudes(true)
                         }}

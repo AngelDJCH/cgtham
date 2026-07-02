@@ -55,12 +55,12 @@ export default function Visitas() {
 
         if (user.tipo === 'Escuela') {
             vistEscuela()
-        } else if((user.tipo === 'Empresa') || (user.tipo === 'Cámara de Comercio')) {
+        } else if ((user.tipo === 'Empresa') || (user.tipo === 'Cámara de Comercio')) {
             vistEmpresa()
-        }else{
+        } else {
             vistAdministrador()
         }
-        
+
         orgs()
     }, [])
 

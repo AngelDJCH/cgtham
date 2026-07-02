@@ -70,14 +70,14 @@ export default function Sectores() {
                     sectores.map(
                         sector =>
                             <div key={sector.id} className="sector-tarjeta" style={{ transform: valor % 2 == 0 ? 'translateY(-30px)' : 'translateY(30px)' }}>
-                                <div style={{ width: '90%', height:'100px'}} id={`sector${sector.id}`}>
+                                <div style={{ width: '90%', height: '100px' }} id={`sector${sector.id}`}>
                                     <p><strong id="nombre-sector">{sector.nombre}</strong></p>
                                 </div>
                                 <div className="contenedor-imagen-tarjeta">
                                     <img src={sector.imagen} alt={`logo ${sector.imagen}`} />
                                 </div>
                                 <p style={{ display: 'none' }} id="descripcion-sector">{sector.descripcion}</p>
-                                <div style={{width:'100%', padding:'1rem', display:'flex', justifyContent:'center', alignItems:'center'}}>
+                                <div style={{ width: '100%', padding: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <button
                                         className="btn-sector"
 

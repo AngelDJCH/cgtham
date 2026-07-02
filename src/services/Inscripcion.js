@@ -3,12 +3,12 @@ import { axiosInstance } from "./Axios"
 export const createInscripcion = async (id_evento, id_organizacion) => {
     try {
         const date = new Date()
-        const day =  date.getDate()
+        const day = date.getDate()
         const year = date.getFullYear()
         const month = date.getMonth()
-        const {status} = await axiosInstance.post('/inscripcionesEvento/', {
+        const { status } = await axiosInstance.post('/inscripcionesEvento/', {
             estado: 'PENDIENTE',
-            fecha: `${year}-${month < 10 ? '0'+month : month}-${day < 10 ? '0'+day : day}`,
+            fecha: `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`,
             id_evento: id_evento,
             id_organizacion: id_organizacion
         })

@@ -12,19 +12,19 @@ import Sectores from "../components/Sectores";
 
 
 
-export default function LandingPage(){
-    return(
+export default function LandingPage() {
+    return (
         <div>
-            <NavBar opcionesNav={true}/>
-            <Hero/>
-            <Aliados/>
-            <Sectores/>
-            <Impacto/>
-            <Noticias/>
-            <Funcionamiento/>
-            <Historias/>
-            <Cta/>
-            <Footer/>
+            <NavBar opcionesNav={true} />
+            <Hero />
+            <Aliados />
+            <Sectores />
+            <Impacto />
+            <Noticias />
+            <Funcionamiento />
+            <Historias />
+            <Cta />
+            <Footer />
         </div>
     )
 }

@@ -28,8 +28,8 @@ export default function Noticias() {
 
     const obtenerFoto = (evento) => {
         // if (evento?.fotos.length === 1) {
-            return <div style={{ display: 'flex', justifyContent: 'center', width: '150px', height: '250px' }}>
-                <img style={{ width: '100%', height: '100%' }} src={`${evento?.fotos[0]}`} alt={`${evento.organizacion.nombre}`} /></div>
+        return <div style={{ display: 'flex', justifyContent: 'center', width: '150px', height: '250px' }}>
+            <img style={{ width: '100%', height: '100%' }} src={`${evento?.fotos[0]}`} alt={`${evento.organizacion.nombre}`} /></div>
         // }
         // return <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '100%' }}>
         //     <img src={`${evento?.fotos[0]}`} style={{ width: '50%', height: 'auto' }} />
@@ -76,7 +76,7 @@ export default function Noticias() {
                                     </div>
                                     <div className="s4">
                                         <button className="btn-accion-2"
-                                            onClick={()=>{
+                                            onClick={() => {
                                                 setOpenEvento(true);
                                                 setSelectIdEvento(evento.id)
                                             }}
@@ -107,15 +107,15 @@ export default function Noticias() {
                             <div>
                                 <button
                                     className="btn-accion-cancelar-1"
-                                    style={{borderRadius:'100%', width:'40px', height:'40px'}}
+                                    style={{ borderRadius: '100%', width: '40px', height: '40px' }}
                                     onClick={() => { setOpenHistorial(false) }}
 
                                 >
                                     <strong>X</strong>
                                 </button>
                             </div>
-                            <div style={{ width: '90%', height: '80vh', maxHeight: '80vh', overflowY: 'scroll', backgroundColor: 'white'}}>
-                                    <table className="contenedor-tablas-interno" style={{ minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll', width:'100%' }}>
+                            <div style={{ width: '90%', height: '80vh', maxHeight: '80vh', overflowY: 'scroll', backgroundColor: 'white' }}>
+                                <table className="contenedor-tablas-interno" style={{ minHeight: '100px', height: 'auto', maxHeight: '500px', overflowY: 'scroll', width: '100%' }}>
                                     <thead style={{ backgroundColor: 'black', color: 'white' }}>
                                         <tr>
                                             <th>Titulo</th>
@@ -148,7 +148,7 @@ export default function Noticias() {
             }
             {
                 openEvento && (
-                    <VisualizarEvento id_evento={selectIdEvento} accion={setOpenEvento}/>
+                    <VisualizarEvento id_evento={selectIdEvento} accion={setOpenEvento} />
                 )
             }
         </div>

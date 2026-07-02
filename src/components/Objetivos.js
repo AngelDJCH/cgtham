@@ -57,10 +57,11 @@ export default function Objetivos(props) {
                 <button
                     style={{ marginTop: '1rem' }}
                     className="btn-accion"
-                    onClick={(e) => { 
-                    setOpenMision(false)
-                    setOpenVision(false)    
-                    props.accion(false) }}>CERRAR</button>
+                    onClick={(e) => {
+                        setOpenMision(false)
+                        setOpenVision(false)
+                        props.accion(false)
+                    }}>CERRAR</button>
             </div>
         </div>
     )

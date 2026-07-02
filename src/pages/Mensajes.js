@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@uidotdev/usehooks";
 //http://localhost:3040
-const socket = io(process.env.REACT_APP_URL_WEBSOCKET ||'http://localhost:3040', {
+const socket = io(process.env.REACT_APP_URL_WEBSOCKET || 'http://localhost:3040', {
     transports: ['websocket']
 });
 

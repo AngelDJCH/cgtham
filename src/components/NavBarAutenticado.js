@@ -56,7 +56,7 @@ export default function NavBarAutenticado() {
 
                         ><a >Eventos</a></li>
                     )}
-                    {!isMediumDevice && user?.tipo === 'Empresa' && (
+                    {!isMediumDevice && (user?.tipo === 'Empresa' || user?.tipo === 'Cámara de Comercio') && (
                         <li className='opciones'
 
                             onClick={(e) => {
@@ -119,7 +119,6 @@ export default function NavBarAutenticado() {
 
                         ><a >Comentarios</a></li>
                     )}
-
                     {
                         !isMediumDevice && (
                             <li
@@ -133,13 +132,10 @@ export default function NavBarAutenticado() {
                             </li>
                         )
                     }
-
-
                     <li>
                         <button
                             style={{ border: 'none', backgroundColor: 'transparent' }}
                             onClick={(e) => { open === true ? setOpen(false) : setOpen(true) }}
-
                         >
                             <img src={logoOrganizacion} alt={''} style={{ width: '50px', height: '50px', borderRadius: '100%' }} />
                         </button>
@@ -151,108 +147,109 @@ export default function NavBarAutenticado() {
                 open && (
                     <div className='opcioenes-emergentes'>
                         <ul>
-                            <li className='opciones'
-
-                                onClick={(e) => { navigate('/home') }}
-
-                            ><a >Inicio</a></li>
-                            <li className='opciones'
-
-                                onClick={(e) => {
-                                    navigate('/eventos')
-                                }}
-
-                            ><a >Eventos</a></li>
                             {
-                                user.tipo === 'Escuela' || user.tipo === 'Empresa' && (
+                                isMediumDevice && (
                                     <li className='opciones'
-
+                                        onClick={(e) => { navigate('/home') }}
+                                    ><a >Inicio</a></li>
+                                )
+                            }
+                            {
+                                (isMediumDevice || user.rol.includes('ADMIN_SYS')) && (
+                                    <li className='opciones'
+                                        onClick={(e) => {
+                                            navigate('/mensajes')
+                                        }}
+                                    ><a >Mensajes</a></li>
+                                )
+                            }
+                            {
+                                isMediumDevice && (user?.tipo === 'Empresa' || user?.tipo === 'Cámara de Comercio') && (
+                                    <li className='opciones'
+                                        onClick={(e) => {
+                                            navigate('/inscripciones')
+                                        }}
+                                    ><a >Inscripciones</a></li>
+                                )
+                            }
+                            {
+                                (isMediumDevice || user.rol.includes('ADMIN_SYS')) && (
+                                    <li className='opciones'
+                                        onClick={(e) => {
+                                            navigate('/eventos')
+                                        }}
+                                    ><a >Eventos</a></li>
+                                )
+                            }
+                            {
+                                (isMediumDevice || user.rol.includes('ADMIN_SYS')) && (
+                                    <li className='opciones'
+                                        onClick={(e) => {
+                                            navigate('/cursos')
+                                        }}
+                                    ><a >Cursos</a></li>
+                                )
+                            }
+                            {
+                                (isMediumDevice || user.rol.includes('ADMIN_SYS')) && (
+                                    <li className='opciones'
                                         onClick={(e) => {
                                             navigate('/ofertaslaborales')
                                         }}
-
                                     ><a >Ofertas Laborales</a></li>
                                 )
                             }
                             {
-                                user.rol.includes('ADMIN_SYS') && (
+                                ((isMediumDevice && user.rol.includes('ADMIN_SYS')) || user.rol.includes('ADMIN_SYS')) && (
                                     <li className='opciones'
-
                                         onClick={(e) => {
                                             navigate('/organizaciones')
                                         }}
-
                                     ><a >Organizaciones</a></li>
                                 )
                             }
                             <li className='opciones'
-
                                 onClick={(e) => {
                                     navigate(`/organizacion/${user.organizacion}`)
                                 }}
-
                             ><a >Organizacion</a></li>
                             {
-                                user.rol.includes('ADMIN_SYS') && (
+                                isMediumDevice && user.rol.includes('ADMIN_SYS') && (
                                     <li className='opciones'
-
                                         onClick={(e) => {
                                             navigate('/historicos')
                                         }}
-
                                     ><a >Historicos</a></li>
                                 )
                             }
-                            {!isMediumDevice && (
+                            {(isMediumDevice || user.rol.includes('ADMIN_SYS')) && (
                                 <li className='opciones'
-
                                     onClick={(e) => {
                                         navigate('/comentarios')
                                     }}
-
                                 ><a >Comentarios</a></li>
                             )}
-                            {!isMediumDevice && (
-                                <li className='opciones'
-
-                                    onClick={(e) => {
-                                        navigate('/convenios')
-                                    }}
-
-                                ><a >Convenios</a></li>
-                            )}
-                            {isMediumDevice && (
-                                <li className='opciones'
-
-                                    onClick={(e) => {
-                                        navigate('/cursos')
-                                    }}
-
-                                ><a >Cursos</a></li>
-                            )}
-                            {isMediumDevice && (
-                                <li className='opciones'
-
-                                    onClick={(e) => {
-                                        navigate('/visitas')
-                                    }}
-
-                                ><a >Visitas</a></li>
-                            )}
-                            {isMediumDevice && (
-                                <li className='opciones'
-
-                                    onClick={(e) => {
-                                        navigate('/mensajes')
-                                    }}
-
-                                ><a >Mensajes</a></li>
-                            )}
+                            {
+                                (isMediumDevice || user.rol.includes('ADMIN_SYS')) && (
+                                    <li className='opciones'
+                                        onClick={(e) => {
+                                            navigate('/convenios')
+                                        }}
+                                    ><a >Convenios</a></li>
+                                )
+                            }
+                            {
+                                (isMediumDevice || user.rol.includes('ADMIN_SYS')) && (
+                                    <li className='opciones'
+                                        onClick={(e) => {
+                                            navigate('/visitas')
+                                        }}
+                                    ><a >Visitas</a></li>
+                                )
+                            }
                             <li
                                 onClick={async (e) => {
-
                                     const status = await logout()
-
                                     status === 204 ? navigate('/') : navigate('/home')
                                 }}
                             >Salir</li>

@@ -23,9 +23,9 @@ export const logout = async () => {
 export const createCuenta = async (correo, contrasenia, id_organizacion) => {
     try {
         const data = {
-            correo : correo,
-            contrasenia : contrasenia,
-            id_organizacion : id_organizacion
+            correo: correo,
+            contrasenia: contrasenia,
+            id_organizacion: id_organizacion
         }
         const resCuenta = await axiosInstance.post('/cuentas/', data)
         return resCuenta
@@ -37,9 +37,9 @@ export const createCuenta = async (correo, contrasenia, id_organizacion) => {
 export const updateCuentaCorreoById = async (cuenta) => {
     try {
         const cuentaData = {
-            correo : cuenta.correo,
+            correo: cuenta.correo,
         }
-        const {status} = await axiosInstance.put(`/cuentas/correo/${cuenta.id}`, cuentaData)
+        const { status } = await axiosInstance.put(`/cuentas/correo/${cuenta.id}`, cuentaData)
         return status
     } catch (error) {
         return error.response.status
@@ -49,9 +49,9 @@ export const updateCuentaCorreoById = async (cuenta) => {
 export const updateCuentaContraseniaById = async (cuenta) => {
     try {
         const cuentaData = {
-            contrasenia : cuenta.contrasenia
+            contrasenia: cuenta.contrasenia
         }
-        const {status} = await axiosInstance.put(`/cuentas/contrasenia/${cuenta.id}`, cuentaData)
+        const { status } = await axiosInstance.put(`/cuentas/contrasenia/${cuenta.id}`, cuentaData)
         return status
     } catch (error) {
         return error.response.status

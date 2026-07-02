@@ -3,9 +3,9 @@ import { axiosInstance } from "./Axios"
 
 export const createVisita = async (id_escuela, id_empresa) => {
     try {
-        const {status} = await axiosInstance.post('/visitas/', {
-            id_escuela : id_escuela,
-            id_empresa : id_empresa
+        const { status } = await axiosInstance.post('/visitas/', {
+            id_escuela: id_escuela,
+            id_empresa: id_empresa
         })
         return status
     } catch (error) {
@@ -16,7 +16,7 @@ export const createVisita = async (id_escuela, id_empresa) => {
 
 export const deleteByIdForEscuelas = async (id_visita) => {
     try {
-        const {status} = await axiosInstance.delete(`/visitas/${id_visita}`)
+        const { status } = await axiosInstance.delete(`/visitas/${id_visita}`)
         return status
     } catch (error) {
         return error.response.status
@@ -25,7 +25,7 @@ export const deleteByIdForEscuelas = async (id_visita) => {
 
 export const allVisitasByIdEscuela = async (id_escuela) => {
     try {
-        const {data} = await axiosInstance.get(`/visitas/escuela/${id_escuela}`)
+        const { data } = await axiosInstance.get(`/visitas/escuela/${id_escuela}`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER TODAS LAS VISITAS')
@@ -34,7 +34,7 @@ export const allVisitasByIdEscuela = async (id_escuela) => {
 
 export const allVisitasForAdministrador = async () => {
     try {
-        const {data} = await axiosInstance.get(`/visitas/administrador`)
+        const { data } = await axiosInstance.get(`/visitas/administrador`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER TODAS LAS VISITAS')
@@ -43,7 +43,7 @@ export const allVisitasForAdministrador = async () => {
 
 export const allVisitasByIdEmpresa = async (id_empresa) => {
     try {
-        const {data} = await axiosInstance.get(`/visitas/empresa/${id_empresa}`)
+        const { data } = await axiosInstance.get(`/visitas/empresa/${id_empresa}`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER TODAS LAS VISITAS')
@@ -52,7 +52,7 @@ export const allVisitasByIdEmpresa = async (id_empresa) => {
 
 export const updateEstadoRechazadaById = async (id_visita) => {
     try {
-        const {status} = await axiosInstance.put(`/visitas/estado/${id_visita}`)
+        const { status } = await axiosInstance.put(`/visitas/estado/${id_visita}`)
         return status
     } catch (error) {
         return error.response.status
@@ -61,7 +61,7 @@ export const updateEstadoRechazadaById = async (id_visita) => {
 
 export const findById = async (id_visita) => {
     try {
-        const {data} = await axiosInstance.get(`/visitas/${id_visita}`)
+        const { data } = await axiosInstance.get(`/visitas/${id_visita}`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER LA VISITA')
@@ -70,7 +70,7 @@ export const findById = async (id_visita) => {
 
 export const updateVisitaById = async (fecha_visita, id) => {
     try {
-        const {status} = await axiosInstance.put(`/visitas/${id}`, {fecha_visita : fecha_visita})
+        const { status } = await axiosInstance.put(`/visitas/${id}`, { fecha_visita: fecha_visita })
         return status
     } catch (error) {
         return error.response.status

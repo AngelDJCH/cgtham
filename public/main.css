@@ -119,6 +119,10 @@ table {
     border-collapse: collapse;
 }
 
+table th {
+    width: 100px;
+}
+
 table tr td {
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -286,6 +290,7 @@ table tr td {
         height: 80%;
         width: 100%;
     }
+
 }
 
 .editar-perfil-contenedor {

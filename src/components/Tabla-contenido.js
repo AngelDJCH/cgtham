@@ -198,7 +198,7 @@ export default function TablaContenido(props) {
                                                         setOpenEditarComentario(true)
                                                     }}
                                                 >
-                                                    EDITAR
+                                                    <strong>EDITAR</strong>
                                                 </button>
                                             )
                                         }
@@ -217,7 +217,7 @@ export default function TablaContenido(props) {
 
                                                     className='btn-accion-cancelar-1'
                                                 >
-                                                    ELIMINAR
+                                                    <strong>ELIMINAR</strong>
                                                 </button>
                                             )
                                         }
@@ -365,7 +365,7 @@ export default function TablaContenido(props) {
                                     <td>{convenio.registro.split('T')[0]}</td>
                                     <td>{convenio.inicio.split('T')[0]}</td>
                                     <td>{convenio.final.split('T')[0]}</td>
-                                    <td>
+                                    <td style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
                                         <button
                                             className='btn-accion-2'
                                             onClick={() => { setOpenConvenio(true); setIdConvenio(convenio?.id); setIdOrganizacion(convenio?.organizacion.id) }}
@@ -386,15 +386,6 @@ export default function TablaContenido(props) {
                                                     className='btn-accion-cancelar-1'
                                                 >
                                                     <strong>ELIMINAR</strong>
-                                                </button>
-                                            )
-                                        }
-                                        {
-                                            convenio.organizacion.id === user.organizacion && !user.rol.includes('ADMIN_SYS') && (
-                                                <button
-                                                    className='btn-accion-2'
-                                                >
-                                                    <strong>EDITAR</strong>
                                                 </button>
                                             )
                                         }
@@ -431,7 +422,7 @@ export default function TablaContenido(props) {
                                             }}
                                         ><strong>VISUALIZAR</strong></button>
                                         {
-                                           ( user.organizacion === curso.organizacion.id || user.tipo === 'Comité' ) && (
+                                            (user.organizacion === curso.organizacion.id || user.tipo === 'Comité') && (
                                                 <button className='btn-accion-cancelar-1'
                                                     onClick={() => { handleEliminarCurso(curso.id) }}
                                                 >
@@ -445,7 +436,7 @@ export default function TablaContenido(props) {
                         }
 
                         {
-                            user.tipo != 'Comité' && props.visitasTabla?.filter(f=>props.filtro ? f.empresa.nombre.includes(props?.filtro) : f).map(
+                            user.tipo != 'Comité' && props.visitasTabla?.filter(f => props.filtro ? f.empresa.nombre.includes(props?.filtro) : f).map(
                                 visita => <tr>
                                     <td>{visita.id}</td>
                                     <td>{visita.escuela ? visita.escuela.nombre : visita.empresa.nombre}</td>
@@ -496,13 +487,13 @@ export default function TablaContenido(props) {
                                     <td>{visita?.empresa}</td>
                                     <td><button
                                         className='btn-accion-cancelar-1'
-                                        onClick={async(e)=>{
+                                        onClick={async (e) => {
                                             e.preventDefault()
                                             const status = await deleteByIdForEscuelas(visita?.id)
-                                            if(status===204){
+                                            if (status === 204) {
                                                 navigate(0)
                                                 alert('VISITA ELIMINADA')
-                                            }else{
+                                            } else {
                                                 alert('LA VISITA NO SE PUDO ELIMINAR')
                                             }
                                         }}

@@ -30,21 +30,21 @@ export default function Footer() {
                 <div className='f-contenedor-lista-h'>
                     <ul>
                         <li
-                            style={{cursor:'pointer'}}
+                            style={{ cursor: 'pointer' }}
                             onClick={(e) => {
                                 setOpenPolitica(true);
                             }}
 
                         >Politica de Privacidad</li>
                         <li
-                            style={{cursor:'pointer'}}
+                            style={{ cursor: 'pointer' }}
                             onClick={(e) => {
                                 setOpenTerminos(true);
                             }}
 
                         >Términos de Uso</li>
                         <li
-                            style={{cursor:'pointer'}}
+                            style={{ cursor: 'pointer' }}
                             onClick={(e) => {
                                 setOpenAccesibilidad(true)
                             }}
@@ -74,17 +74,17 @@ export default function Footer() {
                 </div>
                 <ul>
                     <li
-                    style={{cursor:'pointer'}}
-                    onClick={()=>{
-                        setOpenMision(true)
-                    }}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            setOpenMision(true)
+                        }}
 
                     >Misión</li>
                     <li
-                    style={{cursor:'pointer'}}
-                    onClick={()=>{
-                        setOpenVision(true)
-                    }}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            setOpenVision(true)
+                        }}
 
                     >Visión</li>
                 </ul>
@@ -104,31 +104,31 @@ export default function Footer() {
 
             {
                 openPolitica && (
-                    <PoliticaPrivacidad accion={setOpenPolitica}/>
+                    <PoliticaPrivacidad accion={setOpenPolitica} />
                 )
             }
 
             {
                 openTerminos && (
-                    <Terminos accion={setOpenTerminos}/>
+                    <Terminos accion={setOpenTerminos} />
                 )
             }
 
             {
                 openAccesibilidad && (
-                    <Accesibilidad accion={setOpenAccesibilidad}/>
+                    <Accesibilidad accion={setOpenAccesibilidad} />
                 )
             }
 
             {
                 openMision && (
-                    <Mision accion={setOpenMision}/>
+                    <Mision accion={setOpenMision} />
                 )
             }
 
             {
                 openVision && (
-                    <Vision accion={setOpenVision}/>
+                    <Vision accion={setOpenVision} />
                 )
             }
         </div>

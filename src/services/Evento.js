@@ -4,16 +4,16 @@ import { axiosInstance } from "./Axios";
 export const createEvento = async (evento) => {
     try {
         const dataEvento = {
-            titulo : evento.titulo,
-            descripcion : evento.descripcion,
-            tipo : evento.tipo,
-            estado : 'ACTIVO',
-            id_organizacion : evento.id_organizacion,
-            fecha_inicio : evento.fecha_inicio,
-            fecha_final : evento.fecha_final
+            titulo: evento.titulo,
+            descripcion: evento.descripcion,
+            tipo: evento.tipo,
+            estado: 'ACTIVO',
+            id_organizacion: evento.id_organizacion,
+            fecha_inicio: evento.fecha_inicio,
+            fecha_final: evento.fecha_final
         }
 
-        const {data} = await axiosInstance.post('/eventos/', dataEvento)
+        const { data } = await axiosInstance.post('/eventos/', dataEvento)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL CREAR UN EVENTO')
@@ -36,14 +36,14 @@ export const eventosLandingPage = async () => {
 }
 
 export const eventosByIdUsuario = async (id_usuario) => {
-    const {data} =  await axiosInstance.get(`/eventos/usuario/${id_usuario}`)
-    return data    
+    const { data } = await axiosInstance.get(`/eventos/usuario/${id_usuario}`)
+    return data
 }
 
 
 export const eventoById = async (id_evento) => {
     try {
-        const {data} = await axiosInstance.get(`/eventos/${id_evento}`)
+        const { data } = await axiosInstance.get(`/eventos/${id_evento}`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER UN EVENTO')
@@ -53,13 +53,13 @@ export const eventoById = async (id_evento) => {
 export const updateEventoById = async (evento) => {
     try {
         const dataEvento = {
-            titulo : evento.titulo,
-            descripcion : evento.descripcion,
-            tipo : evento.tipo,
-            fecha_inicio : evento.fecha_inicio.split('T')[0],
-            fecha_final : evento.fecha_final.split('T')[0]
+            titulo: evento.titulo,
+            descripcion: evento.descripcion,
+            tipo: evento.tipo,
+            fecha_inicio: evento.fecha_inicio.split('T')[0],
+            fecha_final: evento.fecha_final.split('T')[0]
         }
-        const {status} = await axiosInstance.put(`/eventos/${evento.id}`, dataEvento)
+        const { status } = await axiosInstance.put(`/eventos/${evento.id}`, dataEvento)
         return status
     } catch (error) {
         return error.response.status
@@ -77,7 +77,7 @@ export const deleteEventoById = async (id_evento) => {
 
 export const findParticipantesPendientesByIdEvento = async (id_evento) => {
     try {
-        const {data} = await axiosInstance.get(`/inscripcionesEvento/pendientes/${id_evento}`)
+        const { data } = await axiosInstance.get(`/inscripcionesEvento/pendientes/${id_evento}`)
         return data
     } catch (error) {
         return null
@@ -86,7 +86,7 @@ export const findParticipantesPendientesByIdEvento = async (id_evento) => {
 
 export const getDashEventos = async () => {
     try {
-        const {data} = await axiosInstance.get('/eventos/dash')
+        const { data } = await axiosInstance.get('/eventos/dash')
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER LOS EVENTOS')

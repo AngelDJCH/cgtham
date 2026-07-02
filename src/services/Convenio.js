@@ -53,7 +53,7 @@ export const updateConvenioById = async (id_convenio, convenio) => {
 
 export const getDashConvenios = async () => {
     try {
-        const {data} = await axiosInstance.get('/convenios/dash')
+        const { data } = await axiosInstance.get('/convenios/dash')
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER LOS CONVENIOS')

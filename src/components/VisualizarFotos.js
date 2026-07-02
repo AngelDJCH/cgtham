@@ -19,17 +19,17 @@ export default function VisualizarFotos(props) {
     return (
         <div>
             <div className="overllay"></div>
-            <div className="overllay-contenedor" style={{backgroundColor:'white'}}>
-                <div style={{ display: 'flex', width: '600px', height: 'auto', flexDirection:'column', gap:'1rem', justifyContent:'center', alignItems:'center'}}>
-                    <div style={{width:'250px', height:'450px', display:'flex', justifyContent:'center'}}>
-                        <img src={fotoSeleccionada} style={{width:'100%', height:'100%', margin:0}}/>
+            <div className="overllay-contenedor" style={{ backgroundColor: 'white' }}>
+                <div style={{ display: 'flex', width: '600px', height: 'auto', flexDirection: 'column', gap: '1rem', justifyContent: 'center', alignItems: 'center' }}>
+                    <div style={{ width: '250px', height: '450px', display: 'flex', justifyContent: 'center' }}>
+                        <img src={fotoSeleccionada} style={{ width: '100%', height: '100%', margin: 0 }} />
                     </div>
-                    <div style={{width:'100%', height:'50px',maxWidth: '100%',  overflowX: 'scroll', overflowY: 'hidden', display:'flex', gap:'1rem', scrollbarWidth:'none', justifyContent:'center'}}>
+                    <div style={{ width: '100%', height: '50px', maxWidth: '100%', overflowX: 'scroll', overflowY: 'hidden', display: 'flex', gap: '1rem', scrollbarWidth: 'none', justifyContent: 'center' }}>
                         {
                             fotos?.map(
-                                foto => <div style={{width:'40px', height:'40px', cursor:'pointer'}}>
-                                    <img src={foto} style={{ width: '100%', height: '100%', objectFit:'cover' }} 
-                                    onClick={()=>{setFotoSeleccionada(foto)}}
+                                foto => <div style={{ width: '40px', height: '40px', cursor: 'pointer' }}>
+                                    <img src={foto} style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        onClick={() => { setFotoSeleccionada(foto) }}
                                     />
                                 </div>
                             )
@@ -38,8 +38,8 @@ export default function VisualizarFotos(props) {
                 </div>
                 <div>
                     <button
-                    onClick={()=>{props?.accion(false)}}
-                    className="btn-accion-cancelar-1"
+                        onClick={() => { props?.accion(false) }}
+                        className="btn-accion-cancelar-1"
                     >
                         <strong>
                             CERRAR

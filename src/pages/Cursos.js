@@ -341,7 +341,7 @@ export default function Cursos() {
                                         <div className="contenedor-botones-formulario">
                                             <button
                                                 className="btn-accion-cancelar-1"
-                                                onClick={() => { setLoading(true);setOpenCurso(false); setEnable(false) }}
+                                                onClick={() => { setLoading(true); setOpenCurso(false); setEnable(false) }}
                                             ><strong>CERRAR</strong></button>
                                             {user.tipo === 'Escuela'
                                                 && (<button
@@ -357,7 +357,7 @@ export default function Cursos() {
                                                 user.tipo != 'Escuela' && user.tipo != 'Comité' && (
                                                     <button
                                                         className="btn-accion-2"
-                                                        onClick={() => { setLoading(true);handleParticipar(curso?.id) }}
+                                                        onClick={() => { setLoading(true); handleParticipar(curso?.id) }}
                                                     ><strong>PARTICIPAR</strong></button>
                                                 )
                                             }

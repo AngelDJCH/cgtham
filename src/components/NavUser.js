@@ -53,14 +53,14 @@ export default function NavUser(props) {
                 {
                     user.tipo != 'Comité' && (
                         <li
-                
-                onClick={()=>{
-                    navigate(`/mensajes`)
-                }}
-                >
-                    <img alt='mensajes' src={img_mensajes}/>
-                    <p>Mensajes</p>
-                </li>
+
+                            onClick={() => {
+                                navigate(`/mensajes`)
+                            }}
+                        >
+                            <img alt='mensajes' src={img_mensajes} />
+                            <p>Mensajes</p>
+                        </li>
                     )
                 }
                 {

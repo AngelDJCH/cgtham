@@ -90,8 +90,8 @@ export default function VisualizarEvento(props) {
     }, [])
 
 
-    useEffect(()=>{
-        const pendientes = async()=>{
+    useEffect(() => {
+        const pendientes = async () => {
             const res = await findParticipantesPendientesByIdEvento(props?.id_evento)
 
             console.log(res)
@@ -99,7 +99,7 @@ export default function VisualizarEvento(props) {
         }
 
         pendientes()
-    },[props?.id_evento])
+    }, [props?.id_evento])
 
     const isSmallDevice = useMediaQuery('(max-width:768px)');
     const isMediumDevice = useMediaQuery('(max-width: 1024px)');

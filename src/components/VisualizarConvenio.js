@@ -213,7 +213,7 @@ export default function VisualizarConvenio(props) {
                                                     <button className="btn-accion-2"
                                                         onClick={() => { setOpenAdministracion(true) }}
                                                     >
-                                                        ADMINISTRAR
+                                                        <strong>ADMINISTRAR</strong>
                                                     </button>
                                                 </div>
                                             )
@@ -326,17 +326,20 @@ export default function VisualizarConvenio(props) {
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
-                            <div style={{ width: '90%', height: '90%' }}>
+                            <div style={{ width: '90%', height: '90%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                 <iframe
                                     src={`https://docs.google.com/gview?url=${encodeURIComponent(convenio?.archivo)}&embedded=true`}
                                     width="100%"
-                                    height="100%"
+                                    height="95%"
                                     style={{ border: 'none' }}
                                 />
-                                <div><button
-                                    className="btn-accion-cancelar-1"
-                                    onClick={() => { setOpenDocumento(false) }}
-                                ><strong>CERRAR</strong></button></div>
+                                <div style={{ display: "flex", justifyContent: 'flex-end' }}>
+                                    <button
+                                        className="btn-accion-cancelar-1"
+                                        onClick={() => { setOpenDocumento(false) }}
+                                    ><strong>CERRAR</strong>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -351,7 +354,7 @@ export default function VisualizarConvenio(props) {
                                 width: '90%', height: '80vh', padding: '1rem', backgroundColor: 'white', display: 'flex', flexDirection: 'column',
                                 justifyContent: 'space-around', alignItems: 'center', gap: '1rem'
                             }}>
-                                <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100%', maxHeight: '100%', overflowY: 'scroll' }}>
+                                <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100%', maxHeight: '100%' }}>
                                     <h1>ADMINISTRACIÓN DE PARTICIPANTES</h1>
                                     <table className="contenedor-tablas-interno">
                                         <thead>
@@ -369,7 +372,7 @@ export default function VisualizarConvenio(props) {
                                                         <td>{participante.organizacion.nombre}</td>
                                                         <td>PARTICIPANTE</td>
                                                         <td>{participante.estado ? 'APROBADO' : 'PENDIENTE'}</td>
-                                                        <td>
+                                                        <td style={{ display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center', alignItems: 'center' }}>
                                                             {
                                                                 !participante.estado && (
                                                                     <button className="btn-accion-cancelar-1"

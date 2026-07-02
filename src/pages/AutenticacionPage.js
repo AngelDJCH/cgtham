@@ -224,8 +224,8 @@ export default function AutenticacionPage() {
     const deleteRegister = async ({ contacto, direccion, organizacion }) => {
         let resOrg = null
         if (organizacion) resOrg = await deleteOrganizacionById(organizacion.id)
-        if (resOrg!=204 && contacto) await deleteContactoById(contacto.id)
-        if (resOrg!=204 &&direccion) await deleteDireccionById(direccion.id)
+        if (resOrg != 204 && contacto) await deleteContactoById(contacto.id)
+        if (resOrg != 204 && direccion) await deleteDireccionById(direccion.id)
         return
     }
 
@@ -297,7 +297,7 @@ export default function AutenticacionPage() {
     }, [])
 
     return (
-        <div className="autenticacion" style={{ height: openRegisterOrg ? 'auto' : null, paddingBottom:'2rem'}}>
+        <div className="autenticacion" style={{ height: openRegisterOrg ? 'auto' : null, paddingBottom: '2rem' }}>
             <NavBar opcionesNav={false} />
             {
                 openLogin && (

@@ -28,7 +28,7 @@ export default function Historias() {
                 <h2>Voces de nuestra comunidad</h2>
             </div>
             <div className="comentarios-contenedor">
-                    {
+                {
                     comentarios.map(
                         comentario => <div className="comentario-tarjeta">
                             <div className="comentario-imagen-contenedor">
@@ -41,7 +41,7 @@ export default function Historias() {
                             </div>
                         </div>
                     )
-                }                
+                }
             </div>
         </div>
     )
