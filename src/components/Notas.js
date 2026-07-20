@@ -108,7 +108,7 @@ export default function Notas() {
                 <div>
                   <p style={{ fontFamily: 'Poppins', textAlign: 'center', fontSize: '13px' }}>{evento.fecha_inicio.split('T')[0]} <strong>/</strong> {evento.fecha_final.split('T')[0]}</p>
                 </div>
-                <div style={{ width: '100%', height: '50px', display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
+                <div style={{ width: '100%', height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'end', alignItems: 'center'}}>
                   <button className="btn-accion-2"
                     onClick={() => {
                       setIdEvento(evento.id)

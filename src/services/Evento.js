@@ -12,7 +12,6 @@ export const createEvento = async (evento) => {
             fecha_inicio: evento.fecha_inicio,
             fecha_final: evento.fecha_final
         }
-
         const { data } = await axiosInstance.post('/eventos/', dataEvento)
         return data
     } catch (error) {

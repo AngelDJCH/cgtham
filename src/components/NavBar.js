@@ -17,11 +17,8 @@ export default function NavBar(props) {
             <div className="seccion1"
             >
                 <div style={{ width: '50px', height: '50px' }}><img src={logo} alt="" /></div>
-
                 <h1
-
                     onClick={() => { navigate('/') }}
-
                 >{nombre}</h1>
 
             </div>
@@ -77,12 +74,10 @@ export default function NavBar(props) {
                                     className='btn-accion'
                                     style={{ width: 'auto', paddingLeft: '1rem', paddingRight: '1rem' }}
                                     onClick={(e) => { navigate('/login') }}
-
                                 >
                                     LOGIN
                                 </button>
                             </li>
-
                         )
                     }
                 </ul>

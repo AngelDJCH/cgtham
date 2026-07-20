@@ -12,9 +12,7 @@ export default function Cta() {
             </div>
             <h2 className='texto-informativo'>¿Listo/a para ser parte de la transformación?</h2>
             <button
-
                 onClick={() => { navigate('/register_org') }}
-
             >REGISTRARME</button>
         </div>
     )

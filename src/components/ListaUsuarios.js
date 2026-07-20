@@ -158,7 +158,6 @@ export default function ListaUsuarios(props) {
                       )
                     }
                   </li>
-
                 )
               }
             </ul>

@@ -23,7 +23,6 @@ export default function Filtros(props) {
                             e.preventDefault()
                             props.btn_accion(true)
                         }}
-
                     >
                         {props.accion}
                     </button>

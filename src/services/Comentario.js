@@ -22,7 +22,6 @@ export const updateComentarioByEstado = async (id_comentario, estado, id_adminis
             estado: estado,
             id_administrador: id_administrador
         }
-
         const { status } = await axiosInstance.put(`/comentarios/estado/${id_comentario}`, data_update)
         return status
     } catch (error) {
@@ -37,7 +36,6 @@ export const createComentario = async (contenido, id_usuario) => {
             estado: 'Pendiente',
             id_usuario: id_usuario
         }
-
         const { status } = await axiosInstance.post('/comentarios/', dataComentario)
         return status
     } catch (error) {

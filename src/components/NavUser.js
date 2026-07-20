@@ -39,12 +39,10 @@ export default function NavUser(props) {
                 </li>
                 {
                     user.rol.includes('ADMIN_ORG') ? <li
-
                         onClick={(e) => {
                             console.log(user)
                             navigate(`/organizacion/${user.organizacion}`)
                         }}
-
                     >
                         <img src={img_organizacion} alt='Organizacion' />
                         <p>Organizacion</p>
@@ -53,7 +51,6 @@ export default function NavUser(props) {
                 {
                     user.tipo != 'Comité' && (
                         <li
-
                             onClick={() => {
                                 navigate(`/mensajes`)
                             }}

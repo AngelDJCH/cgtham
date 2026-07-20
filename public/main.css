@@ -269,16 +269,18 @@ table tr td {
 
 
 .contenedor-botones-formulario{
-    width: 50%;
+    width: 100%;
     height: 10vh;
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
+    margin-right : 1rem;
 }
 
 @media(max-width:768px),(max-width:1024px){
     .contenedor-botones-formulario{
         width: 100%;
+            margin-right : 0rem;
     }
 
     .formulario-contenedor{

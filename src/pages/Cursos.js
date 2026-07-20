@@ -97,6 +97,7 @@ export default function Cursos() {
         } else {
             alert('NO SE PUDO REALIZAR LA INSCRIPCION')
         }
+        setLoading(false)
     }
 
     useEffect(() => {

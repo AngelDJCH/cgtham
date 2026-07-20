@@ -30,7 +30,6 @@ export const updateEmpresaById = async (empresa) => {
             regimen_fiscal: empresa.regimen_fiscal,
             direccion_fiscal: empresa.direccion_fiscal
         }
-
         const { status } = await axiosInstance.put(`/empresas/${empresa.id}`, empresaData)
         return status
     } catch (error) {

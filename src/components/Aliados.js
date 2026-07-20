@@ -171,7 +171,6 @@ export default function Aliados() {
                         )
                     }
                 </div>
-
             </div>
         </div>
     )

@@ -28,7 +28,6 @@ export const updateCamaraById = async (camara) => {
             nombre: camara.nombre,
             presidente: camara.presidente
         }
-
         const { status } = await axiosInstance.put(`/camaras/${camara.id}`, camaraData)
         return status
     } catch (error) {

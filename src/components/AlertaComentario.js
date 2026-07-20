@@ -7,16 +7,12 @@ import { useMediaQuery } from "@uidotdev/usehooks"
 export default function AlertaComentario(
     props
 ) {
-
-    const isSmallDevice = useMediaQuery('(max-width:768px)')
-
+    
+    const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width:1024px)')
     const [countCantidad, setCountCantidad] = useState(0)
-
     const [contenido, setContenido] = useState('')
-
     const navigate = useNavigate()
     const { user } = useAuth()
-
     const create = async () => {
         const res = await createComentario(contenido, user.organizacion)
         if (res != 201) alert('No se pudo crear el comentario - Error')
@@ -55,16 +51,16 @@ export default function AlertaComentario(
                         <button
                             className="btn-accion-2"
                             onClick={(e) => {
-                                    e.preventDefault()
-                                    if (contenido.length === 0 || contenido.length <= 10 || contenido.length > 70) {
-                                        alert('El comentario debe de tener mas de 12 y menos de 70 caracteres')
-                                    }else{
-                                        alert('Comentario publicado con exito')
-                                        create()
-                                        props.btn_accion(false)
-                                        navigate(0)
-                                    }
+                                e.preventDefault()
+                                if (contenido.length === 0 || contenido.length <= 10 || contenido.length > 70) {
+                                    alert('El comentario debe de tener mas de 12 y menos de 70 caracteres')
+                                } else {
+                                    alert('Comentario publicado con exito')
+                                    create()
+                                    props.btn_accion(false)
+                                    navigate(0)
                                 }
+                            }
                             }
                         >
                             <strong>

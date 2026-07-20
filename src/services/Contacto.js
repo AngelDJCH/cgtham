@@ -17,7 +17,6 @@ export const createContacto = async (correo, telefono) => {
             correo: correo,
             telefono: telefono
         }
-
         const id_contacto = await axiosInstance.post('/contactos/', data)
         return id_contacto.data
     } catch (error) {
@@ -31,7 +30,6 @@ export const updateContactoById = async (contacto) => {
             correo: contacto.correo,
             telefono: contacto.telefono
         }
-
         const { status } = await axiosInstance.put(`/contactos/${contacto.id}`, contactoData)
         return status
     } catch (error) {

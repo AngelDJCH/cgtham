@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
                 const {data} = await axiosInstance.get('/cuentas/verify')
                 setUser(data)
             } catch (error) {
+                
                 setUser(null)
             } finally {
                 setLoading(false)

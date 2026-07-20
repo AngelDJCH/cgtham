@@ -41,7 +41,6 @@ export default function InscripcionAlterta(props) {
                                     console.log(error)
                                 }
                             }}
-
                         ><strong>ACEPTAR</strong></button>
                     </div>
 
