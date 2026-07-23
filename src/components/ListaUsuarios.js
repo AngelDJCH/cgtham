@@ -160,6 +160,39 @@ export default function ListaUsuarios(props) {
                   </li>
                 )
               }
+              {
+                !busqueda && (
+                  <li className='titulos-lista'><strong>ADMINISTRADOR</strong></li>
+                )
+              }
+
+              {
+                organizaciones?.filter(f => f.nombre_comercial.toLowerCase().startsWith(busqueda.toLowerCase())).filter(f => f.tipo === 'Comité').map(
+                  o => <li className='usuario-contenedor' key={o.id}>
+                    <div className='logo-organizacion-contenedor'>
+
+                      <img src={o.logo} alt={o.nombre_comercial} />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'start', width: '200px' }}>
+                      <p
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          navigate(`/organizacion/${o.id}`)
+                        }}
+                      >{o.nombre_comercial}</p>
+                    </div>
+                    {
+                      props?.mensaje && (
+                        <img src={img_mensaje} style={{ marginRight: '0.2rem', cursor: 'pointer' }}
+                          onClick={() => {
+                            props.selectUsuario(o.id)
+                          }}
+                        />
+                      )
+                    }
+                  </li>
+                )
+              }
             </ul>
           </div>
         )

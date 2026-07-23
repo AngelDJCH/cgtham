@@ -819,7 +819,7 @@ export default function Organizacion() {
                             }
                             <div style={{ display: 'flex', gap: '1rem', height: 'auto', padding: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
                                 {
-                                    ofertasEducativas.map(
+                                    ofertasEducativas?.map(
                                         oferta =>
                                             <div style={{ width: '200px', backgroundColor: 'white', borderRadius: '0px 0px 10px 10px' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center' }}>

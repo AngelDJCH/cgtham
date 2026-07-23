@@ -40,7 +40,7 @@ export default function AlertaComentario(
                         </div>
 
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap:'1rem'}}>
                         <button className="btn-accion-cancelar-1"
                             onClick={() => { props.btn_accion(false) }}
                         >

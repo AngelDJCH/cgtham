@@ -46,7 +46,7 @@ export default function EditarComentario(props) {
                         </div>
 
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap:'1rem' }}>
                         <button
                             className='btn-accion-cancelar-1'
                             onClick={() => { props?.accion(false) }}
