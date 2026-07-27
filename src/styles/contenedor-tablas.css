@@ -30,6 +30,24 @@
     font-size: 20px;
 }
 
+.tabla-acciones {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.tabla-celda-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.tabla-link-organizacion {
+    cursor: pointer;
+}
+
 .overllay {
     position: fixed;
     inset: 0;

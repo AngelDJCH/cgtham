@@ -126,7 +126,7 @@ export default function TablaContenido(props) {
                                     <td>
                                         {
                                             inscrpcion.inscripcion.estado != 'PENDIENTE' && (
-                                                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                                                <div className='tabla-acciones'>
                                                     <button
                                                         className='btn-accion-2'
                                                         value={inscrpcion.evento.id_evento}
@@ -147,7 +147,7 @@ export default function TablaContenido(props) {
                                         {
                                             inscrpcion.inscripcion.estado === 'PENDIENTE' && (
 
-                                                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                                                <div className='tabla-acciones'>
                                                     <button
                                                         value={inscrpcion.evento.id_evento}
                                                         className='btn-accion-2'
@@ -359,13 +359,13 @@ export default function TablaContenido(props) {
                                     <td>{convenio.subtipo}</td>
                                     <td>{convenio.descripcion.substring(0, 50)} {convenio.descripcion.length > 50 ? '...' : ''}</td>
                                     <td><p
-                                        style={{ cursor: 'pointer' }}
+                                        className='tabla-link-organizacion'
                                         onClick={() => { navigate(`/organizacion/${convenio.organizacion.id}`) }}
                                     >{convenio.organizacion.nombre}</p></td>
                                     <td>{convenio.registro.split('T')[0]}</td>
                                     <td>{convenio.inicio.split('T')[0]}</td>
                                     <td>{convenio.final.split('T')[0]}</td>
-                                    <td style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
+                                    <td className='tabla-celda-acciones'>
                                         <button
                                             className='btn-accion-2'
                                             onClick={() => { setOpenConvenio(true); setIdConvenio(convenio?.id); setIdOrganizacion(convenio?.organizacion.id) }}
