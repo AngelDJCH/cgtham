@@ -3,11 +3,12 @@ import { useAuth } from "../hooks/useAuth"
 import { createComentario } from "../services/Comentario"
 import { useNavigate } from "react-router-dom"
 import { useMediaQuery } from "@uidotdev/usehooks"
+import '../styles/comentarios-modal.css'
 
 export default function AlertaComentario(
     props
 ) {
-    
+
     const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width:1024px)')
     const [countCantidad, setCountCantidad] = useState(0)
     const [contenido, setContenido] = useState('')
@@ -21,26 +22,26 @@ export default function AlertaComentario(
 
     return (
         <div>
-            <div className="overllay"></div>
-            <div className="overllay-contenedor">
-                <div style={{ width: isSmallDevice ? '90%' : '650px', height: isSmallDevice ? 'auto' : '350px', backgroundColor: 'white', borderRadius: '10px', padding: '0.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
+            <div className="comentario-modal-overlay"></div>
+            <div className="comentario-modal-contenedor">
+                <div className="comentario-modal-cuerpo">
                     <div>
-                        <h1 style={{ textAlign: 'center' }}>NUEVO COMENTARIO</h1>
+                        <h1 className="comentario-modal-titulo">NUEVO COMENTARIO</h1>
 
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-                            <div style={{ display: 'flex', width: isSmallDevice ? '40%' : '250px', justifyContent: 'space-between', flexDirection: 'column' }}>
-                                <textarea style={{ width: '100%', height: '100%', maxWidth: '100%', minWidth: '100%', maxHeight: '50px', minHeight: '50px' }} placeholder="Escribe un comentario" onChange={(e) => { setContenido(e.target.value); setCountCantidad(e.target.value.length) }} />
+                        <div className="comentario-modal-contenido">
+                            <div className={`comentario-modal-columna comentario-modal-columna--editor`}>
+                                <textarea className="comentario-modal-textarea comentario-modal-textarea--expandido" placeholder="Escribe un comentario" onChange={(e) => { setContenido(e.target.value); setCountCantidad(e.target.value.length) }} />
                                 <p><strong>Caracteres: </strong>{countCantidad}</p>
                             </div>
 
-                            <div style={{ display: 'flex', width: isSmallDevice ? '40%' : '325px', justifyContent: 'space-evenly' }}>
+                            <div className="comentario-modal-columna comentario-modal-columna--nota">
                                 <p><strong>Nota:</strong> Recuerda que los comentarios deben tener una longitud entre 13 y 70 caracteres (incluyendo
                                     espacios, caracteres especiales, etc). <br /> En caso de tener algun problema reportar a <kbd><strong>cgtham@gmail.com</strong></kbd></p>
                             </div>
                         </div>
 
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap:'1rem'}}>
+                    <div className="comentario-modal-acciones">
                         <button className="btn-accion-cancelar-1"
                             onClick={() => { props.btn_accion(false) }}
                         >

@@ -1,0 +1,105 @@
+.comentario-modal-overlay {
+    position: fixed;
+    inset: 0;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    opacity: 0.5;
+}
+
+.comentario-modal-contenedor {
+    position: fixed !important;
+    inset: 0 !important;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.comentario-modal-cuerpo {
+    width: min(650px, 90%);
+    height: auto;
+    min-height: 350px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.comentario-modal-titulo {
+    text-align: center;
+}
+
+.comentario-modal-contenido {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.comentario-modal-columna {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.comentario-modal-columna--editor {
+    width: 250px;
+}
+
+.comentario-modal-columna--nota {
+    width: 325px;
+}
+
+.comentario-modal-textarea {
+    width: 100%;
+    height: 100px;
+    max-width: 100%;
+    min-width: 100%;
+    max-height: 100px;
+    min-height: 100px;
+}
+
+.comentario-modal-textarea--expandido {
+    height: 100%;
+    max-height: 50px;
+    min-height: 50px;
+}
+
+.comentario-modal-nota {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.comentario-modal-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .comentario-modal-cuerpo {
+        min-height: auto;
+    }
+
+    .comentario-modal-columna--editor {
+        width: 100%;
+    }
+
+    .comentario-modal-columna--nota {
+        width: 100%;
+    }
+}

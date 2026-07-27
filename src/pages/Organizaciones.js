@@ -242,7 +242,7 @@ export default function Organizaciones() {
 
                                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '1.8rem', gap: '1rem', marginTop: '1rem' }}>
                                     <button className="btn-accion-cancelar-1"
-                                        onClick={() => { setOpenOrganizacion(false); setSelectIdOrganizacion(null); setOrganizacion(null) }}
+                                        onClick={() => { setOpenOrganizacion(false); setSelectIdOrganizacion(null); setOrganizacion(null); setOpenDatosGenerales(false); setOpenDatosContacto(false); setOpenDatosUbicacion(false); setOpenDatosHosting(false) }}
                                     >
                                         <strong>CERRAR</strong>
                                     </button>
@@ -256,7 +256,7 @@ export default function Organizaciones() {
                                         )
                                     } */}
                                     {
-                                        organizacion?.organizacion?.estado === false && (
+                                        (organizacion?.organizacion?.estado === false) && (organizacion?.organizacion?.tipo != 'Comité') && (
                                             <button className="btn-accion-2"
                                                 onClick={() => { setOpenOrganizacion(false); setSelectIdOrganizacion(null); setOrganizacion(null); setOpenDatosGenerales(false); setOpenDatosContacto(false); setOpenDatosUbicacion(false); setOpenDatosHosting(false); handleUpdateEstado(organizacion?.organizacion?.id, true) }}
                                             >
@@ -265,7 +265,7 @@ export default function Organizaciones() {
                                         )
                                     }
                                     {
-                                        organizacion?.organizacion?.estado === true && (
+                                        (organizacion?.organizacion?.estado === true) && (organizacion?.organizacion?.tipo != 'Comité') && (
                                             <button className="btn-accion-2"
                                                 onClick={() => { setOpenOrganizacion(false); setSelectIdOrganizacion(null); setOrganizacion(null); setOpenDatosGenerales(false); setOpenDatosContacto(false); setOpenDatosUbicacion(false); setOpenDatosHosting(false); handleUpdateEstado(organizacion?.organizacion?.id, false) }}
                                             >

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { getComentarioById, updateById } from "../services/Comentario"
 import { useNavigate } from "react-router-dom"
 import { useMediaQuery } from "@uidotdev/usehooks"
+import '../styles/comentarios-modal.css'
 
 export default function EditarComentario(props) {
 
@@ -27,26 +28,26 @@ export default function EditarComentario(props) {
 
     return (
         <div>
-            <div className="overllay"></div>
-            <div className="overllay-contenedor">
-                <div style={{ width: isSmallDevice ? '90%' : '650px', height: isSmallDevice ? 'auto' : '350px', backgroundColor: 'white', borderRadius: '10px', padding: '0.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
+            <div className="comentario-modal-overlay"></div>
+            <div className="comentario-modal-contenedor">
+                <div className="comentario-modal-cuerpo">
                     <div>
-                        <h1 style={{ textAlign: 'center' }}>EDITAR COMENTARIO</h1>
+                        <h1 className="comentario-modal-titulo">EDITAR COMENTARIO</h1>
 
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-                            <div style={{ display: 'flex', width: isSmallDevice ? '40%' : '250px', justifyContent: 'space-between', flexDirection: 'column' }}>
-                                <textarea defaultValue={comentarioData?.contenido} onChange={(e) => { setComentarioData({ ...comentarioData, contenido: e.target.value }); setCountCantidad(e.target.value.length) }} style={{ width: '90%', height: '100px', maxWidth: '100%', maxHeight: '100px', minWidth: '100%', minHeight: '100px' }} />
+                        <div className="comentario-modal-contenido">
+                            <div className="comentario-modal-columna comentario-modal-columna--editor">
+                                <textarea className="comentario-modal-textarea" defaultValue={comentarioData?.contenido} onChange={(e) => { setComentarioData({ ...comentarioData, contenido: e.target.value }); setCountCantidad(e.target.value.length) }} />
                                 <p><strong>Caracteres: </strong>{countCantidad}</p>
                             </div>
 
-                            <div style={{ display: 'flex', width: isSmallDevice ? '40%' : '250px', justifyContent: 'space-between', flexDirection: 'column' }}>
+                            <div className="comentario-modal-columna comentario-modal-columna--nota">
                                 <p><strong>Nota:</strong> Recuerda que los comentarios deben tener una longitud entre 13 y 70 caracteres (incluyendo
                                     espacios, caracteres especiales, etc). <br /> En caso de tener algun problema reportar a <kbd><strong>cgtham@gmail.com</strong></kbd></p>
                             </div>
                         </div>
 
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap:'1rem' }}>
+                    <div className="comentario-modal-acciones">
                         <button
                             className='btn-accion-cancelar-1'
                             onClick={() => { props?.accion(false) }}
