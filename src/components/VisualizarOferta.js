@@ -150,7 +150,7 @@ export default function VisualizarOferta(props) {
 
                     </div>
 
-                    <div style={{ padding: '0.5rem', display: 'flex', justifyContent: 'center', height: (isSmallDevice || isMediumDevice) ? '20%' : null, gap: '1rem'}}>
+                    <div style={{ padding: '0.5rem', display: 'flex', justifyContent: 'center', height: (isSmallDevice || isMediumDevice) ? '20%' : null, gap: '1rem' }}>
                         <button className="btn-accion-cancelar-1" onClick={() => { props.accion(false) }}>
                             <strong>CERRAR</strong>
                         </button>

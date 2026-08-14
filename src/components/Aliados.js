@@ -151,7 +151,7 @@ export default function Aliados() {
                             aliado =>
                                 <div key={aliado.id} className="card">
                                     <div className="contenedor-img">
-                                        <img src={aliado.logo} alt={`logo ${aliado.nombre}`} />
+                                        <img src={aliado.logo} />
                                     </div>
                                     <p>{aliado.nombre}</p>
                                 </div>
@@ -164,7 +164,7 @@ export default function Aliados() {
                             aliado =>
                                 <div key={aliado.id} className="card">
                                     <div className="contenedor-img">
-                                        <img src={aliado.logo} alt={`logo ${aliado.nombre}`} />
+                                        <img src={aliado.logo} />
                                     </div>
                                     <p>{aliado.nombre}</p>
                                 </div>

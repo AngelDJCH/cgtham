@@ -13,9 +13,7 @@ export default function Vision(props) {
                         </p>
                     </div>
                     <button className="boton-ventana"
-
                         onClick={() => { props.accion(false) }}
-
                     >
                         CERRAR
                     </button>

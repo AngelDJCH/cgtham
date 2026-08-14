@@ -59,6 +59,8 @@
 .contenedor-img {
     width: 60px;
     height: 60px;
+    background-color: white;
+    border-radius: 100%;
 }
 
 @media(max-width:768px) , (max-width:1024){
@@ -85,6 +87,7 @@
     height: 100%;
     border-radius: 100%;
     background-color: white;
+    object-fit:cover
 }
 
 @keyframes spin {
