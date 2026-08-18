@@ -121,6 +121,7 @@ export default function Convenios() {
 
 
     const handleUploadDocument = (e) => {
+        setDocumento(null)
         const file = e.target.files[0]
         try {
             const reader = new FileReader()
@@ -230,12 +231,13 @@ export default function Convenios() {
                                         )
                                     }
                                 </div>
-                                <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
+                                <div style={{ width: '100%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
                                     <button
                                         className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenCreateConvenio(false) }}
                                     ><strong>CERRAR</strong></button>
                                     <button
+                                        style={{ marginRight: '1rem' }}
                                         onClick={async () => {
                                             if (convenio.titulo.length >= 1 && convenio.descripcion.length >= 1 &&
                                                 convenio.tipo.length >= 1 && convenio.subtipo.length >= 1 &&
@@ -271,7 +273,9 @@ export default function Convenios() {
                         <div className="overllay-contenedor">
                             <div style={{ width: '90%', height: '90%' }}>
                                 <embed src={documento} width={'100%'} height={'100%'}></embed>
-                                <div><button
+                                <div
+                                    style={{ width: '100%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}
+                                ><button
                                     className="btn-accion-cancelar-1"
                                     onClick={() => { setOpenDocumento(false) }}
                                 ><strong>CERRAR</strong></button></div>
