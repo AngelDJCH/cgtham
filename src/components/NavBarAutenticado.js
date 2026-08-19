@@ -247,6 +247,16 @@ export default function NavBarAutenticado() {
                                     ><a >Visitas</a></li>
                                 )
                             }
+                            {
+                                (isMediumDevice || user.tipo.includes('Cámara de Comercio')) && (
+                                    <li className='opciones'
+                                        onClick={(e) => {
+                                            alert('En construcción. Disculpe las molestias.')
+                                            // navigate('/afiliaciones')
+                                        }}
+                                    ><a >Afiliaciones</a></li>
+                                )
+                            }
                             <li
                                 onClick={async (e) => {
                                     const status = await logout()

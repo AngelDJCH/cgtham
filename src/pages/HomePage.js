@@ -15,6 +15,8 @@ export default function HomePage() {
     const isMediumDevice = useMediaQuery("(max-width : 768px) or (max-width : 992px)")
     const isSmallDevice = useMediaQuery("(max-width : 768px)")
 
+    const isLargeDevice = useMediaQuery("(min-width: 992px)")
+
     const { user } = useAuth()
     const [ofertasLaborales, setOfertasLaborales] = useState(null)
 
@@ -57,7 +59,7 @@ export default function HomePage() {
                                 <div className="notas">
                                     {
                                         ofertasLaborales?.map(
-                                            o => <div style={{ width: '50%', height: 'auto', backgroundColor: 'white', borderRadius: '10px' }}>
+                                            o => <div style={{ width: isLargeDevice ? '25%' :'50%', height: 'auto', backgroundColor: 'white', borderRadius: '10px' }}>
                                                 <div style={{ padding: '0.5rem', backgroundColor: '#41431B', borderTopLeftRadius: '10px', borderTopRightRadius: '10px' }}>
                                                     <h1 style={{ color: '#AEB784', fontFamily: 'Poppins', fontSize: '16px', margin: '0', padding: '0' }}>{o?.titulo}</h1>
                                                 </div>

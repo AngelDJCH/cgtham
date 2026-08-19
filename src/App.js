@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import LandinfPage from './pages/LandingPage';
+import LandingPage from './pages/LandingPage';
 import AutenticacionPage from './pages/AutenticacionPage';
 import HomePage from './pages/HomePage';
 import Mensajes from './pages/Mensajes';
@@ -25,7 +25,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<LandinfPage />}></Route>
+          <Route path='/' element={<LandingPage />}></Route>
           <Route path='/:autenticacion' element={<AutenticacionPage />}></Route>
           <Route path='/home' element={
             <ProtectedRoute redirectTo='/'>

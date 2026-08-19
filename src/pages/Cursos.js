@@ -347,7 +347,7 @@ export default function Cursos() {
                                             {user.tipo === 'Escuela'
                                                 && (<button
                                                     onClick={() => {
-                                                        setLoading(true);
+                                                        // setLoading(true);
                                                         enable ? setEnable(false) : setEnable(true);
                                                         if (enable) { handleUpdate() }
                                                     }}

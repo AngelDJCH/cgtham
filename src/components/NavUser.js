@@ -168,6 +168,17 @@ export default function NavUser(props) {
                         <p>Historicos</p>
                     </li> : null
                 }
+
+                {/* {
+                    user.tipo.includes('Cámara de Comercio') ? <li
+                        onClick={(e) => {
+                            navigate('/afiliaciones')
+                        }}
+                    >
+                        <img src={img_historicos} alt='Afiliaciones' />
+                        <p>Afiliciones</p>
+                    </li> : null
+                } */}
             </ul>
 
         </div>
