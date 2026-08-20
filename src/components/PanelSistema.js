@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { getDashEventos, getEventosCounts } from "../services/Evento"
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 import '../styles/panel.css'
 import { getOfertasCounts } from "../services/OfertaLaboral"
@@ -10,6 +11,8 @@ import { getConveniosCounts, getDashConvenios } from "../services/Convenio"
 import { findAllComentariosByAdministrador } from "../services/Comentario"
 
 export default function PanelSistema() {
+
+    const isLargeDevice = useMediaQuery("(min-width: 992px)")
 
     const [countEventos, setCountEventos] = useState(0)
     const [countOfertas, setCountOfertas] = useState(0)
@@ -84,7 +87,7 @@ export default function PanelSistema() {
     }, [])
 
     return (
-        <div style={{ width: '90%', justifyContent: 'center', height: 'auto', paddingLeft: '2rem', paddingRight: '2rem', display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+        <div style={{ width: isLargeDevice ? '75%' : '90%', justifyContent: 'center', height: 'auto', paddingLeft: '2rem', paddingRight: '2rem', display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
 
             <div className="tarjeta-panel" style={{ width: '250px', backgroundColor: 'white', borderRadius: '10px', height: 'auto', padding: '0.15rem' }}>
                 <h1 style={{ fontFamily: 'Poppins', fontSize: '20px', textAlign: 'center' }}>EVENTOS</h1>
