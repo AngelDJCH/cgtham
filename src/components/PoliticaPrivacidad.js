@@ -12,7 +12,7 @@ export default function PoliticaPrivacidad(props) {
                     </div>
                     <div className="descripcion-ventana">
                         <p>
-                            <stron>Compromiso:</stron> En la Comisión de Gestión de Talento Humano de las Altas Montañas, valoramos la privacidad de nuestros usuarios y aliados. Los datos recolectados a través de nuestra plataforma serán utilizados exclusivamente para:
+                            <stron>Compromiso:</stron> En el Comité de Gestión de Talento Humano de las Altas Montañas, valoramos la privacidad de nuestros usuarios y aliados. Los datos recolectados a través de nuestra plataforma serán utilizados exclusivamente para:
                         </p>
                     </div>
                     <ul className="lista-informacion">
