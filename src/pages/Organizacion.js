@@ -603,7 +603,7 @@ export default function Organizacion() {
 
                 {
                     !openDatos && (
-                        <div className="seccion1-contenedor" style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', width: isMediumDevice ? '100%' : '990px', marginTop: '1rem', justifyContent: 'center', alignItems: 'start' }}>
+                        <div className="seccion1-contenedor" style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', width: isLargeDevice ? '70%': '100%', marginTop: '1rem', justifyContent: 'center', alignItems: 'start' }}>
                             <div className="datos" style={{ backgroundColor: '#41431B', width: '100%', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <h1 style={{ color: 'white' }}>DATOS</h1>
                             </div>
