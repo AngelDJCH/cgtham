@@ -70,6 +70,8 @@ export default function Cursos() {
         const status = await solicitar(cursoSolicitud.titulo, cursoSolicitud.descripcion, cursoSolicitud.id_organizacion)
         if (status === 201) {
             alert('La solicitud se completo - Espera a que la organización valide el curso')
+        }else{
+            alert('Ocurrio un error al solicitar el curso - Intenta de nuevo o más tarde')
         }
         setOpenSolicitar(false)
     }
