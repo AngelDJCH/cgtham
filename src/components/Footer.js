@@ -24,7 +24,7 @@ export default function Footer() {
                 </div>
                 <div className='f-contenedor-informacion'>
                     <p>
-                        Comisión de Gestión de Talento Humano de las Altas Montañas
+                        Comité de Gestión de Talento Humano de las Altas Montañas
                     </p>
                 </div>
                 <div className='f-contenedor-lista-h'>

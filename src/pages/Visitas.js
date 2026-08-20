@@ -18,6 +18,7 @@ export default function Visitas() {
 
     const [organizaciones, setOrganizaciones] = useState([])
     const isSmallDevice = useMediaQuery('(max-width:768px)');
+    const isLargeDevice = useMediaQuery('(min-width:992px)')
 
     const [visitas, setVisitas] = useState([])
 
@@ -105,7 +106,7 @@ export default function Visitas() {
                                         </div>
                                     </div>
                                     {
-                                        !isSmallDevice && (
+                                        !isSmallDevice && !isLargeDevice && (
                                             <div style={{ width: '250px', height: '100%' }}>
                                                 <p style={{ textAlign: 'justify' }}><strong>Nota: </strong>
                                                     Una vez realizada la solicitud, la empresa correspondiente evaluará la petición para aceptar y agendar la reunión o visita. Por favor, mantente a la espera de su respuesta. <br></br>
