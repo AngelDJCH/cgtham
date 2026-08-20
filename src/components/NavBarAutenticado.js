@@ -248,7 +248,7 @@ export default function NavBarAutenticado() {
                                 )
                             }
                             {
-                                (isMediumDevice || user.tipo.includes('Cámara de Comercio')) && (
+                                user.tipo.includes('Cámara de Comercio') && (
                                     <li className='opciones'
                                         onClick={(e) => {
                                             alert('En construcción. Disculpe las molestias.')
