@@ -295,7 +295,7 @@ export default function Organizacion() {
     const isLargeDevice = useMediaQuery('(min-width:992px) or (min-width: 1400px)');
 
     return (
-        <div style={{ marginTop: '100px', marginRight: '50px', width: isMediumDevice ? '100%' : null}}>
+        <div style={{ marginTop: '100px', marginRight: '50px', width: isMediumDevice ? '100%' : null }}>
             <NavBarAutenticado />
             {
                 isLargeDevice && (
@@ -304,8 +304,8 @@ export default function Organizacion() {
                     </div>
                 )
             }
-            <div className="editar-perfil-contenedor" style={{ width: '100%'}}>
-                <div className='seccion1-contenedor' style={{ width: isLargeDevice ? '70%': '100%' }}>
+            <div className="editar-perfil-contenedor" style={{ width: '100%' }}>
+                <div className='seccion1-contenedor' style={{ width: isLargeDevice ? '70%' : '100%', marginRight: isLargeDevice ? '1rem' : null }}>
                     <div className='foto-perfil-contenedor' style={{ marginTop: isMediumDevice ? '20px' : null, width: isMediumDevice ? '100px' : null, height: isMediumDevice ? '100px' : null }}>
                         <input
                             id="logo"
@@ -358,7 +358,7 @@ export default function Organizacion() {
                     </div>
                 </div>
 
-                <div>
+                <div style={{ marginRight: '1rem' }}>
                     {
                         openDatos && user.organizacion === organizacion?.id && (
                             <button
@@ -374,7 +374,7 @@ export default function Organizacion() {
 
                 {
                     openDatos && (
-                        <div className="seccion1-contenedor" style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap',  width: isLargeDevice ? '70%': '100%', marginTop: '1rem', justifyContent: 'center', alignItems: 'center' }}>
+                        <div className="seccion1-contenedor" style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', width: isLargeDevice ? '70%' : '100%', marginTop: '1rem', justifyContent: 'center', alignItems: 'center', marginRight: isLargeDevice ? '1rem' : null }}>
                             <div className="datos" style={{ backgroundColor: '#41431B', width: '100%', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <h1 style={{ color: 'white' }}>INFORMACIÓN</h1>
                             </div>
@@ -603,7 +603,7 @@ export default function Organizacion() {
 
                 {
                     !openDatos && (
-                        <div className="seccion1-contenedor" style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', width: isLargeDevice ? '70%': '100%', marginTop: '1rem', justifyContent: 'center', alignItems: 'start' }}>
+                        <div className="seccion1-contenedor" style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', width: isLargeDevice ? '70%' : '100%', marginTop: '1rem', justifyContent: 'center', alignItems: 'start', marginRight: isLargeDevice ? '1rem' : null }}>
                             <div className="datos" style={{ backgroundColor: '#41431B', width: '100%', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <h1 style={{ color: 'white' }}>DATOS</h1>
                             </div>
@@ -785,7 +785,7 @@ export default function Organizacion() {
                                     </div>
                                 </div>
                             </div>
-                            <div style={{ display: 'flex', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
                                 <button className="btn-accion-cancelar-1"
                                     onClick={() => { setOpenDatos(true) }}
                                 >
@@ -803,7 +803,7 @@ export default function Organizacion() {
 
                 {
                     organizacion?.tipo === 'Escuela' && (
-                        <div className="seccion1-contenedor" style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '1.2rem', flexWrap: 'wrap',  width: isLargeDevice ? '70%': '100%', marginTop: '1rem', alignItems: 'start' }}>
+                        <div className="seccion1-contenedor" style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '1.2rem', flexWrap: 'wrap', width: isLargeDevice ? '70%' : '100%', marginTop: '1rem', alignItems: 'start', marginRight: isLargeDevice ? '1rem' : null }}>
                             <div className="datos" style={{ backgroundColor: '#41431B', width: '100%', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <h1 style={{ color: 'white' }}>OFERTA EDUCATIVA</h1>
                             </div>
@@ -818,6 +818,14 @@ export default function Organizacion() {
                                 */
                             }
                             <div style={{ display: 'flex', gap: '1rem', height: 'auto', padding: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                                {
+                                    ofertasEducativas?.length === 0 && (
+                                        <p
+                                            style={{ width: '100%', textAlign: 'center', fontFamily:'emoji', fontSize:'18px'}}
+                                        >SIN OFERTAS EDUCATIVAS DISPONIBLES...</p>
+                                    )
+                                }
+
                                 {
                                     ofertasEducativas?.map(
                                         oferta =>
