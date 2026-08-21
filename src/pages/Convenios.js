@@ -211,7 +211,7 @@ export default function Convenios() {
                                             </label>
                                             {/* {
                                                 isSmallDevice && ( */}
-                                                    <button className="btn-accion-2"
+                                                    <button className= {documento===null ? "btn-accion-cancelar-1" : "btn-accion-2"}
                                                         onClick={() => { documento ? setOpenDocumento(true) : alert('DEBES SUBIR ALGUN DOCUMENTO') }}
                                                     ><strong>VER</strong></button>
                                                 {/* )
@@ -236,11 +236,12 @@ export default function Convenios() {
                                 <div style={{ width: '100%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
                                     <button
                                         className="btn-accion-cancelar-1"
-                                        onClick={() => { setOpenCreateConvenio(false) }}
+                                        onClick={() => { setDocumento(null); setOpenCreateConvenio(false) }}
                                     ><strong>CERRAR</strong></button>
                                     <button
                                         style={{ marginRight: '1rem' }}
                                         onClick={async () => {
+                                            setDocumento(null)
                                             if (convenio.titulo.length >= 1 && convenio.descripcion.length >= 1 &&
                                                 convenio.tipo.length >= 1 && convenio.subtipo.length >= 1 &&
                                                 convenio.fecha_inicio.length >= 1 && convenio.fecha_final.length >= 1 &&

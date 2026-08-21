@@ -13,7 +13,7 @@ const socket = io(process.env.REACT_APP_URL_WEBSOCKET || 'http://localhost:3040'
 });
 
 export default function Mensajes() {
-    const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width : 1024px)')
+    const isSmallDevice = useMediaQuery('(max-width:768px)')
 
     const [mensaje, setMensaje] = useState('');
     const { user } = useAuth();
@@ -136,7 +136,7 @@ export default function Mensajes() {
             {
                 usuarioActivo && (
                     <div style={{ display: 'flex', justifyContent: isSmallDevice ? 'center' : 'flex-end', width: '100%', height: isSmallDevice ? '65vh' : '80vh' }}>
-                        <div style={{ width: isSmallDevice ? '90%' : '70%', marginRight: isSmallDevice ? null : '25px', backgroundColor: 'white', borderRadius: '10px', height: '100%' }}>
+                        <div style={{ width: isSmallDevice ? '90%' : '65%', marginRight: isSmallDevice ? null : '25px', backgroundColor: 'white', borderRadius: '10px', height: '100%' }}>
                             <div className="encabezado-mensajes" style={{ width: '100%' }}>
                                 <div style={{ width: '35px', height: '35px' }}>
                                     <img src={organizacion?.logo} alt="imagen" style={{ backgroundColor: 'white' }} />
