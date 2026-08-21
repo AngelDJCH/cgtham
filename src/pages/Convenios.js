@@ -209,13 +209,13 @@ export default function Convenios() {
                                             <label htmlFor="documento" className="btn-accion-2" style={{ width: '50px', height: '30px' }}>
                                                 <strong>SUBIR</strong>
                                             </label>
-                                            {
-                                                isSmallDevice && (
+                                            {/* {
+                                                isSmallDevice && ( */}
                                                     <button className="btn-accion-2"
                                                         onClick={() => { documento ? setOpenDocumento(true) : alert('DEBES SUBIR ALGUN DOCUMENTO') }}
                                                     ><strong>VER</strong></button>
-                                                )
-                                            }
+                                                {/* )
+                                            } */}
                                         </div>
                                     </div>
                                     {
