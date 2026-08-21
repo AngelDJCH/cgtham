@@ -9,6 +9,8 @@ import PanelSistema from "../components/PanelSistema";
 import { useEffect, useState } from "react";
 import { getOfertasLaboralesAll } from "../services/OfertaLaboral";
 import VisualizarOferta from "../components/VisualizarOferta";
+import { getAllOrganizaciones } from '../services/Organizacion.js';
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
 
@@ -23,6 +25,12 @@ export default function HomePage() {
     const [selectOferta, setSelectOferta] = useState(null)
     const [openOferta, setOpenOferta] = useState(false)
 
+    const [openListUsers, setOpenListUsers] = useState(false)
+
+    const [organizaciones, setOrganizaciones] = useState([])
+
+    const navigate = useNavigate()
+
     useEffect(() => {
         const getOfertas = async () => {
             const res = await getOfertasLaboralesAll()
@@ -31,6 +39,16 @@ export default function HomePage() {
         }
         getOfertas()
     }, [])
+
+    useEffect(()=>{
+        if(openListUsers){
+            const organizacionesData = async()=>{
+                const res = await getAllOrganizaciones()
+                setOrganizaciones(res)
+            }
+            organizacionesData()
+        }
+    },[openListUsers])
 
     return (
         <div className="home" style={{ marginBottom: '1rem' }}>
@@ -59,7 +77,7 @@ export default function HomePage() {
                                 <div className="notas">
                                     {
                                         ofertasLaborales?.map(
-                                            o => <div style={{ width: isLargeDevice ? '25%' :'50%', height: 'auto', backgroundColor: 'white', borderRadius: '10px' }}>
+                                            o => <div style={{ width: isLargeDevice ? '25%' : '50%', height: 'auto', backgroundColor: 'white', borderRadius: '10px' }}>
                                                 <div style={{ padding: '0.5rem', backgroundColor: '#41431B', borderTopLeftRadius: '10px', borderTopRightRadius: '10px' }}>
                                                     <h1 style={{ color: '#AEB784', fontFamily: 'Poppins', fontSize: '16px', margin: '0', padding: '0' }}>{o?.titulo}</h1>
                                                 </div>
@@ -144,6 +162,93 @@ export default function HomePage() {
                     <VisualizarOferta id_oferta={selectOferta} accion={setOpenOferta} />
                 )
             }
+            {
+                isSmallDevice && (
+                    <div
+                        style={
+                            {
+                                position: 'fixed',
+                                bottom: '1rem',
+                                right: '1rem'
+                            }
+                        }
+                    >
+                        <button style={{
+                            width: '50px', height: '50px', borderRadius: '100%', border: 'none', backgroundColor: 'white'
+                        }}
+                            onClick={() => {
+                                setOpenListUsers(true)
+                                // alert('Esta funcionalidad se encuentra en desarrollo. Disculpe las molestias.')
+                            }}
+                        >
+                            <img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXJzLWljb24gbHVjaWRlLXVzZXJzIj48cGF0aCBkPSJNMTYgMjF2LTJhNCA0IDAgMCAwLTQtNEg2YTQgNCAwIDAgMC00IDR2MiIvPjxwYXRoIGQ9Ik0xNiAzLjEyOGE0IDQgMCAwIDEgMCA3Ljc0NCIvPjxwYXRoIGQ9Ik0yMiAyMXYtMmE0IDQgMCAwIDAtMy0zLjg3Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjciIHI9IjQiLz48L3N2Zz4=' alt='Users or Organizations' />
+                        </button>
+                    </div>
+                )
+            }
+
+            {
+                openListUsers && (
+                    <div>
+
+                        <div className='overllay'>
+                        </div>
+                        <div className='overllay-contenedor'>
+                            {/* <ul>
+                                {
+                                    organizaciones?.map(
+                                        o => <li>
+                                            {o.nombre_comercial}
+                                        </li>
+                                    )
+                                }
+                            </ul> */}
+                            <div style={{width:'200px', minWidth:'200px', maxWidth:'200px', height:'400px', maxHeight: '400px', minHeight: '400px', backgroundColor:'white', borderRadius:'10px', overflowY:'scroll', scrollbarWidth:'none'}}>
+                                {
+                                    organizaciones?.map(
+                                        (o)=><div
+                                            style={{
+                                                width:'100%', height:'50px', display:'flex', justifyContent:'left', alignItems:'center', border:'1px solid black'
+                                            }}
+                                        >
+                                            <div style={{
+                                                width:'30px', height:'30px', padding:'5px'
+                                            }}>
+                                                <img src={o.logo}
+                                                    style={
+                                                        {
+                                                            width:'100%', height:'100%', objectPosition:'center'
+                                                        }
+                                                    }
+                                                />
+                                            </div>
+                                            <div><p
+                                                style={{
+                                                    cursor:'pointer',
+                                                    fontSize:'12px', fontFamily:'Poppins', display:'flex', flexWrap:'wrap', width:'150px'
+                                                }}
+                                                onClick={()=>{navigate(`/organizacion/${o.id}`)}}
+                                            >{o.nombre_comercial}</p></div>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                            <button
+                                style={{marginTop:'1rem'}}
+                                className='btn-accion-2'
+                                onClick={
+                                    () => {
+                                        setOpenListUsers(false)
+                                    }
+                                }
+                            >
+                                <strong>CERRAR</strong>
+                            </button>
+                        </div>
+                    </div>
+                )
+            }
+
         </div>
     )
 }
