@@ -10,7 +10,7 @@ import { uploadDocument } from "../services/Upload";
 import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function Convenios() {
-    const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width:1024px)');
+    const isSmallDevice = useMediaQuery('(max-width:768px)');
 
     const [documento, setDocumento] = useState(null)
     const [openDocumento, setOpenDocumento] = useState(false)
@@ -142,6 +142,8 @@ export default function Convenios() {
         getConvenios()
         console.log(convenios)
     }, [])
+    const isMediumDevice = useMediaQuery('(min-width:1920px)')
+    const isLargeDevice = useMediaQuery('(min-width: 992px)')
 
     return (
         <div>
@@ -217,7 +219,7 @@ export default function Convenios() {
                                         </div>
                                     </div>
                                     {
-                                        !isSmallDevice && (
+                                        (isMediumDevice) && (
                                             <div style={{ width: '250px', height: '100%' }}>
                                                 <div style={{ width: '100%', height: '90%', backgroundColor: 'gray' }}>
                                                     <embed src={documento} width={'100%'} height={'100%'}></embed>

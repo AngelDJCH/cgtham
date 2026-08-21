@@ -897,7 +897,7 @@ export default function Organizacion() {
                                         </div>
                                     </div>
                                     {
-                                        !isSmallDevice && (
+                                        isMediumDevice && (
                                             <div style={{ width: '250px', height: '100%' }}>
                                                 <p style={{ textAlign: 'justify' }}><strong>Nota: </strong>
                                                     Una vez realizada publicada la oferta educativa, no se podran realizar modificaciones por el momento. Se recomienda revisar dicha oferta educativa antes de ser publicada.<br></br>
@@ -906,7 +906,7 @@ export default function Organizacion() {
                                         )
                                     }
                                 </div>
-                                <div style={{ width: '50%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
+                                <div style={{ width: '100%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
                                     <button className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenCreateOfertaEducativa(false) }}
                                     >
