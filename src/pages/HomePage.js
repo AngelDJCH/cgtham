@@ -163,7 +163,7 @@ export default function HomePage() {
                 )
             }
             {
-                isSmallDevice||user.rol.includes('ADMIN_SYS') && (
+                (isSmallDevice||user.rol.includes('ADMIN_SYS')) && (
                     <div
                         style={
                             {
