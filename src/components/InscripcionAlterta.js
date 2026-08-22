@@ -31,14 +31,15 @@ export default function InscripcionAlterta(props) {
                                     if (status && status === 201) {
                                         alert('INSCRIPCION REALIZADA')
                                         navigate(0)
-                                        props.accion(false)
                                     } else if (status && status === 409) {
                                         alert('YA ESTAS EN LISTA DE ESPERA')
                                     } else {
                                         alert('OCURRIO UN ERROR')
                                     }
+                                    props.accion(false) 
                                 } catch (error) {
                                     console.log(error)
+                                    props.accion(false) 
                                 }
                             }}
                         ><strong>ACEPTAR</strong></button>
