@@ -327,7 +327,7 @@ export default function Organizacion() {
                             )
                         }
                     </div>
-                    <div className='img-banner-contenedor' style={{ width: isMediumDevice ? '100%' : null }}>
+                    <div className='img-banner-contenedor' style={{ width: '100%' }}>
                         <input
                             id="banner"
                             type="file"
