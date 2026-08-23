@@ -75,3 +75,9 @@
     font-size: 12px;
     font-weight: 20px;
 }
+
+@media (min-width: 992px){
+    .listausuarios{
+        width : 250px
+    }
+} 

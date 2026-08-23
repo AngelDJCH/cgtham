@@ -148,7 +148,7 @@ export default function Convenios() {
     return (
         <div>
             <NavBarAutenticado />
-            <Filtros enableAccion={true} btn_accion={setOpenCreateConvenio} titulo='Convenios' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='Crear convenio' />
+            <Filtros enableAccion={true} btn_accion={setOpenCreateConvenio} titulo='Convenios' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='CREAR' />
             <TablaContenido encabezados={['Titulo', 'Tipo', 'Subtipo', 'Descripcion', 'Anfitrion', 'Registro', 'Inicio', 'Fin', 'Acciones']} conveniosTabla={convenios} />
             {
                 openCreateConvenio && (

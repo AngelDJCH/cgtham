@@ -160,7 +160,7 @@ export default function Cursos() {
     return (
         <div>
             <NavBarAutenticado />
-            <Filtros btn_accion_solicitudes={user.tipo === 'Escuela' ? setOpenSolicitudes : null} btn_accion_solicitud={user.tipo === 'Escuela' ? true : false} enableAccion={true} titulo='Cursos' accion={user.tipo != 'Escuela' ? 'SOLICITAR' : 'Crear curso'} btn_accion={user.tipo === 'Escuela' ? setOpenCreateCurso : setOpenSolicitar} />
+            <Filtros btn_accion_solicitudes={user.tipo === 'Escuela' ? setOpenSolicitudes : null} btn_accion_solicitud={user.tipo === 'Escuela' ? true : false} enableAccion={true} titulo='Cursos' accion={user.tipo != 'Escuela' ? 'SOLICITAR' : 'CREAR'} btn_accion={user.tipo === 'Escuela' ? setOpenCreateCurso : setOpenSolicitar} />
             <TablaContenido id_curso={setIdCurso} open_curso={setOpenCurso} cursosTabla={cursos} encabezados={['Titulo', 'Descripcion', 'Publicado', 'Inicio', 'Fin', 'Organizacion', 'Acciones']} />
             {
                 openCreateCurso && (

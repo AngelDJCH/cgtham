@@ -56,8 +56,8 @@ export default function Organizaciones() {
         <div>
             <NavBarAutenticado />
             <Filtros titulo='Organizaciones' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='Crear organizacion' />
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                <div style={{ backgroundColor: 'white', width: '90%', padding: '0.5rem', height: 'auto', display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'center'}}>
+                <div style={{ backgroundColor: 'white', width: '90%', padding: '0.5rem', height: '60vh', minHeight: '60vh', maxHeight: '60vh', overflowY:'scroll', display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center', justifyContent: 'center'}}>
                     {
                         organizaciones?.map(
                             org => <div

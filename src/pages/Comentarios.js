@@ -35,7 +35,7 @@ export default function Comentarios() {
     return (
         <div>
             <NavBarAutenticado />
-            <Filtros enableAccion={user.rol.includes('ADMIN_ORG') ? true : false} titulo='Comentarios' placeholder='Buscar por estado' opciones={['Mas recientes', 'Menos recientes']} accion='Crear comentario' btn_accion={setAlerta} />
+            <Filtros enableAccion={user.rol.includes('ADMIN_ORG') ? true : false} titulo='Comentarios' placeholder='Buscar por estado' opciones={['Mas recientes', 'Menos recientes']} accion='CREAR' btn_accion={setAlerta} />
             <TablaContenido encabezados={user.rol.includes('ADMIN_ORG') ? ['Contenido', 'Fecha', 'Estado', 'Acciones'] : ['Organización', 'Contenido', 'Fecha', 'Estado', 'Acciones']} comentariosTabla={user.rol.includes('ADMIN_ORG') ? comentariosUsuario : comentariosAdministracion} tipo={user.rol.includes('ADMIN_ORG') ? 'ORG' : 'SYS'} />
             {
                 alerta && (

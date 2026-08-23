@@ -5,7 +5,6 @@ import TablaContenido from "../components/Tabla-contenido";
 import { useAuth } from "../hooks/useAuth";
 import { getAllOrganizaciones } from "../services/Organizacion";
 import { allVisitasByIdEmpresa, allVisitasByIdEscuela, allVisitasForAdministrador, createVisita } from "../services/Visita";
-import { wait } from "@testing-library/user-event/dist/utils";
 import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function Visitas() {
@@ -94,6 +93,19 @@ export default function Visitas() {
                                                     )
                                                 }
                                             </select>
+                                            <div>
+                                                <h6>Documento:</h6>
+                                                <input id="documento" style={{ display: 'none' }} type="file" accept="pdf" 
+                                                    
+                                                />
+                                                <label  className="btn-accion-2" style={{ width: '50px', height: '30px' }}>
+                                                    <strong
+                                                    onClick={()=>{alert('Modulo no disponible.')}}
+                                                    >SUBIR</strong>
+                                                </label>
+                                                {/* <button>VER DOCUMENTO</button> */}
+                                                <p><strong>Nota:</strong> El documento es un requisito para la solicitud. Para especificar de manera formal la visita a las instalaciones de la empresa. Indicando area de interés, cantidad de alumnos, etc.</p>
+                                            </div>
                                             {
                                                 isSmallDevice && (
                                                     <div style={{ width: '100%', height: '100%' }}>

@@ -153,7 +153,7 @@ export default function OfertasLaborales() {
     return (
         <div>
             <NavBarAutenticado />
-            <Filtros enableAccion={user.tipo === 'Escuela' ? false : true} filtro={setFiltro} titulo='Ofertas Laborales' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='Crear oferta laboral' btn_accion={setOpenCreateOferta} />
+            <Filtros enableAccion={user.tipo === 'Escuela' ? false : true} filtro={setFiltro} titulo='Ofertas Laborales' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='CREAR' btn_accion={setOpenCreateOferta} />
             <div className="contenedor-tablas">
                 <div style={{ width: '85%', backgroundColor: 'white', display: 'flex', flexWrap: 'wrap', height: '100vh', maxHeight: '100vh', padding: '1rem', overflowY: 'scroll', gap: '1rem' }}>
                     {
