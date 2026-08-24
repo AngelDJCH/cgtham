@@ -93,7 +93,11 @@ export default function Visitas() {
                                                     )
                                                 }
                                             </select>
-                                            <div>
+                                            {
+                                                // El codigo comentado es para una funcionalidad futura.
+                                                // Agosto - Diciembre 2026
+                                            }
+                                            {/* <div>
                                                 <h6>Documento:</h6>
                                                 <input id="documento" style={{ display: 'none' }} type="file" accept="pdf" 
                                                     
@@ -103,9 +107,9 @@ export default function Visitas() {
                                                     onClick={()=>{alert('Modulo no disponible.')}}
                                                     >SUBIR</strong>
                                                 </label>
-                                                {/* <button>VER DOCUMENTO</button> */}
+                                                {/* <button>VER DOCUMENTO</button> *
                                                 <p><strong>Nota:</strong> El documento es un requisito para la solicitud. Para especificar de manera formal la visita a las instalaciones de la empresa. Indicando area de interés, cantidad de alumnos, etc.</p>
-                                            </div>
+                                            </div> */}
                                             {
                                                 isSmallDevice && (
                                                     <div style={{ width: '100%', height: '100%' }}>
