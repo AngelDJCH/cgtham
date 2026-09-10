@@ -194,10 +194,8 @@ export default function Mensajes() {
                 createChat && (<div>
                     <div className="overllay"></div>
                     <div className="overllay-contenedor">
-                        <div style={{
-                            width: '500px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white',
-                            padding: '1rem', height: 'auto', borderRadius: '10px'
-                        }}>
+                        <div
+                            className="alerta-chat">
                             <h1>¿QUIERES CREAR UN CHAT?</h1>
                             <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
                                 <button

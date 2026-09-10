@@ -137,7 +137,7 @@ export default function NavBarAutenticado() {
                             style={{ border: 'none', backgroundColor: 'transparent' }}
                             onClick={(e) => { open === true ? setOpen(false) : setOpen(true) }}
                         >
-                            <img src={logoOrganizacion} alt={''} style={{ width: '50px', height: '50px', borderRadius: '100%' }} />
+                            <img src={logoOrganizacion} alt={''} style={{ width: '50px', height: '50px', borderRadius: '100%', border: '1px solid #AEB784' }} />
                         </button>
                     </li>
                 </ul>

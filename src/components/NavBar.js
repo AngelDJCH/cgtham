@@ -72,7 +72,7 @@ export default function NavBar(props) {
                             <li>
                                 <button
                                     className='btn-accion'
-                                    style={{ width: 'auto', paddingLeft: '1rem', paddingRight: '1rem' }}
+                                    style={{ width: 'auto', paddingLeft: '1rem', paddingRight: '1rem', fontSize:'12px', width:'auto', height:'40px'}}
                                     onClick={(e) => { navigate('/login') }}
                                 >
                                     LOGIN
