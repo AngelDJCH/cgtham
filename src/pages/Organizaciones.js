@@ -5,8 +5,11 @@ import { getAllOrganizacionesPendientes, getOrganizacionFast, updateEstadoByIdOr
 import { or } from "ajv/dist/compile/codegen";
 import '../styles/organizaciones.css'
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function Organizaciones() {
+
+    const isSmallDevice = useMediaQuery('(max-with:768px)')
 
     const [organizaciones, setOrganizaciones] = useState([])
 
@@ -56,8 +59,8 @@ export default function Organizaciones() {
         <div>
             <NavBarAutenticado />
             <Filtros titulo='Organizaciones' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='Crear organizacion' />
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'center'}}>
-                <div style={{ backgroundColor: 'white', width: '90%', padding: '0.5rem', height: '60vh', minHeight: '60vh', maxHeight: '60vh', overflowY:'scroll', display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center', justifyContent: 'center'}}>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                <div style={{ backgroundColor: 'white', width: '90%', padding: '0.5rem', height: '60vh', minHeight: '60vh', maxHeight: '60vh', overflowY: 'scroll', display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center', justifyContent: 'center' }}>
                     {
                         organizaciones?.map(
                             org => <div
@@ -66,7 +69,7 @@ export default function Organizaciones() {
                                     <img src={org.organizacion.banner} style={{ width: '100%', borderRadius: '10px', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
                                 </div>
                                 <div>
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px', textAlign: 'center', color: 'white' }}>{org.organizacion.nombre?.length < 26 ? org.organizacion.nombre :  org.organizacion.nombre?.substring(0,27)+"..."}</h6>
+                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px', textAlign: 'center', color: 'white' }}>{org.organizacion.nombre?.length < 26 ? org.organizacion.nombre : org.organizacion.nombre?.substring(0, 27) + "..."}</h6>
                                 </div>
                                 <div
                                     style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '0.3rem' }}
@@ -94,12 +97,12 @@ export default function Organizaciones() {
                                 <div style={{ width: '100%', height: '150px', backgroundColor: '#41431B' }}>
                                     <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} src={organizacion?.organizacion?.banner} />
                                 </div>
-                                <div style={{ display: 'flex', gap: '1rem', marginLeft: '1rem', alignItems: 'center', transform: 'translateY(-50%)' }}>
-                                    <div style={{ width: '125px', height: '125px', flexShrink:0}}>
+                                <div style={{ display: 'flex', gap: '1rem', marginLeft: '1rem', alignItems: 'center', transform: 'translateY(-50%)', flexDirection: isSmallDevice ? 'column' : 'row' }}>
+                                    <div style={{ width: '125px', height: '125px', flexShrink: 0 }}>
                                         <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', borderRadius: '100%' }} src={organizacion?.organizacion?.logo} />
                                     </div>
                                     <div className="titulo-organizacion">
-                                        <h1 style={{ margin: 0 }}>{organizacion?.organizacion.nombre}</h1>
+                                        <h1 style={{ margin: 0 }}>{!isSmallDevice ? organizacion?.organizacion.nombre.substring(0, 26) + "..." : organizacion?.organizacion.nombre}</h1>
                                     </div>
                                 </div>
 
@@ -114,6 +117,10 @@ export default function Organizaciones() {
                                     {
                                         openDatosGenerales && (
                                             <div className="contenedor-datos">
+                                                <div className="subcontenedor-datos">
+                                                    <h6>Nombre Completo:</h6>
+                                                    <input value={organizacion?.organizacion?.nombre} />
+                                                </div>
                                                 <div className="subcontenedor-datos">
                                                     <h6>Descripcion:</h6>
                                                     <textarea defaultValue={organizacion?.organizacion?.descripcion} />
