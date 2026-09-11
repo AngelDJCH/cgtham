@@ -121,13 +121,13 @@ export default function Mensajes() {
 
             {
                 !isSmallDevice && (
-                    <ListaUsuarios isSmallDevice={false} mensaje={true} left='30px' right='0' selectUsuario={setUsuarioActivo} />
+                    <ListaUsuarios isSmallDevice={false} mensaje={true} left='30px' right='0'  selectUsuario={setUsuarioActivo} />
                 )
             }
 
             {
                 isSmallDevice && (
-                    <ListaUsuarios position={'relative'} height={'auto'} width={'90%'} isSmallDevice={true} mensaje={true} left='0' right='0' selectUsuario={setUsuarioActivo} />
+                    <ListaUsuarios position={'fixed'} height={'auto'} width={'90%'} isSmallDevice={true} mensaje={true} left='0' right='0'  bottom='0'selectUsuario={setUsuarioActivo} />
                 )
             }
 
@@ -143,7 +143,7 @@ export default function Mensajes() {
                                 </div>
                                 <h1 onClick={()=>{
                                     navigate(`/organizacion/${organizacion?.id}`)
-                                }} style={{ margin: '0', fontSize: isSmallDevice ? '18px' : '20px', cursor: 'pointer'}}>{user.organizacion === organizacion?.id ? `(YO)` : `${organizacion?.nombre_comercial}`}</h1>
+                                }} style={{ margin: '0', fontSize: isSmallDevice ? '18px' : '20px', cursor: 'pointer'}}>{user.organizacion === organizacion?.id ? `(YO)` : organizacion?.nombre_comercial?.length > 26 && isSmallDevice ? organizacion?.nombre_comercial?.substring(26)+"..." : `${organizacion?.nombre_comercial}`}</h1>
                             </div>
                             <div className="cuerpo-mensajes">
                                 {

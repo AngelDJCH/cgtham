@@ -63,6 +63,19 @@
     border-radius: 10px
 }
 
+.chat-seleccionado:hover{
+    background-color: white;
+}
+
+
+.chat-seleccionado:hover img{
+    border: 1px solid black;
+}
+
+.selector-chat:hover{
+    scale:1.005;
+}
+
 @media (max-width:768px) {
     .alerta-chat{
         width: 70%;

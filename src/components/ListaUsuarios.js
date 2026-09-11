@@ -15,12 +15,29 @@ export default function ListaUsuarios(props) {
 
   const [busqueda, setBusqueda] = useState('')
 
+  const [move, setMove] = useState(0)
+  const moveLeft = 10
+
   const img_mensaje = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0MTQzMUIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1zZW5kLWljb24gbHVjaWRlLXNlbmQiPjxwYXRoIGQ9Ik0xNC41MzYgMjEuNjg2YS41LjUgMCAwIDAgLjkzNy0uMDI0bDYuNS0xOWEuNDk2LjQ5NiAwIDAgMC0uNjM1LS42MzVsLTE5IDYuNWEuNS41IDAgMCAwLS4wMjQuOTM3bDcuOTMgMy4xOGEyIDIgMCAwIDEgMS4xMTIgMS4xMXoiLz48cGF0aCBkPSJtMjEuODU0IDIuMTQ3LTEwLjk0IDEwLjkzOSIvPjwvc3ZnPg=='
+
+  const handleBack = () => {
+    const carrusel = document.getElementById('carrusel-contactos')
+    carrusel.scrollBy({ left: move - moveLeft, behavior: 'smooth' })
+    setMove(move - 10)
+  }
+
+  const handleNext = () => {
+    const carrusel = document.getElementById('carrusel-contactos')
+    carrusel.scrollBy({ left: move + moveLeft, behavior: 'smooth' })
+    setMove(move + 10)
+  }
 
 
   const handleClick = (usuario) => {
     props.selectUsuario(usuario)
   }
+
+  const [openChats, setOpenChats] = useState(false)
 
   useEffect(() => {
     const organizacionesData = async () => {
@@ -33,21 +50,78 @@ export default function ListaUsuarios(props) {
   }, [])
 
   return (
-    <div className='listausuarios' style={{ position: props.position, width: props.width ? props.width : null, left: `${props.left}`, right: `${props.right}`, height: props.height, maxHeight: props.height, minHeight: props.height }}>
+    <div className='listausuarios' style={{ position: props.position, width: props.width ? props.width : null, left: `${props.left}`, right: `${props.right}`, height: props.height, maxHeight: props.height, minHeight: props.height, bottom: props?.bottom }}>
+
+      {
+        openChats && (
+          <div
+            style={{
+              position: 'fixed',
+              bottom: '65px',
+              width: '100%',
+              height: '70vh',
+              display:'flex',
+              justifyContent:'center'
+            }}
+          >
+            <div
+              style={{
+                width: '90%',
+                height: '70vh',
+                minHeight: '70vh',
+                maxHeight: '70vh',
+                overflowY:'scroll',
+                scrollbarWidth:'thin',
+                backgroundColor: 'gray'
+              }}
+            >
+              {
+                organizaciones?.map(
+                  o => 
+                  <div className='chat-seleccionado' style={{display:'flex', alignItems:'center', gap:'1rem', flexShrink:'0', paddingLeft:'1rem'}}
+                    onClick={()=>{props.selectUsuario(o?.id); setOpenChats(false)}}
+                  >
+                    <div style={{width:'30px', height:'30px', flexShrink:0}}><img src={o?.logo} style={{width:'100%', height:'100%', borderRadius:'100%', backgroundColor:'white'}}/></div>
+                    <h6>{o?.nombre_comercial}</h6>
+                  </div>
+                )
+              }
+            </div>
+          </div>
+        )
+      }
 
       {
         props.isSmallDevice && (
-          <div style={{ width: '100%', maxWidth: '100%', minWidth: '100%', height: '50px', gap: '1rem', display: 'flex', padding: '1rem', justifyContent: 'center', alignItems: 'center', overflowX: 'auto' }}>
+          <div style={{ width: '100%', maxWidth: '100%', minWidth: '100%', height: '50px', display: 'flex', padding: '1rem', justifyContent: 'center', alignItems: 'center' }}>
+            {/* <select >
             {
-              organizaciones?.map(
-                o =>
-                  <div style={{ width: '45px', height: '45px', cursor: 'pointer' }}
-                    onClick={() => { props.selectUsuario(o.id) }}
-                  >
-                    <img src={o.logo} style={{ width: '100%', height: '100%', borderRadius: '100%' }} />
-                  </div>
-              )
+              organizaciones?.map(o => <option onClick={()=>{props.selectUsuario(o?.id)}}>{o?.nombre_comercial}</option>)
             }
+          </select> */}
+            <div className='selector-chat' style={{
+              backgroundColor: 'white', width: '100%', height: '30px', display: 'flex', borderRadius: '10px', justifyContent: 'space-between'
+            }}>
+              <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                onClick={() => { setOpenChats(!openChats) }}
+              >
+                <h6 style={{ padding: '0', margin: '0' }}>SELECCIONA EL CHAT</h6>
+              </div>
+              <img
+                src={openChats ? 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNjN2M3YzciIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLWRvd24iPjxwYXRoIGQ9Im02IDkgNiA2IDYtNiIvPjwvc3ZnPg==' : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNjN2M3YzciIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLXVwIj48cGF0aCBkPSJtMTggMTUtNi02LTYgNiIvPjwvc3ZnPg=='} />
+            </div>
+            {/* <div id='carrusel-contactos' style={{ width: '100%', maxWidth: '100%', minWidth: '100%', height: '50px', display: 'flex', paddingTop: '1rem', paddingBottom:'1rem',justifyContent: 'center', alignItems: 'center', flexDirection:'row', overflowX:'scroll', overflowY:'hidden'}}>
+              {
+                organizaciones?.map(
+                  o =>
+                    <div style={{ width: '45px', height: '45px', cursor: 'pointer', flexShrink:0}}
+                      onClick={() => { props.selectUsuario(o.id) }}
+                    >
+                      <img src={o.logo} style={{ width: '100%', height: '100%', borderRadius: '100%', objectFit: 'cover', backgroundColor:'white'}} />
+                    </div>
+                )
+              }
+            </div> */}
           </div>
         )
       }
