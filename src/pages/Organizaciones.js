@@ -9,7 +9,7 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function Organizaciones() {
 
-    const isSmallDevice = useMediaQuery('(max-with:768px)')
+    const isSmallDevice = useMediaQuery('(max-width:768px)')
 
     const [organizaciones, setOrganizaciones] = useState([])
 
@@ -101,8 +101,8 @@ export default function Organizaciones() {
                                     <div style={{ width: '125px', height: '125px', flexShrink: 0 }}>
                                         <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', borderRadius: '100%' }} src={organizacion?.organizacion?.logo} />
                                     </div>
-                                    <div className="titulo-organizacion">
-                                        <h1 style={{ margin: 0 }}>{!isSmallDevice ? organizacion?.organizacion.nombre.substring(0, 26) + "..." : organizacion?.organizacion.nombre}</h1>
+                                    <div className="titulo-organizacion" style={{width:isSmallDevice?'200px':null}}>
+                                        <h1 style={{ margin: 0, fontSize:`${isSmallDevice?'14px':'18px'}`}}>{organizacion?.organizacion.nombre}</h1>
                                     </div>
                                 </div>
 
