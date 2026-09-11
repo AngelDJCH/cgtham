@@ -66,7 +66,7 @@ export default function Organizaciones() {
                                     <img src={org.organizacion.banner} style={{ width: '100%', borderRadius: '10px', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
                                 </div>
                                 <div>
-                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px', textAlign: 'center', color: 'white' }}>{org.organizacion.nombre}</h6>
+                                    <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px', textAlign: 'center', color: 'white' }}>{org.organizacion.nombre?.length < 26 ? org.organizacion.nombre :  org.organizacion.nombre?.substring(0,27)+"..."}</h6>
                                 </div>
                                 <div
                                     style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '0.3rem' }}
@@ -95,7 +95,7 @@ export default function Organizaciones() {
                                     <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} src={organizacion?.organizacion?.banner} />
                                 </div>
                                 <div style={{ display: 'flex', gap: '1rem', marginLeft: '1rem', alignItems: 'center', transform: 'translateY(-50%)' }}>
-                                    <div style={{ width: '125px', height: '125px' }}>
+                                    <div style={{ width: '125px', height: '125px', flexShrink:0}}>
                                         <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', borderRadius: '100%' }} src={organizacion?.organizacion?.logo} />
                                     </div>
                                     <div className="titulo-organizacion">
