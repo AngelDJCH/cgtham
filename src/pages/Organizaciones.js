@@ -97,7 +97,8 @@ export default function Organizaciones() {
                                 <div style={{ width: '100%', height: '150px', backgroundColor: '#41431B' }}>
                                     <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} src={organizacion?.organizacion?.banner} />
                                 </div>
-                                <div style={{ display: 'flex', gap: '1rem', marginLeft: '1rem', alignItems: 'center', transform: 'translateY(-50%)', flexDirection: isSmallDevice ? 'column' : 'row' }}>
+
+                                <div style={{ display: 'flex', gap: '1rem', marginLeft: isSmallDevice ? '0rem':'1rem', alignItems: 'center', transform: 'translateY(-62.5px)', flexDirection: isSmallDevice ? 'column' : 'row'}}>
                                     <div style={{ width: '125px', height: '125px', flexShrink: 0 }}>
                                         <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', borderRadius: '100%' }} src={organizacion?.organizacion?.logo} />
                                     </div>
@@ -106,7 +107,7 @@ export default function Organizaciones() {
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', gap: '0.4rem' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', gap: '0.4rem', transform: 'translateY(-50px)'}}>
                                     <div className="tarjeta-datos-titulos">
                                         <h6>DATOS GENERALES</h6>
                                         <img
@@ -247,7 +248,7 @@ export default function Organizaciones() {
 
                                 </div>
 
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '1.8rem', gap: '1rem', marginTop: '1rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '1.8rem', gap: '1rem', transform: 'translateY(-20px)'}}>
                                     <button className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenOrganizacion(false); setSelectIdOrganizacion(null); setOrganizacion(null); setOpenDatosGenerales(false); setOpenDatosContacto(false); setOpenDatosUbicacion(false); setOpenDatosHosting(false) }}
                                     >
