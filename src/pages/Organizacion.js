@@ -1502,7 +1502,7 @@ export default function Organizacion() {
                         <div className="overllay">
                         </div>
                         <div className="overllay-contenedor">
-                            <div style={{ minWidth: '500px', maxWidth: '500px', minHeight: '80vh', maxHeight: '80vh', backgroundColor: '#ffff', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <div style={{ minWidth: isLargeDevice ? '500px' : '100%', maxWidth: isLargeDevice ? '500px' : '100%', minHeight: '80vh', maxHeight: '80vh', backgroundColor: '#ffff', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '40px', width: '100%' }}>
                                     <h1 style={{ margin: '0', fontFamily: 'Poppins', fontSize: '20px', textAlign: 'center' }}>AFILIACIONES</h1>
                                     <div style={{ width: '25px', height: '25px', cursor: 'pointer' }}
