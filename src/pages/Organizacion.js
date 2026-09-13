@@ -1557,7 +1557,7 @@ export default function Organizacion() {
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
-                            <div style={{ width: '500px', height: 'auto', backgroundColor:'white', display:'flex', gap:'1rem', flexDirection:'column', justifyContent:'space-between', alignItems:'center'}}>
+                            <div style={{ width: isLargeDevice ? '500px' : '100%', height: 'auto', backgroundColor:'white', display:'flex', gap:'1rem', flexDirection:'column', justifyContent:'space-between', alignItems:'center'}}>
                                 <div><h1 style={{margin: 0, fontFamily:'Poppins', fontSize: '18px', textAlign:'center'}}>INFORMACIÓN</h1></div>
                                 <div style={{ width: '90%', display: 'flex', gap: '1rem' }}>
                                     <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
