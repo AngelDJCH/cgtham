@@ -41,7 +41,7 @@ export default function NavUser(props) {
                     user.rol.includes('ADMIN_ORG') ? <li
                         onClick={(e) => {
                             console.log(user)
-                            navigate(`/organizacion/${user.organizacion}`)
+                            navigate(`/organizacion/${user.organizacion}`); navigate(0)
                         }}
                     >
                         <img src={img_organizacion} alt='Organizacion' />

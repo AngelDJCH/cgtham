@@ -74,6 +74,16 @@ export default function NavBarAutenticado() {
 
                         ><a >Convenios</a></li>
                     )}
+
+                    {!isMediumDevice && (user?.tipo === 'Empresa' || user?.tipo === 'Cámara de Comercio') && (
+                        <li className='opciones'
+
+                            onClick={(e) => {
+                                navigate('/afiliaciones')
+                            }}
+
+                        ><a >Afiliaciones</a></li>
+                    )}
                     {!isMediumDevice && user?.tipo === 'Empresa' && (
                         <li className='opciones'
 
@@ -126,7 +136,7 @@ export default function NavBarAutenticado() {
                                     navigate(`/mensajes`)
                                 }}
                             >
-                                <button className='btn-accion-2' style={{ width: '40px', height: '40px' }}>
+                                <button className='btn-accion-2' style={{ width: '40px', height: '40px', borderRadius: '100%' }}>
                                     <img alt='Mensajes' src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0MTQzMUIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1tZXNzYWdlLWNpcmNsZS1pY29uIGx1Y2lkZS1tZXNzYWdlLWNpcmNsZSI+PHBhdGggZD0iTTIuOTkyIDE2LjM0MmEyIDIgMCAwIDEgLjA5NCAxLjE2N2wtMS4wNjUgMy4yOWExIDEgMCAwIDAgMS4yMzYgMS4xNjhsMy40MTMtLjk5OGEyIDIgMCAwIDEgMS4wOTkuMDkyIDEwIDEwIDAgMSAwLTQuNzc3LTQuNzE5Ii8+PC9zdmc+' />
                                 </button>
                             </li>
@@ -210,7 +220,7 @@ export default function NavBarAutenticado() {
                             }
                             <li className='opciones'
                                 onClick={(e) => {
-                                    navigate(`/organizacion/${user.organizacion}`)
+                                    navigate(`/organizacion/${user.organizacion}`); navigate(0)
                                 }}
                             ><a >Organizacion</a></li>
                             {
@@ -251,8 +261,7 @@ export default function NavBarAutenticado() {
                                 user.tipo.includes('Cámara de Comercio') && (
                                     <li className='opciones'
                                         onClick={(e) => {
-                                            alert('En construcción. Disculpe las molestias.')
-                                            // navigate('/afiliaciones')
+                                            navigate('/afiliaciones')
                                         }}
                                     ><a >Afiliaciones</a></li>
                                 )

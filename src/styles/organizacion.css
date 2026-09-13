@@ -1,4 +1,67 @@
-.tarjeta-dato{
+.contenedor-datos-g {
+    width: 90%;
+    height: auto;
+    padding: 1rem;
+    background-color: #41431B
+}
+
+.titulo-datos{
+    width: 100%;
+    display:flex;
+    justify-content: space-between;
+}
+
+.titulo-datos img:hover{
+    cursor:pointer;
+    scale:1.1
+}
+
+.titulo-datos h1 {
+    font-size: 16px;
+    color: white
+}
+
+.contenedor-datos-i{
+    width: 100%
+}
+
+.cuerpo-datos h6{
+    font-size: 12px;
+    color:white
+}
+
+.cuerpo-datos input{
+    width: 90%;
+    height: 30px;
+    border: 1px solid hsl(63, 35%, 57%);
+    color: black;
+    font-family: 'Poppins';
+    font-size: 12px;
+}
+
+.cuerpo-datos select{
+    width: 90%;
+    height: 30px;
+    border: 1px solid hsl(63, 35%, 57%);
+    color: black;
+    font-family: 'Poppins';
+    font-size: 12px;
+}
+
+.cuerpo-datos textarea{
+    width: 90%;
+    max-width: 90%;
+    min-width: 90%;
+    height: 90px;
+    max-height: 90px;
+    min-height: 90px;
+    border: 1px solid hsl(63, 35%, 57%);
+    color: black;
+    font-family: 'Poppins';
+    font-size: 12px;
+}
+
+.tarjeta-dato {
     background-color: white;
     width: 200px;
     min-width: 200px;
@@ -16,18 +79,18 @@
     scrollbar-width: none;
 }
 
-body{
+body {
     background-color: #AEB784 !important;
 }
 
-.tarjeta-dato:hover{
+.tarjeta-dato:hover {
     background-color: #41431B;
     color: white;
     transition: all 0.5s ease;
 }
 
 
-.tarjeta-dato h6{
+.tarjeta-dato h6 {
     margin: 0;
     padding: 0;
 }

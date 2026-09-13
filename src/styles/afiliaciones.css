@@ -1,0 +1,27 @@
+.card-afiliacion{
+    width: 200px;
+    height: 100px;
+    border: 1px solid black;
+    background-color: #41431B;
+}
+
+.card-afiliacion h6 {
+    margin: 0;
+    font-family: 'Poppins';
+    font-size: 12px;
+    text-align: center;
+    color: white;
+}
+
+.card-afiliacion textarea{
+    background-color: transparent;
+    scrollbar-width: none;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 40px;
+    max-height: 40px;
+    height: 40px;
+    margin: 0;
+    border: none;
+}
