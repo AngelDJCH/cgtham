@@ -17,6 +17,7 @@ import { uploadImgBanner, uploadImgLogo } from "../services/Upload";
 import { updateCuentaById, updateCuentaContraseniaById, updateCuentaCorreoById } from "../services/Cuenta";
 import { createOfertaEducativa, findAllByIdEscuela } from "../services/OfertaEducativa";
 import { findByIdEmpresa } from "../services/Afiliacion";
+import Loader from "../components/Loader";
 
 
 export default function Organizacion() {
@@ -102,6 +103,8 @@ export default function Organizacion() {
         }
     ]);
 
+    const [loading, setLoading] = useState(false)
+
     const [selectTipo, setSelectTipo] = useState('')
     const [selectSector, setSelectSector] = useState('')
     const [selectGiro, setSelectGiro] = useState('')
@@ -139,6 +142,8 @@ export default function Organizacion() {
 
     const handleCreateOfertaEducativa = async () => {
 
+        setLoading(true)
+
         const nombre = document.getElementById('nombre_oferta').value
         const duracion = document.getElementById('duracion_oferta').value
         const descripcion = document.getElementById('descripcion_oferta').value
@@ -153,11 +158,13 @@ export default function Organizacion() {
         })
         if (newOferta === 201) {
             alert('SE PUBLICO LA OFERTA')
+            setOpenCreateOfertaEducativa(false)
         } else if (newOferta === 409) {
             alert('OFERTA EDUCATIVA YA EXISTENTE')
         } else {
             alert('NO SE PUDO PUBLICAR LA OFERTA')
         }
+        setLoading(false)
     }
 
 
@@ -170,9 +177,13 @@ export default function Organizacion() {
     })
 
     const handleChangeLogo = async (e) => {
+
+        setLoading(true)
+
         const logoEvento = e.target.files[0]
         if (logoEvento.size > 5000000) {
             alert('El archivo debe pesar menos que 5 MB')
+            setLoading(false)
         } else {
             try {
                 var reader = new FileReader()
@@ -196,17 +207,23 @@ export default function Organizacion() {
                         alert('LOGO GUARDADO EXITOSAMENTE')
                     }
                 }
+
+                setLoading(false)
             } catch (error) {
                 console.log(error)
+                setLoading(false)
             }
         }
     }
 
     const handleChangeBanner = (e) => {
 
+        setLoading(true)
+
         const bannerEvento = e.target.files[0]
         if (bannerEvento.size > 5000000) {
             alert('El archivo debe pesar menos que 5 MB')
+            setLoading(false)
         } else {
             try {
                 var reader = new FileReader()
@@ -230,8 +247,10 @@ export default function Organizacion() {
                         alert('BANNER GUARDADO EXITOSAMENTE')
                     }
                 }
+                setLoading(false)
             } catch (error) {
                 console.log(error)
+                setLoading(false)
             }
         }
     }
@@ -306,6 +325,8 @@ export default function Organizacion() {
 
     const handleUpdateOrganizacionData = async () => {
 
+        setLoading(true)
+
         let notificacionData = ''
 
         const datosOrganizacion = await updateById(organizacion)
@@ -346,11 +367,13 @@ export default function Organizacion() {
         if (cloudData === 200) { notificacionData.concat('DATOS DE CLOUDINARY (HOSTING) ACTUALIZADOS \n') }
         const direccionData = await updateDireccionById(direccion)
         if (direccionData === 200) { notificacionData = notificacionData.concat('DATOS DE DIRECCIÓN ACTUALIZADOS \n') }
-        navigate(0)
         alert(notificacionData)
+        setLoading(false)
+        navigate(0)
     }
 
     useEffect(() => {
+
         const organizacionData = async () => {
             const resOrg = await getOrganizacion(id)
             setOrganizacion(resOrg)
@@ -1329,7 +1352,19 @@ export default function Organizacion() {
                                  -> Perfil del egresado
                                 */
                             }
-                            <div style={{ display: 'flex', gap: '1rem', height: 'auto', padding: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                            <div style={{ display: 'flex', gap: '1rem', height: 'auto', padding: '0.9rem', flexWrap: 'wrap', justifyContent: 'center'}}>
+                                {
+                                    user.tipo === 'Escuela' && organizacion?.id === user.organizacion && (
+                                        <div style={{width:'100%', display:'flex', justifyContent:'end'}}>
+                                            <button className="btn-accion-2"
+                                                onClick={() => {
+                                                    setOpenCreateOfertaEducativa(true)
+                                                }}
+                                            ><strong>AGREGAR</strong></button>
+                                        </div>
+                                    )
+                                }
+
                                 {
                                     ofertasEducativas?.length === 0 && (
                                         <p
@@ -1366,17 +1401,6 @@ export default function Organizacion() {
                                                     </div>
                                                 </div>
                                             </div>
-                                    )
-                                }
-                                {
-                                    user.tipo === 'Escuela' && organizacion?.id === user.organizacion && (
-                                        <div>
-                                            <button className="btn-accion-2"
-                                                onClick={() => {
-                                                    setOpenCreateOfertaEducativa(true)
-                                                }}
-                                            ><strong>AGREGAR</strong></button>
-                                        </div>
                                     )
                                 }
                             </div>
@@ -1557,40 +1581,40 @@ export default function Organizacion() {
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor">
-                            <div style={{ width: isLargeDevice ? '500px' : '100%', height: 'auto', backgroundColor:'white', display:'flex', gap:'1rem', flexDirection:'column', justifyContent:'space-between', alignItems:'center'}}>
-                                <div><h1 style={{margin: 0, fontFamily:'Poppins', fontSize: '18px', textAlign:'center'}}>INFORMACIÓN</h1></div>
+                            <div style={{ width: isLargeDevice ? '500px' : '100%', height: 'auto', backgroundColor: 'white', display: 'flex', gap: '1rem', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div><h1 style={{ margin: 0, fontFamily: 'Poppins', fontSize: '18px', textAlign: 'center' }}>INFORMACIÓN</h1></div>
                                 <div style={{ width: '90%', display: 'flex', gap: '1rem' }}>
-                                    <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
-                                        <h1 style={{margin: 0, fontFamily:'Poppins', fontSize: '16px', textAlign:'center'}}>ACTIVA</h1>
-                                        <p style={{margin: 0, fontFamily:'Poppins', fontSize: '12px', textAlign:'justify'}}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                        <h1 style={{ margin: 0, fontFamily: 'Poppins', fontSize: '16px', textAlign: 'center' }}>ACTIVA</h1>
+                                        <p style={{ margin: 0, fontFamily: 'Poppins', fontSize: '12px', textAlign: 'justify' }}>
                                             La Organización esta afiliada a la Camara de Comercio.
                                         </p>
-                                        <div style={{width:'50px', height:'50px'}}>
-                                            <img src={activaAUrl} style={{width:'100%', height:'100%'}}/>
+                                        <div style={{ width: '50px', height: '50px' }}>
+                                            <img src={activaAUrl} style={{ width: '100%', height: '100%' }} />
                                         </div>
                                     </div>
 
-                                    <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
-                                        <h1 style={{margin: 0, fontFamily:'Poppins', fontSize: '16px', textAlign:'center'}}>INACTIVA</h1>
-                                        <p style={{margin: 0, fontFamily:'Poppins', fontSize: '12px', textAlign:'justify'}}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                        <h1 style={{ margin: 0, fontFamily: 'Poppins', fontSize: '16px', textAlign: 'center' }}>INACTIVA</h1>
+                                        <p style={{ margin: 0, fontFamily: 'Poppins', fontSize: '12px', textAlign: 'justify' }}>
                                             La Organización se encuentra en modo de espera para tener la afiliación.
                                         </p>
-                                        <div style={{width:'50px', height:'50px'}}>
-                                            <img src={inactivaAUrl} style={{width:'100%', height:'100%'}}/>
+                                        <div style={{ width: '50px', height: '50px' }}>
+                                            <img src={inactivaAUrl} style={{ width: '100%', height: '100%' }} />
                                         </div>
                                     </div>
 
-                                    <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
-                                        <h1 style={{margin: 0, fontFamily:'Poppins', fontSize: '16px', textAlign:'center'}}>SUSPENDIDA</h1>
-                                        <p style={{margin: 0, fontFamily:'Poppins', fontSize: '12px', textAlign:'justify'}}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                        <h1 style={{ margin: 0, fontFamily: 'Poppins', fontSize: '16px', textAlign: 'center' }}>SUSPENDIDA</h1>
+                                        <p style={{ margin: 0, fontFamily: 'Poppins', fontSize: '12px', textAlign: 'justify' }}>
                                             La Organización ya no tiene la afiliación por parte de esa Camara de Comercio.
                                         </p>
-                                        <div style={{width:'50px', height:'50px'}}>
-                                            <img src={suspendidaAUrl} style={{width:'100%', height:'100%'}}/>
+                                        <div style={{ width: '50px', height: '50px' }}>
+                                            <img src={suspendidaAUrl} style={{ width: '100%', height: '100%' }} />
                                         </div>
                                     </div>
                                 </div>
-                                <div style={{display:'flex', justifyContent:'end'}}>
+                                <div style={{ display: 'flex', justifyContent: 'end' }}>
                                     <button className="btn-accion-2"
                                         onClick={() => { setOpenInformacionAfiliaciones(false) }}
                                     >
@@ -1600,6 +1624,12 @@ export default function Organizacion() {
                             </div>
                         </div>
                     </div>
+                )
+            }
+
+            {
+                loading && (
+                    <Loader />
                 )
             }
 

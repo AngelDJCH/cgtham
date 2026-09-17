@@ -18,6 +18,9 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function AutenticacionPage() {
 
+    const [openCambiarContraseña, setOpenCambiarContraseña] = useState(false)
+    const [openAlertaCambiarContraseña, setOpenAlertaCambiarContraseña] = useState(false)
+
     const imgLogoDefault = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlLXVwLWljb24gbHVjaWRlLWltYWdlLXVwIj48cGF0aCBkPSJNMTAuMyAyMUg1YTIgMiAwIDAgMS0yLTJWNWEyIDIgMCAwIDEgMi0yaDE0YTIgMiAwIDAgMSAyIDJ2MTBsLTMuMS0zLjFhMiAyIDAgMCAwLTIuODE0LjAxNEw2IDIxIi8+PHBhdGggZD0ibTE0IDE5LjUgMy0zIDMgMyIvPjxwYXRoIGQ9Ik0xNyAyMnYtNS41Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjkiIHI9IjIiLz48L3N2Zz4="
     const imgBannerDefault = "https://plus.unsplash.com/premium_photo-1772877094825-2908e6cfd259?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
@@ -177,6 +180,7 @@ export default function AutenticacionPage() {
             res.status === 200 ? navigate('/home') : <div></div>
         } catch (error) {
             alert('CREDENCIALES INCORRECTAS')
+            setOpenCambiarContraseña(true)
         }
     }
 
@@ -313,6 +317,22 @@ export default function AutenticacionPage() {
                                 <input placeholder="Correo electronico" required type="email" onChange={(e) => { setCorreoLogin(e.target.value) }} />
                                 <input placeholder="Contraseña" required type="password" onChange={(e) => { setContraseniaLogin(e.target.value) }} />
                             </div>
+                            {
+                                openCambiarContraseña && (
+                                    <div className="a-registros">
+                                        <p
+
+                                            style={{ cursor: 'pointer', color: 'red' }}
+
+                                            onClick={() => {
+                                                //setOpenAlertaCambiarContraseña(true)
+                                                alert('No disponible')
+                                            }}
+
+                                        >Recuperar contraseña</p>
+                                    </div>
+                                )
+                            }
                             <div className="a-registros">
                                 <p
 
@@ -645,6 +665,39 @@ export default function AutenticacionPage() {
                 )
 
             }
+
+            {
+                openAlertaCambiarContraseña && (
+                    <div>
+                        <div className="overllay"></div>
+                        <div className="overllay-contenedor">
+                            <div className="a-inputs">
+                                <input placeholder="Ingrese el correo de la cuenta" />
+                            </div>
+                            <div className="a-inputs">
+                                <input placeholder="Ingrese el correo de la cuenta" />
+                            </div>
+                            <div>
+                                <button className=""
+                                    onClick={() => {
+                                        setOpenAlertaCambiarContraseña(false)
+                                    }}
+                                >
+                                    <strong>
+                                        CANCELAR
+                                    </strong>
+                                </button>
+                                <button className="btn-accion-2">
+                                    <strong>
+                                        RECUPERAR
+                                    </strong>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
         </div>
     )
 }

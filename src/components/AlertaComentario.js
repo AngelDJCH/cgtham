@@ -4,20 +4,27 @@ import { createComentario } from "../services/Comentario"
 import { useNavigate } from "react-router-dom"
 import { useMediaQuery } from "@uidotdev/usehooks"
 import '../styles/comentarios-modal.css'
+import Loader from "./Loader"
 
 export default function AlertaComentario(
     props
 ) {
-
+    const [loading, setLoading] = useState(false)
     const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width:1024px)')
     const [countCantidad, setCountCantidad] = useState(0)
     const [contenido, setContenido] = useState('')
     const navigate = useNavigate()
     const { user } = useAuth()
     const create = async () => {
+        setLoading(true)
         const res = await createComentario(contenido, user.organizacion)
-        if (res != 201) alert('No se pudo crear el comentario - Error')
-        if (res === 201) alert('SE CREO EL COMENTARIO')
+        if (res != 201) {
+            setLoading(false)
+            alert('No se pudo crear el comentario - Error')
+        } else {
+            setLoading(false)
+            alert('SE CREO EL COMENTARIO')
+        }
     }
 
     return (
@@ -71,6 +78,13 @@ export default function AlertaComentario(
                     </div>
                 </div>
             </div>
+
+            {
+                loading && (
+                    <Loader/>
+                )
+            }
+
         </div>
     )
 }

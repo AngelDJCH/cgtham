@@ -8,6 +8,7 @@ import '../styles/botones.css'
 import { useAuth } from "../hooks/useAuth"
 import InscripcionAlterta from "./InscripcionAlterta"
 import { useMediaQuery } from "@uidotdev/usehooks"
+import Loader from "./Loader"
 
 export default function VisualizarEvento(props) {
 
@@ -67,6 +68,8 @@ export default function VisualizarEvento(props) {
     ]);
 
     useEffect(() => {
+        setLoading(true)
+
         const getEvento = async () => {
             const res = await eventoById(props.id_evento)
             setEvento(res)
@@ -106,21 +109,27 @@ export default function VisualizarEvento(props) {
 
 
     const handleUpdateEstadoById = async (id, estado) => {
+        setLoading(true)
         const data = await updateInscripcionByEstado(id, estado)
         if (data) {
+            setLoading(false)
             navigate(0)
             alert('INSCRIPCION ACEPTADA')
         } else {
+            setLoading(false)
             navigate(0)
             alert('NO SE PUDO ACTUALIZAR LA INSCRIPCION')
         }
     }
     const handeUpdateEvento = async () => {
+        setLoading(true)
         const status = await updateEventoById({ ...evento, id_organizacion: user?.organizacion })
         if (status === 200) {
+            setLoading(false)
             alert('Evento modificado');
             navigate(0)
         } else {
+            setLoading(false)
             navigate(0); alert('NO SE PUDO MODIFICAR EL EVENTO')
         }
         // if (status === 200) navigate(0)
@@ -129,10 +138,16 @@ export default function VisualizarEvento(props) {
 
     return (
         <div>
+
+            {
+                loading && (
+                    <Loader/>
+                )
+            }
+
             <div className="overllay"></div>
             <div className="overllay-contenedor">
-                {
-                    !loading ? (
+
                         <div className="formulario-contenedor">
                             <div className="titulo-formulario"><h1 className="subtitulo">{evento?.titulo.substring(0, 25)}</h1></div>
                             <div className="formulario">
@@ -240,8 +255,7 @@ export default function VisualizarEvento(props) {
                                 }
                             </div>
                         </div>
-                    ) : <p>CARGANDO...</p>
-                }
+
             </div>
 
             {

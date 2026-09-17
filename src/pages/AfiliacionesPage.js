@@ -26,7 +26,7 @@ export default function Afiliaciones() {
             }
             <div style={{ width: '100%', marginTop: isLargeDevice ? '5vh' : '16vh', display: 'flex', justifyContent: isLargeDevice ? 'end' : 'center' }}>
                 <div style={{ width: isLargeDevice ? '70%' : '90%', height: isLargeDevice ? '75vh' : '80vh', backgroundColor: 'white', marginRight: isLargeDevice ? '2rem' : '0rem' }}>
-                    <div style={{ width: '100%', height: '20px',display:'flex', gap:'1rem', justifyContent:'center', marginTop:'1rem', flexWrap:'wrap'}}>
+                    <div style={{ width: '100%', height: '20px', display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem', flexWrap: 'wrap' }}>
                         <input placeholder="Ingresa el nombre de la empresa"
                             style={{
                                 border: '1px solid black',
@@ -41,14 +41,35 @@ export default function Afiliaciones() {
                             <strong>BUSCAR</strong>
                         </button>
                     </div>
-                    <div style={{display:'flex', marginTop:'1rem'}}>
-                                            <div
-                        className="card-afiliacion"
-                    >
-                        <div><h6>PETICIONES</h6></div>
-                        <div><textarea value={'En esta sección encontras las peticiones de afiliación de otras empresas a tu camara de comercio.'}/></div>
-                        <div><button><strong>ABRIR</strong></button></div>
-                    </div>
+                    <div style={{ display: 'flex', marginTop: '1rem', width:'100%', justifyContent:'space-between', flexWrap:'wrap'}}>
+                        <div
+                            className="card-afiliacion"
+                        >
+                            <div><h6>PETICIONES</h6></div>
+                            <div><textarea value={'En esta sección encontras las peticiones de afiliación de otras empresas a tu camara de comercio.'} /></div>
+                            <div><button><strong>ABRIR</strong></button></div>
+                        </div>
+                        <div
+                            className="card-afiliacion"
+                        >
+                            <div><h6>NOTICIAS</h6></div>
+                            <div><textarea value={'En esta sección encontras las peticiones de afiliación de otras empresas a tu camara de comercio.'} /></div>
+                            <div><button><strong>ABRIR</strong></button></div>
+                        </div>
+                        <div
+                            className="card-afiliacion"
+                        >
+                            <div><h6>SUGERENCIAS</h6></div>
+                            <div><textarea value={'En esta sección encontras las peticiones de afiliación de otras empresas a tu camara de comercio.'} /></div>
+                            <div><button><strong>ABRIR</strong></button></div>
+                        </div>
+                        <div
+                            className="card-afiliacion"
+                        >
+                            <div><h6>EVENTOS</h6></div>
+                            <div><textarea value={'En esta sección encontras las peticiones de afiliación de otras empresas a tu camara de comercio.'} /></div>
+                            <div><button><strong>ABRIR</strong></button></div>
+                        </div>
                     </div>
                 </div>
             </div>

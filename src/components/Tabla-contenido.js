@@ -17,6 +17,9 @@ import VisualizarVisita from './VisualizarVisita.js'
 import { deleteByIdConvenio } from '../services/Convenio.js'
 
 export default function TablaContenido(props) {
+
+    const [loading, setLoading] = useState(false)
+
     const navigate = useNavigate()
     const { user } = useAuth()
     const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width : 1024px)');

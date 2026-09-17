@@ -6,6 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import { getAllOrganizaciones } from "../services/Organizacion";
 import { allVisitasByIdEmpresa, allVisitasByIdEscuela, allVisitasForAdministrador, createVisita } from "../services/Visita";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import Loader from "../components/Loader";
 
 export default function Visitas() {
     const [filtro, setFiltro] = useState('')
@@ -19,15 +20,20 @@ export default function Visitas() {
     const isSmallDevice = useMediaQuery('(max-width:768px)');
     const isLargeDevice = useMediaQuery('(min-width:992px)')
 
+    const [loading, setLoading] = useState(false)
+
     const [visitas, setVisitas] = useState([])
 
     const handleVisitaCreate = async () => {
+        setLoading(true)
         try {
             const status = await createVisita(user.organizacion, idEmpresa)
             if (status === 201) { alert('Solicitud de visita realizada con exito') }
             if (status != 201) { alert('La solicitud de visita no se realizo con exito') }
         } catch (error) {
             alert('Ocurrio un error')
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -144,6 +150,13 @@ export default function Visitas() {
                     </div>
                 )
             }
+
+            {
+                loading && (
+                    <Loader/>
+                )
+            }
+
         </div>
     )
 }

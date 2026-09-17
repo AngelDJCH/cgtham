@@ -8,9 +8,12 @@ import { createConvenio } from "../services/Convenio";
 import { useNavigate } from "react-router-dom";
 import { uploadDocument } from "../services/Upload";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import Loader from "../components/Loader";
 
 export default function Convenios() {
     const isSmallDevice = useMediaQuery('(max-width:768px)');
+
+    const [loading, setLoading] = useState(false)
 
     const [documento, setDocumento] = useState(null)
     const [openDocumento, setOpenDocumento] = useState(false)
@@ -241,6 +244,7 @@ export default function Convenios() {
                                     <button
                                         style={{ marginRight: '1rem' }}
                                         onClick={async () => {
+                                            setLoading(true)
                                             setDocumento(null)
                                             if (convenio.titulo.length >= 1 && convenio.descripcion.length >= 1 &&
                                                 convenio.tipo.length >= 1 && convenio.subtipo.length >= 1 &&
@@ -252,11 +256,14 @@ export default function Convenios() {
                                                 const id_convenio_res = resConvenio.id
                                                 const resConvenioOrganizacion = await createConvenioOrganizacion('ANFITRION', id_convenio_res, user.organizacion)
                                                 if (resConvenioOrganizacion === 201) {
+                                                    setLoading(false)
                                                     navigate(0)
                                                 } else {
+                                                    setLoading(false)
                                                     alert('Ocurrio un error')
                                                 }
                                             } else {
+                                                setLoading(false)
                                                 alert('FALTAN CAMPOS DE LLENAR')
                                             }
                                         }}
@@ -287,6 +294,13 @@ export default function Convenios() {
                     </div>
                 )
             }
+
+            {
+                loading && (
+                    <Loader/>
+                )
+            }
+
         </div>
     )
 }

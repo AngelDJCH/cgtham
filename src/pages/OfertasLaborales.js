@@ -9,8 +9,11 @@ import { useAuth } from "../hooks/useAuth";
 import { uploadDocument } from "../services/Upload";
 import VisualizarOferta from "../components/VisualizarOferta";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import Loader from '../components/Loader'
 
 export default function OfertasLaborales() {
+
+    const [loading, setLoading] = useState(false)
 
     const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width:1024px)');
 
@@ -52,20 +55,24 @@ export default function OfertasLaborales() {
     })
 
     const handleCreateOferta = async () => {
+
+        setLoading(true)
+
         if (ofertaData.jornada === '---' ||
             ofertaData.tipo_contrato === '---' ||
             ofertaData.departamento_area === '---' ||
             ofertaData.modalidad === '---' ||
             documento === null
         ) {
+            setLoading(false)
             alert('DEBES LLENAR TODOS LOS DATOS Y SUBIR EL DOCUMENTO DE OFERTA LABORAL EN PDF')
         } else {
             const res_document = await uploadDocument(documento, user.organizacion)
             if (res_document) {
                 const res = await createOfertaLaboral({ ...ofertaData, id_empresa: user.organizacion, documento: res_document })
                 setDocumento(null)
-                if (res) navigate(0)
-                if (!res) alert('Debes llenar todos los datos')
+                if (res) {setLoading(false); navigate(0)}
+                if (!res) {setLoading(false); alert('Debes llenar todos los datos')}
             }
         }
     }
@@ -120,6 +127,8 @@ export default function OfertasLaborales() {
     });
 
     const handleUploadDocument = (e) => {
+        setLoading(true)
+
         const file = e.target.files[0]
         try {
             const reader = new FileReader()
@@ -130,6 +139,8 @@ export default function OfertasLaborales() {
         } catch (error) {
             console.log(error)
         }
+
+        setLoading(false)
     }
 
     const [openDocumento, setOpenDocumento] = useState(false)
@@ -386,6 +397,12 @@ export default function OfertasLaborales() {
                             </div>
                         </div>
                     </div>
+                )
+            }
+
+            {
+                loading && (
+                    <Loader/>
                 )
             }
 

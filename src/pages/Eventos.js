@@ -9,8 +9,11 @@ import { createEvento, deleteEventoById } from "../services/Evento";
 import { useNavigate } from "react-router-dom";
 import { uploadFotoEvento } from "../services/Foto";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import Loader from "../components/Loader";
 
 export default function Eventos(prop) {
+
+    const [loading, setLoading] = useState(false)
 
     const imgDefaultSelect = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="
     const imgAddSelect = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlLXBsdXMtaWNvbiBsdWNpZGUtaW1hZ2UtcGx1cyI+PHBhdGggZD0iTTE2IDVoNiIvPjxwYXRoIGQ9Ik0xOSAydjYiLz48cGF0aCBkPSJNMjEgMTEuNVYxOWEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoNy41Ii8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48Y2lyY2xlIGN4PSI5IiBjeT0iOSIgcj0iMiIvPjwvc3ZnPg=="
@@ -78,9 +81,6 @@ export default function Eventos(prop) {
                 setImagenes([...imagenes, nuevaImagen]);
                 setSelectImagen(nuevaImagen.url);
             };
-
-
-
             reader.readAsDataURL(file);
         } catch (error) {
             console.log("Error al cargar la imagen:", error);
@@ -88,7 +88,9 @@ export default function Eventos(prop) {
     };
 
     const handleCreateEvento = async () => {
-        if (imagenes.length === 0) { alert('NO SE HAN SELECCIONADO IMAGENES') } else {
+        setLoading(true)
+
+        if (imagenes.length === 0) { alert('NO SE HAN SELECCIONADO IMAGENES'); setLoading(false) } else {
 
             const res = await createEvento(evento)
             if (res) {
@@ -98,16 +100,17 @@ export default function Eventos(prop) {
                     }
                 } catch (error) {
                     const eliminado = await deleteEventoById(res.id)
+                    setLoading(false)
                     navigate(0)
                     alert('NO SE PUDO CREAR EL EVENTO')
                 }
-
+                setLoading(false)
                 navigate(0)
                 alert('EVENTO PUBLICADO - (FOTOS SUBIDAS CON EXITO)')
             } else {
                 alert('NO SE PUDO CREAR EL EVENTO')
             }
-
+            setLoading(false);
             setOpenCreateEvento(false); setImagenes([]); setSelectImagen(null);
         }
     }
@@ -233,6 +236,12 @@ export default function Eventos(prop) {
                             </div>
                         </div>
                     </div>
+                )
+            }
+
+            {
+                loading && (
+                    <Loader />
                 )
             }
 
