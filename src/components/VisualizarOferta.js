@@ -83,7 +83,7 @@ export default function VisualizarOferta(props) {
                         <h1 style={{ margin: '0', padding: '0', fontFamily: 'Poppins', fontSize: '18px', marginLeft: '1rem' }}>{oferta?.titulo}</h1>
                     </div>
 
-                    <div style={{ padding: '0.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', minHeight: (isSmallDevice || isMediumDevice) ? '40%' : '250px', maxHeight: isSmallDevice ? '150px' : '250px', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
+                    <div style={{ padding: '0.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', minHeight: (isSmallDevice || isMediumDevice) ? '50%' : '300px', maxHeight: isSmallDevice ? '50%' : '300px', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
                         <div style={{ width: '100%', height: '60px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', borderTop: '1px solid black', paddingTop: '0.5rem' }}>
                             <h6 style={{ margin: '0', textAlign: 'justify', width: '90%' }}>Descripción:</h6>
                             <textarea style={{ minWidth: '90%', maxWidth: '90%', minHeight: '50px', maxHeight: '50px', border: 'none', textAlign: 'center' }} value={oferta?.descripcion} />
@@ -147,22 +147,20 @@ export default function VisualizarOferta(props) {
                                 </div>
                             )
                         }
-
-                    </div>
-
-                    <div style={{ padding: '0.5rem', display: 'flex', justifyContent: 'center', height: (isSmallDevice || isMediumDevice) ? '20%' : null, gap: '1rem' }}>
-                        <button className="btn-accion-cancelar-1" onClick={() => { props.accion(false) }}>
-                            <strong>CERRAR</strong>
-                        </button>
-                        {oferta?.id_empresa === user?.organizacion && (
-                            <button className="btn-accion-2" onClick={async () => {
-                                const res = await deleteOferta(oferta?.id)
-                                if (res === 204) navigate(0)
-                                else alert('no se pudo eliminar la oferta')
-                            }}>
-                                <strong>ELIMINAR</strong>
+                        <div style={{ padding: '0.5rem', display: 'flex', justifyContent: 'center', height: (isSmallDevice || isMediumDevice) ? '20%' : null, gap: '1rem' }}>
+                            <button className="btn-accion-cancelar-1" onClick={() => { props.accion(false) }}>
+                                <strong>CERRAR</strong>
                             </button>
-                        )}
+                            {oferta?.id_empresa === user?.organizacion && (
+                                <button className="btn-accion-2" onClick={async () => {
+                                    const res = await deleteOferta(oferta?.id)
+                                    if (res === 204) navigate(0)
+                                    else alert('no se pudo eliminar la oferta')
+                                }}>
+                                    <strong>ELIMINAR</strong>
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
 

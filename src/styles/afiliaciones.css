@@ -25,3 +25,27 @@
     margin: 0;
     border: none;
 }
+
+.contenedor-afiliaciones-cards{
+    display: flex;
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    height: 60vh;
+    max-height: 60vh;
+    min-height: 60vh;
+}
+
+@media (max-width:768px) {
+    .card-afiliacion{
+        width: 90%;
+    }
+
+    .contenedor-afiliaciones-cards{
+        justify-content: center;
+        gap: 1rem;
+        overflow-y: scroll;
+        scrollbar-width: thin;
+    }
+}
