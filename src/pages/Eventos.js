@@ -69,6 +69,8 @@ export default function Eventos(prop) {
         const file = e.target.files[0];
         if (!file) return;
 
+        if(file.size  > 5242880) {alert('LA FOTO DEBE PESAR MENOS DE 5MB'); return;}
+
         try {
             const reader = new FileReader();
 

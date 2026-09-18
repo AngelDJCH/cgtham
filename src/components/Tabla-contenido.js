@@ -121,67 +121,67 @@ export default function TablaContenido(props) {
                     <tbody>
                         {
                             props.inscripcionesTabla?.filter(f => props.filtro.length === 0 || f.evento.titulo.toLowerCase().includes(props.filtro.toLowerCase())).map(
-                                inscrpcion => <tr>
-                                    <td defaultValue={inscrpcion.organizacion.id}>{inscrpcion.organizacion.nombre_comercial}</td>
-                                    <td defaultValue>{inscrpcion.evento.titulo}</td>
-                                    <td defaultValue={inscrpcion.inscripcion.id}>{inscrpcion.inscripcion.fecha.split('T')[0]}</td>
-                                    <td>{inscrpcion.inscripcion.estado}</td>
-                                    <td>
-                                        {
-                                            inscrpcion.inscripcion.estado != 'PENDIENTE' && (
-                                                <div className='tabla-acciones'>
-                                                    <button
-                                                        className='btn-accion-2'
-                                                        value={inscrpcion.evento.id_evento}
-                                                        onClick={(e) => {
-                                                            setIdEvento(inscrpcion.evento.id_evento)
-                                                            setOpenEvento(true)
-                                                        }}
+                                inscripcion => (
+                                    <tr key={inscripcion.inscripcion?.id_inscripcion ?? inscripcion.evento?.id_evento ?? inscripcion.organizacion?.id}>
+                                        <td defaultValue={inscripcion.organizacion.id}>{inscripcion.organizacion.nombre_comercial}</td>
+                                        <td defaultValue>{inscripcion.evento.titulo}</td>
+                                        <td defaultValue={inscripcion.inscripcion.id}>{inscripcion.inscripcion.fecha.split('T')[0]}</td>
+                                        <td>{inscripcion.inscripcion.estado}</td>
+                                        <td>
+                                            {
+                                                inscripcion.inscripcion.estado !== 'PENDIENTE' && (
+                                                    <div className='tabla-acciones'>
+                                                        <button
+                                                            className='btn-accion-2'
+                                                            value={inscripcion.evento.id_evento}
+                                                            onClick={(e) => {
+                                                                setIdEvento(inscripcion.evento.id_evento)
+                                                                setOpenEvento(true)
+                                                            }}
 
-                                                    >
-                                                        <strong>
-                                                            VER
-                                                        </strong>
-                                                    </button>
-                                                </div>
-                                            )
-                                        }
+                                                        >
+                                                            <strong>
+                                                                VER
+                                                            </strong>
+                                                        </button>
+                                                    </div>
+                                                )
+                                            }
 
-                                        {
-                                            inscrpcion.inscripcion.estado === 'PENDIENTE' && (
+                                            {
+                                                inscripcion.inscripcion.estado === 'PENDIENTE' && (
 
-                                                <div className='tabla-acciones'>
-                                                    <button
-                                                        value={inscrpcion.evento.id_evento}
-                                                        className='btn-accion-2'
-                                                        onClick={(e) => {
-                                                            setIdEvento(inscrpcion.evento.id_evento)
-                                                            setOpenEvento(true)
-                                                        }}
+                                                    <div className='tabla-acciones'>
+                                                        <button
+                                                            value={inscripcion.evento.id_evento}
+                                                            className='btn-accion-2'
+                                                            onClick={(e) => {
+                                                                setIdEvento(inscripcion.evento.id_evento)
+                                                                setOpenEvento(true)
+                                                            }}
 
-                                                    >
-                                                        <strong>
-                                                            VER
-                                                        </strong>
-                                                    </button>
-                                                    <button
-                                                        className='btn-accion-cancelar-1'
-                                                        onClick={async () => {
-
-                                                            const status = await deleteById(inscrpcion.inscripcion.id_inscripcion)
-                                                            navigate(0)
-
-                                                        }}
-                                                    >
-                                                        <strong>
-                                                            CANCELAR
-                                                        </strong>
-                                                    </button>
-                                                </div>
-                                            )
-                                        }
-                                    </td>
-                                </tr>
+                                                        >
+                                                            <strong>
+                                                                VER
+                                                            </strong>
+                                                        </button>
+                                                        <button
+                                                            className='btn-accion-cancelar-1'
+                                                            onClick={async () => {
+                                                                const status = await deleteById(inscripcion.inscripcion.id_inscripcion)
+                                                                navigate(0)
+                                                            }}
+                                                        >
+                                                            <strong>
+                                                                CANCELAR
+                                                            </strong>
+                                                        </button>
+                                                    </div>
+                                                )
+                                            }
+                                        </td>
+                                    </tr>
+                                )
                             )
                         }
 
@@ -321,7 +321,7 @@ export default function TablaContenido(props) {
                                             )
                                         }
                                         {
-                                            evento?.id_organizacion === user.organizacion || user.rol.includes('ADMIN_SYS') && (
+                                            (evento?.id_organizacion === user.organizacion || user.rol.includes('ADMIN_SYS')) && (
                                                 <button
                                                     onClick={async () => {
                                                         const res = await deleteEventoById(evento?.id)

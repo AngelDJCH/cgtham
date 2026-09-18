@@ -102,7 +102,7 @@ export default function Notas() {
                   src={evento.fotos[0]} alt="imagenes" style={{cursor: 'pointer', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
               </div>
               <div style={{ width: isMediumDevice ? '100%' : '200px', height: 'auto', backgroundColor: '#AEB784', padding: '0.1rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <h1 style={{ margin: '0', padding: '0', fontFamily: 'Poppins', fontSize: '14px', width: '100%', textAlign: 'center' }}>{evento.titulo}</h1>
+                <h1 style={{ margin: '0', padding: '0', fontFamily: 'Poppins', fontSize: '14px', width: '100%', textAlign: 'center' }}>{evento.titulo.length > 20 ? evento.titulo.substring(0,20)+'...' : evento.titulo}</h1>
                 <div>
                   <p style={{ fontFamily: 'Poppins', textAlign: 'center', fontSize: '13px' }}>{evento.fecha_inicio.split('T')[0]} <strong>/</strong> {evento.fecha_final.split('T')[0]}</p>
                 </div>
