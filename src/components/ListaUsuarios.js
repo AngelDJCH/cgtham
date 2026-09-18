@@ -60,8 +60,8 @@ export default function ListaUsuarios(props) {
               bottom: '65px',
               width: '100%',
               height: '70vh',
-              display:'flex',
-              justifyContent:'center'
+              display: 'flex',
+              justifyContent: 'center'
             }}
           >
             <div
@@ -70,20 +70,20 @@ export default function ListaUsuarios(props) {
                 height: '70vh',
                 minHeight: '70vh',
                 maxHeight: '70vh',
-                overflowY:'scroll',
-                scrollbarWidth:'thin',
+                overflowY: 'scroll',
+                scrollbarWidth: 'thin',
                 backgroundColor: 'gray'
               }}
             >
               {
                 organizaciones?.map(
-                  o => 
-                  <div className='chat-seleccionado' style={{display:'flex', alignItems:'center', gap:'1rem', flexShrink:'0', paddingLeft:'1rem'}}
-                    onClick={()=>{props.selectUsuario(o?.id); setOpenChats(false)}}
-                  >
-                    <div style={{width:'30px', height:'30px', flexShrink:0}}><img src={o?.logo} style={{width:'100%', height:'100%', borderRadius:'100%', backgroundColor:'white'}}/></div>
-                    <h6>{o?.nombre_comercial}</h6>
-                  </div>
+                  o =>
+                    <div className='chat-seleccionado' style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: '0', paddingLeft: '1rem' }}
+                      onClick={() => { props.selectUsuario(o?.id); setOpenChats(false) }}
+                    >
+                      <div style={{ width: '30px', height: '30px', flexShrink: 0 }}><img src={o?.logo} style={{ width: '100%', height: '100%', borderRadius: '100%', backgroundColor: 'white' }} /></div>
+                      <h6>{o?.nombre_comercial}</h6>
+                    </div>
                 )
               }
             </div>

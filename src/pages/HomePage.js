@@ -204,7 +204,7 @@ export default function HomePage() {
                                     )
                                 }
                             </ul> */}
-                            <div style={{width:'200px', minWidth:'200px', maxWidth:'200px', height:'400px', maxHeight: '400px', minHeight: '400px', backgroundColor:'white', borderRadius:'10px', overflowY:'scroll', scrollbarWidth:'none'}}>
+                            <div style={{width:'400px', minWidth:'400px', maxWidth:'400px', height:'400px', maxHeight: '400px', minHeight: '400px', backgroundColor:'white', borderRadius:'10px', overflowY:'scroll', scrollbarWidth:'none'}}>
                                 {
                                     organizaciones?.map(
                                         (o)=><div
@@ -213,12 +213,12 @@ export default function HomePage() {
                                             }}
                                         >
                                             <div style={{
-                                                width:'30px', height:'30px', padding:'5px'
+                                                width:'30px', height:'30px', padding:'5px',flexShrink:0
                                             }}>
                                                 <img src={o.logo}
                                                     style={
                                                         {
-                                                            width:'100%', height:'100%', objectPosition:'center', borderRadius:'100%'
+                                                            width:'100%', height:'100%', objectPosition:'center', borderRadius:'100%', flexShrink:0
                                                         }
                                                     }
                                                 />
@@ -226,7 +226,7 @@ export default function HomePage() {
                                             <div><p
                                                 style={{
                                                     cursor:'pointer',
-                                                    fontSize:'12px', fontFamily:'Poppins', display:'flex', flexWrap:'wrap', width:'150px'
+                                                    fontSize:'12px', fontFamily:'Poppins', display:'flex', flexWrap:'wrap', width:'auto'
                                                 }}
                                                 onClick={()=>{navigate(`/organizacion/${o.id}`)}}
                                             >{o.nombre_comercial}</p></div>

@@ -69,11 +69,11 @@ export default function Notas() {
       {
         eventos?.map(
           evento => <div key={evento.id} className="nota" style={{ width: isMediumDevice ? '300px' : null, height: isMediumDevice ? '400px' : null }}>
-            <div style={{ position: 'absolute', width: isMediumDevice ? '80%' : '450px', display: 'flex', alignItems: 'flex-start', height: '140px', justifyContent: 'right' }}>
+            {/* <div style={{ position: 'absolute', width: isMediumDevice ? '80%' : '450px', display: 'flex', alignItems: 'flex-start', height: '140px', justifyContent: 'right' }}>
               <div style={{ width: '40px', height: '40px', borderRadius: '100%', backgroundColor: '#41431B', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <img style={{ width: '80%', height: '80%' }} src={imgTipoEvento.filter(f => f.tipo === evento.tipo).map(t => t.logo)} alt="tipo" />
               </div>
-            </div>
+            </div> */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', width: '90%', marginLeft: '1rem', gap: '1rem', backgroundColor: '#AEB784', padding: '0.4rem', borderRadius: '10px 10px 10px 10px' }}>
               <div style={{ width: '40px', height: '40px' }}>
                 <img src={evento.organizacion.foto} alt={evento.organizacion.nombre_comercial} style={{ backgroundColor: '#E3DBBB', borderRadius: '100%', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
@@ -93,15 +93,13 @@ export default function Notas() {
             </div>
             <div style={{ width: '90%', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
               <div style={{ width: isMediumDevice ? '100%' : '140px', height: '140px' }}>
-                <div style={{ position: 'absolute', width: '140px', height: '140px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
-                  <button className="btn-ver-fotos"
-                    onClick={() => {
-                      setIdEvento(evento?.id)
-                      setOpenFotos(true)
-                    }}
-                  ><strong>VER</strong></button>
-                </div>
-                <img src={evento.fotos[0]} alt="imagenes" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
+                <img
+                  onClick={() => {
+                    setIdEvento(evento?.id)
+                    setOpenFotos(true)
+                  }}
+                  className="img-scale"
+                  src={evento.fotos[0]} alt="imagenes" style={{cursor: 'pointer', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
               </div>
               <div style={{ width: isMediumDevice ? '100%' : '200px', height: 'auto', backgroundColor: '#AEB784', padding: '0.1rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <h1 style={{ margin: '0', padding: '0', fontFamily: 'Poppins', fontSize: '14px', width: '100%', textAlign: 'center' }}>{evento.titulo}</h1>

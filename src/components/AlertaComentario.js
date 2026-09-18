@@ -10,20 +10,28 @@ export default function AlertaComentario(
     props
 ) {
     const [loading, setLoading] = useState(false)
-    const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width:1024px)')
     const [countCantidad, setCountCantidad] = useState(0)
     const [contenido, setContenido] = useState('')
     const navigate = useNavigate()
     const { user } = useAuth()
+
     const create = async () => {
         setLoading(true)
-        const res = await createComentario(contenido, user.organizacion)
-        if (res != 201) {
+
+        if (contenido.length === 0 || contenido.length <= 10 || contenido.length > 70) {
             setLoading(false)
-            alert('No se pudo crear el comentario - Error')
+            alert('El comentario debe de tener mas de 12 y menos de 70 caracteres')
         } else {
-            setLoading(false)
-            alert('SE CREO EL COMENTARIO')
+            const res = await createComentario(contenido, user.organizacion)
+            if (res != 201) {
+                setLoading(false)
+                alert('No se pudo crear el comentario - Error')
+            } else {
+                setLoading(false)
+                alert('SE CREO EL COMENTARIO')
+            }
+            props.btn_accion(false)
+            navigate(0)
         }
     }
 
@@ -59,15 +67,7 @@ export default function AlertaComentario(
                         <button
                             className="btn-accion-2"
                             onClick={(e) => {
-                                e.preventDefault()
-                                if (contenido.length === 0 || contenido.length <= 10 || contenido.length > 70) {
-                                    alert('El comentario debe de tener mas de 12 y menos de 70 caracteres')
-                                } else {
-                                    alert('Comentario publicado con exito')
-                                    create()
-                                    props.btn_accion(false)
-                                    navigate(0)
-                                }
+                                create()
                             }
                             }
                         >
@@ -81,7 +81,7 @@ export default function AlertaComentario(
 
             {
                 loading && (
-                    <Loader/>
+                    <Loader />
                 )
             }
 
