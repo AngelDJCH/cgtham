@@ -11,50 +11,39 @@ import { getConveniosCounts, getDashConvenios } from "../services/Convenio"
 import { findAllComentariosByAdministrador } from "../services/Comentario"
 
 export default function PanelSistema() {
-
     const isLargeDevice = useMediaQuery("(min-width: 992px)")
-
     const [countEventos, setCountEventos] = useState(0)
     const [countOfertas, setCountOfertas] = useState(0)
     const [countOrganizaciones, setCountOrganizaciones] = useState(0)
     const [dashComentarios, setDashComentarios] = useState([])
     const [countConvenios, setCountConvenios] = useState(0)
-
     const COLORES = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
-
     const [dashConvenios, setDashConvenios] = useState([])
     const [dashEventos, setDashEventos] = useState([])
-
     const navigate = useNavigate()
-
     const handleNavigate = (rute, param) => {
         if (param) {
             navigate(`/${rute}/${param}`)
         }
         navigate(rute)
     }
-
     useEffect(() => {
         const countE = async () => {
             const res = await getEventosCounts()
             setCountEventos(res)
         }
-
         const countO = async () => {
             const res = await getOfertasCounts()
             setCountOfertas(res)
         }
-
         const countOrg = async () => {
             const res = await getOrganizacionesCounts()
             setCountOrganizaciones(res)
         }
-
         const coutCon = async () => {
             const res = await getConveniosCounts()
             setCountConvenios(res)
         }
-
         const dashConvenios = async () => {
             const res = await getDashConvenios()
             const datosLimpios = res.map(item => ({
@@ -72,7 +61,6 @@ export default function PanelSistema() {
             }))
             setDashEventos(datosLimpios)
         }
-
         const dashComentariosAll = async () => {
             const res = await findAllComentariosByAdministrador()
             setDashComentarios(res)
@@ -85,10 +73,8 @@ export default function PanelSistema() {
         dashComentariosAll()
         dashEventos()
     }, [])
-
     return (
         <div style={{ width: isLargeDevice ? '75%' : '90%', justifyContent: 'center', height: 'auto', paddingLeft: '2rem', paddingRight: '2rem', display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-
             <div className="tarjeta-panel" style={{ width: '250px', backgroundColor: 'white', borderRadius: '10px', height: 'auto', padding: '0.15rem' }}>
                 <h1 style={{ fontFamily: 'Poppins', fontSize: '20px', textAlign: 'center' }}>EVENTOS</h1>
                 <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
@@ -97,7 +83,6 @@ export default function PanelSistema() {
                     <button onClick={() => { handleNavigate('/eventos') }} className="btn-accion-2"><strong>Ir</strong></button>
                 </div>
             </div>
-
             <div className="tarjeta-panel" style={{ width: '250px', backgroundColor: 'white', borderRadius: '10px', height: 'auto', padding: '0.15rem' }}>
                 <h1 style={{ fontFamily: 'Poppins', fontSize: '20px', textAlign: 'center' }}>OFERTAS L.</h1>
                 <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
@@ -106,7 +91,6 @@ export default function PanelSistema() {
                     <button onClick={() => { handleNavigate('/ofertaslaborales') }} className="btn-accion-2"><strong>Ir</strong></button>
                 </div>
             </div>
-
             <div className="tarjeta-panel" style={{ width: '250px', backgroundColor: 'white', borderRadius: '10px', height: 'auto', padding: '0.15rem' }}>
                 <h1 style={{ fontFamily: 'Poppins', fontSize: '20px', textAlign: 'center' }}>ORGANIZACIONES</h1>
                 <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
@@ -115,7 +99,6 @@ export default function PanelSistema() {
                     <button onClick={() => { handleNavigate('/organizaciones') }} className="btn-accion-2"><strong>Ir</strong></button>
                 </div>
             </div>
-
             <div className="tarjeta-panel" style={{ width: '250px', backgroundColor: 'white', borderRadius: '10px', height: 'auto', padding: '0.15rem' }}>
                 <h1 style={{ fontFamily: 'Poppins', fontSize: '20px', textAlign: 'center' }}>CONVENIOS</h1>
                 <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
@@ -124,7 +107,6 @@ export default function PanelSistema() {
                     <button onClick={() => { handleNavigate('/convenios') }} className="btn-accion-2"><strong>Ir</strong></button>
                 </div>
             </div>
-
             <div style={{ flex: '1 1 600px', maxWidth: '650px', height: '300px', backgroundColor: 'white', padding: '10px', borderRadius: '8px', boxSizing: 'border-box' }}>
                 <h6 style={{ margin: 0, color: '#41431B', fontFamily: 'Poppins', fontSize: '18px', marginBottom: '0.5rem' }}>
                     Convenios por sector
@@ -153,7 +135,6 @@ export default function PanelSistema() {
                     </ResponsiveContainer>
                 </div>
             </div>
-
             <div style={{ flex: '1 1 300px', maxWidth: '350px', height: '300px', backgroundColor: 'white', padding: '10px', borderRadius: '8px', boxSizing: 'border-box' }}>
                 <h6 style={{ margin: 0, color: '#41431B', fontFamily: 'Poppins', fontSize: '18px', marginBottom: '0.5rem' }}>
                     Últimos comentarios
@@ -171,7 +152,6 @@ export default function PanelSistema() {
                     ))}
                 </div>
             </div>
-
             <div style={{ flex: '1 1 100%', maxWidth: '1010px', height: '320px', backgroundColor: 'white', padding: '10px', borderRadius: '8px', boxSizing: 'border-box' }}>
                 <h6 style={{ margin: 0, color: '#41431B', fontFamily: 'Poppins', fontSize: '18px', marginBottom: '0.5rem' }}>
                     Eventos por año sin importar su estado
@@ -191,7 +171,6 @@ export default function PanelSistema() {
                     </ResponsiveContainer>
                 </div>
             </div>
-
         </div>
     );
 }

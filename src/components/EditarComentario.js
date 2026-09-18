@@ -5,13 +5,22 @@ import { useMediaQuery } from "@uidotdev/usehooks"
 import '../styles/comentarios-modal.css'
 
 export default function EditarComentario(props) {
-
     const navigate = useNavigate()
-
     const [comentarioData, setComentarioData] = useState(null)
     const [countCantidad, setCountCantidad] = useState(0)
-
-
+    const updateComentario = async () => {
+        if (comentarioData.contenido.length >= 13 && comentarioData.contenido.length <= 70) {
+            const res = await updateById(props?.idComentario, comentarioData.contenido)
+            if (res.status === 200) {
+                alert('COMENTARIO ACTUALIZADO')
+                navigate(0)
+            } else {
+                alert('NO SE PUDO ACTUALIZAR EL COMENTARIO')
+            }
+        } else {
+            alert('El comentario debe tener entre 13 y 70 caracteres')
+        }
+    }
     useEffect(() => {
         const getComentario = async () => {
             const res = await getComentarioById(props?.idComentario)
@@ -23,9 +32,6 @@ export default function EditarComentario(props) {
             getComentario()
         }
     }, [])
-
-    const isSmallDevice = useMediaQuery('(max-width:768px)')
-
     return (
         <div>
             <div className="comentario-modal-overlay"></div>
@@ -39,13 +45,11 @@ export default function EditarComentario(props) {
                                 <textarea className="comentario-modal-textarea" defaultValue={comentarioData?.contenido} onChange={(e) => { setComentarioData({ ...comentarioData, contenido: e.target.value }); setCountCantidad(e.target.value.length) }} />
                                 <p><strong>Caracteres: </strong>{countCantidad}</p>
                             </div>
-
                             <div className="comentario-modal-columna comentario-modal-columna--nota">
                                 <p><strong>Nota:</strong> Recuerda que los comentarios deben tener una longitud entre 13 y 70 caracteres (incluyendo
                                     espacios, caracteres especiales, etc). <br /> En caso de tener algun problema reportar a <kbd><strong>cgtham@gmail.com</strong></kbd></p>
                             </div>
                         </div>
-
                     </div>
                     <div className="comentario-modal-acciones">
                         <button
@@ -53,19 +57,7 @@ export default function EditarComentario(props) {
                             onClick={() => { props?.accion(false) }}
                         ><strong>CANCELAR</strong></button>
                         <button
-                            onClick={async () => {
-                                if (comentarioData.contenido.length >= 13 && comentarioData.contenido.length <= 70) {
-                                    const res = await updateById(props?.idComentario, comentarioData.contenido)
-                                    if (res.status === 200) {
-                                        alert('COMENTARIO ACTUALIZADO')
-                                        navigate(0)
-                                    } else {
-                                        alert('NO SE PUDO ACTUALIZAR EL COMENTARIO')
-                                    }
-                                } else {
-                                    alert('El comentario debe tener entre 13 y 70 caracteres')
-                                }
-                            }}
+                            onClick={() => { updateComentario() }}
                             className='btn-accion-2'
                         ><strong>GUARDAR</strong></button>
                     </div>

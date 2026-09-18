@@ -4,17 +4,14 @@ import { deleteByIdForEscuelas, findById, updateEstadoRechazadaById, updateVisit
 import { useNavigate } from "react-router-dom";
 
 export default function VisualizarVisita(props) {
-
     const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width : 1024px)');
     const navigate = useNavigate()
-
     const handleUpdateById = async (fecha_visita, id) => {
         const res = await updateVisitaById(fecha_visita, id)
         if (res && res === 200) { navigate(0); alert('Visita aprobada') } else {
             alert('No se pudo aprobar la visita')
         }
     }
-
     const [visitaData, setVisitaData] = useState({
         id: '',
         solicitado: '',
@@ -22,22 +19,17 @@ export default function VisualizarVisita(props) {
         agendado: '',
         estado: ''
     })
-
     useEffect(() => {
         const getVisita = async () => {
             const res = await findById(props.idVisita)
             setVisitaData(res)
         }
-
         if (props.idVisita != null) { getVisita() }
-
     }, [])
-
     return (
         <div>
             <div className="overllay"></div>
             <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-
                 <div className="formulario-contenedor">
                     <div className="titulo-formulario"><h1 className='subtitulo'>SOLICITUD DE VISITA</h1></div>
                     <div className="formulario">

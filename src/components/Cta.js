@@ -2,9 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import '../styles/cta.css'
 
 export default function Cta() {
-
     const navigate = useNavigate()
-
     return (
         <div className='cta'>
             <div className='subtitulo'>

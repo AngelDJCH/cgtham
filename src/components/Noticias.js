@@ -4,47 +4,28 @@ import { eventoOrganizacion } from "../services/EventoOrganizacion"
 import VisualizarEvento from './VisualizarEvento'
 
 export default function Noticias() {
-
     const [openHistorial, setOpenHistorial] = useState(false)
-
     const [eventosTabla, setEventosTabla] = useState([])
-
-    const ahora = new Date()
-
     useEffect(() => {
         const eventosD = async () => {
             const res = await eventoOrganizacion(3, 0)
             setEventos(res)
         }
-
         const eventosT = async () => {
             const res = await eventoOrganizacion(100, 0)
             setEventosTabla(res)
         }
-
         eventosD()
         eventosT()
     }, [])
 
     const obtenerFoto = (evento) => {
-        // if (evento?.fotos.length === 1) {
         return <div style={{ display: 'flex', justifyContent: 'center', width: '150px', height: '250px' }}>
             <img style={{ width: '100%', height: '100%' }} src={`${evento?.fotos[0]}`} alt={`${evento.organizacion.nombre}`} /></div>
-        // }
-        // return <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '100%' }}>
-        //     <img src={`${evento?.fotos[0]}`} style={{ width: '50%', height: 'auto' }} />
-        //     <img src={`${evento?.fotos[1]}`} style={{ width: '50%', height: 'auto' }} />
-        // </div>
     }
-
     const [selectIdEvento, setSelectIdEvento] = useState(null)
     const [openEvento, setOpenEvento] = useState(false)
-
-    const [eventos, setEventos] = useState(
-        [
-        ]
-    )
-
+    const [eventos, setEventos] = useState([])
     return (
         <div className="noticias" id="noticias">
             <div className="etiqueta">
@@ -69,7 +50,6 @@ export default function Noticias() {
                                         <p>{evento.titulo}</p>
                                     </div>
                                     <div className="s3">
-
                                         {
                                             obtenerFoto(evento)
                                         }
@@ -90,9 +70,7 @@ export default function Noticias() {
                 </div>
                 <div className="boton-historicos">
                     <button className="boton-accion-historicos"
-
                         onClick={() => { setOpenHistorial(true) }}
-
                     >
                         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNsb2NrLWljb24gbHVjaWRlLWNsb2NrIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIvPjxwYXRoIGQ9Ik0xMiA2djZsNCAyIi8+PC9zdmc+" alt="historico" />
                     </button>
@@ -109,7 +87,6 @@ export default function Noticias() {
                                     className="btn-accion-cancelar-1"
                                     style={{ borderRadius: '100%', width: '40px', height: '40px' }}
                                     onClick={() => { setOpenHistorial(false) }}
-
                                 >
                                     <strong>X</strong>
                                 </button>

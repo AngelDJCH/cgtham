@@ -2,14 +2,11 @@ import { useState } from "react"
 import '../styles/sectores.css'
 
 export default function Sectores() {
-
     const [openSector, setOpenSector] = useState(false)
-    const [sectorSeleccionado, setSectorSeleccionado] = useState(0)
     const [sectorData, setSectorData] = useState({
         nombre: '',
         descripcion: ''
     })
-
     const [sectores, setSectores] = useState([
         {
             id: 1,
@@ -49,10 +46,6 @@ export default function Sectores() {
         }
     ]);
 
-    const [count, setCount] = useState(0)
-
-    let valor = 0;
-
     return (
         <div className="sectores" id="sectores">
             <div className="etiqueta">
@@ -64,12 +57,11 @@ export default function Sectores() {
             <div className="descripcion">
                 <p className="texto-informativo">Las mejores alianzas para desarrollar grandes profesionales</p>
             </div>
-
             <div className="contenedor-sectores">
                 {
                     sectores.map(
                         sector =>
-                            <div key={sector.id} className="sector-tarjeta" style={{ transform: valor % 2 == 0 ? 'translateY(-30px)' : 'translateY(30px)' }}>
+                            <div key={sector.id} className="sector-tarjeta">
                                 <div style={{ width: '90%', height: '100px' }} id={`sector${sector.id}`}>
                                     <p><strong id="nombre-sector">{sector.nombre}</strong></p>
                                 </div>
@@ -110,9 +102,7 @@ export default function Sectores() {
                                     </p>
                                 </div>
                                 <button className="btn-sector"
-
                                     onClick={() => { setOpenSector(false) }}
-
                                 >
                                     CERRAR
                                 </button>
@@ -120,9 +110,7 @@ export default function Sectores() {
                         </div>
                     </div>
                 )
-
             }
-
         </div>
     )
 }

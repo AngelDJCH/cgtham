@@ -2,20 +2,16 @@ import { useEffect, useState } from "react"
 import { getFotosByIdEvento } from "../services/Foto";
 
 export default function VisualizarFotos(props) {
-
     const [fotos, setFotos] = useState([])
     const [fotoSeleccionada, setFotoSeleccionada] = useState('')
-
     useEffect(() => {
         const getFotos = async () => {
             const res = await getFotosByIdEvento(props?.id_evento)
             setFotos(res)
             setFotoSeleccionada(res[0])
         }
-
         getFotos()
     }, []);
-
     return (
         <div>
             <div className="overllay"></div>

@@ -3,13 +3,9 @@ import { useState } from "react"
 
 
 export default function Objetivos(props) {
-
     const isSmallOrMediumDevice = useMediaQuery('(max-width:768px) or (max-width:1024px)')
-
     const [openVision, setOpenVision] = useState(false)
-
     const [openMision, setOpenMision] = useState(false)
-
     return (
         <div>
             <div className="overllay"></div>

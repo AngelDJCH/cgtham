@@ -7,31 +7,25 @@ import { getOrganizacionesCounts } from "../services/Organizacion"
 
 export default function Impacto() {
     const video = 'cgtham.mp4'
-
     const [organizaciones, setOrganizaciones] = useState(0)
     const [empleos, setEmpleos] = useState(0)
     const [eventos, setEventos] = useState(0)
-
     const imagenUsuarios = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzQxNDMxQiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXJzLWljb24gbHVjaWRlLXVzZXJzIj48cGF0aCBkPSJNMTYgMjF2LTJhNCA0IDAgMCAwLTQtNEg2YTQgNCAwIDAgMC00IDR2MiIvPjxwYXRoIGQ9Ik0xNiAzLjEyOGE0IDQgMCAwIDEgMCA3Ljc0NCIvPjxwYXRoIGQ9Ik0yMiAyMXYtMmE0IDQgMCAwIDAtMy0zLjg3Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjciIHI9IjQiLz48L3N2Zz4='
     const imagenEmpleos = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzQxNDMxQiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWJyaWVmY2FzZS1idXNpbmVzcy1pY29uIGx1Y2lkZS1icmllZmNhc2UtYnVzaW5lc3MiPjxwYXRoIGQ9Ik0xMiAxMmguMDEiLz48cGF0aCBkPSJNMTYgNlY0YTIgMiAwIDAgMC0yLTJoLTRhMiAyIDAgMCAwLTIgMnYyIi8+PHBhdGggZD0iTTIyIDEzYTE4LjE1IDE4LjE1IDAgMCAxLTIwIDAiLz48cmVjdCB3aWR0aD0iMjAiIGhlaWdodD0iMTQiIHg9IjIiIHk9IjYiIHJ4PSIyIi8+PC9zdmc+'
     const imagenEventos = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzQxNDMxQiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNhbGVuZGFyLWhlYXJ0LWljb24gbHVjaWRlLWNhbGVuZGFyLWhlYXJ0Ij48cGF0aCBkPSJNMTIuMTI3IDIySDVhMiAyIDAgMCAxLTItMlY2YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnY1LjEyNSIvPjxwYXRoIGQ9Ik0xNC42MiAxOC44QTIuMjUgMi4yNSAwIDEgMSAxOCAxNS44MzZhMi4yNSAyLjI1IDAgMSAxIDMuMzggMi45NjZsLTIuNjI2IDIuODU2YS45OTguOTk4IDAgMCAxLTEuNTA3IDB6Ii8+PHBhdGggZD0iTTE2IDJ2NCIvPjxwYXRoIGQ9Ik0zIDEwaDE4Ii8+PHBhdGggZD0iTTggMnY0Ii8+PC9zdmc+'
-
     useEffect(() => {
         const getUsuariosCount = async () => {
             const res = await getOrganizacionesCounts()
             setOrganizaciones(res)
         }
-
         const getOfertasCount = async () => {
             const res = await getOfertasCounts()
             setEmpleos(res)
         }
-
         const getEventosCount = async () => {
             const res = await getEventosCounts()
             setEventos(res)
         }
-
         getUsuariosCount()
         getOfertasCount()
         getEventosCount()

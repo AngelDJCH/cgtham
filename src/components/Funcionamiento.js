@@ -3,9 +3,7 @@ import '../styles/funcionamiento.css'
 
 export default function Funcionamiento() {
     const imagenRoles = 'https://static.vecteezy.com/system/resources/previews/019/045/391/non_2x/silhouettes-of-business-men-and-women-with-back-to-back-poses-free-png.png'
-
     const navigate = useNavigate()
-
     return (
         <div className='funcionamiento' id='funcionamiento'>
             <div className='etiqueta'>
@@ -34,7 +32,6 @@ export default function Funcionamiento() {
                     </div>
                     <div className='funcionamiento-tarjeta-boton-contendor'>
                         <button
-
                             onClick={() => { navigate('/register_org') }}
                             className='btn-accion'
                         >
@@ -42,11 +39,9 @@ export default function Funcionamiento() {
                         </button>
                     </div>
                 </div>
-
                 <div className='roles-imagen'>
                     <img src={imagenRoles} alt="imagenRoles" />
                 </div>
-
                 <div className='funcionamiento-tarjeta'>
                     <div className='subtitulo'>
                         <h2>Administrador</h2>
@@ -67,10 +62,8 @@ export default function Funcionamiento() {
                     </div>
                     <div className='funcionamiento-tarjeta-boton-contendor'>
                         <button
-
                             onClick={() => { navigate('/login') }}
                             className='btn-accion'
-
                         >
                             INGRESAR
                         </button>

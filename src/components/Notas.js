@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import '../styles/notas.css'
-import InscripcionAlterta from "./InscripcionAlterta";
 import { eventoOrganizacion } from "../services/EventoOrganizacion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
@@ -10,18 +9,13 @@ import '../styles/botones.css'
 import VisualizarEvento from "./VisualizarEvento";
 
 export default function Notas() {
-
   const [openInscripcion, setOpenInscripcion] = useState(false)
   const [openEditar, setOpenEditar] = useState(false)
   const [idEvento, setIdEvento] = useState('')
-
   const navigate = useNavigate()
-
   const [eventos, setEventos] = useState([]);
   const [nombre_evento, setNombreEvento] = useState('')
-
   const [openFotos, setOpenFotos] = useState(false)
-
   const [imgTipoEvento, setImgTipoEvento] = useState([
     {
       id: 1,
@@ -49,12 +43,8 @@ export default function Notas() {
       logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1icmllZmNhc2UtYnVzaW5lc3MtaWNvbiBsdWNpZGUtYnJpZWZjYXNlLWJ1c2luZXNzIj48cGF0aCBkPSJNMTIgMTJoLjAxIi8+PHBhdGggZD0iTTE2IDZWNGEyIDIgMCAwIDAtMi0yaC00YTIgMiAwIDAgMC0yIDJ2MiIvPjxwYXRoIGQ9Ik0yMiAxM2ExOC4xNSAxOC4xNSAwIDAgMS0yMCAwIi8+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjE0IiB4PSIyIiB5PSI2IiByeD0iMiIvPjwvc3ZnPg=='
     }
   ]);
-
   const { user } = useAuth()
-
   const isMediumDevice = useMediaQuery("only screen and (max-width : 992px)")
-
-
   useEffect(() => {
     const eventosDB = async () => {
       const res = await eventoOrganizacion(100, 0)
@@ -62,18 +52,11 @@ export default function Notas() {
     }
     eventosDB()
   }, [])
-
   return (
     <div className="notas">
-
       {
         eventos?.map(
           evento => <div key={evento.id} className="nota" style={{ width: isMediumDevice ? '300px' : null, height: isMediumDevice ? '400px' : null }}>
-            {/* <div style={{ position: 'absolute', width: isMediumDevice ? '80%' : '450px', display: 'flex', alignItems: 'flex-start', height: '140px', justifyContent: 'right' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '100%', backgroundColor: '#41431B', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <img style={{ width: '80%', height: '80%' }} src={imgTipoEvento.filter(f => f.tipo === evento.tipo).map(t => t.logo)} alt="tipo" />
-              </div>
-            </div> */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', width: '90%', marginLeft: '1rem', gap: '1rem', backgroundColor: '#AEB784', padding: '0.4rem', borderRadius: '10px 10px 10px 10px' }}>
               <div style={{ width: '40px', height: '40px' }}>
                 <img src={evento.organizacion.foto} alt={evento.organizacion.nombre_comercial} style={{ backgroundColor: '#E3DBBB', borderRadius: '100%', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />

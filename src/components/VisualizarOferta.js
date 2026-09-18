@@ -12,7 +12,6 @@ export default function VisualizarOferta(props) {
     const [loading, setLoading] = useState(true) // Estado para controlar la carga inicial
     const isSmallDevice = useMediaQuery('(max-width:768px)');
     const isMediumDevice = useMediaQuery('(max-width: 1024px)');
-
     const [oferta, setOferta] = useState({
         id: '',
         titulo: '',
@@ -32,7 +31,6 @@ export default function VisualizarOferta(props) {
         id_empresa: '',
         documento: ''
     })
-
     useEffect(() => {
         const getOferta = async () => {
             if (!props?.id_oferta) return;
@@ -53,12 +51,10 @@ export default function VisualizarOferta(props) {
         }
         getOferta()
     }, [props?.id_oferta])
-
     const esUrlValidaParaVisor = (url) => {
         if (!url) return false;
         return url.startsWith('http://') || url.startsWith('https://');
     }
-
     return (
         <div>
             <div className="overllay"></div>
@@ -78,11 +74,9 @@ export default function VisualizarOferta(props) {
                             <p><strong>{oferta?.fecha_publicacion ? oferta.fecha_publicacion.split('T')[0] : ''}</strong></p>
                         </div>
                     </div>
-
                     <div style={{ width: '100%', height: '50px', backgroundColor: '#41431B', color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <h1 style={{ margin: '0', padding: '0', fontFamily: 'Poppins', fontSize: '18px', marginLeft: '1rem' }}>{oferta?.titulo}</h1>
                     </div>
-
                     <div style={{ padding: '0.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', minHeight: (isSmallDevice || isMediumDevice) ? '50%' : '300px', maxHeight: isSmallDevice ? '50%' : '300px', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
                         <div style={{ width: '100%', height: '60px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', borderTop: '1px solid black', paddingTop: '0.5rem' }}>
                             <h6 style={{ margin: '0', textAlign: 'justify', width: '90%' }}>Descripción:</h6>
@@ -116,7 +110,6 @@ export default function VisualizarOferta(props) {
                             <h6 style={{ margin: '0', textAlign: 'justify', width: '90%' }}>Experiencia:</h6>
                             <p style={{ margin: '0' }}>{oferta?.experiencia} años</p>
                         </div>
-
                         <div style={{ width: '100%', height: '60px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', borderTop: '1px solid black', paddingTop: '0.5rem' }}>
                             <h6 style={{ margin: '0', textAlign: 'justify', width: '90%' }}>Habilidades:</h6>
                             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', marginTop: '0.5rem' }}>
@@ -130,7 +123,6 @@ export default function VisualizarOferta(props) {
                                 </select>
                             </div>
                         </div>
-
                         {
                             (isSmallDevice || isMediumDevice) && (
                                 <div>

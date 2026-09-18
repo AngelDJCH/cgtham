@@ -31,7 +31,6 @@ export default function Terminos(props) {
                     <button
                         className="boton-ventana"
                         onClick={() => props.accion(false)}
-
                     >CERRAR</button>
                 </div>
             </div>

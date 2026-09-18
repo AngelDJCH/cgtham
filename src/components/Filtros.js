@@ -2,9 +2,7 @@ import { useAuth } from '../hooks/useAuth'
 import '../styles/filtros.css'
 
 export default function Filtros(props) {
-
     const { user } = useAuth()
-
     return (
         <div className="filtro-contenedor">
             <h2 className='subtitulo'>
@@ -28,7 +26,6 @@ export default function Filtros(props) {
                     </button>
                 )
             }
-
             {
                 props?.btn_accion_solicitud && (
                     <button

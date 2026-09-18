@@ -31,7 +31,6 @@ export default function Accesibilidad(props) {
                         onClick={() => {
                             props.accion(false)
                         }}
-
                     >CERRAR</button>
                 </div>
             </div>

@@ -17,27 +17,21 @@ import VisualizarVisita from './VisualizarVisita.js'
 import { deleteByIdConvenio } from '../services/Convenio.js'
 
 export default function TablaContenido(props) {
-
     const [loading, setLoading] = useState(false)
-
     const navigate = useNavigate()
     const { user } = useAuth()
-    const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width : 1024px)');
-
     const [openEvento, setOpenEvento] = useState(false)
     const [openEditarEvento, setOpenEditarEvento] = useState(false)
     const [openEditarComentario, setOpenEditarComentario] = useState(false)
     const [openConvenio, setOpenConvenio] = useState(false)
     const [openVisita, setOpenVisita] = useState(false)
     const [nombreEvento, setNombreEvento] = useState('')
-
     const [idEvento, setIdEvento] = useState(null)
     const [idComentario, setIdComentario] = useState(null)
     const [idConvenio, setIdConvenio] = useState(null)
     const [idOrganizacion, setIdOrganizacion] = useState(null)
     const [idVisita, setIdVisita] = useState(null)
     const [openInscripcion, setOpenInscripcion] = useState(false)
-
     const [comentarioData, setComentarioData] = useState(null)
     const [visitaData, setVisitaData] = useState({
         id: '',
@@ -46,10 +40,6 @@ export default function TablaContenido(props) {
         agendado: '',
         estado: ''
     })
-
-    const imgAprobar = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMGQ1ZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1leWUtaWNvbiBsdWNpZGUtZXllIj48cGF0aCBkPSJNMi4wNjIgMTIuMzQ4YTEgMSAwIDAgMSAwLS42OTYgMTAuNzUgMTAuNzUgMCAwIDEgMTkuODc2IDAgMSAxIDAgMCAxIDAgLjY5NiAxMC43NSAxMC43NSAwIDAgMS0xOS44NzYgMCIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiLz48L3N2Zz4='
-    const imgRechazar = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZjAwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS10cmFzaDItaWNvbiBsdWNpZGUtdHJhc2gtMiI+PHBhdGggZD0iTTEwIDExdjYiLz48cGF0aCBkPSJNMTQgMTF2NiIvPjxwYXRoIGQ9Ik0xOSA2djE0YTIgMiAwIDAgMS0yIDJIN2EyIDIgMCAwIDEtMi0yVjYiLz48cGF0aCBkPSJNMyA2aDE4Ii8+PHBhdGggZD0iTTggNlY0YTIgMiAwIDAgMSAyLTJoNGEyIDIgMCAwIDEgMiAydjIiLz48L3N2Zz4='
-
     const handleParticiparConvenio = async (id_convenio) => {
         const status = await createConvenioOrganizacion('PARTICIPANTE', id_convenio, user.organizacion)
         if (status && status === 201) {
@@ -61,7 +51,6 @@ export default function TablaContenido(props) {
             alert('OCURRIO UN ERROR EN EL SERVIDOR')
         }
     }
-
     const handleEliminarCurso = async (id_curso) => {
         const res = await deleteCursoById(id_curso)
         if (res && res.status === 200) { navigate(0); alert('Curso Eliminado') } else {
@@ -74,8 +63,6 @@ export default function TablaContenido(props) {
             alert('NO SE PUDO REALIZAR LA ACCION')
         }
     }
-
-
     const handleDeleteByIdForEscuelas = async (id) => {
         const status = await deleteByIdForEscuelas(id)
         if (status && status === 204) {
@@ -84,7 +71,6 @@ export default function TablaContenido(props) {
             alert('No se pudo eliminar la solicitudad')
         }
     }
-
     const deleteByIdEscuela = async (id_escuela) => {
         const status = await deleteByIdForEscuelas(idVisita)
         if (status && status === 204) {
@@ -93,7 +79,6 @@ export default function TablaContenido(props) {
             alert('NO SE PUDO ELIMINAR LA SOLICITUD')
         }
     }
-
     useEffect(() => {
         const getComentario = async () => {
             const res = await getComentarioById(idComentario)
@@ -104,7 +89,6 @@ export default function TablaContenido(props) {
             getComentario()
         }
     }, [idComentario])
-
     return (
         <div className="contenedor-tablas">
             <div className="contenedor-tablas-interno">
@@ -138,7 +122,6 @@ export default function TablaContenido(props) {
                                                                 setIdEvento(inscripcion.evento.id_evento)
                                                                 setOpenEvento(true)
                                                             }}
-
                                                         >
                                                             <strong>
                                                                 VER
@@ -159,7 +142,6 @@ export default function TablaContenido(props) {
                                                                 setIdEvento(inscripcion.evento.id_evento)
                                                                 setOpenEvento(true)
                                                             }}
-
                                                         >
                                                             <strong>
                                                                 VER
@@ -217,7 +199,6 @@ export default function TablaContenido(props) {
                                                             alert('El comentario no se pudo eliminar')
                                                         }
                                                     }}
-
                                                     className='btn-accion-cancelar-1'
                                                 >
                                                     <strong>ELIMINAR</strong>

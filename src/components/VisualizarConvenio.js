@@ -7,25 +7,10 @@ import { useMediaQuery } from "@uidotdev/usehooks"
 import Loader from "./Loader"
 
 export default function VisualizarConvenio(props) {
-
     const [participantes, setParticipantes] = useState([])
-
     const [disabled, setDisabled] = useState(true)
-
-    const [idOrganizacion, setIdOrganizacion] = useState(null)
-
     const [openAdminstracion, setOpenAdministracion] = useState(false)
-
-    const [idConvenioOrg, setIdConvenioOrg] = useState(null)
-
-    const [convenioOrganizacion, setConvenioOrganizacion] = useState({
-        rol: '',
-        id_convenio: '',
-        id_organizacion: ''
-    })
-
     const [loading, setLoading] = useState(true)
-
     const [tiposConvenios, setTiposConvenios] = useState([
         {
             id: 1,
@@ -105,15 +90,10 @@ export default function VisualizarConvenio(props) {
             ]
         }
     ])
-
-    const { user } = useAuth()
-
     const [selectTipo, setSelectTipo] = useState('')
     const navigate = useNavigate()
     const [openDocumento, setOpenDocumento] = useState(false)
-
     const [convenio, setConvenio] = useState(null)
-
     const handleRechazar = async (id_convenio_organizacion) => {
         const res = await deleteById(id_convenio_organizacion)
         if (res === 204) {
@@ -123,7 +103,6 @@ export default function VisualizarConvenio(props) {
             alert('NO SE PUDO RECHAZAR LA SOLICITUD')
         }
     }
-
     const handleAprobar = async (id_convenio_organizacion) => {
         const res = await updateEstadoById(id_convenio_organizacion)
         if (res === 200) {
@@ -133,25 +112,20 @@ export default function VisualizarConvenio(props) {
             alert('NO SE PUDO APROBAR LA SOLICITUD')
         }
     }
-
     useEffect(() => {
         const convenioData = async () => {
             const res = await findById(props?.id_convenio)
             setConvenio(res)
         }
-
         const participantesData = async () => {
             const res = await findAllParticipantes(props?.id_convenio)
             setParticipantes(res)
         }
-
         convenioData()
         participantesData()
         setLoading(false)
     }, [])
-
     const isSmallDevice = useMediaQuery('(max-width:768px)');
-
     return (
         <div>
             <div className="overllay"></div>
@@ -218,9 +192,7 @@ export default function VisualizarConvenio(props) {
                                     )
                                 }
                                 <h6 style={{ margin: '0' }}>Participantes</h6>
-                                <select
-                                //                                    disabled={disabled}
-                                >
+                                <select>
                                     {
                                         participantes?.filter(participante => participante.estado).map(
                                             participante => <option value={participante.organizacion.id}>
@@ -230,14 +202,12 @@ export default function VisualizarConvenio(props) {
                                     }
                                 </select>
                                 <h6 style={{ margin: '0' }}>Fechas:</h6>
-
                                 <div className="group-two-input">
                                     <h6 style={{ margin: '0' }}>Inicio:</h6>
                                     <input disabled={disabled} type="date" onChange={(e) => setConvenio({ ...convenio, fecha_inicio: e.target.value })} defaultValue={convenio?.fecha_inicio.split('T')[0]} />
                                     <h6 style={{ margin: '0' }}>Fin:</h6>
                                     <input disabled={disabled} type="date" onChange={(e) => { setConvenio({ ...convenio, fecha_final: e.target.value }) }} defaultValue={convenio?.fecha_final.split('T')[0]} />
                                 </div>
-
                                 {
                                     isSmallDevice && (
                                         <button className="btn-accion-2"
@@ -245,7 +215,6 @@ export default function VisualizarConvenio(props) {
                                         ><strong>VER</strong></button>
                                     )
                                 }
-
                             </div>
                         </div>
                         {
@@ -277,7 +246,6 @@ export default function VisualizarConvenio(props) {
                                 <button
                                     onClick={async () => {
                                         disabled ? setDisabled(false) : setDisabled(true);
-
                                         if (!disabled) {
                                             setLoading(true)
                                             const datosAEnviar = {
@@ -285,7 +253,6 @@ export default function VisualizarConvenio(props) {
                                                 fecha_inicio: convenio.fecha_inicio.split('T')[0],
                                                 fecha_final: convenio.fecha_final.split('T')[0]
                                             };
-
                                             const res = await updateConvenioById(convenio?.id, datosAEnviar);
                                             if (res === 200) { setLoading(false); alert('CONVENIO GUARDADO EXITOSAMENTE') }
                                             else { setLoading(false); alert('CONVENIO NO GUARDADO') }

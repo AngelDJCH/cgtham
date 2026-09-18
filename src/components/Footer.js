@@ -8,13 +8,11 @@ import Vision from './Vision'
 
 export default function Footer() {
     const logo = 'logo_cgtham.png'
-
     const [openPolitica, setOpenPolitica] = useState(false)
     const [openTerminos, setOpenTerminos] = useState(false)
     const [openAccesibilidad, setOpenAccesibilidad] = useState(false)
     const [openMision, setOpenMision] = useState(false)
     const [openVision, setOpenVision] = useState(false)
-
     return (
         <div className='footer' id='contacto'>
             <div className='f-contenedor-seccion'>
@@ -41,14 +39,12 @@ export default function Footer() {
                             onClick={(e) => {
                                 setOpenTerminos(true);
                             }}
-
                         >Términos de Uso</li>
                         <li
                             style={{ cursor: 'pointer' }}
                             onClick={(e) => {
                                 setOpenAccesibilidad(true)
                             }}
-
                         >Accesibilidad</li>
                     </ul>
                 </div>
@@ -78,14 +74,12 @@ export default function Footer() {
                         onClick={() => {
                             setOpenMision(true)
                         }}
-
                     >Misión</li>
                     <li
                         style={{ cursor: 'pointer' }}
                         onClick={() => {
                             setOpenVision(true)
                         }}
-
                     >Visión</li>
                 </ul>
             </div>

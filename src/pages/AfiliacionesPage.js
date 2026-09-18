@@ -6,6 +6,7 @@ import { createAfiliacion } from "../services/Afiliacion";
 import '../styles/afiliaciones.css'
 
 export default function Afiliaciones() {
+    
     const isLargeDevice = useMediaQuery('(min-width:992px) or (min-width: 1400px)');
 
     const crearAfiliacion = async (empresa, camara) => {

@@ -5,13 +5,9 @@ import { useMediaQuery } from '@uidotdev/usehooks'
 
 export default function NavBar(props) {
     const navigate = useNavigate()
-
     const logo = 'logo_cgtham.png'
     const nombre = 'CGTHAM' || 'Comisión de Gestión de Talento Humano de las Altas Montañas'
-
     const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width:1024px)');
-
-
     return (
         <div className="navbar">
             <div className="seccion1"
@@ -20,7 +16,6 @@ export default function NavBar(props) {
                 <h1
                     onClick={() => { navigate('/') }}
                 >{nombre}</h1>
-
             </div>
             <div className="seccion2">
                 <ul>
