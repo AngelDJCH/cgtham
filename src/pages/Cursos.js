@@ -10,29 +10,21 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import Loader from "../components/Loader";
 
 export default function Cursos() {
-
     const { user } = useAuth()
     const naviagte = useNavigate()
-
     const [openCreateCurso, setOpenCreateCurso] = useState(false)
     const [openCurso, setOpenCurso] = useState(false)
     const [openSolicitar, setOpenSolicitar] = useState(false)
     const [openSolicitudes, setOpenSolicitudes] = useState(false)
     const [enable, setEnable] = useState(false)
-
     const [inscripciones, setInscripciones] = useState([])
-
     const [idCurso, setIdCurso] = useState(null)
     const [cursos, setCursos] = useState([])
     const [organizaciones, setOrganizaciones] = useState([])
     const [solicitudes, setSolicitudes] = useState([])
-
     const [administrar, setAdministrar] = useState(false)
-
     const [loading, setLoading] = useState(false)
-
     const [participantes, setParticipantes] = useState([])
-
     const [curso, setCurso] = useState({
         titulo: '',
         descripcion: '',
@@ -41,16 +33,13 @@ export default function Cursos() {
         estado: '',
         id_organizacion: ''
     })
-
     const [cursoSolicitud, setCursoSolicitud] = useState({
         titulo: '',
         descripcion: '',
         id_organizacion: ''
     })
-
     const handleCreate = async () => {
         setLoading(true)
-
         const res = await createCurso({ ...curso, id_organizacion: user.organizacion })
         if (res && res?.status != 201) {
             alert('El curso no se creo')
@@ -59,7 +48,6 @@ export default function Cursos() {
         setOpenCreateCurso(false)
         naviagte(0)
     }
-
     const handleUpdateInscripcionEstado = async (id, estado) => {
         const status = await updateInscripcionByEstado(id, estado)
         if (status === 200) {
@@ -69,7 +57,6 @@ export default function Cursos() {
             alert(`NO SE PUDO ACTUALIZAR LA INSCRIPCION - ${estado}`)
         }
     }
-
     const handleSolicitar = async () => {
         setLoading(true)
         const status = await solicitar(cursoSolicitud.titulo, cursoSolicitud.descripcion, cursoSolicitud.id_organizacion)
@@ -78,11 +65,9 @@ export default function Cursos() {
         } else {
             alert('Ocurrio un error al solicitar el curso - Intenta de nuevo o más tarde')
         }
-
         setLoading(false)
         setOpenSolicitar(false)
     }
-
     const handleUpdate = async () => {
         setLoading(true)
         const res = await updateById(curso?.titulo, curso?.descripcion, curso?.inicio, curso?.final, curso?.id)
@@ -94,14 +79,12 @@ export default function Cursos() {
             alert('Curso no modificado')
         }
     }
-
     const handleRechazarCurso = async (id_curso) => {
         const status = await updateEstadoById(id_curso)
         if (status && status === 200) { naviagte(0); alert('Curso rechazado') } else {
             alert('No se rechazo el curso')
         }
     }
-
     const handleParticipar = async (id_curso) => {
         const status = await createInscripcionCurso(id_curso, user.organizacion)
         if (status && status === 201) {
@@ -114,21 +97,17 @@ export default function Cursos() {
         }
         setLoading(false)
     }
-
     useEffect(() => {
         const toEmpresas = async () => {
             const res = await findToEmpresas()
             setCursos(res)
         }
-
         const toEscuelas = async () => {
             const res = await findToEscuelas(user.organizacion)
             setCursos(res)
         }
-
         user.tipo != 'Escuela' ? toEmpresas() : toEscuelas()
     }, [])
-
     useEffect(() => {
         if (idCurso != null) {
             const findById = async () => {
@@ -143,33 +122,27 @@ export default function Cursos() {
                 const data = await organizacionesPendientes(idCurso)
                 setInscripciones(data)
             }
-
             pendientesCurso()
             participantesCurso()
             findById()
             setLoading(false)
         }
     }, [idCurso])
-
     useEffect(() => {
         const getOrganizaciones = async () => {
             const data = await getAllOrganizaciones()
             setOrganizaciones(data)
         }
-
         getOrganizaciones()
     }, [])
-
     useEffect(() => {
         const getSolicitudes = async () => {
             const data = await allSolicitudes(user.organizacion)
             setSolicitudes(data)
         }
-
         getSolicitudes()
     }, [])
     const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width : 1024px)');
-
     return (
         <div>
             <NavBarAutenticado />
@@ -203,7 +176,6 @@ export default function Cursos() {
                                         </div>
                                     </div>
                                 </div>
-
                                 <div className="contenedor-botones-formulario" style={{ width: '100%' }}>
                                     <button
                                         className="btn-accion-cancelar-1"
@@ -228,7 +200,6 @@ export default function Cursos() {
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-
                             <div className="formulario-contenedor" style={{ width: isSmallDevice ? '90%' : null, height: isSmallDevice ? '90%' : null }}>
                                 <div className="titulo-formulario"><h1 className="subtitulo">SOLICITAR CURSO</h1></div>
                                 <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
@@ -240,7 +211,6 @@ export default function Cursos() {
                                             <textarea placeholder="Descripcion" type="text" onChange={(e) => { setCursoSolicitud({ ...cursoSolicitud, descripcion: e.target.value }) }} />
                                             <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Organización</h6>
                                             <select
-
                                                 onChange={(e) => {
                                                     if (e.target.value != '----') {
                                                         const organizacion = organizaciones.filter(f => f.nombre_comercial === e.target.value)
@@ -250,7 +220,6 @@ export default function Cursos() {
                                                     }
                                                 }}
                                             >
-
                                                 <option>----</option>
                                                 {
                                                     organizaciones.filter(tipo => tipo.tipo === 'Escuela').map(
@@ -282,14 +251,11 @@ export default function Cursos() {
                     </div>
                 )
             }
-
-
             {
                 loading && (
                     <Loader />
                 )
             }
-
             {
                 openCurso && (
                     <div>
@@ -343,7 +309,6 @@ export default function Cursos() {
                                             </div>
                                         </div>
                                     </div>
-
                                     {
                                         !isSmallDevice && (
                                             <div style={{ width: '250px', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -355,7 +320,6 @@ export default function Cursos() {
                                             </div>
                                         )
                                     }
-
                                 </div>
                                 <div className="contenedor-botones-formulario">
                                     <button
@@ -365,7 +329,6 @@ export default function Cursos() {
                                     {user.tipo === 'Escuela'
                                         && (<button
                                             onClick={() => {
-                                                // setLoading(true);
                                                 enable ? setEnable(false) : setEnable(true);
                                                 if (enable) { handleUpdate() }
                                             }}
@@ -386,8 +349,6 @@ export default function Cursos() {
                     </div>
                 )
             }
-
-
             {
                 openSolicitudes && (
                     <div>
@@ -456,8 +417,6 @@ export default function Cursos() {
                     </div>
                 )
             }
-
-
             {
                 administrar && (
                     <div>
@@ -521,7 +480,6 @@ export default function Cursos() {
                                                 )
                                             }
                                         </tbody>
-
                                     </table>
                                 </div>
                                 <button

@@ -7,31 +7,21 @@ import AlertaComentario from "../components/AlertaComentario";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Comentarios() {
-
     const { user } = useAuth()
-
     const [comentariosAdministracion, setComentariosAdministracion] = useState([])
-
     const [comentariosUsuario, setComentariosUsuario] = useState([])
-
     const [alerta, setAlerta] = useState(false)
-
-    const [filtro, setFiltro] = useState('')
-
     useEffect(() => {
         const administrador = async () => {
             const res = await findAllComentariosByAdministrador()
             setComentariosAdministracion(res)
         }
-
         const usuario = async () => {
             const res = await findAllComentariosByUsuario(user.organizacion)
             setComentariosUsuario(res)
         }
-
         user.rol.includes('ADMIN_ORG') ? usuario() : administrador()
     }, [])
-
     return (
         <div>
             <NavBarAutenticado />

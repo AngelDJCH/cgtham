@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import '../styles/listausuarios.css'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js'
-import { getSeguidores } from '../services/Seguimiento.js';
 import { getAllOrganizaciones } from '../services/Organizacion.js';
 
 export default function ListaUsuarios(props) {

@@ -7,14 +7,13 @@ import { useAuth } from "../hooks/useAuth";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@uidotdev/usehooks";
-//http://localhost:3040
+
 const socket = io(process.env.REACT_APP_URL_WEBSOCKET || 'http://localhost:3040', {
     transports: ['websocket']
 });
 
 export default function Mensajes() {
     const isSmallDevice = useMediaQuery('(max-width:768px)')
-
     const [mensaje, setMensaje] = useState('');
     const { user } = useAuth();
     const [idChat, setIdChat] = useState(' ');
@@ -24,89 +23,62 @@ export default function Mensajes() {
     const [informacionSocket, setInformacionSocket] = useState('');
     const [createChat, setCreateChat] = useState(false)
     const navigate = useNavigate()
-
-    // 1. Listeners Globales (Conexión, Desconexión y Chats entrantes)
     useEffect(() => {
         socket.on('connect', () => {
-            console.log('El id del socket es: ', socket.id);
+            // console.log('El id del socket es: ', socket.id);
+            console.log('USUARIO CONECTADO')
         });
-
         socket.on('disconnect', () => {
-            console.log('El usuario se desconectó');
+            console.log('USUARIO DESCONECTADO');
         });
-
         socket.on('chat', (data) => {
-            // Aseguramos el uso correcto de prevMensajes para evitar duplicados u obsoletos
             setMensajes((prevMensajes) => [...prevMensajes, data]);
         });
-
         socket.on('newChat', (data) => {
             setIdChat(data.chat_id)
         })
-
         return () => {
             socket.off('chat');
             socket.off('connect');
             socket.off('disconnect');
         };
     }, []);
-
-    // 2. Listener exclusivo del canal de la organización (Controlado y Auto-limpiable)
     useEffect(() => {
         if (!user?.organizacion) return;
-
         const handleRoomResponse = (data) => {
             setIdChat(data.chat_id);
             setIdChat(data.chat_id);
-
-            // SÓLO agregamos al array si la respuesta realmente contiene un mensaje de chat válido
             if (data && data.data && data) {
                 setMensajes(data.data);
             } else {
                 setCreateChat(true)
             }
         };
-
-        // Escuchamos el evento
         socket.on(user.organizacion, handleRoomResponse);
-
-        // LIMPIEZA: Apaga el escucha anterior cuando cambie de organización o se desmonte
         return () => {
             socket.off(user.organizacion, handleRoomResponse);
         };
     }, [user?.organizacion]);
-
-    // 3. Emitir el 'join' al cambiar de usuario seleccionado
     useEffect(() => {
         if (!usuarioActivo) return;
-
         const getOrganizacionById = async () => {
             const data = await getOrganizacion(usuarioActivo);
             setOrganizacion(data);
-
-            // Limpiamos la pantalla de mensajes viejos al cambiar de chat
             setMensajes([]);
-            // Notificamos al servidor del cambio de sala
             socket.emit('join', { id_emisor: user?.organizacion, id_receptor: usuarioActivo });
         };
-
         getOrganizacionById();
     }, [usuarioActivo]);
-
-    // 4. Enviar un nuevo mensaje
     const handleCreateNewMessage = () => {
         if (!mensaje.trim()) return;
-
         socket.emit('chat', {
             message: mensaje,
             room: idChat,
             id_emisor: user.organizacion,
             id_receptor: usuarioActivo
         });
-
         setMensaje('');
     };
-
     const handleCreateNewChat = () => {
         socket.emit('newChat', {
             organizacion1: user.organizacion,
@@ -114,25 +86,19 @@ export default function Mensajes() {
         })
         socket.emit('join', { id_emisor: usuarioActivo, id_receptor: user?.organizacion });
     }
-
     return (
         <div style={{ marginTop: '100px' }}>
             <NavBarAutenticado />
-
             {
                 !isSmallDevice && (
-                    <ListaUsuarios isSmallDevice={false} mensaje={true} left='30px' right='0'  selectUsuario={setUsuarioActivo} />
+                    <ListaUsuarios isSmallDevice={false} mensaje={true} left='30px' right='0' selectUsuario={setUsuarioActivo} />
                 )
             }
-
             {
                 isSmallDevice && (
-                    <ListaUsuarios position={'fixed'} height={'auto'} width={'90%'} isSmallDevice={true} mensaje={true} left='0' right='0'  bottom='0'selectUsuario={setUsuarioActivo} />
+                    <ListaUsuarios position={'fixed'} height={'auto'} width={'90%'} isSmallDevice={true} mensaje={true} left='0' right='0' bottom='0' selectUsuario={setUsuarioActivo} />
                 )
             }
-
-
-
             {
                 usuarioActivo && (
                     <div style={{ display: 'flex', justifyContent: isSmallDevice ? 'center' : 'flex-end', width: '100%', height: isSmallDevice ? '65vh' : '80vh' }}>
@@ -141,9 +107,9 @@ export default function Mensajes() {
                                 <div style={{ width: '35px', height: '35px' }}>
                                     <img src={organizacion?.logo} alt="imagen" style={{ backgroundColor: 'white' }} />
                                 </div>
-                                <h1 onClick={()=>{
+                                <h1 onClick={() => {
                                     navigate(`/organizacion/${organizacion?.id}`)
-                                }} style={{ margin: '0', fontSize: isSmallDevice ? '18px' : '20px', cursor: 'pointer'}}>{user.organizacion === organizacion?.id ? `(YO)` : organizacion?.nombre_comercial?.length > 26 && isSmallDevice ? organizacion?.nombre_comercial?.substring(26)+"..." : `${organizacion?.nombre_comercial}`}</h1>
+                                }} style={{ margin: '0', fontSize: isSmallDevice ? '18px' : '20px', cursor: 'pointer' }}>{user.organizacion === organizacion?.id ? `(YO)` : organizacion?.nombre_comercial?.length > 26 && isSmallDevice ? organizacion?.nombre_comercial?.substring(26) + "..." : `${organizacion?.nombre_comercial}`}</h1>
                             </div>
                             <div className="cuerpo-mensajes">
                                 {
@@ -151,10 +117,7 @@ export default function Mensajes() {
                                         // Controlamos si viene como msg.contenido o msg.message
                                         const textoMensaje = msg?.contenido || msg?.message;
                                         const esEmisor = msg?.id_emisor === user.organizacion;
-
-                                        // Si por alguna razón el mensaje sigue vacío, no renderizamos nada estorboso
                                         if (!textoMensaje) return null;
-
                                         return (
                                             <div key={index} style={{ display: 'flex', justifyContent: esEmisor ? 'end' : 'start', padding: '0.5rem', minWidth: '100px' }}>
                                                 <p style={{ maxWidth: '70%', padding: '1rem', backgroundColor: esEmisor ? '#AEB784' : '#41431B', color: 'white', borderRadius: '8px', margin: 0 }}>
@@ -189,7 +152,6 @@ export default function Mensajes() {
                     </div>
                 )
             }
-
             {
                 createChat && (<div>
                     <div className="overllay"></div>

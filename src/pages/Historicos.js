@@ -9,27 +9,22 @@ export default function Historicos() {
     const imgFileDownloandPdf = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0MTQzMUIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1maWxlLWRvd24taWNvbiBsdWNpZGUtZmlsZS1kb3duIj48cGF0aCBkPSJNNiAyMmEyIDIgMCAwIDEtMi0yVjRhMiAyIDAgMCAxIDItMmg4YTIuNCAyLjQgMCAwIDEgMS43MDQuNzA2bDMuNTg4IDMuNTg4QTIuNCAyLjQgMCAwIDEgMjAgOHYxMmEyIDIgMCAwIDEtMiAyeiIvPjxwYXRoIGQ9Ik0xNCAydjVhMSAxIDAgMCAwIDEgMWg1Ii8+PHBhdGggZD0iTTEyIDE4di02Ii8+PHBhdGggZD0ibTkgMTUgMyAzIDMtMyIvPjwvc3ZnPg=='
     const [eventos, setEventos] = useState([])
     const [ofertas, setOfertas] = useState([])
-
     const handleCreatePdf = (e) => {
         e.preventDefault()
         alert('ACCIÓN NO DISPONIBLE')
     }
-
     useEffect(() => {
         const hEventos = async () => {
             const res = await findAllHistoricosEventos()
             setEventos(res)
         }
-
         const hOfertas = async () => {
             const res = await findAllHistoricosOferta()
             setOfertas(res)
         }
-
         hEventos()
         hOfertas()
     }, [])
-
     return (
         <div>
             <NavBarAutenticado />
@@ -81,7 +76,6 @@ export default function Historicos() {
                         <img src={imgFileDownloandPdf} onClick={handleCreatePdf} style={{ width: '24px', height: '24px', cursor: 'pointer' }} />
                     </div>
                     <div className="tabla-historico">
-
                         <table >
                             <thead>
                                 <tr>

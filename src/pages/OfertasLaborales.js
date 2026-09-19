@@ -12,28 +12,16 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import Loader from '../components/Loader'
 
 export default function OfertasLaborales() {
-
     const [loading, setLoading] = useState(false)
-
     const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width:1024px)');
-
     const [documento, setDocumento] = useState(null)
-
     const [ofertasLaborales, setOfertasLaborales] = useState(null)
     const navigate = useNavigate()
-
-    const [openPostulacion, setOpenPostulacion] = useState(false)
     const [selectOferta, setSelectOferta] = useState(null)
     const [openOferta, setOpenOferta] = useState(false)
-
-    const [organizacion, setOrganizacion] = useState(null)
-
     const [openCreateOferta, setOpenCreateOferta] = useState(false)
-
     const [filtro, setFiltro] = useState('')
-
     const { user } = useAuth()
-
     const [ofertaData, setOfertaData] = useState({
         id: '',
         titulo: '',
@@ -53,11 +41,8 @@ export default function OfertasLaborales() {
         id_empresa: '',
         documento: ''
     })
-
     const handleCreateOferta = async () => {
-
         setLoading(true)
-
         if (ofertaData.jornada === '---' ||
             ofertaData.tipo_contrato === '---' ||
             ofertaData.departamento_area === '---' ||
@@ -71,12 +56,11 @@ export default function OfertasLaborales() {
             if (res_document) {
                 const res = await createOfertaLaboral({ ...ofertaData, id_empresa: user.organizacion, documento: res_document })
                 setDocumento(null)
-                if (res) {setLoading(false); navigate(0)}
-                if (!res) {setLoading(false); alert('Debes llenar todos los datos')}
+                if (res) { setLoading(false); navigate(0) }
+                if (!res) { setLoading(false); alert('Debes llenar todos los datos') }
             }
         }
     }
-
     const [opcionesFiltros, setOpcionesFiltros] = useState({
         jornada: [
             { id: 1, opcion: 'Completa' },
@@ -125,10 +109,8 @@ export default function OfertasLaborales() {
             { id: 3, opcion: 'Remota' }
         ]
     });
-
     const handleUploadDocument = (e) => {
         setLoading(true)
-
         const file = e.target.files[0]
         try {
             const reader = new FileReader()
@@ -139,28 +121,20 @@ export default function OfertasLaborales() {
         } catch (error) {
             console.log(error)
         }
-
         setLoading(false)
     }
-
     const [openDocumento, setOpenDocumento] = useState(false)
-
-
     useEffect(() => {
         const getOfertas = async () => {
             const res = await getOfertasLaboralesAll()
             setOfertasLaborales(res)
         }
-
         const getOfertasByIdOrganizacion = async () => {
             const res = await getOfertasLaboralesByIdOrganizacion(user.organizacion)
             setOfertasLaborales(res)
         }
         user.tipo != 'Escuela' && user.tipo != 'Comité' ? getOfertasByIdOrganizacion() : getOfertas()
     }, [])
-
-
-
     return (
         <div>
             <NavBarAutenticado />
@@ -185,7 +159,6 @@ export default function OfertasLaborales() {
                                     </div>
                                 </div>
                                 <div style={{ width: '100%', paddingTop: '0.5rem', display: 'flex', flexWrap: 'wrap', gap: '0.4rem', justifyContent: 'center', alignItems: 'center' }}>
-
                                     <div className="tarjeta-datos-oferta" style={{ width: '100px', display: 'flex', gap: '0.2rem', justifyContent: 'center', alignItems: 'center', height: '30px', backgroundColor: '#ffffff' }}>
                                         <div>
                                             <h6 style={{ fontSize: '10px', margin: 0, padding: 0, textAlign: 'center' }}><strong>VACANTES</strong></h6>
@@ -239,19 +212,16 @@ export default function OfertasLaborales() {
                     }
                 </div>
             </div>
-
             {
                 openOferta && (
                     <VisualizarOferta id_oferta={selectOferta} accion={setOpenOferta} />
                 )
             }
-
             {
                 openCreateOferta && (
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-
                             <div className="formulario-contenedor" style={{ width: isSmallDevice ? '90%' : null, height: isSmallDevice ? '90%' : null }}>
                                 <div className="titulo-formulario"><h1 className="subtitulo">NUEVA OFERTA LABORAL</h1></div>
                                 <div className="formulario" style={{ height: isSmallDevice ? '80%' : null, width: isSmallDevice ? '100%' : null }}>
@@ -382,7 +352,6 @@ export default function OfertasLaborales() {
                     </div>
                 )
             }
-
             {
                 openDocumento && (
                     <div>
@@ -399,13 +368,11 @@ export default function OfertasLaborales() {
                     </div>
                 )
             }
-
             {
                 loading && (
-                    <Loader/>
+                    <Loader />
                 )
             }
-
         </div>
     )
 }

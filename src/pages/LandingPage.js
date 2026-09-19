@@ -9,9 +9,6 @@ import NavBar from "../components/NavBar";
 import Noticias from "../components/Noticias";
 import Sectores from "../components/Sectores";
 
-
-
-
 export default function LandingPage() {
     return (
         <div>

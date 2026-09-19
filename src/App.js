@@ -95,11 +95,10 @@ function App() {
             path='/afiliaciones'
             element={
               <ProtectedRoute redirectTo={'/'}>
-                <Afiliaciones/>
+                <Afiliaciones />
               </ProtectedRoute>
             }
           >
-
           </Route>
           <Route
             path='/cursos'

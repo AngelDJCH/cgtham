@@ -12,17 +12,13 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import Loader from "../components/Loader";
 
 export default function Eventos(prop) {
-
     const [loading, setLoading] = useState(false)
-
     const imgDefaultSelect = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="
     const imgAddSelect = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlLXBsdXMtaWNvbiBsdWNpZGUtaW1hZ2UtcGx1cyI+PHBhdGggZD0iTTE2IDVoNiIvPjxwYXRoIGQ9Ik0xOSAydjYiLz48cGF0aCBkPSJNMjEgMTEuNVYxOWEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoNy41Ii8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48Y2lyY2xlIGN4PSI5IiBjeT0iOSIgcj0iMiIvPjwvc3ZnPg=="
-
     const [imagenes, setImagenes] = useState([])
     const [imagen, setImagen] = useState(null)
     const { user } = useAuth()
     const navigate = useNavigate()
-
     const [evento, setEvento] = useState({
         titulo: '',
         descripcion: '',
@@ -31,7 +27,6 @@ export default function Eventos(prop) {
         fecha_final: '',
         id_organizacion: user.organizacion
     })
-
     const [imgTipoEvento, setImgTipoEvento] = useState([
         {
             id: 1,
@@ -62,18 +57,13 @@ export default function Eventos(prop) {
     const [filtro, setFiltro] = useState('')
     const [eventos, setEventos] = useState([])
     const [openCreateEvento, setOpenCreateEvento] = useState(false)
-
     const [selectImagen, setSelectImagen] = useState(null)
-
     const handeChangeFoto = (e) => {
         const file = e.target.files[0];
         if (!file) return;
-
-        if(file.size  > 5242880) {alert('LA FOTO DEBE PESAR MENOS DE 5MB'); return;}
-
+        if (file.size > 5242880) { alert('LA FOTO DEBE PESAR MENOS DE 5MB'); return; }
         try {
             const reader = new FileReader();
-
             reader.onloadend = function () {
                 const nuevaImagen = {
                     id: imagenes.length,
@@ -88,12 +78,9 @@ export default function Eventos(prop) {
             console.log("Error al cargar la imagen:", error);
         }
     };
-
     const handleCreateEvento = async () => {
         setLoading(true)
-
         if (imagenes.length === 0) { alert('NO SE HAN SELECCIONADO IMAGENES'); setLoading(false) } else {
-
             const res = await createEvento(evento)
             if (res) {
                 try {
@@ -116,29 +103,23 @@ export default function Eventos(prop) {
             setOpenCreateEvento(false); setImagenes([]); setSelectImagen(null);
         }
     }
-
     useEffect(() => {
         const getEventos = async () => {
             const res = await eventosByIdOrganizacion(user.organizacion)
             setEventos(res)
         }
-
         const getEventosAll = async () => {
             const res = await eventoOrganizacion(100, 0)
             setEventos(res)
         }
-
         user.tipo === 'Escuela' ? getEventos() : getEventosAll()
     }, [])
     const isSmallDevice = useMediaQuery('(max-width:768px)');
-
     const isMediumDevice = useMediaQuery('(max-width: 1024px)');
-
     return (
         <div>
             <NavBarAutenticado />
             <Filtros enableAccion={user.tipo === 'Escuela' ? true : false} titulo='Eventos' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='CREAR' filtro={setFiltro} btn_accion={setOpenCreateEvento} />
-
             <TablaContenido encabezados={['Titulo', 'Descripción', 'Tipo', user.tipo === 'Escuela' ? 'Estado' : null, 'Inicio', 'Final', 'Publicado', 'Acciones']} eventosTabla={eventos} filtro={filtro} />
             {
                 openCreateEvento && (
@@ -240,13 +221,11 @@ export default function Eventos(prop) {
                     </div>
                 )
             }
-
             {
                 loading && (
                     <Loader />
                 )
             }
-
         </div>
     )
 }

@@ -17,10 +17,8 @@ export const AuthProvider = ({ children }) => {
                 setLoading(false)
             }
         }
-
         verifyToken()
     }, [])
-
     return (
         <AuthContex.Provider value={{ user, setUser, loading }}>
             {children}

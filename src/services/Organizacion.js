@@ -28,7 +28,6 @@ export const getAllOrganizaciones = async () => {
         const { data } = await axiosInstance.get('/organizaciones/')
         return data
     } catch (error) {
-        // alert('OCURRIO UN ERROR AL OBTENER LAS ORGANIZACIONES')
     }
 }
 

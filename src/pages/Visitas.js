@@ -11,19 +11,13 @@ import Loader from "../components/Loader";
 export default function Visitas() {
     const [filtro, setFiltro] = useState('')
     const { user } = useAuth()
-
     const [idEmpresa, setIdEmpresa] = useState('')
-
     const [openCreateVisita, setOpenCreateVisita] = useState(false)
-
     const [organizaciones, setOrganizaciones] = useState([])
     const isSmallDevice = useMediaQuery('(max-width:768px)');
     const isLargeDevice = useMediaQuery('(min-width:992px)')
-
     const [loading, setLoading] = useState(false)
-
     const [visitas, setVisitas] = useState([])
-
     const handleVisitaCreate = async () => {
         setLoading(true)
         try {
@@ -36,29 +30,23 @@ export default function Visitas() {
             setLoading(false)
         }
     }
-
     useEffect(() => {
         const orgs = async () => {
             const res = await getAllOrganizaciones()
             setOrganizaciones(res)
         }
-
         const vistEmpresa = async () => {
             const data = await allVisitasByIdEmpresa(user.organizacion)
             setVisitas(data)
         }
-
         const vistEscuela = async () => {
             const data = await allVisitasByIdEscuela(user.organizacion)
             setVisitas(data)
         }
-
         const vistAdministrador = async () => {
             const data = await allVisitasForAdministrador()
             setVisitas(data)
         }
-
-
         if (user.tipo === 'Escuela') {
             vistEscuela()
         } else if ((user.tipo === 'Empresa') || (user.tipo === 'Cámara de Comercio')) {
@@ -66,23 +54,18 @@ export default function Visitas() {
         } else {
             vistAdministrador()
         }
-
         orgs()
     }, [])
-
     return (
         <div>
             <NavBarAutenticado />
             <Filtros btn_accion={setOpenCreateVisita} accion='SOLICITAR' enableAccion={user.tipo === 'Escuela' ? true : false} titulo='Visitas' filtro={user.tipo === 'Escuela' ? setFiltro : null} placeholder={user.tipo === 'Escuela' ? 'Escribe el nombre de la empresa' : null} />
             <TablaContenido filtro={filtro} visitasTabla={visitas} encabezados={user.tipo === 'Escuela' ? ['ID', 'Empresa', 'Solicitado', 'Aprobado', 'Agendado', 'Estado', 'Acciones'] : user.tipo === 'Empresa' || user.tipo === 'Cámara de Comercio' ? ['ID', 'Escuela', 'Solicitado', 'Aprobado', 'Agendado', 'Estado', 'Acciones'] : ['ID', 'Escuela', 'Empresa', 'Acciones']} />
-
-
             {
                 openCreateVisita && (
                     <div>
                         <div className="overllay"></div>
                         <div className="overllay-contenedor" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-
                             <div className="formulario-contenedor" style={{ height: isSmallDevice ? '100%' : null, height: isSmallDevice ? 'auto' : null }}>
                                 <div className="titulo-formulario"><h1 className="subtitulo">NUEVA SOLICITUD DE VISITA</h1></div>
                                 <div className="formulario" style={{ width: isSmallDevice ? '100%' : null, height: 'auto' }}>
@@ -99,23 +82,6 @@ export default function Visitas() {
                                                     )
                                                 }
                                             </select>
-                                            {
-                                                // El codigo comentado es para una funcionalidad futura.
-                                                // Agosto - Diciembre 2026
-                                            }
-                                            {/* <div>
-                                                <h6>Documento:</h6>
-                                                <input id="documento" style={{ display: 'none' }} type="file" accept="pdf" 
-                                                    
-                                                />
-                                                <label  className="btn-accion-2" style={{ width: '50px', height: '30px' }}>
-                                                    <strong
-                                                    onClick={()=>{alert('Modulo no disponible.')}}
-                                                    >SUBIR</strong>
-                                                </label>
-                                                {/* <button>VER DOCUMENTO</button> *
-                                                <p><strong>Nota:</strong> El documento es un requisito para la solicitud. Para especificar de manera formal la visita a las instalaciones de la empresa. Indicando area de interés, cantidad de alumnos, etc.</p>
-                                            </div> */}
                                             {
                                                 isSmallDevice && (
                                                     <div style={{ width: '100%', height: '100%' }}>
@@ -150,13 +116,11 @@ export default function Visitas() {
                     </div>
                 )
             }
-
             {
                 loading && (
                     <Loader/>
                 )
             }
-
         </div>
     )
 }

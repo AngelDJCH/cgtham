@@ -13,43 +13,32 @@ import { getAllOrganizaciones } from '../services/Organizacion.js';
 import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
-
     const isMediumDevice = useMediaQuery("(max-width : 768px) or (max-width : 992px)")
     const isSmallDevice = useMediaQuery("(max-width : 768px)")
-
     const isLargeDevice = useMediaQuery("(min-width: 992px)")
-
     const { user } = useAuth()
     const [ofertasLaborales, setOfertasLaborales] = useState(null)
-
     const [selectOferta, setSelectOferta] = useState(null)
     const [openOferta, setOpenOferta] = useState(false)
-
     const [openListUsers, setOpenListUsers] = useState(false)
-
     const [organizaciones, setOrganizaciones] = useState([])
-
     const navigate = useNavigate()
-
     useEffect(() => {
         const getOfertas = async () => {
             const res = await getOfertasLaboralesAll()
-
             setOfertasLaborales(res)
         }
         getOfertas()
     }, [])
-
-    useEffect(()=>{
-        if(openListUsers){
-            const organizacionesData = async()=>{
+    useEffect(() => {
+        if (openListUsers) {
+            const organizacionesData = async () => {
                 const res = await getAllOrganizaciones()
                 setOrganizaciones(res)
             }
             organizacionesData()
         }
-    },[openListUsers])
-
+    }, [openListUsers])
     return (
         <div className="home" style={{ marginBottom: '1rem' }}>
             <NavBarAutenticado />
@@ -71,7 +60,6 @@ export default function HomePage() {
                                 <Notas />
                             )
                         }
-
                         {
                             user.tipo === 'Escuela' && (
                                 <div className="notas">
@@ -82,7 +70,6 @@ export default function HomePage() {
                                                     <h1 style={{ color: '#AEB784', fontFamily: 'Poppins', fontSize: '16px', margin: '0', padding: '0' }}>{o?.titulo}</h1>
                                                 </div>
                                                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '0.3rem' }}>
-
                                                     <div style={{ width: '200px', display: 'flex', gap: '0.2rem', justifyContent: 'center', alignItems: 'center', height: '30px', backgroundColor: '#41431B' }}>
                                                         <div style={{ width: '20px', height: '20px' }}>
                                                             <img src={o?.empresa?.logo} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', borderRadius: '100%', backgroundColor: 'white' }} />
@@ -93,7 +80,6 @@ export default function HomePage() {
                                                     </div>
                                                 </div>
                                                 <div style={{ width: '100%', padding: isSmallDevice || isMediumDevice ? '0rem' : '0.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center', alignItems: 'center' }}>
-
                                                     <div style={{ width: '100%', padding: isSmallDevice || isMediumDevice ? '1rem' : '0.5rem', display: 'flex', flexWrap: 'wrap', gap: isSmallDevice ? '1rem' : '0.4rem', justifyContent: 'space-evenly', alignItems: 'center' }}>
                                                         <div className="tarjeta-datos-oferta" style={{ width: isSmallDevice ? '100%' : '80px', display: 'flex', gap: '0.2rem', justifyContent: 'center', alignItems: 'center', height: '30px', backgroundColor: '#ffffff' }}>
                                                             <div>
@@ -156,14 +142,13 @@ export default function HomePage() {
                     </div>
                 )
             }
-
             {
                 openOferta && (
                     <VisualizarOferta id_oferta={selectOferta} accion={setOpenOferta} />
                 )
             }
             {
-                (isSmallDevice||user.rol.includes('ADMIN_SYS')) && (
+                (isSmallDevice || user.rol.includes('ADMIN_SYS')) && (
                     <div
                         style={
                             {
@@ -178,64 +163,52 @@ export default function HomePage() {
                         }}
                             onClick={() => {
                                 setOpenListUsers(true)
-                                // alert('Esta funcionalidad se encuentra en desarrollo. Disculpe las molestias.')
                             }}
                         >
                             <img
-                            src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXJzLWljb24gbHVjaWRlLXVzZXJzIj48cGF0aCBkPSJNMTYgMjF2LTJhNCA0IDAgMCAwLTQtNEg2YTQgNCAwIDAgMC00IDR2MiIvPjxwYXRoIGQ9Ik0xNiAzLjEyOGE0IDQgMCAwIDEgMCA3Ljc0NCIvPjxwYXRoIGQ9Ik0yMiAyMXYtMmE0IDQgMCAwIDAtMy0zLjg3Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjciIHI9IjQiLz48L3N2Zz4=' alt='Users or Organizations' />
+                                src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXJzLWljb24gbHVjaWRlLXVzZXJzIj48cGF0aCBkPSJNMTYgMjF2LTJhNCA0IDAgMCAwLTQtNEg2YTQgNCAwIDAgMC00IDR2MiIvPjxwYXRoIGQ9Ik0xNiAzLjEyOGE0IDQgMCAwIDEgMCA3Ljc0NCIvPjxwYXRoIGQ9Ik0yMiAyMXYtMmE0IDQgMCAwIDAtMy0zLjg3Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjciIHI9IjQiLz48L3N2Zz4=' alt='Users or Organizations' />
                         </button>
                     </div>
                 )
             }
-
             {
                 openListUsers && (
                     <div>
-
                         <div className='overllay'>
                         </div>
                         <div className='overllay-contenedor'>
-                            {/* <ul>
+                            <div style={{ width: '400px', minWidth: '400px', maxWidth: '400px', height: '400px', maxHeight: '400px', minHeight: '400px', backgroundColor: 'white', borderRadius: '10px', overflowY: 'scroll', scrollbarWidth: 'none' }}>
                                 {
                                     organizaciones?.map(
-                                        o => <li>
-                                            {o.nombre_comercial}
-                                        </li>
-                                    )
-                                }
-                            </ul> */}
-                            <div style={{width:'400px', minWidth:'400px', maxWidth:'400px', height:'400px', maxHeight: '400px', minHeight: '400px', backgroundColor:'white', borderRadius:'10px', overflowY:'scroll', scrollbarWidth:'none'}}>
-                                {
-                                    organizaciones?.map(
-                                        (o)=><div
+                                        (o) => <div
                                             style={{
-                                                width:'100%', height:'50px', display:'flex', justifyContent:'left', alignItems:'center', border:'1px solid black'
+                                                width: '100%', height: '50px', display: 'flex', justifyContent: 'left', alignItems: 'center', border: '1px solid black'
                                             }}
                                         >
                                             <div style={{
-                                                width:'30px', height:'30px', padding:'5px',flexShrink:0
+                                                width: '30px', height: '30px', padding: '5px', flexShrink: 0
                                             }}>
                                                 <img src={o.logo}
                                                     style={
                                                         {
-                                                            width:'100%', height:'100%', objectPosition:'center', borderRadius:'100%', flexShrink:0
+                                                            width: '100%', height: '100%', objectPosition: 'center', borderRadius: '100%', flexShrink: 0
                                                         }
                                                     }
                                                 />
                                             </div>
                                             <div><p
                                                 style={{
-                                                    cursor:'pointer',
-                                                    fontSize:'12px', fontFamily:'Poppins', display:'flex', flexWrap:'wrap', width:'auto'
+                                                    cursor: 'pointer',
+                                                    fontSize: '12px', fontFamily: 'Poppins', display: 'flex', flexWrap: 'wrap', width: 'auto'
                                                 }}
-                                                onClick={()=>{navigate(`/organizacion/${o.id}`)}}
+                                                onClick={() => { navigate(`/organizacion/${o.id}`) }}
                                             >{o.nombre_comercial}</p></div>
                                         </div>
                                     )
                                 }
                             </div>
                             <button
-                                style={{marginTop:'1rem'}}
+                                style={{ marginTop: '1rem' }}
                                 className='btn-accion-2'
                                 onClick={
                                     () => {
@@ -249,7 +222,6 @@ export default function HomePage() {
                     </div>
                 )
             }
-
         </div>
     )
 }

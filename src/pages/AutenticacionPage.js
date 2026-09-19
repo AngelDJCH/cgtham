@@ -5,8 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { createCuenta, login } from "../services/Cuenta";
 import { useAuth } from "../hooks/useAuth";
 import { createOrganizaion, deleteOrganizacionById, getAllOrganizaciones } from "../services/Organizacion";
-import { axiosInstance } from "../services/Axios";
-import { createUsuario } from "../services/Usuario";
 import { createContacto, deleteContactoById } from "../services/Contacto";
 import { createDireccion, deleteDireccionById } from "../services/Direccion";
 import { createCloudinary } from "../services/Cloudinary";
@@ -17,13 +15,10 @@ import { uploadImg } from "../services/Upload";
 import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function AutenticacionPage() {
-
     const [openCambiarContraseña, setOpenCambiarContraseña] = useState(false)
     const [openAlertaCambiarContraseña, setOpenAlertaCambiarContraseña] = useState(false)
-
     const imgLogoDefault = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlLXVwLWljb24gbHVjaWRlLWltYWdlLXVwIj48cGF0aCBkPSJNMTAuMyAyMUg1YTIgMiAwIDAgMS0yLTJWNWEyIDIgMCAwIDEgMi0yaDE0YTIgMiAwIDAgMSAyIDJ2MTBsLTMuMS0zLjFhMiAyIDAgMCAwLTIuODE0LjAxNEw2IDIxIi8+PHBhdGggZD0ibTE0IDE5LjUgMy0zIDMgMyIvPjxwYXRoIGQ9Ik0xNyAyMnYtNS41Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjkiIHI9IjIiLz48L3N2Zz4="
     const imgBannerDefault = "https://plus.unsplash.com/premium_photo-1772877094825-2908e6cfd259?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-
     const [sectores, setSectores] = useState([
         {
             id: 1,
@@ -90,25 +85,16 @@ export default function AutenticacionPage() {
             ]
         }
     ]);
-
     const [selectTipo, setSelectTipo] = useState('')
     const [selectSector, setSelectSector] = useState('')
     const [selectGiro, setSelectGiro] = useState('')
-
     const { autenticacion } = useParams()
-
     const navigate = useNavigate()
-
     const imagen = 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-
     const [openLogin, setOpenLogin] = useState(false)
-
     const [openRegister, setOpenRegister] = useState(false)
-
     const [organizaciones, setOrganizaciones] = useState([])
-
     const isSmallDevice = useMediaQuery('(max-width:768px)');
-
     const [datosPersonales, setDatosPersonales] = useState({
         nombre: '',
         descripcion: '',
@@ -139,26 +125,18 @@ export default function AutenticacionPage() {
             api_secret: ''
         }
     )
-
-    const [organizacionId, setOrganizacionId] = useState(null)
-
     const [openRegisterOrg, setOpenRegisterOrg] = useState(false)
-
     const [openDatosPersonales, setOpenDatosPersonales] = useState(true)
     const [openDatosUbicacion, setOpenDatosUbicacion] = useState(true)
     const [openDatosContacto, setOpenDatosContacto] = useState(true)
     const [openDatosSeguridad, setOpenDatosSeguridad] = useState(true)
-
-
     const [correoLogin, setCorreoLogin] = useState('')
     const [contraseniaLogin, setContraseniaLogin] = useState('')
     const [banner, setBanner] = useState(null)
     const [foto, setFoto] = useState(null)
     const { setUser } = useAuth()
-
     const [archivoBanner, setArchivoBanner] = useState(null);
     const [archivoFoto, setArchivoFoto] = useState(null);
-
     const [empresa, setEmpresa] = useState({
         razon_social: '',
         regimen_fiscal: '',
@@ -172,7 +150,6 @@ export default function AutenticacionPage() {
         nombre: '',
         presidente: ''
     })
-
     const postCuenta = async (correo, contrasenia) => {
         try {
             const res = await login(correo, contrasenia)
@@ -183,8 +160,6 @@ export default function AutenticacionPage() {
             setOpenCambiarContraseña(true)
         }
     }
-
-
     const handleNextData = () => {
         if (openDatosPersonales) {
             setOpenDatosPersonales(false)
@@ -199,7 +174,6 @@ export default function AutenticacionPage() {
             setOpenDatosPersonales(true)
         }
     }
-
     const handleChangeBanner = (e) => {
         const archivo = e.target.files[0];
         if (archivo) {
@@ -211,7 +185,6 @@ export default function AutenticacionPage() {
             setBanner(URL.createObjectURL(archivo));
         }
     };
-
     const handleChangeFoto = (e) => {
         const archivo = e.target.files[0];
         if (archivo) {
@@ -224,7 +197,6 @@ export default function AutenticacionPage() {
             setFoto(URL.createObjectURL(archivo));
         }
     };
-
     const deleteRegister = async ({ contacto, direccion, organizacion }) => {
         let resOrg = null
         if (organizacion) resOrg = await deleteOrganizacionById(organizacion.id)
@@ -232,7 +204,6 @@ export default function AutenticacionPage() {
         if (resOrg != 204 && direccion) await deleteDireccionById(direccion.id)
         return
     }
-
     const handeCreateOrganizacion = async () => {
         try {
             const logoUrl = await uploadImg(archivoFoto)
@@ -241,7 +212,6 @@ export default function AutenticacionPage() {
             if (bannerUrl === null) return
             const contactoApi = await createContacto(datosContacto.correo, datosContacto.telefono)
             if (contactoApi === null) return
-            // if((logoUrl === null) || (bannerUrl === null)) {await deleteContactoById(contactoApi.id);return}
             const direccionApi = await createDireccion(datosUbicacion.calle, datosUbicacion.numero, datosUbicacion.colonia,
                 datosUbicacion.codigo_postal, datosUbicacion.ciudad, datosUbicacion.estado, datosUbicacion.pais
             )
@@ -266,7 +236,6 @@ export default function AutenticacionPage() {
                 camaraApi = await createCamara(organizacionAPI?.id, camara.nombre, camara.presidente)
                 if (camaraApi === null) deleteRegister({ contacto: contactoApi, direccion: direccionApi, organizacion: organizacionAPI })
             }
-
             const cuentaApi = await createCuenta(datosContacto.correo, datosSeguridad.contrasenia, organizacionAPI?.id)
             if (cuentaApi === null) deleteRegister({ contacto: contactoApi, direccion: direccionApi, organizacion: organizacionAPI })
             if (cuentaApi.status === 201 && contactoApi && direccionApi && organizacionAPI && cloudinariApi || (empresaApi || escuelaApi || camaraApi)) {
@@ -276,30 +245,24 @@ export default function AutenticacionPage() {
             alert('Ocurrio un error al intentar registrar una organizacion')
         }
     }
-
     useEffect(() => {
         if (autenticacion === 'login') {
             setOpenLogin(true)
         }
-
         if (autenticacion === 'register') {
             setOpenRegister(true)
         }
-
         if (autenticacion === 'register_org') {
             setOpenRegisterOrg(true)
         }
     }, [])
-
     useEffect(() => {
         const organizacionesData = async () => {
             const res = await getAllOrganizaciones()
             setOrganizaciones(res)
         }
-
         organizacionesData()
     }, [])
-
     return (
         <div className="autenticacion" style={{ height: openRegisterOrg ? 'auto' : null, paddingBottom: '2rem' }}>
             <NavBar opcionesNav={false} />
@@ -328,14 +291,12 @@ export default function AutenticacionPage() {
                                                 //setOpenAlertaCambiarContraseña(true)
                                                 alert('No disponible')
                                             }}
-
                                         >Recuperar contraseña</p>
                                     </div>
                                 )
                             }
                             <div className="a-registros">
                                 <p
-
                                     style={{ cursor: 'pointer' }}
 
                                     onClick={() => { setOpenLogin(false); setOpenRegisterOrg(true) }}
@@ -359,7 +320,6 @@ export default function AutenticacionPage() {
                     </div>
                 )
             }
-
             {
 
                 openRegisterOrg && (
@@ -391,7 +351,6 @@ export default function AutenticacionPage() {
                             }
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-
                             <div className="contenedor-seccion2" style={{ flexWrap: 'wrap' }}>
                                 <div style={{ width: isSmallDevice ? '100%' : '20%', display: 'flex', justifyContent: 'center', marginTop: '1rem', flexWrap: 'wrap' }}>
                                     <input type="file" accept=".png"
@@ -399,7 +358,6 @@ export default function AutenticacionPage() {
                                         style={{ display: 'none' }}
                                         onChange={handleChangeFoto}
                                     />
-
                                     {
                                         foto === null && (
                                             <label
@@ -554,17 +512,13 @@ export default function AutenticacionPage() {
                                         REGRESAR
                                     </button>
                                     <button className="btn-limpiar"
-
                                         onClick={(e) => {
                                             e.preventDefault()
-
                                             setFoto(null)
                                             setBanner(null)
-
                                             document.getElementById('r_nombre').value = ''
                                             document.getElementById('r_descripcion').value = ''
                                             document.getElementById('r_rfc').value = ''
-
                                             if (selectTipo === 'Escuela') {
                                                 document.getElementById('r_sitio').value = ''
                                             } else if (selectTipo === 'Empresa') {
@@ -575,15 +529,11 @@ export default function AutenticacionPage() {
                                                 document.getElementById('r_nombre_camara').value = ''
                                                 document.getElementById('r_presidente').value = ''
                                             }
-
                                             document.getElementById('r_tipo_org').selectedIndex = 0
                                             document.getElementById('r_sector_org').selectedIndex = 0
                                             document.getElementById('r_giro_org').selectedIndex = 0
-
                                             setSelectTipo('')
-
                                             document.getElementById('r_tamaño').value = ''
-
                                             document.getElementById('r_calle').value = ''
                                             document.getElementById('r_numero').value = ''
                                             document.getElementById('r_colonia').value = ''
@@ -591,18 +541,12 @@ export default function AutenticacionPage() {
                                             document.getElementById('r_cp').value = ''
                                             document.getElementById('r_estado').value = ''
                                             document.getElementById('r_pais').value = ''
-
-
                                             document.getElementById('r_correo').value = ''
                                             document.getElementById('r_telefono').value = ''
-
-
                                             document.getElementById('r_contrasenia').value = ''
-
                                             document.getElementById('cloud_name').value = ''
                                             document.getElementById('api_key').value = ''
                                             document.getElementById('api_secret').value = ''
-
                                             setDatosPersonales(
                                                 {
                                                     nombre: '',
@@ -612,7 +556,6 @@ export default function AutenticacionPage() {
                                                     tamaño: ''
                                                 }
                                             )
-
                                             setDatosUbicacion(
                                                 {
                                                     calle: '',
@@ -624,20 +567,17 @@ export default function AutenticacionPage() {
                                                     pais: ''
                                                 }
                                             )
-
                                             setDatosContacto(
                                                 {
                                                     correo: '',
                                                     telefono: ''
                                                 }
                                             )
-
                                             setDatosSeguridad(
                                                 {
                                                     contrasenia: ''
                                                 }
                                             )
-
                                             setDatosCloudinary(
                                                 {
                                                     cloud_name: '',
@@ -645,9 +585,7 @@ export default function AutenticacionPage() {
                                                     api_secret: ''
                                                 }
                                             )
-
                                         }}
-
                                     >
                                         LIMPIAR
                                     </button>
@@ -663,9 +601,7 @@ export default function AutenticacionPage() {
                         </div>
                     </div>
                 )
-
             }
-
             {
                 openAlertaCambiarContraseña && (
                     <div>
@@ -697,7 +633,6 @@ export default function AutenticacionPage() {
                     </div>
                 )
             }
-
         </div>
     )
 }

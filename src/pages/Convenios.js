@@ -12,16 +12,12 @@ import Loader from "../components/Loader";
 
 export default function Convenios() {
     const isSmallDevice = useMediaQuery('(max-width:768px)');
-
     const [loading, setLoading] = useState(false)
-
     const [documento, setDocumento] = useState(null)
     const [openDocumento, setOpenDocumento] = useState(false)
-
     const [openCreateConvenio, setOpenCreateConvenio] = useState(false)
     const { user } = useAuth()
     const [convenios, setConvenios] = useState([])
-
     const [convenio, setConvenio] = useState({
         titulo: '',
         descripcion: '',
@@ -32,13 +28,11 @@ export default function Convenios() {
         fecha_inicio: '',
         fecha_final: ''
     })
-
     const [convenioOrganizacion, setConvenioOrganizacion] = useState({
         rol: '',
         id_convenio: '',
         id_organizacion: ''
     })
-
     const [tiposConvenios, setTiposConvenios] = useState([
         {
             id: 1,
@@ -118,11 +112,8 @@ export default function Convenios() {
             ]
         }
     ])
-
     const [selectTipo, setSelectTipo] = useState('')
     const navigate = useNavigate()
-
-
     const handleUploadDocument = (e) => {
         setDocumento(null)
         const file = e.target.files[0]
@@ -136,7 +127,6 @@ export default function Convenios() {
             console.log(error)
         }
     }
-
     useEffect(() => {
         const getConvenios = async () => {
             const res = await findAll()
@@ -146,8 +136,6 @@ export default function Convenios() {
         console.log(convenios)
     }, [])
     const isMediumDevice = useMediaQuery('(min-width:1920px)')
-    const isLargeDevice = useMediaQuery('(min-width: 992px)')
-
     return (
         <div>
             <NavBarAutenticado />
@@ -200,7 +188,6 @@ export default function Convenios() {
                                                 }
                                             </select>
                                             <h6 style={{ margin: '0' }}>Fechas:</h6>
-
                                             <div className="group-two-input">
                                                 <h6 style={{ margin: '0' }}>Inicio:</h6>
                                                 <input className="input-date" type="date" onChange={(e) => setConvenio({ ...convenio, fecha_inicio: e.target.value })} />
@@ -212,13 +199,9 @@ export default function Convenios() {
                                             <label htmlFor="documento" className="btn-accion-2" style={{ width: '50px', height: '30px' }}>
                                                 <strong>SUBIR</strong>
                                             </label>
-                                            {/* {
-                                                isSmallDevice && ( */}
-                                                    <button className= {documento===null ? "btn-accion-cancelar-1" : "btn-accion-2"}
-                                                        onClick={() => { documento ? setOpenDocumento(true) : alert('DEBES SUBIR ALGUN DOCUMENTO') }}
-                                                    ><strong>VER</strong></button>
-                                                {/* )
-                                            } */}
+                                            <button className={documento === null ? "btn-accion-cancelar-1" : "btn-accion-2"}
+                                                onClick={() => { documento ? setOpenDocumento(true) : alert('DEBES SUBIR ALGUN DOCUMENTO') }}
+                                            ><strong>VER</strong></button>
                                         </div>
                                     </div>
                                     {
@@ -272,10 +255,8 @@ export default function Convenios() {
                                 </div>
                             </div>
                         </div></div>
-
                 )
             }
-
             {
                 openDocumento && (
                     <div>
@@ -294,13 +275,11 @@ export default function Convenios() {
                     </div>
                 )
             }
-
             {
                 loading && (
-                    <Loader/>
+                    <Loader />
                 )
             }
-
         </div>
     )
 }

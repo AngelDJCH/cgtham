@@ -6,14 +6,11 @@ import { createAfiliacion } from "../services/Afiliacion";
 import '../styles/afiliaciones.css'
 
 export default function Afiliaciones() {
-    
     const isLargeDevice = useMediaQuery('(min-width:992px) or (min-width: 1400px)');
-
     const crearAfiliacion = async (empresa, camara) => {
         const res = await createAfiliacion(empresa, camara)
         if (res == 201) alert('Afiliación creada')
     }
-
     const { user } = useAuth()
     return (
         <>
@@ -27,7 +24,7 @@ export default function Afiliaciones() {
             }
             <div style={{ width: '100%', marginTop: isLargeDevice ? '5vh' : '16vh', display: 'flex', justifyContent: isLargeDevice ? 'end' : 'center' }}>
                 <div style={{ width: isLargeDevice ? '70%' : '90%', height: isLargeDevice ? '75vh' : '80vh', backgroundColor: 'white', marginRight: isLargeDevice ? '2rem' : '0rem' }}>
-                    <div style={{ width: '100%', height: isLargeDevice ? '30px' : 'auto', display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem', flexWrap: 'wrap', alignItems:'center' }}>
+                    <div style={{ width: '100%', height: isLargeDevice ? '30px' : 'auto', display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
                         <input placeholder="Ingresa el nombre de la empresa"
                             style={{
                                 border: '1px solid black',

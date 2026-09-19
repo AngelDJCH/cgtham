@@ -8,23 +8,15 @@ import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@uidotdev/usehooks";
 
 export default function Organizaciones() {
-
     const isSmallDevice = useMediaQuery('(max-width:768px)')
-
     const [organizaciones, setOrganizaciones] = useState([])
-
     const [openDatosGenerales, setOpenDatosGenerales] = useState(false)
     const [openDatosContacto, setOpenDatosContacto] = useState(false)
     const [openDatosUbicacion, setOpenDatosUbicacion] = useState(false)
     const [openDatosHosting, setOpenDatosHosting] = useState(false)
-
     const [organizacion, setOrganizacion] = useState(null)
     const navigate = useNavigate()
-
-    // useEffect(()=>{},[])
-
     const [selectIdOrganizacion, setSelectIdOrganizacion] = useState(null)
-
     const handleUpdateEstado = async (id, estado) => {
         const data = await updateEstadoByIdOrganizacion(id, estado)
         if (data) {
@@ -32,7 +24,6 @@ export default function Organizaciones() {
             alert('ORGANIZACION ACTUALIZADA')
         }
     }
-
     useEffect(() => {
         if (selectIdOrganizacion) {
             const organizacionById = async () => {
@@ -42,19 +33,15 @@ export default function Organizaciones() {
             organizacionById()
         }
     }, [selectIdOrganizacion])
-
     useEffect(() => {
         const org = async () => {
             const res = await getAllOrganizacionesPendientes()
             console.log(res)
             setOrganizaciones(res)
         }
-
         org()
     }, [])
-
     const [openOrganizacion, setOpenOrganizacion] = useState(false)
-
     return (
         <div>
             <NavBarAutenticado />
@@ -74,7 +61,6 @@ export default function Organizaciones() {
                                 <div
                                     style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '0.3rem' }}
                                 >
-
                                     <button className="btn-accion-2"
                                         onClick={() => { setSelectIdOrganizacion(org.organizacion.id); setOpenOrganizacion(true) }}
                                     >
@@ -87,7 +73,6 @@ export default function Organizaciones() {
                     }
                 </div>
             </div>
-
             {
                 openOrganizacion && (
                     <div>
@@ -97,24 +82,21 @@ export default function Organizaciones() {
                                 <div style={{ width: '100%', height: '150px', backgroundColor: '#41431B' }}>
                                     <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} src={organizacion?.organizacion?.banner} />
                                 </div>
-
-                                <div style={{ display: 'flex', gap: '1rem', marginLeft: isSmallDevice ? '0rem':'1rem', alignItems: 'center', transform: 'translateY(-62.5px)', flexDirection: isSmallDevice ? 'column' : 'row'}}>
+                                <div style={{ display: 'flex', gap: '1rem', marginLeft: isSmallDevice ? '0rem' : '1rem', alignItems: 'center', transform: 'translateY(-62.5px)', flexDirection: isSmallDevice ? 'column' : 'row' }}>
                                     <div style={{ width: '125px', height: '125px', flexShrink: 0 }}>
                                         <img style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', borderRadius: '100%' }} src={organizacion?.organizacion?.logo} />
                                     </div>
-                                    <div className="titulo-organizacion" style={{width:isSmallDevice?'200px':null}}>
-                                        <h1 style={{ margin: 0, fontSize:`${isSmallDevice?'14px':'18px'}`}}>{organizacion?.organizacion.nombre}</h1>
+                                    <div className="titulo-organizacion" style={{ width: isSmallDevice ? '200px' : null }}>
+                                        <h1 style={{ margin: 0, fontSize: `${isSmallDevice ? '14px' : '18px'}` }}>{organizacion?.organizacion.nombre}</h1>
                                     </div>
                                 </div>
-
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', gap: '0.4rem', transform: 'translateY(-50px)'}}>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', gap: '0.4rem', transform: 'translateY(-50px)' }}>
                                     <div className="tarjeta-datos-titulos">
                                         <h6>DATOS GENERALES</h6>
                                         <img
                                             onClick={() => { openDatosGenerales ? setOpenDatosGenerales(false) : setOpenDatosGenerales(true); setOpenDatosContacto(false); setOpenDatosHosting(false); setOpenDatosUbicacion(false) }}
                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1zcXVhcmUtY2hldnJvbi1kb3duLWljb24gbHVjaWRlLXNxdWFyZS1jaGV2cm9uLWRvd24iPjxyZWN0IHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgeD0iMyIgeT0iMyIgcng9IjIiLz48cGF0aCBkPSJtMTYgMTAtNCA0LTQtNCIvPjwvc3ZnPg==" style={{ width: '20px', height: '20px' }} />
                                     </div>
-
                                     {
                                         openDatosGenerales && (
                                             <div className="contenedor-datos">
@@ -153,14 +135,12 @@ export default function Organizaciones() {
                                             </div>
                                         )
                                     }
-
                                     <div className="tarjeta-datos-titulos">
                                         <h6>DATOS CONTACTO</h6>
                                         <img
                                             onClick={() => { setOpenDatosGenerales(false); openDatosContacto ? setOpenDatosContacto(false) : setOpenDatosContacto(true); setOpenDatosHosting(false); setOpenDatosUbicacion(false) }}
                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1zcXVhcmUtY2hldnJvbi1kb3duLWljb24gbHVjaWRlLXNxdWFyZS1jaGV2cm9uLWRvd24iPjxyZWN0IHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgeD0iMyIgeT0iMyIgcng9IjIiLz48cGF0aCBkPSJtMTYgMTAtNCA0LTQtNCIvPjwvc3ZnPg==" style={{ width: '20px', height: '20px' }} />
                                     </div>
-
                                     {
                                         openDatosContacto && (
                                             <div className="contenedor-datos">
@@ -175,15 +155,12 @@ export default function Organizaciones() {
                                             </div>
                                         )
                                     }
-
-
                                     <div className="tarjeta-datos-titulos">
                                         <h6>DATOS UBICACION</h6>
                                         <img
                                             onClick={() => { setOpenDatosGenerales(false); setOpenDatosContacto(false); setOpenDatosHosting(false); openDatosUbicacion ? setOpenDatosUbicacion(false) : setOpenDatosUbicacion(true) }}
                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1zcXVhcmUtY2hldnJvbi1kb3duLWljb24gbHVjaWRlLXNxdWFyZS1jaGV2cm9uLWRvd24iPjxyZWN0IHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgeD0iMyIgeT0iMyIgcng9IjIiLz48cGF0aCBkPSJtMTYgMTAtNCA0LTQtNCIvPjwvc3ZnPg==" style={{ width: '20px', height: '20px' }} />
                                     </div>
-
                                     {
                                         openDatosUbicacion && (
                                             <div className="contenedor-datos">
@@ -218,15 +195,12 @@ export default function Organizaciones() {
                                             </div>
                                         )
                                     }
-
-
                                     <div className="tarjeta-datos-titulos">
                                         <h6>DATOS HOSTING</h6>
                                         <img
                                             onClick={() => { setOpenDatosGenerales(false); setOpenDatosContacto(false); openDatosHosting ? setOpenDatosHosting(false) : setOpenDatosHosting(true); setOpenDatosUbicacion(false) }}
                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1zcXVhcmUtY2hldnJvbi1kb3duLWljb24gbHVjaWRlLXNxdWFyZS1jaGV2cm9uLWRvd24iPjxyZWN0IHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgeD0iMyIgeT0iMyIgcng9IjIiLz48cGF0aCBkPSJtMTYgMTAtNCA0LTQtNCIvPjwvc3ZnPg==" style={{ width: '20px', height: '20px' }} />
                                     </div>
-
                                     {
                                         openDatosHosting && (
                                             <div className="contenedor-datos">
@@ -245,24 +219,13 @@ export default function Organizaciones() {
                                             </div>
                                         )
                                     }
-
                                 </div>
-
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '1.8rem', gap: '1rem', transform: 'translateY(-20px)'}}>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '1.8rem', gap: '1rem', transform: 'translateY(-20px)' }}>
                                     <button className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenOrganizacion(false); setSelectIdOrganizacion(null); setOrganizacion(null); setOpenDatosGenerales(false); setOpenDatosContacto(false); setOpenDatosUbicacion(false); setOpenDatosHosting(false) }}
                                     >
                                         <strong>CERRAR</strong>
                                     </button>
-                                    {/* {
-                                        organizacion?.organizacion?.estado === false && (
-                                            <button className="btn-accion-cancelar-1"
-                                                onClick={() => { setOpenOrganizacion(false); setSelectIdOrganizacion(null); setOrganizacion(null) }}
-                                            >
-                                                <strong>RECHAZAR</strong>
-                                            </button>
-                                        )
-                                    } */}
                                     {
                                         (organizacion?.organizacion?.estado === false) && (organizacion?.organizacion?.tipo != 'Comité') && (
                                             <button className="btn-accion-2"
@@ -287,7 +250,6 @@ export default function Organizaciones() {
                     </div>
                 )
             }
-
         </div>
     )
 }

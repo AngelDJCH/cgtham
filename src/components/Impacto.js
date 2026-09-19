@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import '../styles/impacto.css'
-import { getUsersCounts } from "../services/Usuario"
 import { getOfertasCounts } from "../services/OfertaLaboral"
 import { getEventosCounts } from "../services/Evento"
 import { getOrganizacionesCounts } from "../services/Organizacion"
