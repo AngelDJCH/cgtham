@@ -270,7 +270,7 @@ export default function NavBarAutenticado() {
                     <div style={{width:'100%', height:'60vh', position:'absolute'}}>
                         <div className='overllay'></div>
                         <div className='overllay-contenedor'>
-                            <Calendario/>
+                            <Calendario accion={setOpenCalendar}/>
                         </div>
                     </div>
                 )
