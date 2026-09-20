@@ -122,7 +122,6 @@ export default function VisualizarEvento(props) {
             }
             <div className="overllay"></div>
             <div className="overllay-contenedor">
-
                 <div className="formulario-contenedor">
                     <div className="titulo-formulario"><h1 className="subtitulo">{evento?.titulo.substring(0, 25)}</h1></div>
                     <div className="formulario">

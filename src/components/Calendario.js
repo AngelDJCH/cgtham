@@ -7,6 +7,7 @@ import { eventoOrganizacion } from "../services/EventoOrganizacion";
 import Loader from "./Loader";
 
 import 'dayjs/locale/es';
+import VisualizarEvento from "./VisualizarEvento";
 
 dayjs.locale('es')
 
@@ -41,6 +42,7 @@ export default function Calendario(props) {
             let res = await eventoOrganizacion(100, 0)
             res = res?.map(r => {
                 return {
+                    id : r.id,
                     title: r.titulo,
                     start: new Date(r.fecha_inicio),
                     end: new Date(r.fecha_final)
@@ -58,6 +60,16 @@ export default function Calendario(props) {
     const onNavigate = useCallback((newDate) => { setDate(newDate) }, [setDate])
     const onView = useCallback((newView) => { setView(newView) }, [setView])
 
+    const [openEvento, setOpenEvento] = useState(false)
+    const [idEvento, setIdEvento] = useState('')
+
+    const handleOnSelectEvent = (event)=>{
+        if(event.id){
+            setIdEvento(event.id)
+            setOpenEvento(!openEvento)
+        }
+    }
+
     return (
         <>
             <select>
@@ -68,6 +80,7 @@ export default function Calendario(props) {
                 <option>CONVENIOS</option>
             </select>
             <Calendar
+                onSelectEvent={handleOnSelectEvent}
                 date={date}
                 view={view}
                 events={events}
@@ -89,6 +102,12 @@ export default function Calendario(props) {
 
             {
                 loading && (<Loader />)
+            }
+
+            {
+                openEvento && (
+                    <VisualizarEvento id_evento={idEvento} accion={setOpenEvento}/>
+                )
             }
         </>
     )
