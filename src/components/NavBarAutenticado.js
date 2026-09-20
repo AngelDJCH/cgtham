@@ -5,8 +5,11 @@ import { logout } from '../services/Cuenta'
 import { useAuth } from '../hooks/useAuth'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { getLogoByIdOrganizacion } from '../services/Organizacion'
+import Calendario from './Calendario'
+
 
 export default function NavBarAutenticado() {
+    const [openCalendar, setOpenCalendar] = useState(false)
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const logo = 'https://res.cloudinary.com/dfdfauyvo/image/upload/v1780874578/Gemini_Generated_Image_l40lrul40lrul40l_rx9sd3.png'
@@ -101,6 +104,19 @@ export default function NavBarAutenticado() {
                             }}
                         ><a >Comentarios</a></li>
                     )}
+                    {
+                        !isMediumDevice && (
+                            <li
+                                onClick={() => {
+                                    setOpenCalendar(!openCalendar)
+                                }}
+                            >
+                                <button className='btn-accion-2' style={{ width: '40px', height: '40px', borderRadius: '100%', backgroundColor: '#41431B' }}>
+                                    <img alt='Mensajes' src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkQ0MDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jYWxlbmRhci1jbG9jayBwcmV2aWV3LWljb24iPjxwYXRoIGQ9Ik0xNiAxNHYyLjJsMS42IDEiLz48cGF0aCBkPSJNMTYgMnYzIi8+PHBhdGggZD0iTTIxIDcuMzM4VjVhMiAyIDAgMDAtMi0ySDVhMiAyIDAgMDAtMiAydjE0YTIgMiAwIDAwMiAyaDIuMzM4Ii8+PHBhdGggZD0iTTMgOWg1Ljg1OSIvPjxwYXRoIGQ9Ik04IDJ2MyIvPjxjaXJjbGUgY3g9IjE2IiBjeT0iMTYiIHI9IjYiLz48L3N2Zz4=' />
+                                </button>
+                            </li>
+                        )
+                    }
                     {
                         !isMediumDevice && (
                             <li
@@ -245,6 +261,17 @@ export default function NavBarAutenticado() {
                                 }}
                             >Salir</li>
                         </ul>
+                    </div>
+                )
+            }
+
+            {
+                openCalendar && (
+                    <div style={{width:'100%', height:'60vh', position:'absolute'}}>
+                        <div className='overllay'></div>
+                        <div className='overllay-contenedor'>
+                            <Calendario/>
+                        </div>
                     </div>
                 )
             }

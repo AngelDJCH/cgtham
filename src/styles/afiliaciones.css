@@ -38,6 +38,11 @@
     min-height: 60vh;
 }
 
+.card-btn-afiliacion{
+    display: flex;
+    justify-content: center;
+}
+
 @media (max-width:768px) {
     .card-afiliacion{
         width: 90%;

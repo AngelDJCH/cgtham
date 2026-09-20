@@ -13,6 +13,7 @@ import { createCamara } from "../services/Camara";
 import { createEscuela } from "../services/Escuela";
 import { uploadImg } from "../services/Upload";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import Loader from '../components/Loader'
 
 export default function AutenticacionPage() {
     const [openCambiarContraseña, setOpenCambiarContraseña] = useState(false)
@@ -204,7 +205,9 @@ export default function AutenticacionPage() {
         if (resOrg != 204 && direccion) await deleteDireccionById(direccion.id)
         return
     }
+    const [loading, setLoading] = useState(false)
     const handeCreateOrganizacion = async () => {
+        setLoading(true)
         try {
             const logoUrl = await uploadImg(archivoFoto)
             if (logoUrl === null) return
@@ -240,9 +243,13 @@ export default function AutenticacionPage() {
             if (cuentaApi === null) deleteRegister({ contacto: contactoApi, direccion: direccionApi, organizacion: organizacionAPI })
             if (cuentaApi.status === 201 && contactoApi && direccionApi && organizacionAPI && cloudinariApi || (empresaApi || escuelaApi || camaraApi)) {
                 alert('ORGANIZACION CREADA')
+                setLoading(false)
+                navigate(0)
             }
         } catch (error) {
             alert('Ocurrio un error al intentar registrar una organizacion')
+            setLoading(false)
+            navigate(0)
         }
     }
     useEffect(() => {
@@ -266,6 +273,11 @@ export default function AutenticacionPage() {
     return (
         <div className="autenticacion" style={{ height: openRegisterOrg ? 'auto' : null, paddingBottom: '2rem' }}>
             <NavBar opcionesNav={false} />
+            {
+                loading && (
+                    <Loader />
+                )
+            }
             {
                 openLogin && (
                     <div className="contenedor-autenticacion">

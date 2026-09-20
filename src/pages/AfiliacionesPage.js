@@ -45,28 +45,28 @@ export default function Afiliaciones() {
                         >
                             <div><h6>PETICIONES</h6></div>
                             <div><textarea value={'En esta sección encontras las peticiones de afiliación de otras empresas a tu camara de comercio.'} /></div>
-                            <div><button className="btn-accion-2"><strong>ABRIR</strong></button></div>
+                            <div className="card-btn-afiliacion"><button className="btn-accion-2"><strong>ABRIR</strong></button></div>
                         </div>
                         <div
                             className="card-afiliacion"
                         >
                             <div><h6>NOTICIAS</h6></div>
                             <div><textarea value={'En esta sección encontras las peticiones de afiliación de otras empresas a tu camara de comercio.'} /></div>
-                            <div><button className="btn-accion-2"><strong>ABRIR</strong></button></div>
+                            <div className="card-btn-afiliacion"><button className="btn-accion-2"><strong>ABRIR</strong></button></div>
                         </div>
                         <div
                             className="card-afiliacion"
                         >
                             <div><h6>SUGERENCIAS</h6></div>
                             <div><textarea value={'En esta sección encontras las peticiones de afiliación de otras empresas a tu camara de comercio.'} /></div>
-                            <div><button className="btn-accion-2"><strong>ABRIR</strong></button></div>
+                            <div className="card-btn-afiliacion"><button className="btn-accion-2"><strong>ABRIR</strong></button></div>
                         </div>
                         <div
                             className="card-afiliacion"
                         >
                             <div><h6>EVENTOS</h6></div>
                             <div><textarea value={'En esta sección encontras las peticiones de afiliación de otras empresas a tu camara de comercio.'} /></div>
-                            <div><button className="btn-accion-2"><strong>ABRIR</strong></button></div>
+                            <div className="card-btn-afiliacion"><button className="btn-accion-2"><strong>ABRIR</strong></button></div>
                         </div>
                     </div>
                 </div>
