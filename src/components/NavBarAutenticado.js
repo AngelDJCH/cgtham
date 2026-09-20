@@ -153,6 +153,15 @@ export default function NavBarAutenticado() {
                                 )
                             }
                             {
+                                isMediumDevice && (
+                                    <li className='opciones'
+                                        onClick={()=>{setOpenCalendar(!openCalendar)}}
+                                    >
+                                        Calendario
+                                    </li>
+                                )
+                            }
+                            {
                                 (isMediumDevice || user.rol.includes('ADMIN_SYS')) && (
                                     <li className='opciones'
                                         onClick={(e) => {
