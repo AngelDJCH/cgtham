@@ -280,13 +280,13 @@ export default function Calendario(props) {
                 views={onView}
                 localizer={localizer}
                 popup
-                style={{
-                    width: '100%',
-                    height: '80%'
-                }}
+                className="calendar"
             />
             <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end', width: '100%' }}>
                 <button className="btn-accion-cancelar-1"
+                    style={{
+                        marginRight:'1rem'
+                    }}
                     onClick={() => { props.accion(false) }}
                 ><strong>CERRAR</strong></button>
             </div>

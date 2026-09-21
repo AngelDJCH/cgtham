@@ -1,13 +1,30 @@
-.input-select{
+.input-select {
     width: 350px;
     height: 30px;
     font-family: 'Poppins';
     font-size: 16px;
 }
 
-.contenedor-input-select{
+.contenedor-input-select {
     width: 100%;
     display: flex;
     justify-content: end;
     padding-right: 2rem;
+    margin-bottom: 5px;
+}
+
+.calendar {
+    width: 80%;
+    height: 80%;
+    background-color: white;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 5px;
+}
+
+@media(max-width:768px) {
+    .contenedor-input-select {
+        justify-content: center;
+        padding-right: 0rem;
+    }
 }
