@@ -58,7 +58,6 @@ export default function VisualizarEvento(props) {
         }
     ]);
     useEffect(() => {
-        setLoading(true)
         const getEvento = async () => {
             const res = await eventoById(props.id_evento)
             setEvento(res)
@@ -73,9 +72,8 @@ export default function VisualizarEvento(props) {
             setFotoSeleccionada(res[0])
         }
         getEvento()
-        fotosEvento()
         participantesEvento()
-        setLoading(false)
+        fotosEvento()
     }, [])
     useEffect(() => {
         const pendientes = async () => {

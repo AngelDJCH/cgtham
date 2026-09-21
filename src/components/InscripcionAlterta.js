@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 export default function InscripcionAlterta(props) {
     const { user } = useAuth()
     const navigate = useNavigate()
-    const createInscripcion = async () => {
+    const crearInscripcion = async () => {
         try {
             const status = await createInscripcion(props.id_evento, user.organizacion)
             if (status && status === 201) {
@@ -14,11 +14,11 @@ export default function InscripcionAlterta(props) {
                 navigate(0)
             } else if (status && status === 409) {
                 alert('YA ESTAS EN LISTA DE ESPERA')
-            } else {
-                alert('OCURRIO UN ERROR')
             }
             props.accion(false)
         } catch (error) {
+            console.log(error)
+            alert('OCURRIO UN ERROR')
             props.accion(false)
         }
     }
@@ -35,7 +35,7 @@ export default function InscripcionAlterta(props) {
                             onClick={() => { props.accion(false) }}
                         ><strong>CANCELAR</strong></button>
                         <button className='btn-accion-2'
-                            onClick={() => { createInscripcion() }}
+                            onClick={() => { crearInscripcion() }}
                         ><strong>ACEPTAR</strong></button>
                     </div>
                 </div>

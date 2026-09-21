@@ -2,10 +2,12 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react"
 import { deleteByIdForEscuelas, findById, updateEstadoRechazadaById, updateVisitaById } from '../services/Visita.js'
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth.js";
 
 export default function VisualizarVisita(props) {
     const isSmallDevice = useMediaQuery('(max-width:768px) or (max-width : 1024px)');
     const navigate = useNavigate()
+    const { user } = useAuth()
     const handleUpdateById = async (fecha_visita, id) => {
         const res = await updateVisitaById(fecha_visita, id)
         if (res && res === 200) { navigate(0); alert('Visita aprobada') } else {
@@ -22,6 +24,7 @@ export default function VisualizarVisita(props) {
     useEffect(() => {
         const getVisita = async () => {
             const res = await findById(props.idVisita)
+            // console.log(res)
             setVisitaData(res)
         }
         if (props.idVisita != null) { getVisita() }
@@ -51,9 +54,9 @@ export default function VisualizarVisita(props) {
                                         <input type='date' defaultValue={visitaData.solicitado.split('T')[0]} disabled />
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', height: '100px' }}>
-                                        <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>Agendar:</h6>
+                                        <h6 style={{ margin: 0, padding: 0, fontFamily: 'Poppins', fontSize: '18px' }}>{user.tipo==='Empresa'?'Agendar:':'Agendada:'}</h6>
                                         {
-                                            visitaData.agendado != null ? <input type='date' defaultChecked={visitaData.agendado.split('T')[0]} /> : <input type='date' id='fecha_visita' />
+                                            (visitaData?.agendado != '') ? <input type='date' defaultValue={visitaData.agendado.split('T')[0]} id='fecha_visita' disabled={user.tipo === 'Empresa' ? false : true} /> : <input type='date' id='fecha_visita' disabled={user.tipo === 'Empresa' ? false : true} />
                                         }
                                     </div>
                                 </div>
@@ -77,15 +80,19 @@ export default function VisualizarVisita(props) {
                         >
                             <strong>CANCELAR</strong>
                         </button>
-                        <button
-                            className='btn-accion-2'
-                            onClick={() => {
-                                const f_visita = document.getElementById('fecha_visita').value
-                                handleUpdateById(f_visita, visitaData.id)
-                            }}
-                        >
-                            <strong>GUARDAR</strong>
-                        </button>
+                        {
+                            user.tipo === 'Empresa' && (
+                                <button
+                                    className='btn-accion-2'
+                                    onClick={() => {
+                                        const f_visita = document.getElementById('fecha_visita').value
+                                        handleUpdateById(f_visita, visitaData.id)
+                                    }}
+                                >
+                                    <strong>GUARDAR</strong>
+                                </button>
+                            )
+                        }
                     </div>
                 </div>
             </div>
