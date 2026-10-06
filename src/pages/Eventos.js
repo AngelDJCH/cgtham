@@ -120,7 +120,7 @@ export default function Eventos(prop) {
         <div>
             <NavBarAutenticado />
             <Filtros enableAccion={user.tipo === 'Escuela' ? true : false} titulo='Eventos' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='CREAR' filtro={setFiltro} btn_accion={setOpenCreateEvento} />
-            <TablaContenido encabezados={['Titulo', 'Descripción', 'Tipo', user.tipo === 'Escuela' ? 'Estado' : null, 'Inicio', 'Final', 'Publicado', 'Acciones']} eventosTabla={eventos} filtro={filtro} />
+            <TablaContenido encabezados={['Titulo', user.tipo === 'Escuela' ? 'Descripción' : 'Organización', 'Tipo', user.tipo === 'Escuela' ? 'Estado' : null, 'Inicio', 'Final', 'Publicado', 'Acciones']} eventosTabla={eventos} filtro={filtro} />
             {
                 openCreateEvento && (
                     <div>

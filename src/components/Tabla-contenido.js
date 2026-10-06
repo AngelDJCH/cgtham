@@ -259,7 +259,7 @@ export default function TablaContenido(props) {
                                     </td>
                                     <td>
                                         {
-                                            evento?.descripcion.substring(0, 20)
+                                            evento?.organizacion?.nombre_comercial?.substring(0, 20)
                                         } ...
                                     </td>
                                     <td>
