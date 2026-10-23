@@ -14,6 +14,16 @@ export default function Filtros(props) {
                 )
             }
             {
+                props?.selector && (
+                    <select onChange={(e)=>{props?.setSeleccionado(e.target.value)}}>
+                        <option>{props?.opcionDefault}</option>
+                        {
+                            props?.selectorOpciones?.map(o => <option>{o.tipo}</option>)
+                        }
+                    </select>
+                )
+            }
+            {
                 props.accion && props?.enableAccion && user.rol.includes('ADMIN_ORG') && (
                     <button className="accion"
 

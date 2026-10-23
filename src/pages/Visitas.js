@@ -7,6 +7,7 @@ import { getAllOrganizaciones } from "../services/Organizacion";
 import { allVisitasByIdEmpresa, allVisitasByIdEscuela, allVisitasForAdministrador, createVisita } from "../services/Visita";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import Loader from "../components/Loader";
+import Paginacion from "../components/Paginacion";
 
 export default function Visitas() {
     const [filtro, setFiltro] = useState('')
@@ -18,6 +19,10 @@ export default function Visitas() {
     const isLargeDevice = useMediaQuery('(min-width:992px)')
     const [loading, setLoading] = useState(false)
     const [visitas, setVisitas] = useState([])
+
+
+    const [limit, setLimit] = useState(20)
+    const [offset, setOffset] = useState(0)
     const handleVisitaCreate = async () => {
         setLoading(true)
         try {
@@ -26,41 +31,50 @@ export default function Visitas() {
             if (status != 201) { alert('La solicitud de visita no se realizo con exito') }
         } catch (error) {
             alert('Ocurrio un error')
-        }finally{
+        } finally {
             setLoading(false)
         }
     }
+
+    const orgs = async () => {
+        const res = await getAllOrganizaciones()
+        setOrganizaciones(res)
+    }
+    const vistEmpresa = async (limit, offset) => {
+        const data = await allVisitasByIdEmpresa(user.organizacion,limit, offset)
+        setVisitas(data)
+    }
+    const vistEscuela = async (limit, offset) => {
+        const data = await allVisitasByIdEscuela(user.organizacion,limit, offset)
+        setVisitas(data)
+    }
+    const vistAdministrador = async (limit, offset) => {
+        const data = await allVisitasForAdministrador(limit, offset)
+        setVisitas(data)
+    }
+
     useEffect(() => {
-        const orgs = async () => {
-            const res = await getAllOrganizaciones()
-            setOrganizaciones(res)
+        if(user.tipo === 'Escuela'){
+            orgs()
         }
-        const vistEmpresa = async () => {
-            const data = await allVisitasByIdEmpresa(user.organizacion)
-            setVisitas(data)
-        }
-        const vistEscuela = async () => {
-            const data = await allVisitasByIdEscuela(user.organizacion)
-            setVisitas(data)
-        }
-        const vistAdministrador = async () => {
-            const data = await allVisitasForAdministrador()
-            setVisitas(data)
-        }
+    }, [])
+
+    useEffect(() => {
         if (user.tipo === 'Escuela') {
-            vistEscuela()
+            vistEscuela(limit, offset)
         } else if ((user.tipo === 'Empresa') || (user.tipo === 'Cámara de Comercio')) {
-            vistEmpresa()
+            vistEmpresa(limit, offset)
         } else {
-            vistAdministrador()
+            vistAdministrador(limit, offset)
         }
         orgs()
-    }, [])
+    }, [offset])
     return (
         <div>
             <NavBarAutenticado />
             <Filtros btn_accion={setOpenCreateVisita} accion='SOLICITAR' enableAccion={user.tipo === 'Escuela' ? true : false} titulo='Visitas' filtro={user.tipo === 'Escuela' ? setFiltro : null} placeholder={user.tipo === 'Escuela' ? 'Escribe el nombre de la empresa' : null} />
             <TablaContenido filtro={filtro} visitasTabla={visitas} encabezados={user.tipo === 'Escuela' ? ['ID', 'Empresa', 'Solicitado', 'Aprobado', 'Agendado', 'Estado', 'Acciones'] : user.tipo === 'Empresa' || user.tipo === 'Cámara de Comercio' ? ['ID', 'Escuela', 'Solicitado', 'Aprobado', 'Agendado', 'Estado', 'Acciones'] : ['ID', 'Escuela', 'Empresa', 'Acciones']} />
+            <Paginacion offset={offset} setOffset={setOffset} />
             {
                 openCreateVisita && (
                     <div>
@@ -118,7 +132,7 @@ export default function Visitas() {
             }
             {
                 loading && (
-                    <Loader/>
+                    <Loader />
                 )
             }
         </div>

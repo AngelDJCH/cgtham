@@ -5,21 +5,21 @@ export const getOfertasCounts = async () => {
     return data.empleos
 }
 
-export const getOfertasLaboralesAll = async () => {
+export const getOfertasLaboralesAll = async (limit, offset) => {
     try {
-        const { data } = await axiosInstance.get('/ofertaslaborales/')
+        const { data } = await axiosInstance.get(`/ofertaslaborales/${limit}/${offset}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LAS OFERTAS EDUCATIVAS')
+        alert('OCURRIO UN ERROR AL OBTENER LAS OFERTAS LABORALES')
     }
 }
 
-export const getOfertasLaboralesByIdOrganizacion = async (id_organizacion) => {
+export const getOfertasLaboralesByIdOrganizacion = async (id_organizacion, limit, offset) => {
     try {
-        const { data } = await axiosInstance.get(`/ofertaslaborales/organizacion/${id_organizacion}`)
+        const { data } = await axiosInstance.get(`/ofertaslaborales/organizacion/${id_organizacion}/${limit}/${offset}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LAS OFERTAS EDUCAIVAS DE LA ORGANIZACION')
+        alert('OCURRIO UN ERROR AL OBTENER LAS OFERTAS LABORALES DE LA ORGANIZACION')
     }
 }
 

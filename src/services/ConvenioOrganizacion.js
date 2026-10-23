@@ -1,8 +1,8 @@
 import { axiosInstance } from "./Axios"
 
-export const findAll = async () => {
+export const findAll = async (limit, offset) => {
     try {
-        const { data } = await axiosInstance.get('/convenios')
+        const { data } = await axiosInstance.get(`/convenios/${limit}/${offset}`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER LOS DATOS DEL CONVENIO')

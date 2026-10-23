@@ -1,17 +1,17 @@
 import { axiosInstance } from "./Axios"
 
-export const findToEmpresas = async () => {
+export const findToEmpresas = async (limit, offset) => {
     try {
-        const { data } = await axiosInstance.get('/cursos/empresas/')
+        const { data } = await axiosInstance.get(`/cursos/empresas/${limit}/${offset}`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER LOS CURSOS')
     }
 }
 
-export const findToEscuelas = async (id_organizacion) => {
+export const findToEscuelas = async (id_organizacion, limit, offset) => {
     try {
-        const { data } = await axiosInstance.get(`/cursos/escuelas/${id_organizacion}`)
+        const { data } = await axiosInstance.get(`/cursos/escuelas/${id_organizacion}/${limit}/${offset}`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER LOS CURSOS')

@@ -8,8 +8,11 @@ import { useNavigate } from "react-router-dom";
 import { getAllOrganizaciones } from "../services/Organizacion";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import Loader from "../components/Loader";
+import Paginacion from "../components/Paginacion";
 
 export default function Cursos() {
+    const [limit, setLimit] = useState(20)
+    const [offset, setOffset] = useState(0)
     const { user } = useAuth()
     const naviagte = useNavigate()
     const [openCreateCurso, setOpenCreateCurso] = useState(false)
@@ -97,17 +100,21 @@ export default function Cursos() {
         }
         setLoading(false)
     }
+
+    const toEmpresas = async (limit, offset) => {
+        const res = await findToEmpresas(limit, offset)
+        setCursos(res)
+    }
+    const toEscuelas = async (limit, offset) => {
+        const res = await findToEscuelas(user.organizacion, limit, offset)
+        setCursos(res)
+    }
+    // useEffect(() => {
+    //     user.tipo != 'Escuela' ? toEmpresas(limit, offset) : toEscuelas(limit, offset)
+    // }, [])
     useEffect(() => {
-        const toEmpresas = async () => {
-            const res = await findToEmpresas()
-            setCursos(res)
-        }
-        const toEscuelas = async () => {
-            const res = await findToEscuelas(user.organizacion)
-            setCursos(res)
-        }
-        user.tipo != 'Escuela' ? toEmpresas() : toEscuelas()
-    }, [])
+        user.tipo != 'Escuela' ? toEmpresas(limit, offset) : toEscuelas(limit, offset)
+    }, [offset])
     useEffect(() => {
         if (idCurso != null) {
             const findById = async () => {
@@ -148,6 +155,7 @@ export default function Cursos() {
             <NavBarAutenticado />
             <Filtros btn_accion_solicitudes={user.tipo === 'Escuela' ? setOpenSolicitudes : null} btn_accion_solicitud={user.tipo === 'Escuela' ? true : false} enableAccion={true} titulo='Cursos' accion={user.tipo != 'Escuela' ? 'SOLICITAR' : 'CREAR'} btn_accion={user.tipo === 'Escuela' ? setOpenCreateCurso : setOpenSolicitar} />
             <TablaContenido id_curso={setIdCurso} open_curso={setOpenCurso} cursosTabla={cursos} encabezados={['Titulo', 'Descripcion', 'Publicado', 'Inicio', 'Fin', 'Organizacion', 'Acciones']} />
+            <Paginacion offset={offset} setOffset={setOffset} />
             {
                 openCreateCurso && (
                     <div>

@@ -252,7 +252,7 @@ export default function TablaContenido(props) {
                         }
 
                         {
-                            props?.eventosTabla?.filter(f => f.titulo.toLowerCase().includes(props?.filtro.toLowerCase()) || props?.filtro.length === 0).map(
+                            props?.eventosTabla?.filter(f => f.titulo.toLowerCase().includes(props?.filtro.toLowerCase()) || props?.filtro.length === 0).filter(opciones => (opciones.tipo === props?.tipoEventoSeleccionado || props?.tipoEventoSeleccionado === 'Tipo')).map(
                                 evento => <tr>
                                     <td>
                                         {evento?.titulo}
@@ -336,7 +336,7 @@ export default function TablaContenido(props) {
                         }
 
                         {
-                            props?.conveniosTabla?.map(
+                            props?.conveniosTabla?.filter(f => (f.tipo === props?.tipoConvenioSeleccionado || props?.tipoConvenioSeleccionado === 'Tipo')).map(
                                 convenio => <tr>
                                     <td>{convenio.titulo}</td>
                                     <td>{convenio.tipo}</td>
@@ -525,7 +525,6 @@ export default function TablaContenido(props) {
                     <VisualizarConvenio accion={setOpenConvenio} id_convenio={idConvenio} propietario={user.organizacion === idOrganizacion ? true : false} />
                 )
             }
-
         </div>
     )
 }

@@ -25,7 +25,7 @@ export default function HomePage() {
     const navigate = useNavigate()
     useEffect(() => {
         const getOfertas = async () => {
-            const res = await getOfertasLaboralesAll()
+            const res = await getOfertasLaboralesAll(20,0)
             setOfertasLaborales(res)
         }
         getOfertas()

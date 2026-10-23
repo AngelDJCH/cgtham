@@ -62,7 +62,7 @@ export default function PanelSistema() {
             setDashEventos(datosLimpios)
         }
         const dashComentariosAll = async () => {
-            const res = await findAllComentariosByAdministrador()
+            const res = await findAllComentariosByAdministrador(10,0)
             setDashComentarios(res)
         }
         coutCon()

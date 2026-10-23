@@ -86,6 +86,44 @@ export default function ListaUsuarios(props) {
           <div className='lista'>
             <ul>
               {
+                organizaciones?.filter(f => f.nombre_comercial.toLowerCase().startsWith(busqueda.toLowerCase())).map(
+                  o => <li className='usuario-contenedor' key={o.id}>
+                    <div className='logo-organizacion-contenedor'>
+                      <img src={o.logo} alt={o.nombre_comercial} />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'start', width: '200px', flexDirection: 'Column'}}>
+                      <p
+                        style={{ cursor: 'pointer', fontSize: '0.9rem'}}
+                        onClick={() => {
+                          navigate(`/organizacion/${o.id}`)
+                        }}
+                      >{o.nombre_comercial}</p>
+                      <a
+                        style={
+                          {
+                            fontSize: '0.5rem', margin:0, padding:0
+                          }
+                        }
+                      >
+                        <strong>
+                        {
+                          o.tipo
+                        }</strong>
+                      </a>
+                    </div>
+                    {
+                      props?.mensaje && (
+                        <img src={img_mensaje} style={{ marginRight: '0.2rem', cursor: 'pointer' }}
+                          onClick={() => {
+                            props.selectUsuario(o.id)
+                          }}
+                        />
+                      )
+                    }
+                  </li>
+                )
+              }
+              {/* {
                 !busqueda && (
                   <li className='titulos-lista'><strong>CÁMARAS DE COMERCIO</strong></li>
                 )
@@ -211,7 +249,7 @@ export default function ListaUsuarios(props) {
                     }
                   </li>
                 )
-              }
+              } */}
             </ul>
           </div>
         )

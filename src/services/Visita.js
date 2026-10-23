@@ -23,27 +23,27 @@ export const deleteByIdForEscuelas = async (id_visita) => {
     }
 }
 
-export const allVisitasByIdEscuela = async (id_escuela) => {
+export const allVisitasByIdEscuela = async (id_escuela, limit, offset) => {
     try {
-        const { data } = await axiosInstance.get(`/visitas/escuela/${id_escuela}`)
+        const { data } = await axiosInstance.get(`/visitas/escuela/${id_escuela}/${limit}/${offset}`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER TODAS LAS VISITAS')
     }
 }
 
-export const allVisitasForAdministrador = async () => {
+export const allVisitasForAdministrador = async (limit, offset) => {
     try {
-        const { data } = await axiosInstance.get(`/visitas/administrador`)
+        const { data } = await axiosInstance.get(`/visitas/administrador/${limit}/${offset}`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER TODAS LAS VISITAS')
     }
 }
 
-export const allVisitasByIdEmpresa = async (id_empresa) => {
+export const allVisitasByIdEmpresa = async (id_empresa, limit, offset) => {
     try {
-        const { data } = await axiosInstance.get(`/visitas/empresa/${id_empresa}`)
+        const { data } = await axiosInstance.get(`/visitas/empresa/${id_empresa}/${limit}/${offset}`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER TODAS LAS VISITAS')

@@ -1,15 +1,17 @@
 import axios from "axios";
 import { axiosInstance } from "./Axios";
 import { data } from "react-router-dom";
+import Paginacion from "../components/Paginacion";
+
 
 export const getComentarios = async (cantidad) => {
     const { data } = await axiosInstance.get('/comentarios/public')
     return data
 }
 
-export const findAllComentariosByAdministrador = async () => {
+export const findAllComentariosByAdministrador = async (limit, offset) => {
     try {
-        const { data } = await axiosInstance.get('/comentarios/')
+        const { data } = await axiosInstance.get(`/comentarios/${limit}/${offset}`)
         return data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER LOS COMENTARIOS')
@@ -44,9 +46,9 @@ export const createComentario = async (contenido, id_usuario) => {
     }
 }
 
-export const findAllComentariosByUsuario = async (id_organizacion) => {
+export const findAllComentariosByUsuario = async (id_organizacion, limit, offset) => {
     try {
-        const { data } = await axiosInstance.get(`/comentarios/organizacion/${id_organizacion}`)
+        const { data } = await axiosInstance.get(`/comentarios/organizacion/${id_organizacion}/${limit}/${offset}`)
         return data
     } catch (error) {
         console.log(error)

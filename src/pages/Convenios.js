@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { uploadDocument } from "../services/Upload";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import Loader from "../components/Loader";
+import Paginacion from "../components/Paginacion";
 
 export default function Convenios() {
     const isSmallDevice = useMediaQuery('(max-width:768px)');
@@ -33,6 +34,8 @@ export default function Convenios() {
         id_convenio: '',
         id_organizacion: ''
     })
+    const [limit, setLimit] = useState(20)
+    const [offset, setOffset] = useState(0)
     const [tiposConvenios, setTiposConvenios] = useState([
         {
             id: 1,
@@ -128,19 +131,22 @@ export default function Convenios() {
         }
     }
     useEffect(() => {
-        const getConvenios = async () => {
-            const res = await findAll()
+        const getConvenios = async (limit, offset) => {
+            const res = await findAll(limit, offset)
             setConvenios(res)
         }
-        getConvenios()
-        console.log(convenios)
-    }, [])
+        getConvenios(limit, offset)
+    }, [offset])
     const isMediumDevice = useMediaQuery('(min-width:1920px)')
+    
+    const [convenioSeleccionado, setConvenioSeleccionado] = useState('Tipo')
+    
     return (
         <div>
             <NavBarAutenticado />
-            <Filtros enableAccion={true} btn_accion={setOpenCreateConvenio} titulo='Convenios' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='CREAR' />
-            <TablaContenido encabezados={['Titulo', 'Tipo', 'Subtipo', 'Descripcion', 'Anfitrion', 'Registro', 'Inicio', 'Fin', 'Acciones']} conveniosTabla={convenios} />
+            <Filtros enableAccion={true} btn_accion={setOpenCreateConvenio} titulo='Convenios' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='CREAR' selector={true} opcionDefault={'Tipo'} selectorOpciones={tiposConvenios} setSeleccionado={setConvenioSeleccionado}/>
+            <TablaContenido encabezados={['Titulo', 'Tipo', 'Subtipo', 'Descripcion', 'Anfitrion', 'Registro', 'Inicio', 'Fin', 'Acciones']} conveniosTabla={convenios} tipoConvenioSeleccionado={convenioSeleccionado}/>
+            <Paginacion offset={offset} setOffset={setOffset}/>
             {
                 openCreateConvenio && (
                     <div>

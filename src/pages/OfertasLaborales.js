@@ -10,6 +10,7 @@ import { uploadDocument } from "../services/Upload";
 import VisualizarOferta from "../components/VisualizarOferta";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import Loader from '../components/Loader'
+import Paginacion from "../components/Paginacion";
 
 export default function OfertasLaborales() {
     const [loading, setLoading] = useState(false)
@@ -109,6 +110,9 @@ export default function OfertasLaborales() {
             { id: 3, opcion: 'Remota' }
         ]
     });
+
+    const [limit, setLimit] = useState(20)
+    const [offset, setOffset] = useState (0)
     const handleUploadDocument = (e) => {
         setLoading(true)
         const file = e.target.files[0]
@@ -124,17 +128,18 @@ export default function OfertasLaborales() {
         setLoading(false)
     }
     const [openDocumento, setOpenDocumento] = useState(false)
+            const getOfertas = async (limit, offset) => {
+            const res = await getOfertasLaboralesAll(limit, offset)
+            setOfertasLaborales(res)
+        }
+        const getOfertasByIdOrganizacion = async (limit, offset) => {
+            const res = await getOfertasLaboralesByIdOrganizacion(user.organizacion,limit, offset)
+            setOfertasLaborales(res)
+        }
+    
     useEffect(() => {
-        const getOfertas = async () => {
-            const res = await getOfertasLaboralesAll()
-            setOfertasLaborales(res)
-        }
-        const getOfertasByIdOrganizacion = async () => {
-            const res = await getOfertasLaboralesByIdOrganizacion(user.organizacion)
-            setOfertasLaborales(res)
-        }
-        user.tipo != 'Escuela' && user.tipo != 'Comité' ? getOfertasByIdOrganizacion() : getOfertas()
-    }, [])
+        user.tipo != 'Escuela' && user.tipo != 'Comité' ? getOfertasByIdOrganizacion(limit, offset) : getOfertas(limit, offset)
+    }, [offset])
     return (
         <div>
             <NavBarAutenticado />
@@ -212,6 +217,7 @@ export default function OfertasLaborales() {
                     }
                 </div>
             </div>
+            <Paginacion offset={offset} setOffset={setOffset}/>
             {
                 openOferta && (
                     <VisualizarOferta id_oferta={selectOferta} accion={setOpenOferta} />

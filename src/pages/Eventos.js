@@ -10,8 +10,13 @@ import { useNavigate } from "react-router-dom";
 import { uploadFotoEvento } from "../services/Foto";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import Loader from "../components/Loader";
+import Paginacion from "../components/Paginacion";
 
 export default function Eventos(prop) {
+
+    const [limit, setLimit] = useState(20)
+    const [offset, setOffset] = useState(0)
+
     const [loading, setLoading] = useState(false)
     const imgDefaultSelect = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXdhbGxwYXBlci1pY29uIGx1Y2lkZS13YWxscGFwZXIiPjxwYXRoIGQ9Ik0xMiAxN3Y0Ii8+PHBhdGggZD0iTTggMjFoOCIvPjxwYXRoIGQ9Im05IDE3IDYuMS02LjFhMiAyIDAgMCAxIDIuODEuMDFMMjIgMTUiLz48Y2lyY2xlIGN4PSI4IiBjeT0iOSIgcj0iMiIvPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48L3N2Zz4="
     const imgAddSelect = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlLXBsdXMtaWNvbiBsdWNpZGUtaW1hZ2UtcGx1cyI+PHBhdGggZD0iTTE2IDVoNiIvPjxwYXRoIGQ9Ik0xOSAydjYiLz48cGF0aCBkPSJNMjEgMTEuNVYxOWEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoNy41Ii8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48Y2lyY2xlIGN4PSI5IiBjeT0iOSIgcj0iMiIvPjwvc3ZnPg=="
@@ -103,24 +108,32 @@ export default function Eventos(prop) {
             setOpenCreateEvento(false); setImagenes([]); setSelectImagen(null);
         }
     }
+
+    const getEventos = async () => {
+        const res = await eventosByIdOrganizacion(user.organizacion)
+        setEventos(res)
+    }
+    const getEventosAll = async (limit, offset) => {
+        const res = await eventoOrganizacion(limit, offset)
+        setEventos(res)
+    }
+
+    // useEffect(() => {
+    //     user.tipo === 'Escuela' ? getEventos() : getEventosAll(limit, offset)
+    // }, [])
+
     useEffect(() => {
-        const getEventos = async () => {
-            const res = await eventosByIdOrganizacion(user.organizacion)
-            setEventos(res)
-        }
-        const getEventosAll = async () => {
-            const res = await eventoOrganizacion(100, 0)
-            setEventos(res)
-        }
-        user.tipo === 'Escuela' ? getEventos() : getEventosAll()
-    }, [])
+        user.tipo === 'Escuela' ? getEventos() : getEventosAll(limit, offset)
+    }, [offset])
+    const [tipoEventoSeleccionado, setTipoEventoSeleccionado] = useState('Tipo')
     const isSmallDevice = useMediaQuery('(max-width:768px)');
     const isMediumDevice = useMediaQuery('(max-width: 1024px)');
     return (
         <div>
             <NavBarAutenticado />
-            <Filtros enableAccion={user.tipo === 'Escuela' ? true : false} titulo='Eventos' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='CREAR' filtro={setFiltro} btn_accion={setOpenCreateEvento} />
-            <TablaContenido encabezados={['Titulo', user.tipo === 'Escuela' ? 'Descripción' : 'Organización', 'Tipo', user.tipo === 'Escuela' ? 'Estado' : null, 'Inicio', 'Final', 'Publicado', 'Acciones']} eventosTabla={eventos} filtro={filtro} />
+            <Filtros enableAccion={user.tipo === 'Escuela' ? true : false} titulo='Eventos' placeholder='Buscar por nombre' opciones={['Mas recientes', 'Menos recientes']} accion='CREAR' filtro={setFiltro} btn_accion={setOpenCreateEvento} selector={true} selectorOpciones={imgTipoEvento} opcionDefault={'Tipo'} setSeleccionado={setTipoEventoSeleccionado}/>
+            <TablaContenido encabezados={['Titulo', user.tipo === 'Escuela' ? 'Descripción' : 'Organización', 'Tipo', user.tipo === 'Escuela' ? 'Estado' : null, 'Inicio', 'Final', 'Publicado', 'Acciones']} eventosTabla={eventos} filtro={filtro} tipoEventoSeleccionado={tipoEventoSeleccionado}/>
+            <Paginacion offset={offset} setOffset={setOffset} />
             {
                 openCreateEvento && (
                     <div>

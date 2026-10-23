@@ -130,7 +130,7 @@ export default function Calendario(props) {
         if (select === 'VISITAS') {
             if (user.tipo === 'Escuela') {
                 const visitas = async () => {
-                    let res = await allVisitasByIdEscuela(user.organizacion)
+                    let res = await allVisitasByIdEscuela(user.organizacion,100,0)
                     res = res?.filter(e => e.estado === 'APROBADA').map(r => {
                         return {
                             id: r.id,
@@ -145,7 +145,7 @@ export default function Calendario(props) {
                 visitas()
             } else if (user.tipo === 'Comité') {
                 const visitas = async () => {
-                    let res = await allVisitasForAdministrador()
+                    let res = await allVisitasForAdministrador(100,0)
                     res = res?.map(r => {
                         return {
                             id: r.id,
@@ -160,7 +160,7 @@ export default function Calendario(props) {
                 visitas()
             } else {
                 const visitas = async () => {
-                    let res = await allVisitasByIdEmpresa(user.organizacion)
+                    let res = await allVisitasByIdEmpresa(user.organizacion,100,0)
                     res = res?.filter(e => e.estado === 'APROBADA').map(r => {
                         return {
                             id: r.id,
@@ -191,7 +191,7 @@ export default function Calendario(props) {
             eventos()
         }else if(select === 'CURSOS'){
             const cursos = async () => {
-                let res = await findToEmpresas()
+                let res = await findToEmpresas(100,0)
                 res = res?.map(r=>{
                     return{
                         id : r.id,
@@ -206,7 +206,7 @@ export default function Calendario(props) {
             cursos()
         }else if(select === 'CONVENIOS'){
             const convenios = async () => {
-                let res = await findAll()
+                let res = await findAll(100,0)
                 res = res?.map(r=>{
                     return{
                         id : r.id,
@@ -222,7 +222,7 @@ export default function Calendario(props) {
         }else{
             const ofertasLaborales = async()=>{
                 if(user.tipo === 'Empresa' || user.tipo === 'Cámara de Comercio'){
-                    let res = await getOfertasLaboralesByIdOrganizacion(user.organizacion)
+                    let res = await getOfertasLaboralesByIdOrganizacion(user.organizacion,100,0)
                     res = res?.map(r=>{
                         return{
                             id : r.id,
@@ -233,7 +233,7 @@ export default function Calendario(props) {
                     })
                     setOfertasLaborales(res)
                 }else{
-                    let res = await getOfertasLaboralesAll()
+                    let res = await getOfertasLaboralesAll(100,0)
                     res = res?.map(r=>{
                         return{
                             id : r.id,

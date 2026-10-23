@@ -18,9 +18,9 @@ export const createInscripcion = async (id_evento, id_organizacion) => {
     }
 }
 
-export const findAllInscripciones = async (id_organizacion) => {
+export const findAllInscripciones = async (id_organizacion, limit, offset) => {
     try {
-        const inscripciones = await axiosInstance.get(`/inscripcionesEvento/organizaciones/${id_organizacion}`)
+        const inscripciones = await axiosInstance.get(`/inscripcionesEvento/organizaciones/${id_organizacion}/${limit}/${offset}`)
         return inscripciones.data
     } catch (error) {
         alert('OCURRIO UN ERROR AL OBTENER TODAS LAS INSCRIPCIONES')
