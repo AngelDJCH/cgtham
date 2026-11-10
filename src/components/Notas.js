@@ -7,15 +7,128 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import VisualizarFotos from "./VisualizarFotos";
 import '../styles/botones.css'
 import VisualizarEvento from "./VisualizarEvento";
+import { createInscripcion } from "../services/Inscripcion";
+import ModalAlerta from "./ModalAlerta";
 
 export default function Notas() {
   const [openInscripcion, setOpenInscripcion] = useState(false)
+  const [openVer, setOpenVer] = useState(false)
   const [openEditar, setOpenEditar] = useState(false)
   const [idEvento, setIdEvento] = useState('')
   const navigate = useNavigate()
   const [eventos, setEventos] = useState([]);
   const [nombre_evento, setNombreEvento] = useState('')
   const [openFotos, setOpenFotos] = useState(false)
+
+  const [alerta, setAlerta] = useState({
+    abierto: false,
+    tipo: 'info',
+    titulo: '',
+    mensaje: '',
+    mostrarCancelar: false,
+    textoBoton: 'ACEPTAR',
+    textoCancelar: 'CANCELAR',
+    onAceptar: null,
+    onCancelar: null
+  })
+
+  const mostrarAlerta = ({
+    mensaje,
+    tipo = 'info',
+    titulo = '',
+    onAceptar = null,
+    mostrarCancelar = false,
+    onCancelar = null,
+    textoBoton = 'ACEPTAR',
+    textoCancelar = 'CANCELAR'
+  }) => {
+    setAlerta({
+      abierto: true,
+      tipo,
+      titulo: titulo || (tipo === 'error' ? 'Atención' : tipo === 'exito' ? '¡Éxito!' : tipo === 'advertencia' ? 'Advertencia' : 'Aviso'),
+      mensaje,
+      mostrarCancelar,
+      textoBoton,
+      textoCancelar,
+      onAceptar,
+      onCancelar
+    })
+  }
+
+  const cerrarAlerta = () => {
+    const cb = alerta.onAceptar
+    setAlerta(prev => ({ ...prev, abierto: false }))
+    if (cb) cb()
+  }
+
+  const handleSolicitarParticipacion = (evento) => {
+    if (!user?.organizacion) {
+      mostrarAlerta({
+        tipo: 'advertencia',
+        titulo: 'Organización Requerida',
+        mensaje: 'Debes iniciar sesión con una cuenta de organización para poder inscribirte a este evento.'
+      })
+      return
+    }
+
+    // PASO 1: Primera confirmación de participación
+    mostrarAlerta({
+      tipo: 'info',
+      titulo: 'Confirmación de Participación',
+      mensaje: `¿Deseas solicitar tu inscripción para el evento "${evento.titulo}"?`,
+      mostrarCancelar: true,
+      textoBoton: 'CONTINUAR',
+      textoCancelar: 'CANCELAR',
+      onCancelar: () => setAlerta(prev => ({ ...prev, abierto: false })),
+      onAceptar: () => {
+        // PASO 2: Doble confirmación obligatoria
+        setTimeout(() => {
+          mostrarAlerta({
+            tipo: 'advertencia',
+            titulo: 'Doble Confirmación Requerida',
+            mensaje: 'Por favor confirma de manera definitiva el envío de tu solicitud. La organización anfitriona revisará el registro de tu institución. ¿Deseas proceder con el registro?',
+            mostrarCancelar: true,
+            textoBoton: 'SÍ, PARTICIPAR',
+            textoCancelar: 'REGRESAR',
+            onCancelar: () => setAlerta(prev => ({ ...prev, abierto: false })),
+            onAceptar: async () => {
+              setAlerta(prev => ({ ...prev, abierto: false }))
+              try {
+                const status = await createInscripcion(evento.id, user.organizacion)
+                if (status === 201) {
+                  mostrarAlerta({
+                    tipo: 'exito',
+                    titulo: '¡Inscripción Solicitada!',
+                    mensaje: `Tu solicitud para participar en "${evento.titulo}" ha sido registrada exitosamente. Quedará en espera de aprobación por parte de los organizadores.`,
+                    textoBoton: 'ENTENDIDO',
+                    onAceptar: () => navigate(0)
+                  })
+                } else if (status === 409) {
+                  mostrarAlerta({
+                    tipo: 'advertencia',
+                    titulo: 'Registro Previo',
+                    mensaje: 'Tu organización ya se encuentra registrada o en lista de espera para este evento.'
+                  })
+                } else {
+                  mostrarAlerta({
+                    tipo: 'error',
+                    titulo: 'Error',
+                    mensaje: 'No se pudo completar el registro de participación. Intenta de nuevo más tarde.'
+                  })
+                }
+              } catch (error) {
+                mostrarAlerta({
+                  tipo: 'error',
+                  titulo: 'Error del Servidor',
+                  mensaje: 'Ocurrió un error inesperado al procesar tu inscripción.'
+                })
+              }
+            }
+          })
+        }, 100)
+      }
+    })
+  }
   const [imgTipoEvento, setImgTipoEvento] = useState([
     {
       id: 1,
@@ -89,22 +202,30 @@ export default function Notas() {
                 <div>
                   <p style={{ fontFamily: 'Poppins', textAlign: 'center', fontSize: '13px' }}>{evento.fecha_inicio.split('T')[0]} <strong>/</strong> {evento.fecha_final.split('T')[0]}</p>
                 </div>
-                <div style={{ width: '100%', height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'end', alignItems: 'center' }}>
+                <div style={{ width: '100%', height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.4rem' }}>
                   <button className="btn-accion-2"
+                    style={{ backgroundColor: '#41431B', color: '#FFFFFF', width: '85px', fontSize: '12px' }}
                     onClick={() => {
                       setIdEvento(evento.id)
-                      if (user.organizacion != evento.organizacion.id) {
-                        setOpenInscripcion(true);
-                        setNombreEvento(evento.titulo)
+                      setOpenVer(true)
+                    }}
+                    title="Visualizar evento"
+                  >
+                    <strong>VER</strong>
+                  </button>
+                  <button className="btn-accion-2"
+                    style={{ width: '85px', fontSize: '12px' }}
+                    onClick={() => {
+                      setIdEvento(evento.id)
+                      if (user.organizacion !== evento.organizacion.id) {
+                        handleSolicitarParticipacion(evento)
                       } else {
                         setOpenEditar(true)
                       }
                     }}
                   >
                     <strong>
-                      {
-                        user.organizacion === evento.organizacion.id ? 'EDITAR' : 'PARTICIPAR'
-                      }
+                      {user.organizacion === evento.organizacion.id ? 'EDITAR' : 'PARTICIPAR'}
                     </strong>
                   </button>
                 </div>
@@ -123,15 +244,32 @@ export default function Notas() {
       </div>
 
       {
-        openInscripcion && (openInscripcion && (<VisualizarEvento id_evento={idEvento} accion={setOpenInscripcion} />)
+        openVer && (
+          <VisualizarEvento id_evento={idEvento} accion={setOpenVer} modo="ver" />
         )
       }
 
       {
         openEditar && (
-          <VisualizarEvento id_evento={idEvento} accion={setOpenEditar} />
+          <VisualizarEvento id_evento={idEvento} accion={setOpenEditar} modo="editar" />
         )
       }
+
+      <ModalAlerta
+        abierto={alerta.abierto}
+        tipo={alerta.tipo}
+        titulo={alerta.titulo}
+        mensaje={alerta.mensaje}
+        textoBoton={alerta.textoBoton}
+        textoCancelar={alerta.textoCancelar}
+        mostrarCancelar={alerta.mostrarCancelar}
+        onAceptar={cerrarAlerta}
+        onCancelar={() => {
+          const cb = alerta.onCancelar
+          setAlerta(prev => ({ ...prev, abierto: false }))
+          if (cb) cb()
+        }}
+      />
 
       {
         openFotos && (

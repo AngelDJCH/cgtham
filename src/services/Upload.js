@@ -21,7 +21,8 @@ export const uploadImgLogo = async (data_img, id_organizacion) => {
         })
         return res.data.url
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LA URL DE LA IMAGEN')
+        console.error('Error al subir el logo:', error)
+        return null
     }
 }
 
@@ -33,7 +34,8 @@ export const uploadImgBanner = async (data_img, id_organizacion) => {
         })
         return res.data.url
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LA URL DE LA IMAGEN')
+        console.error('Error al subir el banner:', error)
+        return null
     }
 }
 
@@ -46,6 +48,7 @@ export const uploadDocument = async (data_img, id_organizacion) => {
 
         return res.data.url
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LA URL DEL DOCUMENTO')
+        console.error('Error al subir el documento:', error)
+        return null
     }
 }

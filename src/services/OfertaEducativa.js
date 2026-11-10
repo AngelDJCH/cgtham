@@ -5,7 +5,8 @@ export const findAllByIdEscuela = async (id_escuela) => {
         const { data } = await axiosInstance.get(`/ofertaseducativas/${id_escuela}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER TODAS LAS OFERTAS EDUCATIVAS')
+        console.error('Error al obtener todas las ofertas educativas:', error)
+        return []
     }
 }
 

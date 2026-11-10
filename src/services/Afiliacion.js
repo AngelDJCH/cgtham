@@ -2,18 +2,20 @@ import { axiosInstance } from "./Axios"
 
 export const createAfiliacion = async (empresa, camara) => {
     try {
-        const {status} = await axiosInstance.post('/afiliaciones/',{id_empresa:empresa, id_camara:camara})
+        const { status } = await axiosInstance.post('/afiliaciones/', { id_empresa: empresa, id_camara: camara })
         return status
     } catch (error) {
-        alert('Ocurrio un error al afiliar a la empresa')
+        console.error('Error al afiliar a la empresa:', error)
+        return null
     }
 }
 
 export const findByIdEmpresa = async (id_empresa) => {
     try {
-        const {data} = await axiosInstance.get(`/afiliaciones/${id_empresa}`)
+        const { data } = await axiosInstance.get(`/afiliaciones/${id_empresa}`)
         return data
     } catch (error) {
-        alert(error.response)
+        console.error('Error al obtener afiliaciones por empresa:', error)
+        return []
     }
 }

@@ -5,7 +5,8 @@ export const getCloudDinary = async (id_organizacion) => {
         const { data } = await axiosInstance(`/cloudinaryConfigs/${id_organizacion}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LOS DATOS DE CLOUD DINARY')
+        console.error('Error al obtener los datos de Cloudinary:', error)
+        return null
     }
 }
 

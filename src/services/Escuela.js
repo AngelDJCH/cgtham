@@ -5,7 +5,8 @@ export const getEscuela = async (id_escuela) => {
         const { data } = await axiosInstance.get(`/escuelas/${id_escuela}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LA ESCUELA')
+        console.error('Error al obtener la escuela:', error)
+        return null
     }
 }
 

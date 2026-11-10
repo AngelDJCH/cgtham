@@ -15,7 +15,8 @@ export const createEvento = async (evento) => {
         const { data } = await axiosInstance.post('/eventos/', dataEvento)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL CREAR UN EVENTO')
+        console.error('Error al crear un evento:', error)
+        return null
     }
 }
 
@@ -45,7 +46,8 @@ export const eventoById = async (id_evento) => {
         const { data } = await axiosInstance.get(`/eventos/${id_evento}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER UN EVENTO')
+        console.error('Error al obtener un evento:', error)
+        return null
     }
 }
 
@@ -70,7 +72,8 @@ export const deleteEventoById = async (id_evento) => {
         const res = await axiosInstance.delete(`/eventos/${id_evento}`)
         return res
     } catch (error) {
-        alert('OCURRIO UN ERROR AL ELIMINAR EL EVENTO')
+        console.error('Error al eliminar el evento:', error)
+        return null
     }
 }
 
@@ -88,6 +91,7 @@ export const getDashEventos = async () => {
         const { data } = await axiosInstance.get('/eventos/dash')
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LOS EVENTOS')
+        console.error('Error al obtener los eventos de dashboard:', error)
+        return []
     }
 }

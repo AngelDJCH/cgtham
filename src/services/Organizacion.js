@@ -10,7 +10,8 @@ export const getOrganizacion = async (id_organizacion) => {
         const { data } = await axiosInstance.get(`/organizaciones/${id_organizacion}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LA ORGANIZACION')
+        console.error('Error al obtener la organización:', error)
+        return null
     }
 }
 
@@ -19,7 +20,8 @@ export const getOrganizacionFast = async (id_organizacion) => {
         const { data } = await axiosInstance.get(`/organizaciones/fast/${id_organizacion}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LA ORGANIZACION')
+        console.error('Error al obtener la organización (fast):', error)
+        return null
     }
 }
 
@@ -36,7 +38,8 @@ export const getAllOrganizacionesPendientes = async () => {
         const { data } = await axiosInstance.get('/organizaciones/pendientes/')
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LAS ORGANIZACIONES PENDIENTES')
+        console.error('Error al obtener las organizaciones pendientes:', error)
+        return null
     }
 }
 
@@ -84,7 +87,8 @@ export const updateEstadoByIdOrganizacion = async (id, estado) => {
         const { data } = await axiosInstance.put(`/organizaciones/estado/${id}`, { estado: estado })
         return data
     } catch (error) {
-        alert('OUCRRIO UN ERROR AL ACTUALIZAR EL ESTADO DE LA ORGANIZACION')
+        console.error('Error al actualizar el estado de la organización:', error)
+        return null
     }
 }
 
@@ -94,7 +98,8 @@ export const getLogoByIdOrganizacion = async (id) => {
         const { data } = await axiosInstance.get(`/organizaciones/logo/${id}`)
         return data.logo
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER EL LOGO DE LA ORGANIZACION')
+        console.error('Error al obtener el logo de la organización:', error)
+        return null
     }
 }
 

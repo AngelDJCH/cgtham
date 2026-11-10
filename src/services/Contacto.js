@@ -2,12 +2,11 @@ import { axiosInstance } from "./Axios"
 
 export const getContacto = async (id_contacto) => {
     try {
-        console.log(id_contacto)
         const { data } = await axiosInstance.get(`/contactos/${id_contacto}`)
-        console.log(data)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER EL CONTACTO')
+        console.error('Error al obtener el contacto:', error)
+        return null
     }
 }
 
@@ -33,7 +32,8 @@ export const updateContactoById = async (contacto) => {
         const { status } = await axiosInstance.put(`/contactos/${contacto.id}`, contactoData)
         return status
     } catch (error) {
-        alert('OCURRIO UN ERROR AL ACTUALIZAR EL CONTACTO')
+        console.error('Error al actualizar el contacto:', error)
+        return error?.response?.status || 500
     }
 }
 

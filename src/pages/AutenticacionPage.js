@@ -14,10 +14,43 @@ import { createEscuela } from "../services/Escuela";
 import { uploadImg } from "../services/Upload";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import Loader from '../components/Loader'
+import AlertaValidacion, { FORMATOS_IMAGEN, EXTENSIONES_IMAGEN, TAMANIO_MAX_IMAGEN_MB } from '../components/AlertaValidacion'
+import ModalAlerta from '../components/ModalAlerta'
+import imageCompression from 'browser-image-compression'
 
 export default function AutenticacionPage() {
     const [openCambiarContraseña, setOpenCambiarContraseña] = useState(false)
     const [openAlertaCambiarContraseña, setOpenAlertaCambiarContraseña] = useState(false)
+    const [alerta, setAlerta] = useState({
+        abierto: false,
+        tipo: 'info',
+        titulo: '',
+        mensaje: '',
+        onAceptar: null
+    })
+
+    const mostrarAlerta = (mensaje, tipo = 'advertencia', titulo = '', onAceptar = null) => {
+        setAlerta({
+            abierto: true,
+            tipo,
+            titulo: titulo || (tipo === 'error' ? 'Atención' : tipo === 'exito' ? '¡Éxito!' : 'Aviso'),
+            mensaje,
+            onAceptar
+        })
+    }
+
+    const cerrarAlerta = () => {
+        const callback = alerta.onAceptar
+        setAlerta({
+            abierto: false,
+            tipo: 'info',
+            titulo: '',
+            mensaje: '',
+            onAceptar: null
+        })
+        if (callback) callback()
+    }
+
     const imgLogoDefault = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlLXVwLWljb24gbHVjaWRlLWltYWdlLXVwIj48cGF0aCBkPSJNMTAuMyAyMUg1YTIgMiAwIDAgMS0yLTJWNWEyIDIgMCAwIDEgMi0yaDE0YTIgMiAwIDAgMSAyIDJ2MTBsLTMuMS0zLjFhMiAyIDAgMCAwLTIuODE0LjAxNEw2IDIxIi8+PHBhdGggZD0ibTE0IDE5LjUgMy0zIDMgMyIvPjxwYXRoIGQ9Ik0xNyAyMnYtNS41Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjkiIHI9IjIiLz48L3N2Zz4="
     const imgBannerDefault = "https://plus.unsplash.com/premium_photo-1772877094825-2908e6cfd259?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     const [sectores, setSectores] = useState([
@@ -157,7 +190,7 @@ export default function AutenticacionPage() {
             setUser(res.data)
             res.status === 200 ? navigate('/home') : <div></div>
         } catch (error) {
-            alert('CREDENCIALES INCORRECTAS')
+            mostrarAlerta('El correo electrónico o la contraseña son incorrectos.', 'error', 'Error de Autenticación')
             setOpenCambiarContraseña(true)
         }
     }
@@ -175,27 +208,72 @@ export default function AutenticacionPage() {
             setOpenDatosPersonales(true)
         }
     }
-    const handleChangeBanner = (e) => {
-        const archivo = e.target.files[0];
-        if (archivo) {
-            var reader = new FileReader()
-            reader.onloadend = function () {
-                setArchivoBanner(reader.result)
+    const [erroresValidacion, setErroresValidacion] = useState([])
+
+    const validarImagen = (archivo, nombreCampo, idCampo) => {
+        if (!FORMATOS_IMAGEN.includes(archivo.type)) {
+            return { id: idCampo, seccion: 'Imágenes', campo: nombreCampo, mensaje: `El archivo "${archivo.name}" no es válido. Formatos admitidos: ${EXTENSIONES_IMAGEN}.` }
+        }
+        if (archivo.size > TAMANIO_MAX_IMAGEN_MB * 1024 * 1024) {
+            return { id: idCampo, seccion: 'Imágenes', campo: nombreCampo, mensaje: `La imagen pesa ${(archivo.size / 1024 / 1024).toFixed(1)} MB. El máximo permitido es ${TAMANIO_MAX_IMAGEN_MB} MB.` }
+        }
+        return null
+    }
+
+    const imagenInvalida = (e, archivo, nombreCampo, idCampo) => {
+        const error = validarImagen(archivo, nombreCampo, idCampo)
+        if (error) {
+            e.target.value = ''
+            setErroresValidacion([error])
+            return true
+        }
+        document.getElementById(idCampo)?.classList.remove('campo-error')
+        return false
+    }
+
+    const handleChangeBanner = async (e) => {
+        const archivoSeleccionado = e.target.files[0];
+        if (!archivoSeleccionado) return;
+        if (imagenInvalida(e, archivoSeleccionado, 'Banner', 'contenedor-banner')) return;
+        try {
+            let fileToProcess = archivoSeleccionado;
+            try {
+                fileToProcess = await imageCompression(archivoSeleccionado, {
+                    maxSizeMB: 0.8,
+                    maxWidthOrHeight: 1600,
+                    useWebWorker: true
+                });
+            } catch (errComp) {
+                console.warn("Compresión no aplicada en banner de registro:", errComp);
             }
-            reader.readAsDataURL(archivo)
-            setBanner(URL.createObjectURL(archivo));
+            const base64 = await imageCompression.getDataUrlFromFile(fileToProcess);
+            setArchivoBanner(base64);
+            setBanner(base64);
+        } catch (error) {
+            console.error("Error al procesar banner:", error);
         }
     };
-    const handleChangeFoto = (e) => {
-        const archivo = e.target.files[0];
-        if (archivo) {
-            var reader = new FileReader()
 
-            reader.onloadend = function () {
-                setArchivoFoto(reader.result)
+    const handleChangeFoto = async (e) => {
+        const archivoSeleccionado = e.target.files[0];
+        if (!archivoSeleccionado) return;
+        if (imagenInvalida(e, archivoSeleccionado, 'Logo', 'contenedor-logo')) return;
+        try {
+            let fileToProcess = archivoSeleccionado;
+            try {
+                fileToProcess = await imageCompression(archivoSeleccionado, {
+                    maxSizeMB: 0.8,
+                    maxWidthOrHeight: 800,
+                    useWebWorker: true
+                });
+            } catch (errComp) {
+                console.warn("Compresión no aplicada en logo de registro:", errComp);
             }
-            reader.readAsDataURL(archivo)
-            setFoto(URL.createObjectURL(archivo));
+            const base64 = await imageCompression.getDataUrlFromFile(fileToProcess);
+            setArchivoFoto(base64);
+            setFoto(base64);
+        } catch (error) {
+            console.error("Error al procesar logo:", error);
         }
     };
     const deleteRegister = async ({ contacto, direccion, organizacion }) => {
@@ -205,16 +283,99 @@ export default function AutenticacionPage() {
         if (resOrg != 204 && direccion) await deleteDireccionById(direccion.id)
         return
     }
+    const validarFormulario = () => {
+        const errores = []
+        const agregar = (id, seccion, campo, mensaje) => errores.push({ id, seccion, campo, mensaje })
+        const vacio = (valor) => !valor || String(valor).trim() === ''
+        const sinSeleccion = (valor, placeholder) => vacio(valor) || valor === placeholder
+
+        if (!archivoFoto) agregar('contenedor-logo', 'Imágenes', 'Logo', `Selecciona una imagen PNG (${EXTENSIONES_IMAGEN}) para el logo.`)
+        if (!archivoBanner) agregar('contenedor-banner', 'Imágenes', 'Banner', `Selecciona una imagen PNG (${EXTENSIONES_IMAGEN}) para el banner (parte superior).`)
+
+        const nombre = datosPersonales.nombre.trim()
+        if (nombre.length < 5 || nombre.length > 254) agregar('r_nombre', 'Datos Organización', 'Nombre comercial', 'Debe tener entre 5 y 254 caracteres.')
+        if (vacio(datosPersonales.descripcion)) agregar('r_descripcion', 'Datos Organización', 'Descripción', 'Este campo es obligatorio.')
+        const rfc = datosPersonales.rfc.trim()
+        if (rfc.length < 12 || rfc.length > 13) agregar('r_rfc', 'Datos Organización', 'RFC', 'Debe tener 12 caracteres (persona moral) o 13 (persona física).')
+        if (sinSeleccion(selectTipo, 'TIPO')) agregar('r_tipo_org', 'Datos Organización', 'Tipo', 'Selecciona si eres Escuela, Empresa o Cámara de Comercio.')
+        if (sinSeleccion(selectSector, 'SECTOR')) agregar('r_sector_org', 'Datos Organización', 'Sector', 'Selecciona un sector.')
+        if (sinSeleccion(selectGiro, 'GIRO')) agregar('r_giro_org', 'Datos Organización', 'Giro', 'Selecciona un giro.')
+        const tamanio = Number(datosPersonales.tamaño)
+        if (!Number.isInteger(tamanio) || tamanio < 1) agregar('r_tamaño', 'Datos Organización', 'Tamaño', 'Debe ser un número entero mayor o igual a 1.')
+
+        if (selectTipo === 'Empresa') {
+            if (vacio(empresa.razon_social)) agregar('r_razon_social', 'Datos Organización', 'Razón social', 'Este campo es obligatorio.')
+            if (vacio(empresa.regimen_fiscal)) agregar('r_regimen_fiscal', 'Datos Organización', 'Régimen fiscal', 'Este campo es obligatorio.')
+            if (vacio(empresa.direccion_fiscal)) agregar('r_direccion_fiscal', 'Datos Organización', 'Dirección fiscal', 'Este campo es obligatorio.')
+        } else if (selectTipo === 'Escuela') {
+            if (sinSeleccion(escuela.tipo, 'TIPO')) agregar('r_tipo_escuela', 'Datos Organización', 'Tipo de escuela', 'Selecciona Pública o Privada.')
+            if (vacio(escuela.url)) agregar('r_sitio', 'Datos Organización', 'Sitio web', 'Este campo es obligatorio.')
+        } else if (selectTipo === 'Cámara de Comercio') {
+            if (vacio(camara.nombre)) agregar('r_nombre_camara', 'Datos Organización', 'Nombre de la cámara', 'Este campo es obligatorio.')
+            if (vacio(camara.presidente)) agregar('r_presidente', 'Datos Organización', 'Presidente', 'Este campo es obligatorio.')
+        }
+
+        if (vacio(datosUbicacion.calle)) agregar('r_calle', 'Datos Ubicación', 'Calle', 'Este campo es obligatorio.')
+        if (vacio(datosUbicacion.numero)) agregar('r_numero', 'Datos Ubicación', 'Número', 'Este campo es obligatorio.')
+        if (vacio(datosUbicacion.ciudad)) agregar('r_ciudad', 'Datos Ubicación', 'Ciudad', 'Este campo es obligatorio.')
+        if (vacio(datosUbicacion.codigo_postal)) agregar('r_cp', 'Datos Ubicación', 'Código postal', 'Este campo es obligatorio.')
+        if (vacio(datosUbicacion.estado)) agregar('r_estado', 'Datos Ubicación', 'Estado', 'Este campo es obligatorio.')
+        if (vacio(datosUbicacion.pais)) agregar('r_pais', 'Datos Ubicación', 'País', 'Este campo es obligatorio.')
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datosContacto.correo.trim())) agregar('r_correo', 'Datos Contacto', 'Correo', 'Escribe un correo válido (ejemplo: nombre@dominio.com).')
+        if (vacio(datosContacto.telefono)) agregar('r_telefono', 'Datos Contacto', 'Teléfono', 'Este campo es obligatorio.')
+
+        if (vacio(datosSeguridad.contrasenia)) agregar('r_contrasenia', 'Datos Seguridad', 'Contraseña', 'Este campo es obligatorio.')
+
+        if (vacio(datosCloudinary.cloud_name)) agregar('cloud_name', 'Cloudinary', 'Cloud name', 'Este campo es obligatorio.')
+        if (vacio(datosCloudinary.api_key)) agregar('api_key', 'Cloudinary', 'API key', 'Este campo es obligatorio.')
+        if (vacio(datosCloudinary.api_secret)) agregar('api_secret', 'Cloudinary', 'API secret', 'Este campo es obligatorio.')
+
+        return errores
+    }
+
+    const handleAceptarValidacion = () => {
+        const errores = erroresValidacion
+        setErroresValidacion([])
+        errores.forEach(({ id }) => {
+            const elemento = document.getElementById(id)
+            if (!elemento) return
+            elemento.classList.add('campo-error')
+            const quitar = () => elemento.classList.remove('campo-error')
+            elemento.addEventListener('input', quitar, { once: true })
+            elemento.addEventListener('change', quitar, { once: true })
+        })
+        const primero = errores.length ? document.getElementById(errores[0].id) : null
+        if (primero) {
+            primero.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            if (typeof primero.focus === 'function') primero.focus({ preventScroll: true })
+        }
+    }
+
     const [loading, setLoading] = useState(false)
     const handeCreateOrganizacion = async () => {
+        const errores = validarFormulario()
+        if (errores.length > 0) {
+            setErroresValidacion(errores)
+            return
+        }
         setLoading(true)
         try {
             const logoUrl = await uploadImg(archivoFoto)
-            if (logoUrl === null) return
+            if (logoUrl === null) {
+                setErroresValidacion([{ id: 'contenedor-logo', seccion: 'Imágenes', campo: 'Logo', mensaje: 'El servidor no pudo subir el logo. Verifica que sea PNG y que tu conexión funcione.' }])
+                return
+            }
             const bannerUrl = await uploadImg(archivoBanner)
-            if (bannerUrl === null) return
+            if (bannerUrl === null) {
+                setErroresValidacion([{ id: 'contenedor-banner', seccion: 'Imágenes', campo: 'Banner', mensaje: 'El servidor no pudo subir el banner. Verifica que sea PNG y que tu conexión funcione.' }])
+                return
+            }
             const contactoApi = await createContacto(datosContacto.correo, datosContacto.telefono)
-            if (contactoApi === null) return
+            if (contactoApi === null) {
+                setErroresValidacion([{ id: 'r_correo', seccion: 'Datos Contacto', campo: 'Correo / Teléfono', mensaje: 'El servidor rechazó los datos de contacto. Revisa que el correo sea válido.' }])
+                return
+            }
             const direccionApi = await createDireccion(datosUbicacion.calle, datosUbicacion.numero, datosUbicacion.colonia,
                 datosUbicacion.codigo_postal, datosUbicacion.ciudad, datosUbicacion.estado, datosUbicacion.pais
             )
@@ -242,15 +403,17 @@ export default function AutenticacionPage() {
             const cuentaApi = await createCuenta(datosContacto.correo, datosSeguridad.contrasenia, organizacionAPI?.id)
             if (cuentaApi === null) deleteRegister({ contacto: contactoApi, direccion: direccionApi, organizacion: organizacionAPI })
             if (cuentaApi.status === 201 && contactoApi && direccionApi && organizacionAPI && cloudinariApi || (empresaApi || escuelaApi || camaraApi)) {
-                alert('ORGANIZACION CREADA')
+                mostrarAlerta('¡Organización registrada exitosamente!', 'exito', '¡Registro Exitoso!', () => { navigate(0); })
                 setLoading(false)
                 navigate(0)
             }
         } catch (error) {
-            alert('Ocurrio un error al intentar registrar una organizacion')
+            mostrarAlerta('Ocurrió un error al intentar registrar la organización. Por favor verifica los datos ingresados.', 'error')
             setLoading(false)
             navigate(0)
-        }
+        } finally {
+         setLoading(false)
+     }
     }
     useEffect(() => {
         if (autenticacion === 'login') {
@@ -273,6 +436,11 @@ export default function AutenticacionPage() {
     return (
         <div className="autenticacion" style={{ height: openRegisterOrg ? 'auto' : null, paddingBottom: '2rem' }}>
             <NavBar opcionesNav={false} />
+            {
+                erroresValidacion.length > 0 && (
+                    <AlertaValidacion errores={erroresValidacion} onAceptar={handleAceptarValidacion} />
+                )
+            }
             {
                 loading && (
                     <Loader />
@@ -301,7 +469,7 @@ export default function AutenticacionPage() {
 
                                             onClick={() => {
                                                 //setOpenAlertaCambiarContraseña(true)
-                                                alert('No disponible')
+                                                mostrarAlerta('Esta función aún no se encuentra disponible.', 'info')
                                             }}
                                         >Recuperar contraseña</p>
                                     </div>
@@ -336,8 +504,8 @@ export default function AutenticacionPage() {
 
                 openRegisterOrg && (
                     <div className="contenedor-autenticacion" style={{ flexDirection: 'column', height: 'auto', flexWrap: 'wrap' }}>
-                        <div className="contenedor-seccion1">
-                            <input type="file" accept=".png"
+                        <div className="contenedor-seccion1" id="contenedor-banner" title={`Banner: solo PNG (${EXTENSIONES_IMAGEN}), máx. ${TAMANIO_MAX_IMAGEN_MB} MB`}>
+                            <input type="file" accept="image/*"
                                 id="upload-banner"
                                 onChange={handleChangeBanner}
                                 style={{ display: 'none' }}
@@ -364,8 +532,11 @@ export default function AutenticacionPage() {
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                             <div className="contenedor-seccion2" style={{ flexWrap: 'wrap' }}>
-                                <div style={{ width: isSmallDevice ? '100%' : '20%', display: 'flex', justifyContent: 'center', marginTop: '1rem', flexWrap: 'wrap' }}>
-                                    <input type="file" accept=".png"
+                                <div id="contenedor-logo" style={{ width: isSmallDevice ? '100%' : '20%', display: 'flex', justifyContent: 'center', marginTop: '1rem', flexWrap: 'wrap' }}>
+                                    <p className="texto-formato-imagen" style={{ order: 2 }}>
+                                        Logo y banner: Formatos {EXTENSIONES_IMAGEN}
+                                    </p>
+                                    <input type="file" accept="image/*"
                                         id="upload-foto"
                                         style={{ display: 'none' }}
                                         onChange={handleChangeFoto}
@@ -454,7 +625,7 @@ export default function AutenticacionPage() {
                                                 {
                                                     selectTipo === 'Escuela' && (
                                                         <div className="datos">
-                                                            <select onChange={(e) => { setEscuela({ ...escuela, tipo: e.target.value }) }}>
+                                                            <select id="r_tipo_escuela" onChange={(e) => { setEscuela({ ...escuela, tipo: e.target.value }) }}>
                                                                 <option>TIPO</option>
                                                                 <option>Pública</option>
                                                                 <option>Privada</option>
@@ -645,6 +816,13 @@ export default function AutenticacionPage() {
                     </div>
                 )
             }
+            <ModalAlerta
+                abierto={alerta.abierto}
+                tipo={alerta.tipo}
+                titulo={alerta.titulo}
+                mensaje={alerta.mensaje}
+                onAceptar={cerrarAlerta}
+            />
         </div>
     )
 }

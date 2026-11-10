@@ -1,0 +1,111 @@
+.overllay-validacion {
+    position: fixed;
+    inset: 0;
+    z-index: 998;
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+.alerta-validacion-contenedor {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.alerta-validacion-cuerpo {
+    width: 90%;
+    max-width: 460px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    border-top: 6px solid rgb(227, 82, 82);
+    padding: 1.2rem 1.5rem;
+    font-family: 'Poppins';
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.alerta-validacion-cuerpo h1 {
+    margin: 0;
+    font-size: 20px;
+    color: #41431B;
+    text-align: center;
+}
+
+.alerta-validacion-subtitulo {
+    margin: 0.4rem 0 0.8rem;
+    font-size: 13px;
+    text-align: center;
+    color: #555;
+}
+
+.alerta-validacion-lista {
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 0.3rem;
+}
+
+.alerta-validacion-seccion h2 {
+    margin: 0.6rem 0 0.2rem;
+    font-size: 14px;
+    color: rgb(227, 82, 82);
+}
+
+.alerta-validacion-seccion ul {
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+.alerta-validacion-seccion li {
+    font-size: 13px;
+    margin-bottom: 0.25rem;
+    color: #333;
+}
+
+.alerta-validacion-formatos {
+    margin-top: 0.9rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 12px;
+    background-color: #FFF8D6;
+    border-left: 4px solid #FFD400;
+    border-radius: 6px;
+    color: #41431B;
+}
+
+.alerta-validacion-boton {
+    margin-top: 1rem;
+    align-self: center;
+    width: 220px;
+    height: 42px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Poppins';
+    font-size: 14px;
+    background-color: #FFD400;
+    color: black;
+}
+
+.alerta-validacion-boton:hover {
+    background-color: transparent;
+    border: 1px solid #FFD400;
+}
+
+.campo-error {
+    outline: 2px solid rgb(227, 82, 82) !important;
+    outline-offset: 2px;
+    background-color: #FDECEC !important;
+    border-radius: 4px;
+}
+
+.texto-formato-imagen {
+    font-family: 'Poppins';
+    font-size: 11px;
+    color: #555;
+    text-align: center;
+    width: 100%;
+    margin: 0.4rem 0 0;
+}

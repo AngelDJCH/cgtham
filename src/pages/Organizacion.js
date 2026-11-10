@@ -18,9 +18,13 @@ import { updateCuentaById, updateCuentaContraseniaById, updateCuentaCorreoById }
 import { createOfertaEducativa, findAllByIdEscuela } from "../services/OfertaEducativa";
 import { findByIdEmpresa } from "../services/Afiliacion";
 import Loader from "../components/Loader";
+import ModalAlerta from "../components/ModalAlerta";
+import imageCompression from "browser-image-compression";
 
 
 export default function Organizacion() {
+    const defaultLogo = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160' fill='none'%3E%3Crect width='160' height='160' rx='80' fill='%23F4F5F0'/%3E%3Crect x='44' y='48' width='72' height='68' rx='6' stroke='%2341431B' stroke-width='4' fill='none'/%3E%3Cpath d='M58 64h12M90 64h12M58 78h12M90 78h12M72 116v-22h16v22' stroke='%2341431B' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M36 48L80 24L124 48' stroke='%2341431B' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+    const defaultBanner = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='320' viewBox='0 0 1200 320' fill='none'%3E%3Cdefs%3E%3ClinearGradient id='bgGradient' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23363816'/%3E%3Cstop offset='50%25' stop-color='%2341431B'/%3E%3Cstop offset='100%25' stop-color='%23646931'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='320' fill='url(%23bgGradient)'/%3E%3Ccircle cx='1050' cy='160' r='200' fill='%23FFFFFF' fill-opacity='0.04'/%3E%3Ccircle cx='150' cy='220' r='160' fill='%23FFFFFF' fill-opacity='0.03'/%3E%3Cpath d='M0 260C300 220 600 300 1200 240V320H0V260Z' fill='%23000000' fill-opacity='0.12'/%3E%3C/svg%3E"
     const activaAUrl = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZWNrIj48cGF0aCBkPSJNMjAgNiA5IDE3bC01LTUiLz48L3N2Zz4='
     const inactivaAUrl = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXgiPjxwYXRoIGQ9Ik0xOCA2IDYgMTgiLz48cGF0aCBkPSJtNiA2IDEyIDEyIi8+PC9zdmc+'
     const suspendidaAUrl = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWluZm8iPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEwIi8+PHBhdGggZD0iTTEyIDE2di00Ii8+PHBhdGggZD0iTTEyIDhoLjAxIi8+PC9zdmc+'
@@ -28,6 +32,36 @@ export default function Organizacion() {
     const notVerifiedImg = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNBRUI3ODQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1iYWRnZS1jaGVjayI+PHBhdGggZD0iTTMuODUgOC42MmE0IDQgMCAwIDEgNC43OC00Ljc3IDQgNCAwIDAgMSA2Ljc0IDAgNCA0IDAgMCAxIDQuNzggNC43OCA0IDQgMCAwIDEgMCA2Ljc0IDQgNCAwIDAgMS00Ljc3IDQuNzggNCA0IDAgMCAxLTYuNzUgMCA0IDQgMCAwIDEtNC43OC00Ljc3IDQgNCAwIDAgMSAwLTYuNzZaIi8+PHBhdGggZD0ibTE2IDktNS41IDUuNUw4IDEyIi8+PC9zdmc+'
     const [openInformacionAfiliaciones, setOpenInformacionAfiliaciones] = useState(false)
     const [openAfiliaciones, setOpenAfiliaciones] = useState(false)
+    const [openModalFotos, setOpenModalFotos] = useState(false)
+    const [alerta, setAlerta] = useState({
+        abierto: false,
+        tipo: 'info',
+        titulo: '',
+        mensaje: '',
+        onAceptar: null
+    })
+
+    const mostrarAlerta = (mensaje, tipo = 'advertencia', titulo = '', onAceptar = null) => {
+        setAlerta({
+            abierto: true,
+            tipo,
+            titulo: titulo || (tipo === 'error' ? 'Atención' : tipo === 'exito' ? '¡Éxito!' : 'Aviso'),
+            mensaje,
+            onAceptar
+        })
+    }
+
+    const cerrarAlerta = () => {
+        const callback = alerta.onAceptar
+        setAlerta({
+            abierto: false,
+            tipo: 'info',
+            titulo: '',
+            mensaje: '',
+            onAceptar: null
+        })
+        if (callback) callback()
+    }
     const isSmallDevice = useMediaQuery('(max-width:768px)');
     const [sectores, setSectores] = useState([
         {
@@ -119,7 +153,7 @@ export default function Organizacion() {
     const [openDatosUbicación, setOpenDatosUbicación] = useState(false)
     const [openDatosSeguridad, setOpenDatosSeguridad] = useState(false)
     const [openDatosCloudinary, setOpenDatosCloudinary] = useState(false)
-    const { user } = useAuth()
+    const { user, setUser } = useAuth()
     const isMediumDevice = useMediaQuery("(max-width : 768px) or (max-width : 1024px)")
     const handleCreateOfertaEducativa = async () => {
         setLoading(true)
@@ -135,12 +169,12 @@ export default function Organizacion() {
             id_escuela: user.organizacion
         })
         if (newOferta === 201) {
-            alert('SE PUBLICO LA OFERTA')
+            mostrarAlerta('Se publicó la oferta educativa exitosamente.', 'exito', '¡Publicación Exitosa!')
             setOpenCreateOfertaEducativa(false)
         } else if (newOferta === 409) {
-            alert('OFERTA EDUCATIVA YA EXISTENTE')
+            mostrarAlerta('La oferta educativa ya se encuentra registrada.', 'advertencia')
         } else {
-            alert('NO SE PUDO PUBLICAR LA OFERTA')
+            mostrarAlerta('No se pudo publicar la oferta educativa. Por favor intenta de nuevo.', 'error')
         }
         setLoading(false)
     }
@@ -151,74 +185,111 @@ export default function Organizacion() {
         mision: '',
         foto: ''
     })
-    const handleChangeLogo = async (e) => {
-        setLoading(true)
-        const logoEvento = e.target.files[0]
-        if (logoEvento.size > 5000000) {
-            alert('El archivo debe pesar menos que 5 MB')
-            setLoading(false)
-        } else {
-            try {
-                var reader = new FileReader()
-                reader.onloadend = function () {
-                    setOrganizacion({
-                        ...organizacion,
-                        logo: reader.result
-                    })
-                }
-                reader.readAsDataURL(logoEvento)
-                reader.onload = async () => {
-                    const res = await uploadImgLogo(reader.result, user?.organizacion)
-                    console.log(res)
-                    if (!res) alert('No se pudo guardar la imagen en cloudinary')
-                    if (res) {
-                        setOrganizacion({
-                            ...organizacion,
-                            logo: res
-                        })
-                        alert('LOGO GUARDADO EXITOSAMENTE')
-                    }
-                }
-                setLoading(false)
-            } catch (error) {
-                console.log(error)
-                setLoading(false)
+    const handlePickLogo = () => {
+        setOpenModalFotos(false);
+        setTimeout(() => {
+            const input = document.getElementById('logo');
+            if (input) {
+                input.value = '';
+                input.click();
             }
+        }, 50);
+    };
+
+    const handlePickBanner = () => {
+        setOpenModalFotos(false);
+        setTimeout(() => {
+            const input = document.getElementById('banner');
+            if (input) {
+                input.value = '';
+                input.click();
+            }
+        }, 50);
+    };
+
+    const handleChangeLogo = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+        const esValida = (file.type && file.type.startsWith('image/')) || /\.(png|jpe?g|webp|gif|bmp|avif|heic)$/i.test(file.name)
+        if (!esValida) {
+            mostrarAlerta('Formato no permitido. Por favor selecciona una imagen válida (PNG, JPG o WEBP).', 'advertencia')
+            e.target.value = ''
+            return
+        }
+        setLoading(true)
+        try {
+            let fileToProcess = file
+            try {
+                fileToProcess = await imageCompression(file, {
+                    maxSizeMB: 0.8,
+                    maxWidthOrHeight: 800,
+                    useWebWorker: true
+                })
+            } catch (errComp) {
+                console.warn("Compresión no aplicada en logo, usando archivo original:", errComp)
+            }
+            const base64 = await imageCompression.getDataUrlFromFile(fileToProcess)
+            const res = await uploadImgLogo(base64, user?.organizacion)
+            if (res) {
+                setOrganizacion(prev => ({
+                    ...prev,
+                    logo: res
+                }))
+                if (setUser) {
+                    setUser(prev => prev ? ({ ...prev, foto: res }) : prev)
+                }
+                window.dispatchEvent(new CustomEvent('organizacion_logo_actualizado', { detail: { logo: res } }))
+                mostrarAlerta('¡Fotografía de perfil (Logo) guardada exitosamente!', 'exito', '¡Actualización Exitosa!')
+            } else {
+                mostrarAlerta('No se pudo guardar la imagen del logo en el servidor.', 'error', 'Error de Subida')
+            }
+        } catch (error) {
+            console.error("Error al actualizar logo:", error)
+            mostrarAlerta('Ocurrió un error inesperado al procesar el logo.', 'error')
+        } finally {
+            setLoading(false)
+            e.target.value = ''
         }
     }
-    const handleChangeBanner = (e) => {
+
+    const handleChangeBanner = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+        const esValida = (file.type && file.type.startsWith('image/')) || /\.(png|jpe?g|webp|gif|bmp|avif|heic)$/i.test(file.name)
+        if (!esValida) {
+            mostrarAlerta('Formato no permitido. Por favor selecciona una imagen válida (PNG, JPG o WEBP).', 'advertencia')
+            e.target.value = ''
+            return
+        }
         setLoading(true)
-        const bannerEvento = e.target.files[0]
-        if (bannerEvento.size > 5000000) {
-            alert('El archivo debe pesar menos que 5 MB')
-            setLoading(false)
-        } else {
+        try {
+            let fileToProcess = file
             try {
-                var reader = new FileReader()
-                reader.onloadend = function () {
-                    setOrganizacion({
-                        ...organizacion,
-                        banner: reader.result
-                    })
-                }
-                reader.readAsDataURL(bannerEvento)
-                reader.onload = async () => {
-                    const res = await uploadImgBanner(reader.result, user?.organizacion)
-                    console.log(res)
-                    if (!res) alert('No se pudo guardar la imagen en cloudinary')
-                    if (res) {
-                        setOrganizacion({
-                            ...organizacion,
-                            banner: res
-                        })
-                        alert('BANNER GUARDADO EXITOSAMENTE')
-                    }
-                }
-                setLoading(false)
-            } catch (error) {
-                console.log(error)
-                setLoading(false)
+                fileToProcess = await imageCompression(file, {
+                    maxSizeMB: 0.8,
+                    maxWidthOrHeight: 1600,
+                    useWebWorker: true
+                })
+            } catch (errComp) {
+                console.warn("Compresión no aplicada en banner, usando archivo original:", errComp)
             }
+            const base64 = await imageCompression.getDataUrlFromFile(fileToProcess)
+            const res = await uploadImgBanner(base64, user?.organizacion)
+            if (res) {
+                setOrganizacion(prev => ({
+                    ...prev,
+                    banner: res
+                }))
+                mostrarAlerta('¡Imagen de portada (Banner) guardada exitosamente!', 'exito', '¡Actualización Exitosa!')
+            } else {
+                mostrarAlerta('No se pudo guardar la imagen de portada en el servidor.', 'error', 'Error de Subida')
+            }
+        } catch (error) {
+            console.error("Error al actualizar banner:", error)
+            mostrarAlerta('Ocurrió un error inesperado al procesar el banner.', 'error')
+        } finally {
+            setLoading(false)
+            e.target.value = ''
         }
     }
     const handleClicUpdateOpen = (open) => {
@@ -313,50 +384,91 @@ export default function Organizacion() {
         if (cloudData === 200) { notificacionData.concat('DATOS DE CLOUDINARY (HOSTING) ACTUALIZADOS \n') }
         const direccionData = await updateDireccionById(direccion)
         if (direccionData === 200) { notificacionData = notificacionData.concat('DATOS DE DIRECCIÓN ACTUALIZADOS \n') }
-        alert(notificacionData)
         setLoading(false)
-        navigate(0)
+        mostrarAlerta(notificacionData.trim() || 'Datos actualizados con éxito.', 'exito', '¡Actualización Exitosa!', () => {
+            navigate(0)
+        })
     }
     useEffect(() => {
         const organizacionData = async () => {
+            if (!id) {
+                mostrarAlerta(
+                    'No se proporcionó un identificador de organización válido.',
+                    'error',
+                    'Organización no encontrada',
+                    () => {
+                        if (window.history.length > 1) {
+                            navigate(-1)
+                        } else {
+                            navigate('/')
+                        }
+                    }
+                )
+                return
+            }
+
+            setLoading(true)
             const resOrg = await getOrganizacion(id)
+            if (!resOrg || !resOrg.id) {
+                setLoading(false)
+                mostrarAlerta(
+                    'No se encontró la organización solicitada o el enlace es incorrecto.',
+                    'error',
+                    'Organización no encontrada',
+                    () => {
+                        if (window.history.length > 1) {
+                            navigate(-1)
+                        } else {
+                            navigate('/')
+                        }
+                    }
+                )
+                return
+            }
+
             setOrganizacion(resOrg)
-            const resCon = await getContacto(resOrg?.id_contacto)
-            setContacto(resCon)
-            const resDir = await getDireccion(resOrg?.id_direccion)
-            setDireccion(resDir)
-            const cloud = await getCloudDinary(resOrg?.id)
+            if (resOrg.id_contacto) {
+                const resCon = await getContacto(resOrg.id_contacto)
+                setContacto(resCon)
+            }
+            if (resOrg.id_direccion) {
+                const resDir = await getDireccion(resOrg.id_direccion)
+                setDireccion(resDir)
+            }
+            const cloud = await getCloudDinary(resOrg.id)
             setCloudinary(cloud)
             setSelectTipo(resOrg?.tipo)
             setSelectSector(resOrg?.sector)
             setSelectGiro(resOrg?.giro)
-            console.log(resOrg)
-            if (resOrg?.tipo != 'Comité') {
+
+            if (resOrg?.tipo !== 'Comité') {
                 if (resOrg?.tipo === 'Empresa') {
-                    const resEm = await getEmpresa(resOrg?.id)
+                    const resEm = await getEmpresa(resOrg.id)
                     setEmpresa(resEm)
                 } else if (resOrg?.tipo === 'Escuela') {
-                    const resEsc = await getEscuela(resOrg?.id)
+                    const resEsc = await getEscuela(resOrg.id)
                     setEscuela(resEsc)
-                    const getOfertasEducativas = async () => {
+                    if (resEsc?.id) {
                         const data = await findAllByIdEscuela(resEsc.id)
-                        setOfertasEducativas(data)
+                        setOfertasEducativas(data || [])
                     }
-
-                    getOfertasEducativas()
                 } else {
-                    const resCam = await getCamara(resOrg?.id)
+                    const resCam = await getCamara(resOrg.id)
                     setCarama(resCam)
                 }
             }
+            setLoading(false)
         }
         const getAfiliaciones = async () => {
+            if (!id) return
             const res = await findByIdEmpresa(id)
-            setAfiliaciones(res)
+            if (res && Array.isArray(res)) {
+                setAfiliaciones(res)
+            }
         }
         organizacionData()
         getAfiliaciones()
-    }, [])
+    }, [id])
     const isLargeDevice = useMediaQuery('(min-width:992px) or (min-width: 1400px)');
     return (
         <div style={{ marginTop: '100px', marginRight: '50px', width: isMediumDevice ? '100%' : null }}>
@@ -375,19 +487,48 @@ export default function Organizacion() {
                             id="logo"
                             style={{ display: 'none' }}
                             type="file"
-                            accept=".png"
+                            accept="image/*"
                             onChange={handleChangeLogo}
                         />
-                        <img src={organizacion?.logo} style={{ backgroundColor: 'white' }} />
+                        <img
+                            src={organizacion?.logo || defaultLogo}
+                            alt={organizacion?.nombre_comercial ? `Logo ${organizacion.nombre_comercial}` : "Logo"}
+                            onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = defaultLogo;
+                            }}
+                            style={{ backgroundColor: 'white', objectFit: 'cover' }}
+                        />
                         {
-                            user.organizacion === organizacion?.id && (
-                                <label htmlFor="logo">
-                                    <div style={{ width: '100%', height: '0px', transform: 'translateY(-70px)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1pbWFnZS11cC1pY29uIGx1Y2lkZS1pbWFnZS11cCI+PHBhdGggZD0iTTEwLjMgMjFINWEyIDIgMCAwIDEtMi0yVjVhMiAyIDAgMCAxIDItMmgxNGEyIDIgMCAwIDEgMiAydjEwbC0zLjEtMy4xYTIgMiAwIDAgMC0yLjgxNC4wMTRMNiAyMSIvPjxwYXRoIGQ9Im0xNCAxOS41IDMtMyAzIDMiLz48cGF0aCBkPSJNMTcgMjJ2LTUuNSIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PC9zdmc+"
-                                            style={{ position: 'absolute', display: 'flex', width: '40px', height: '40px', cursor: 'pointer' }}
-                                        />
-                                    </div>
-                                </label>
+                            user?.organizacion === organizacion?.id && (
+                                <button
+                                    type="button"
+                                    onClick={() => setOpenModalFotos(true)}
+                                    title="Personalizar foto de perfil o portada"
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: '0px',
+                                        right: '6px',
+                                        width: '38px',
+                                        height: '38px',
+                                        borderRadius: '50%',
+                                        backgroundColor: '#FFD400',
+                                        border: '2.5px solid #FFFFFF',
+                                        boxShadow: '0 3px 8px rgba(0, 0, 0, 0.35)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        zIndex: 10,
+                                        padding: 0
+                                    }}
+                                >
+                                    <img
+                                        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0MTQzMUIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1wZW5jaWwiPjxwYXRoIGQ9Ik0yMS4xNzQgNi44MTJhMSAxIDAgMCAwLTMuOTg2LTMuOTg3TDcuMTcxIDEzLjY1NmEtMiAyIDAgMCAwLS41LjgzNWwtMS4zMjMgNC42MzFhLjUuNSAwIDAgMCAuNjIuNjE5bDQuNjMyLTEuMzIzYTIgMiAwIDAgMCAuODM0LS41MDZsOS44My05LjgzaC4wMDFaIi8+PHBhdGggZD0ibTE1IDUtNCA0Ii8+PC9zdmc+"
+                                        alt="Editar"
+                                        style={{ width: '18px', height: '18px', minWidth: '18px', minHeight: '18px', borderRadius: 0 }}
+                                    />
+                                </button>
                             )
                         }
                     </div>
@@ -395,22 +536,19 @@ export default function Organizacion() {
                         <input
                             id="banner"
                             type="file"
-                            accept=".png"
+                            accept="image/*"
                             onChange={handleChangeBanner}
                             style={{ display: 'none' }}
                         />
-                        <img src={organizacion?.banner} />
-                        {
-                            user.organizacion === organizacion?.id && (
-                                <label htmlFor="banner">
-                                    <div style={{ width: '100%', height: '0px', transform: 'translateY(-70px)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1pbWFnZS11cC1pY29uIGx1Y2lkZS1pbWFnZS11cCI+PHBhdGggZD0iTTEwLjMgMjFINWEyIDIgMCAwIDEtMi0yVjVhMiAyIDAgMCAxIDItMmgxNGEyIDIgMCAwIDEgMiAydjEwbC0zLjEtMy4xYTIgMiAwIDAgMC0yLjgxNC4wMTRMNiAyMSIvPjxwYXRoIGQ9Im0xNCAxOS41IDMtMyAzIDMiLz48cGF0aCBkPSJNMTcgMjJ2LTUuNSIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PC9zdmc+"
-                                            style={{ position: 'absolute', display: 'flex', width: '40px', height: '40px', cursor: 'pointer' }}
-                                        />
-                                    </div>
-                                </label>
-                            )
-                        }
+                        <img
+                            src={organizacion?.banner || defaultBanner}
+                            alt="Portada de la Organización"
+                            onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = defaultBanner;
+                            }}
+                            style={{ objectFit: 'cover' }}
+                        />
                     </div>
                     {
                         organizacion?.tipo === 'Empresa' && (
@@ -434,15 +572,46 @@ export default function Organizacion() {
                     }
                     <div className='contenedor-informacion-botones' >
                         <div className='informacion-contenedor'>
-                            <h1 style={{ textAlign: isMediumDevice ? 'center' : null }}>{organizacion?.nombre_comercial}</h1>
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', width: '100%', justifyContent: 'center' }}>
-                                <p style={{ minWidth: '90%', maxWidth: '90%', textAlign: 'justify' }}>{organizacion?.descripcion}</p>
+                            <h1 style={{ textAlign: isMediumDevice ? 'center' : null }}>{organizacion?.nombre_comercial || (loading ? 'Cargando información...' : 'Organización no disponible')}</h1>
+                            <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'center', marginTop: '4px' }}>
+                                <p style={{ maxWidth: '85%', textAlign: 'center', margin: '0 auto', color: '#555', fontSize: '15px', lineHeight: '1.4' }}>{organizacion?.descripcion || (!loading && !organizacion ? 'No se pudo obtener la información de esta organización.' : '')}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 {
-                    openDatos && (
+                    !organizacion && !loading ? (
+                        <div className="seccion1-contenedor" style={{ display: 'flex', flexDirection: 'column', width: isLargeDevice ? '70%' : '100%', marginTop: '1rem', justifyContent: 'center', alignItems: 'center', padding: '3rem 1.5rem', marginRight: isLargeDevice ? '1rem' : null, textAlign: 'center', backgroundColor: '#FFFFFF', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.06)' }}>
+                            <div style={{ width: '60px', height: '60px', borderRadius: '50%', backgroundColor: '#F4F5F0', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#41431B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: '#41431B', marginBottom: '0.5rem', fontFamily: 'Poppins' }}>Organización no encontrada</h3>
+                            <p style={{ color: '#666', maxWidth: '480px', marginBottom: '1.5rem', fontSize: '14px' }}>
+                                No pudimos localizar la organización solicitada o el enlace es incorrecto. Por favor verifica la dirección web o vuelve a la página anterior.
+                            </p>
+                            <button
+                                type="button"
+                                className="btn-accion-2"
+                                style={{ padding: '8px 28px' }}
+                                onClick={() => {
+                                    if (window.history.length > 1) {
+                                        navigate(-1)
+                                    } else {
+                                        navigate('/')
+                                    }
+                                }}
+                            >
+                                <strong>REGRESAR</strong>
+                            </button>
+                        </div>
+                    ) : null
+                }
+                {
+                    organizacion && openDatos && (
                         <div className="seccion1-contenedor" style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', width: isLargeDevice ? '70%' : '100%', marginTop: '1rem', justifyContent: 'center', alignItems: 'center', marginRight: isLargeDevice ? '1rem' : null }}>
                             <div className="datos" style={{ backgroundColor: '#41431B', width: '100%', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <h1 style={{ color: 'white' }}>INFORMACIÓN</h1>
@@ -669,7 +838,7 @@ export default function Organizacion() {
                     )
                 }
                 {
-                    !openDatos && (
+                    !openDatos && organizacion && (
                         <div className="seccion1-contenedor" style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', width: isLargeDevice ? '70%' : '100%', marginTop: '1rem', justifyContent: 'center', alignItems: 'start', marginRight: isLargeDevice ? '1rem' : null }}>
                             <div className="datos" style={{ backgroundColor: '#41431B', width: '100%', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <h1 style={{ color: 'white' }}>DATOS</h1>
@@ -1276,11 +1445,113 @@ export default function Organizacion() {
                     </div>
                 )
             }
+            
+            {
+                openModalFotos && (
+                    <div>
+                        <div className="overllay" onClick={() => setOpenModalFotos(false)}></div>
+                        <div className="overllay-contenedor">
+                            <div style={{
+                                backgroundColor: 'white',
+                                borderRadius: '12px',
+                                padding: '24px',
+                                width: '380px',
+                                maxWidth: '90vw',
+                                boxShadow: '0 10px 25px rgba(0,0,0,0.25)',
+                                textAlign: 'center',
+                                boxSizing: 'border-box'
+                            }}>
+                                <h3 style={{ fontFamily: 'Poppins', fontSize: '18px', color: '#41431B', margin: '0 0 6px 0', fontWeight: 700 }}>
+                                    Personalizar Imágenes
+                                </h3>
+                                <p style={{ fontFamily: 'Poppins', fontSize: '12px', color: '#666', margin: '0 0 18px 0' }}>
+                                    Selecciona la imagen que deseas actualizar:
+                                </p>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    <div
+                                        onClick={handlePickLogo}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '12px',
+                                            padding: '12px 14px',
+                                            borderRadius: '8px',
+                                            border: '1.5px solid #AEB784',
+                                            backgroundColor: '#F9FAF6',
+                                            cursor: 'pointer',
+                                            textAlign: 'left',
+                                            transition: 'all 0.2s'
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#ECEFD9'}
+                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#F9FAF6'}
+                                    >
+                                        <img
+                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0MTQzMUIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1pbWFnZS11cC1pY29uIGx1Y2lkZS1pbWFnZS11cCI+PHBhdGggZD0iTTEwLjMgMjFINWEyIDIgMCAwIDEtMi0yVjVhMiAyIDAgMCAxIDItMmgxNGEyIDIgMCAwIDEgMiAydjEwbC0zLjEtMy4xYTIgMiAwIDAgMC0yLjgxNC4wMTRMNiAyMSIvPjxwYXRoIGQ9Im0xNCAxOS41IDMtMyAzIDMiLz48cGF0aCBkPSJNMTcgMjJ2LTUuNSIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PC9zdmc+"
+                                            alt="logo"
+                                            style={{ width: '26px', height: '26px' }}
+                                        />
+                                        <div>
+                                            <strong style={{ display: 'block', fontSize: '13px', color: '#41431B', fontFamily: 'Poppins' }}>Cambiar Foto de Perfil (Logo)</strong>
+                                            <span style={{ fontSize: '11px', color: '#777' }}>Formatos permitidos: PNG, JPG o WEBP</span>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        onClick={handlePickBanner}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '12px',
+                                            padding: '12px 14px',
+                                            borderRadius: '8px',
+                                            border: '1.5px solid #AEB784',
+                                            backgroundColor: '#F9FAF6',
+                                            cursor: 'pointer',
+                                            textAlign: 'left',
+                                            transition: 'all 0.2s'
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#ECEFD9'}
+                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#F9FAF6'}
+                                    >
+                                        <img
+                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0MTQzMUIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1pbWFnZS11cC1pY29uIGx1Y2lkZS1pbWFnZS11cCI+PHBhdGggZD0iTTEwLjMgMjFINWEyIDIgMCAwIDEtMi0yVjVhMiAyIDAgMCAxIDItMmgxNGEyIDIgMCAwIDEgMiAydjEwbC0zLjEtMy4xYTIgMiAwIDAgMC0yLjgxNC4wMTRMNiAyMSIvPjxwYXRoIGQ9Im0xNCAxOS41IDMtMyAzIDMiLz48cGF0aCBkPSJNMTcgMjJ2LTUuNSIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PC9zdmc+"
+                                            alt="banner"
+                                            style={{ width: '26px', height: '26px' }}
+                                        />
+                                        <div>
+                                            <strong style={{ display: 'block', fontSize: '13px', color: '#41431B', fontFamily: 'Poppins' }}>Cambiar Portada (Banner)</strong>
+                                            <span style={{ fontSize: '11px', color: '#777' }}>Formatos permitidos: PNG, JPG o WEBP</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setOpenModalFotos(false)}
+                                    className="btn-accion-2"
+                                    style={{ marginTop: '16px', width: '100%', padding: '8px' }}
+                                >
+                                    <strong>CANCELAR</strong>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
             {
                 loading && (
                     <Loader />
                 )
             }
+            <ModalAlerta
+                abierto={alerta.abierto}
+                tipo={alerta.tipo}
+                titulo={alerta.titulo}
+                mensaje={alerta.mensaje}
+                onAceptar={cerrarAlerta}
+            />
         </div>
     )
 }

@@ -10,7 +10,8 @@ export const getOfertasLaboralesAll = async (limit, offset) => {
         const { data } = await axiosInstance.get(`/ofertaslaborales/${limit}/${offset}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LAS OFERTAS LABORALES')
+        console.error('Error al obtener las ofertas laborales:', error)
+        return []
     }
 }
 
@@ -19,7 +20,8 @@ export const getOfertasLaboralesByIdOrganizacion = async (id_organizacion, limit
         const { data } = await axiosInstance.get(`/ofertaslaborales/organizacion/${id_organizacion}/${limit}/${offset}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LAS OFERTAS LABORALES DE LA ORGANIZACION')
+        console.error('Error al obtener las ofertas laborales de la organización:', error)
+        return []
     }
 }
 
@@ -28,7 +30,8 @@ export const getOfertasLaboralesByIdUsuario = async (id_usuario) => {
         const { data } = await axiosInstance.get(`/postulaciones/experiencia/${id_usuario}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LAS OFERTAS EDUCATIVAS DE LA ORGANIZACION')
+        console.error('Error al obtener las ofertas por usuario:', error)
+        return []
     }
 }
 
@@ -37,7 +40,8 @@ export const getOfertaById = async (id_oferta) => {
         const { data } = await axiosInstance.get(`/ofertaslaborales/${id_oferta}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LOS DATOS DE LA OFERTA LABORAL')
+        console.error('Error al obtener los datos de la oferta laboral:', error)
+        return null
     }
 }
 
@@ -65,7 +69,8 @@ export const createOfertaLaboral = async (oferta) => {
         const { data } = await axiosInstance.post(`/ofertaslaborales`, ofertaData)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL CREAR LA OFERTA LABORAL')
+        console.error('Error al crear la oferta laboral:', error)
+        return null
     }
 }
 

@@ -5,7 +5,8 @@ export const getDireccion = async (id_direccion) => {
         const { data } = await axiosInstance.get(`/direcciones/${id_direccion}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LA DIRECCION')
+        console.error('Error al obtener la dirección:', error)
+        return null
     }
 }
 

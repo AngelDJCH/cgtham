@@ -27,7 +27,7 @@ export default function NavUser(props) {
                     <p><strong>OPCIONES</strong></p>
                 </li>
                 {
-                    user.rol.includes('ADMIN_ORG') ? <li
+                    (user.rol.includes('ADMIN_ORG') && !user.rol.includes('ADMIN_SYS')) ? <li
                         onClick={(e) => {
                             console.log(user)
                             navigate(`/organizacion/${user.organizacion}`); navigate(0)

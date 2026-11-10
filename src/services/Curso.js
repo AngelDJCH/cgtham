@@ -5,7 +5,8 @@ export const findToEmpresas = async (limit, offset) => {
         const { data } = await axiosInstance.get(`/cursos/empresas/${limit}/${offset}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LOS CURSOS')
+        console.error('Error al obtener los cursos para empresas:', error)
+        return []
     }
 }
 
@@ -14,7 +15,8 @@ export const findToEscuelas = async (id_organizacion, limit, offset) => {
         const { data } = await axiosInstance.get(`/cursos/escuelas/${id_organizacion}/${limit}/${offset}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LOS CURSOS')
+        console.error('Error al obtener los cursos para escuelas:', error)
+        return []
     }
 }
 
@@ -30,7 +32,8 @@ export const createCurso = async (curso) => {
         })
         return res
     } catch (error) {
-        alert('OCURRIO UN ERROR AL CREAR EL CURSO')
+        console.error('Error al crear el curso:', error)
+        return null
     }
 }
 
@@ -54,7 +57,8 @@ export const allSolicitudes = async (id_organizacion) => {
         const { data } = await axiosInstance.get(`/cursos/solicitudes/${id_organizacion}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LAS SOLICITUDES')
+        console.error('Error al obtener las solicitudes de cursos:', error)
+        return []
     }
 }
 
@@ -72,7 +76,8 @@ export const findByIdCurso = async (id_curso) => {
         const { data } = await axiosInstance.get(`/cursos/${id_curso}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER EL CURSO')
+        console.error('Error al obtener el curso:', error)
+        return null
     }
 }
 
@@ -83,7 +88,8 @@ export const updateById = async (titulo, descripcion, fecha_inicio, fecha_final,
         })
         return res
     } catch (error) {
-        alert('OCURRIO UN ERROR AL ACTUALIZAR EL CURSO')
+        console.error('Error al actualizar el curso:', error)
+        return null
     }
 }
 
@@ -92,7 +98,8 @@ export const deleteCursoById = async (id_curso) => {
         const res = await axiosInstance.delete(`/cursos/${id_curso}`)
         return res
     } catch (error) {
-        alert('OCURRIO UN ERROR AL ELIMINAR EL CURSO')
+        console.error('Error al eliminar el curso:', error)
+        return null
     }
 }
 
@@ -114,7 +121,8 @@ export const organizacionesParticipantes = async (id_curso) => {
         const { data } = await axiosInstance.get(`/inscripcionCurso/participantes/${id_curso}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LOS PARTICIPANTES DEL CURSO')
+        console.error('Error al obtener los participantes del curso:', error)
+        return []
     }
 }
 
@@ -123,7 +131,8 @@ export const organizacionesPendientes = async (id_curso) => {
         const { data } = await axiosInstance.get(`/inscripcionCurso/pendientes/${id_curso}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LAS ORGANIZACIONES PENDIENTES')
+        console.error('Error al obtener las organizaciones pendientes del curso:', error)
+        return []
     }
 }
 

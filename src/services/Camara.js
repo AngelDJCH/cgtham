@@ -5,7 +5,8 @@ export const getCamara = async (id_comercio) => {
         const { data } = await axiosInstance.get(`/camaras/${id_comercio}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LA CAMARA DE COMERCIO')
+        console.error('Error al obtener la cámara de comercio:', error)
+        return null
     }
 }
 

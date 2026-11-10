@@ -5,7 +5,8 @@ export const getEmpresa = async (id_empresa) => {
         const { data } = await axiosInstance.get(`/empresas/${id_empresa}`)
         return data
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LA EMPRESA')
+        console.error('Error al obtener la empresa:', error)
+        return null
     }
 }
 
