@@ -7,7 +7,7 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import VisualizarFotos from "./VisualizarFotos";
 import '../styles/botones.css'
 import VisualizarEvento from "./VisualizarEvento";
-import { createInscripcion } from "../services/Inscripcion";
+import { createInscripcion, findAllInscripciones } from "../services/Inscripcion";
 import ModalAlerta from "./ModalAlerta";
 
 export default function Notas() {
@@ -19,6 +19,23 @@ export default function Notas() {
   const [eventos, setEventos] = useState([]);
   const [nombre_evento, setNombreEvento] = useState('')
   const [openFotos, setOpenFotos] = useState(false)
+  const [fotoIndices, setFotoIndices] = useState({})
+
+  const handleNextFoto = (eventoId, total, e) => {
+    e.stopPropagation();
+    setFotoIndices(prev => ({
+      ...prev,
+      [eventoId]: ((prev[eventoId] || 0) + 1) % total
+    }));
+  };
+
+  const handlePrevFoto = (eventoId, total, e) => {
+    e.stopPropagation();
+    setFotoIndices(prev => ({
+      ...prev,
+      [eventoId]: (((prev[eventoId] || 0) - 1) + total) % total
+    }));
+  };
 
   const [alerta, setAlerta] = useState({
     abierto: false,
@@ -157,89 +174,300 @@ export default function Notas() {
     }
   ]);
   const { user } = useAuth()
+  const [misInscripciones, setMisInscripciones] = useState([])
   const isMediumDevice = useMediaQuery("only screen and (max-width : 992px)")
+
   useEffect(() => {
-    const eventosDB = async () => {
-      const res = await eventoOrganizacion(100, 0)
-      setEventos(res)
+    const cargarDatos = async () => {
+      try {
+        const res = await eventoOrganizacion(100, 0)
+        setEventos(res || [])
+      } catch (error) {
+        console.error("Error al cargar eventos:", error)
+      }
+
+      if (user?.organizacion) {
+        try {
+          const resInscripciones = await findAllInscripciones(user.organizacion, 100, 0)
+          setMisInscripciones(Array.isArray(resInscripciones) ? resInscripciones : [])
+        } catch (error) {
+          console.error("Error al cargar inscripciones del usuario:", error)
+        }
+      }
     }
-    eventosDB()
-  }, [])
+    cargarDatos()
+  }, [user?.organizacion])
   return (
     <div className="notas">
       {
-        eventos?.map(
-          evento => <div key={evento.id} className="nota" style={{ width: isMediumDevice ? '300px' : null, height: isMediumDevice ? '400px' : null }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', width: '90%', marginLeft: '1rem', gap: '1rem', backgroundColor: '#AEB784', padding: '0.4rem', borderRadius: '10px 10px 10px 10px' }}>
-              <div style={{ width: '40px', height: '40px' }}>
-                <img src={evento.organizacion.foto} alt={evento.organizacion.nombre_comercial} style={{ backgroundColor: '#E3DBBB', borderRadius: '100%', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
-              </div>
-              <div>
-                <h1 style={{ fontFamily: 'Poppins', fontSize: '15px', color: '#41431B', cursor: 'pointer' }}
-                  onClick={() => {
-                    navigate(`/organizacion/${evento.organizacion.id}`)
-                  }}
-                >{evento.organizacion.nombre}</h1>
-              </div>
-            </div>
-            <div style={{ width: '90%' }}>
-              <p style={{ fontFamily: 'Poppins', fontSize: '12px', textAlign: 'justify', maxHeight: '50px', minHeight: '50px', overflowY: 'scroll', scrollbarWidth: 'none' }}>
-                {evento.descripcion}
-              </p>
-            </div>
-            <div style={{ width: '90%', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-              <div style={{ width: isMediumDevice ? '100%' : '140px', height: '140px' }}>
-                <img
-                  onClick={() => {
-                    setIdEvento(evento?.id)
-                    setOpenFotos(true)
-                  }}
-                  className="img-scale"
-                  src={evento.fotos[0]} alt="imagenes" style={{cursor: 'pointer', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
-              </div>
-              <div style={{ width: isMediumDevice ? '100%' : '200px', height: 'auto', backgroundColor: '#AEB784', padding: '0.1rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <h1 style={{ margin: '0', padding: '0', fontFamily: 'Poppins', fontSize: '14px', width: '100%', textAlign: 'center' }}>{evento.titulo.length > 20 ? evento.titulo.substring(0,20)+'...' : evento.titulo}</h1>
-                <div>
-                  <p style={{ fontFamily: 'Poppins', textAlign: 'center', fontSize: '13px' }}>{evento.fecha_inicio.split('T')[0]} <strong>/</strong> {evento.fecha_final.split('T')[0]}</p>
+        eventos?.map(evento => {
+          const esDueno = user?.organizacion === evento.organizacion?.id;
+          const fotosLista = (evento.fotos && Array.isArray(evento.fotos) && evento.fotos.length > 0) ? evento.fotos : [];
+          const currentIdx = (fotoIndices[evento.id] || 0) % (fotosLista.length || 1);
+          const fotoActual = fotosLista.length > 0 ? fotosLista[currentIdx] : null;
+          const fechaInicio = evento.fecha_inicio ? evento.fecha_inicio.split('T')[0] : '';
+          const fechaFinal = evento.fecha_final ? evento.fecha_final.split('T')[0] : '';
+
+          // Evaluación de estado de inscripción y cupo
+          const inscripcionUsuario = misInscripciones.find(
+            item => (item.evento?.id_evento || item.id_evento) === evento.id
+          );
+          const estadoInscripcion = inscripcionUsuario?.inscripcion?.estado || inscripcionUsuario?.estado;
+          const estaParticipando = estadoInscripcion === 'APROBADA';
+          const estaPendiente = estadoInscripcion === 'PENDIENTE';
+
+          const limite = (evento.limite_participantes !== null && evento.limite_participantes !== undefined && evento.limite_participantes !== '')
+            ? parseInt(evento.limite_participantes)
+            : null;
+          const totalParticipantes = parseInt(evento.total_participantes || 0);
+          const cupoLleno = limite !== null && totalParticipantes >= limite;
+
+          const tipoIncompatible = !esDueno && evento.tipo_organizacion_permitida && evento.tipo_organizacion_permitida !== 'TODAS' && user?.tipo && user.tipo !== evento.tipo_organizacion_permitida;
+          const sectorIncompatible = !esDueno && evento.sector_permitido && evento.sector_permitido !== 'TODOS' && user?.sector && user.sector !== evento.sector_permitido;
+          const giroIncompatible = !esDueno && evento.giro_permitido && evento.giro_permitido !== 'TODOS' && user?.giro && user.giro !== evento.giro_permitido;
+          const perfilIncompatible = tipoIncompatible || sectorIncompatible || giroIncompatible;
+
+          return (
+            <div key={evento.id} className="nota-card">
+              {/* Cabecera del Emisor */}
+              <div className="nota-card-header">
+                <div
+                  className="nota-emisor-info"
+                  onClick={() => navigate(`/organizacion/${evento.organizacion?.id}`)}
+                  title="Ver perfil de la organización"
+                >
+                  <img
+                    src={evento.organizacion?.foto || 'https://via.placeholder.com/44'}
+                    alt={evento.organizacion?.nombre || 'Organización'}
+                    className="nota-emisor-logo"
+                  />
+                  <div className="nota-emisor-textos">
+                    <h3 className="nota-emisor-nombre">{evento.organizacion?.nombre || evento.organizacion?.nombre_comercial}</h3>
+                    <span className="nota-emisor-sub">Convocatoria Institucional</span>
+                  </div>
                 </div>
-                <div style={{ width: '100%', height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.4rem' }}>
-                  <button className="btn-accion-2"
-                    style={{ backgroundColor: '#41431B', color: '#FFFFFF', width: '85px', fontSize: '12px' }}
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'flex-end', gap: '6px' }}>
+                  {evento.tipo && (
+                    <span className="nota-badge-tipo">{evento.tipo}</span>
+                  )}
+                  {evento.modalidad && (
+                    <span className="nota-badge-tipo" style={{ backgroundColor: '#F0F4E8', borderColor: '#AEB784', fontSize: '10.5px' }}>
+                      {evento.modalidad === 'VIRTUAL' ? 'Virtual' : evento.modalidad === 'HIBRIDO' ? 'Híbrido' : 'Presencial'}
+                    </span>
+                  )}
+                  {evento.tipo_organizacion_permitida && evento.tipo_organizacion_permitida !== 'TODAS' && (
+                    <span className="nota-badge-tipo" style={{ backgroundColor: '#FEF3C7', color: '#92400E', borderColor: '#F59E0B', fontSize: '10.5px' }}>
+                      Solo {evento.tipo_organizacion_permitida}s
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Descripción */}
+              {evento.descripcion && (
+                <p className="nota-card-descripcion">
+                  {evento.descripcion}
+                </p>
+              )}
+
+              {/* Fotografía y Carrusel Integrado */}
+              {fotoActual && (
+                <div className="nota-card-media" onClick={(e) => e.stopPropagation()}>
+                  <img
+                    src={fotoActual}
+                    alt={evento.titulo}
+                    className="nota-card-img"
+                  />
+                  {fotosLista.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        className="nota-carusel-btn prev"
+                        onClick={(e) => handlePrevFoto(evento.id, fotosLista.length, e)}
+                        title="Fotografía anterior"
+                        aria-label="Anterior"
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                      </button>
+
+                      <button
+                        type="button"
+                        className="nota-carusel-btn next"
+                        onClick={(e) => handleNextFoto(evento.id, fotosLista.length, e)}
+                        title="Siguiente fotografía"
+                        aria-label="Siguiente"
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                      </button>
+
+                      <span className="nota-media-overlay-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px' }}>
+                          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                          <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        {currentIdx + 1} / {fotosLista.length}
+                      </span>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* Metadatos y Botonera */}
+              <div className="nota-card-meta">
+                <div className="nota-evento-info">
+                  <h4 className="nota-evento-titulo">{evento.titulo}</h4>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px' }}>
+                    <span className="nota-evento-fechas" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                      {fechaInicio} al {fechaFinal}
+                      {evento.hora_inicio && (
+                        <span style={{ marginLeft: '6px', opacity: 0.9, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>
+                          {evento.hora_inicio.slice(0, 5)} - {evento.hora_final ? evento.hora_final.slice(0, 5) : '18:00'}
+                        </span>
+                      )}
+                    </span>
+                    {limite ? (
+                      <span className={`nota-evento-cupo ${cupoLleno ? 'agotado' : ''}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                          <circle cx="9" cy="7" r="4"></circle>
+                          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        Cupo: {totalParticipantes} / {limite} {cupoLleno ? '(Lleno)' : 'lugares'}
+                      </span>
+                    ) : (
+                      <span className="nota-evento-cupo" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                          <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                        </svg>
+                        Cupo Ilimitado
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="nota-card-botones">
+                  <button
+                    type="button"
+                    className="nota-btn-ver"
                     onClick={() => {
-                      setIdEvento(evento.id)
-                      setOpenVer(true)
+                      setIdEvento(evento.id);
+                      setOpenVer(true);
                     }}
-                    title="Visualizar evento"
+                    title="Visualizar evento completo"
                   >
-                    <strong>VER</strong>
+                    VER
                   </button>
-                  <button className="btn-accion-2"
-                    style={{ width: '85px', fontSize: '12px' }}
-                    onClick={() => {
-                      setIdEvento(evento.id)
-                      if (user.organizacion !== evento.organizacion.id) {
-                        handleSolicitarParticipacion(evento)
-                      } else {
-                        setOpenEditar(true)
-                      }
-                    }}
-                  >
-                    <strong>
-                      {user.organizacion === evento.organizacion.id ? 'EDITAR' : 'PARTICIPAR'}
-                    </strong>
-                  </button>
+
+                  {esDueno ? (
+                    <button
+                      type="button"
+                      className="nota-btn-participar"
+                      onClick={() => {
+                        setIdEvento(evento.id);
+                        setOpenEditar(true);
+                      }}
+                      title="Editar evento"
+                    >
+                      EDITAR
+                    </button>
+                  ) : estaParticipando ? (
+                    <button
+                      type="button"
+                      className="nota-btn-participando"
+                      onClick={() => {
+                        mostrarAlerta({
+                          tipo: 'exito',
+                          titulo: 'Participante Oficial',
+                          mensaje: `Tu organización "${user?.nombre_comercial || 'tu institución'}" ya está formalmente aceptada y registrada como participante en el evento "${evento.titulo}".`
+                        });
+                      }}
+                      title="Inscripción aprobada por el organizador"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '5px' }}>
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      PARTICIPANDO
+                    </button>
+                  ) : estaPendiente ? (
+                    <button
+                      type="button"
+                      className="nota-btn-pendiente"
+                      onClick={() => {
+                        mostrarAlerta({
+                          tipo: 'advertencia',
+                          titulo: 'Solicitud en Revisión',
+                          mensaje: `Tu solicitud para participar en "${evento.titulo}" se encuentra registrada y en espera de aprobación por parte del anfitrión.`
+                        });
+                      }}
+                      title="Solicitud enviada (esperando aprobación)"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '5px' }}>
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      EN ESPERA
+                    </button>
+                  ) : perfilIncompatible ? (
+                    <button
+                      type="button"
+                      className="nota-btn-lleno"
+                      disabled
+                      title={tipoIncompatible ? `Evento reservado para ${evento.tipo_organizacion_permitida}s` : sectorIncompatible ? `Evento reservado para el sector ${evento.sector_permitido}` : `Evento reservado para el giro ${evento.giro_permitido}`}
+                      style={{ fontSize: '11px', backgroundColor: '#FDF2F2', color: '#9B1C1C', borderColor: '#F8B4B4' }}
+                    >
+                      NO ADMITIDO
+                    </button>
+                  ) : cupoLleno ? (
+                    <button
+                      type="button"
+                      className="nota-btn-lleno"
+                      disabled
+                      title="El cupo máximo de participantes ha sido alcanzado"
+                    >
+                      CUPO LLENO
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="nota-btn-participar"
+                      onClick={() => {
+                        setIdEvento(evento.id);
+                        handleSolicitarParticipacion(evento);
+                      }}
+                    >
+                      PARTICIPAR
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
-          </div>
-        )
+          );
+        })
       }
 
       <div>
-        <button className="btn-accion-2" style={{ width: 'auto' }}
+        <button
+          type="button"
+          className="nota-btn-ver-todos"
           onClick={() => { navigate('/eventos') }}
         >
-          <strong>VER TODOS LOS EVENTOS</strong>
+          VER TODOS LOS EVENTOS →
         </button>
       </div>
 

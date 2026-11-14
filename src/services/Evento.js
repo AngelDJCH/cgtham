@@ -10,7 +10,14 @@ export const createEvento = async (evento) => {
             estado: 'ACTIVO',
             id_organizacion: evento.id_organizacion,
             fecha_inicio: evento.fecha_inicio,
-            fecha_final: evento.fecha_final
+            fecha_final: evento.fecha_final,
+            limite_participantes: evento.limite_participantes || null,
+            tipo_organizacion_permitida: evento.tipo_organizacion_permitida || 'TODAS',
+            modalidad: evento.modalidad || 'PRESENCIAL',
+            sector_permitido: evento.sector_permitido || 'TODOS',
+            giro_permitido: evento.giro_permitido || 'TODOS',
+            hora_inicio: evento.hora_inicio || '09:00',
+            hora_final: evento.hora_final || '18:00'
         }
         const { data } = await axiosInstance.post('/eventos/', dataEvento)
         return data
@@ -58,7 +65,14 @@ export const updateEventoById = async (evento) => {
             descripcion: evento.descripcion,
             tipo: evento.tipo,
             fecha_inicio: evento.fecha_inicio.split('T')[0],
-            fecha_final: evento.fecha_final.split('T')[0]
+            fecha_final: evento.fecha_final.split('T')[0],
+            limite_participantes: evento.limite_participantes || null,
+            tipo_organizacion_permitida: evento.tipo_organizacion_permitida || 'TODAS',
+            modalidad: evento.modalidad || 'PRESENCIAL',
+            sector_permitido: evento.sector_permitido || 'TODOS',
+            giro_permitido: evento.giro_permitido || 'TODOS',
+            hora_inicio: evento.hora_inicio || '09:00',
+            hora_final: evento.hora_final || '18:00'
         }
         const { status } = await axiosInstance.put(`/eventos/${evento.id}`, dataEvento)
         return status

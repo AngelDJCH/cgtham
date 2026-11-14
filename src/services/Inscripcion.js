@@ -59,9 +59,11 @@ export const findParticipantesByIEvento = async (id_evento) => {
 
 export const findInscripcionesByIdEvento = async (id_evento) => {
     try {
-        const { data } = await axiosInstance.get()
+        const { data } = await axiosInstance.get(`/inscripcionesEvento/evento/${id_evento}`)
+        return data || []
     } catch (error) {
-        alert('OCURRIO UN ERROR AL OBTENER LAS INSCRIPCIONES DEL EVENTO')
+        console.error('Error al obtener las inscripciones del evento:', error)
+        return []
     }
 }
 

@@ -1,0 +1,421 @@
+/* ==========================================================================
+   MODAL DE RECUPERACIÓN DE CONTRASEÑA INSTITUCIONAL (CGTHAM)
+   ========================================================================== */
+
+.modal-recuperar-root {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.modal-recuperar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(30, 32, 10, 0.58);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: none;
+    width: 100vw;
+    height: 100vh;
+    cursor: pointer;
+    animation: fadeOverlay 0.2s ease-out;
+}
+
+@keyframes fadeOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-recuperar-dialog {
+    position: relative;
+    z-index: 10000;
+    border: none;
+    padding: 0;
+    background: transparent;
+    margin: 0;
+    width: 92%;
+    max-width: 480px;
+    animation: zoomModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes zoomModal {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-recuperar-tarjeta {
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 0 20px 48px rgba(65, 67, 27, 0.22);
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #EAEFE2;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Botón de cerrar superior derecho (X) */
+.modal-recuperar-btn-cerrar {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background-color: #F4F6EE;
+    color: #41431B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.modal-recuperar-btn-cerrar:hover {
+    background-color: #E2E8D5;
+    transform: scale(1.08);
+}
+
+/* Cabecera */
+.modal-recuperar-cabecera {
+    background: linear-gradient(180deg, #FAFBF7 0%, #FFFFFF 100%);
+    padding: 28px 24px 16px 24px;
+    text-align: center;
+    border-bottom: 1px solid #F0F3EA;
+}
+
+.modal-recuperar-icono-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #EEF2E6;
+    border: 2px solid #D5DCBE;
+    color: #41431B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px auto;
+    box-shadow: 0 4px 12px rgba(65, 67, 27, 0.08);
+}
+
+.modal-recuperar-titulo {
+    font-size: 19px;
+    font-weight: 700;
+    color: #41431B;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.2px;
+}
+
+.modal-recuperar-subtitulo {
+    font-size: 12.5px;
+    color: #555A38;
+    line-height: 1.45;
+    margin: 0 0 16px 0;
+    padding: 0 8px;
+}
+
+/* Stepper de dos pasos */
+.modal-recuperar-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.stepper-paso {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+}
+
+.stepper-paso--activo {
+    opacity: 1;
+}
+
+.stepper-numero {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: #CCD5AE;
+    color: #2F3112;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stepper-paso--activo .stepper-numero {
+    background-color: #41431B;
+    color: #FFFFFF;
+}
+
+.stepper-texto {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #41431B;
+}
+
+.stepper-linea {
+    width: 22px;
+    height: 2px;
+    background-color: #CCD5AE;
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
+}
+
+.stepper-linea--activo {
+    background-color: #41431B;
+}
+
+/* Alerta inline de error */
+.modal-recuperar-alerta-inline {
+    background-color: #FDF2F2;
+    border-left: 4px solid #E53E3E;
+    color: #9B2C2C;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 24px 0 24px;
+    border-radius: 6px;
+}
+
+/* Formulario y Campos */
+.modal-recuperar-cuerpo {
+    padding: 20px 24px 26px 24px;
+}
+
+.modal-recuperar-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.modal-recuperar-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.modal-recuperar-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #41431B;
+}
+
+.modal-recuperar-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-recuperar-enlace-volver {
+    background: none;
+    border: none;
+    font-size: 11px;
+    color: #41431B;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    font-weight: 500;
+    font-family: inherit;
+}
+
+.modal-recuperar-enlace-volver:hover {
+    color: #1F200B;
+}
+
+.modal-recuperar-input-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.modal-recuperar-input-icon {
+    position: absolute;
+    left: 12px;
+    color: #8E947A;
+    pointer-events: none;
+}
+
+.modal-recuperar-input {
+    width: 100% !important;
+    height: 42px !important;
+    border: 1.5px solid #CCD5AE !important;
+    border-radius: 8px !important;
+    background-color: #FFFFFF !important;
+    padding: 0 12px 0 38px !important;
+    font-family: inherit !important;
+    font-size: 13px !important;
+    color: #2F3112 !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.modal-recuperar-input:focus {
+    border-color: #41431B !important;
+    box-shadow: 0 0 0 3px rgba(65, 67, 27, 0.12) !important;
+    outline: none !important;
+}
+
+.modal-recuperar-input--con-toggle {
+    padding-left: 12px !important;
+    padding-right: 38px !important;
+}
+
+.modal-recuperar-input--codigo {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    text-align: center !important;
+    font-size: 22px !important;
+    letter-spacing: 6px !important;
+    font-weight: 700 !important;
+    font-family: 'Consolas', 'Courier New', monospace !important;
+    color: #41431B !important;
+}
+
+.modal-recuperar-btn-toggle-pwd {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #8E947A;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.modal-recuperar-btn-toggle-pwd:hover {
+    color: #41431B;
+}
+
+.modal-recuperar-pista {
+    font-size: 11px;
+    color: #7D8465;
+    line-height: 1.35;
+}
+
+/* Acciones Inferiores */
+.modal-recuperar-acciones {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.modal-recuperar-btn-secundario {
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #CCD5AE !important;
+    color: #41431B !important;
+    padding: 8px 18px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 12.5px !important;
+    cursor: pointer !important;
+    font-family: inherit !important;
+    transition: all 0.2s ease !important;
+    height: 38px !important;
+}
+
+.modal-recuperar-btn-secundario:hover:not(:disabled) {
+    background-color: #F4F6EE !important;
+    border-color: #41431B !important;
+}
+
+.modal-recuperar-btn-primario {
+    background-color: #FFD400 !important;
+    border: none !important;
+    color: #41431B !important;
+    padding: 8px 22px !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    font-size: 12.5px !important;
+    cursor: pointer !important;
+    font-family: inherit !important;
+    box-shadow: 0 3px 10px rgba(255, 212, 0, 0.35) !important;
+    transition: all 0.2s ease !important;
+    height: 38px !important;
+}
+
+.modal-recuperar-btn-primario:hover:not(:disabled) {
+    background-color: #ECC400 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(255, 212, 0, 0.45) !important;
+}
+
+.modal-recuperar-btn-primario:disabled,
+.modal-recuperar-btn-secundario:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Loader y Spinner */
+.modal-recuperar-loader-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-recuperar-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(65, 67, 27, 0.25);
+    border-top-color: #41431B;
+    border-radius: 50%;
+    display: inline-block;
+    animation: girarRecuperar 0.7s linear infinite;
+}
+
+@keyframes girarRecuperar {
+    to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD (Móviles / Tablets)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .modal-recuperar-dialog {
+        width: 95%;
+        max-width: 95%;
+    }
+
+    .modal-recuperar-cabecera {
+        padding: 22px 18px 14px 18px;
+    }
+
+    .modal-recuperar-cuerpo {
+        padding: 16px 18px 22px 18px;
+    }
+
+    .modal-recuperar-acciones {
+        flex-direction: column-reverse;
+        gap: 8px;
+    }
+
+    .modal-recuperar-acciones button {
+        width: 100% !important;
+    }
+}

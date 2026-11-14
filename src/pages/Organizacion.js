@@ -155,6 +155,7 @@ export default function Organizacion() {
     const [openDatosCloudinary, setOpenDatosCloudinary] = useState(false)
     const { user, setUser } = useAuth()
     const isMediumDevice = useMediaQuery("(max-width : 768px) or (max-width : 1024px)")
+
     const handleCreateOfertaEducativa = async () => {
         setLoading(true)
         const nombre = document.getElementById('nombre_oferta').value
@@ -171,6 +172,10 @@ export default function Organizacion() {
         if (newOferta === 201) {
             mostrarAlerta('Se publicó la oferta educativa exitosamente.', 'exito', '¡Publicación Exitosa!')
             setOpenCreateOfertaEducativa(false)
+            if (escuela?.id) {
+                const data = await findAllByIdEscuela(escuela.id)
+                setOfertasEducativas(data || [])
+            }
         } else if (newOferta === 409) {
             mostrarAlerta('La oferta educativa ya se encuentra registrada.', 'advertencia')
         } else {
@@ -178,13 +183,7 @@ export default function Organizacion() {
         }
         setLoading(false)
     }
-    const [oferta, setOferta] = useState({
-        nombre: '',
-        duracion: '',
-        vision: '',
-        mision: '',
-        foto: ''
-    })
+
     const handlePickLogo = () => {
         setOpenModalFotos(false);
         setTimeout(() => {
@@ -292,6 +291,7 @@ export default function Organizacion() {
             e.target.value = ''
         }
     }
+
     const handleClicUpdateOpen = (open) => {
         if (open === "organización") {
             setOpenDatosOrganizacion(!openDatosOrganizacion)
@@ -344,6 +344,7 @@ export default function Organizacion() {
             setOpenDatosCloudinary(false)
         }
     }
+
     const handleUpdateOrganizacionData = async () => {
         setLoading(true)
         let notificacionData = ''
@@ -389,6 +390,7 @@ export default function Organizacion() {
             navigate(0)
         })
     }
+
     useEffect(() => {
         const organizacionData = async () => {
             if (!id) {
@@ -469,70 +471,35 @@ export default function Organizacion() {
         organizacionData()
         getAfiliaciones()
     }, [id])
+
     const isLargeDevice = useMediaQuery('(min-width:992px) or (min-width: 1400px)');
+
+    // Construcción de la dirección unificada
+    const direccionCompleta = direccion ? [
+        direccion.calle && `Calle ${direccion.calle}`,
+        direccion.numero && `No. ${direccion.numero}`,
+        direccion.colonia && `Col. ${direccion.colonia}`,
+        direccion.codigo_postal && `C.P. ${direccion.codigo_postal}`,
+        direccion.ciudad,
+        direccion.estado,
+        direccion.pais
+    ].filter(Boolean).join(', ') : 'No registrada';
+
     return (
-        <div style={{ marginTop: '100px', marginRight: '50px', width: isMediumDevice ? '100%' : null }}>
+        <div style={{ marginTop: '100px', marginRight: isLargeDevice ? '50px' : '0', width: isMediumDevice ? '100%' : null }}>
             <NavBarAutenticado />
             {
                 isLargeDevice && (
-                    <div style={{ marginTop: '8rem' }}>
-                        <NavUser left='30px' />
-                    </div>
+                    <NavUser left='30px' top='95px' />
                 )
             }
             <div className="editar-perfil-contenedor" style={{ width: '100%' }}>
-                <div className='seccion1-contenedor' style={{ width: isLargeDevice ? '70%' : '100%', marginRight: isLargeDevice ? '1rem' : null }}>
-                    <div className='foto-perfil-contenedor' style={{ marginTop: isMediumDevice ? '20px' : null, width: isMediumDevice ? '100px' : null, height: isMediumDevice ? '100px' : null }}>
-                        <input
-                            id="logo"
-                            style={{ display: 'none' }}
-                            type="file"
-                            accept="image/*"
-                            onChange={handleChangeLogo}
-                        />
-                        <img
-                            src={organizacion?.logo || defaultLogo}
-                            alt={organizacion?.nombre_comercial ? `Logo ${organizacion.nombre_comercial}` : "Logo"}
-                            onError={(e) => {
-                                e.currentTarget.onerror = null;
-                                e.currentTarget.src = defaultLogo;
-                            }}
-                            style={{ backgroundColor: 'white', objectFit: 'cover' }}
-                        />
-                        {
-                            user?.organizacion === organizacion?.id && (
-                                <button
-                                    type="button"
-                                    onClick={() => setOpenModalFotos(true)}
-                                    title="Personalizar foto de perfil o portada"
-                                    style={{
-                                        position: 'absolute',
-                                        bottom: '0px',
-                                        right: '6px',
-                                        width: '38px',
-                                        height: '38px',
-                                        borderRadius: '50%',
-                                        backgroundColor: '#FFD400',
-                                        border: '2.5px solid #FFFFFF',
-                                        boxShadow: '0 3px 8px rgba(0, 0, 0, 0.35)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        zIndex: 10,
-                                        padding: 0
-                                    }}
-                                >
-                                    <img
-                                        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0MTQzMUIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1wZW5jaWwiPjxwYXRoIGQ9Ik0yMS4xNzQgNi44MTJhMSAxIDAgMCAwLTMuOTg2LTMuOTg3TDcuMTcxIDEzLjY1NmEtMiAyIDAgMCAwLS41LjgzNWwtMS4zMjMgNC42MzFhLjUuNSAwIDAgMCAuNjIuNjE5bDQuNjMyLTEuMzIzYTIgMiAwIDAgMCAuODM0LS41MDZsOS44My05LjgzaC4wMDFaIi8+PHBhdGggZD0ibTE1IDUtNCA0Ii8+PC9zdmc+"
-                                        alt="Editar"
-                                        style={{ width: '18px', height: '18px', minWidth: '18px', minHeight: '18px', borderRadius: 0 }}
-                                    />
-                                </button>
-                            )
-                        }
-                    </div>
-                    <div className='img-banner-contenedor' style={{ width: '100%' }}>
+                {/* =========================================================
+                    CABECERA INSTITUCIONAL: BANNER + AVATAR + DATOS PRINCIPALES
+                    ========================================================= */}
+                <div className='org-header-card' style={{ width: isLargeDevice ? '70%' : '100%', marginRight: isLargeDevice ? '1rem' : null }}>
+                    {/* Banner panorámico con overlay */}
+                    <div className='org-banner-wrapper'>
                         <input
                             id="banner"
                             type="file"
@@ -543,60 +510,134 @@ export default function Organizacion() {
                         <img
                             src={organizacion?.banner || defaultBanner}
                             alt="Portada de la Organización"
+                            className="org-banner-img"
                             onError={(e) => {
                                 e.currentTarget.onerror = null;
                                 e.currentTarget.src = defaultBanner;
                             }}
-                            style={{ objectFit: 'cover' }}
                         />
-                    </div>
-                    {
-                        organizacion?.tipo === 'Empresa' && (
-                            <div style={{ display: 'flex', position: 'absolute', justifyContent: 'end', width: isLargeDevice ? '65%' : '100%' }}>
-                                <div
-                                    onClick={() => { setOpenAfiliaciones(true) }}
-                                    style={{
-                                        width: '40px', height: '40px', border: 'none', backgroundColor: 'transparent', flexShrink: 0, cursor: 'pointer'
-                                    }}
+                        <div className="org-banner-overlay" />
+                        {
+                            user?.organizacion === organizacion?.id && (
+                                <button
+                                    type="button"
+                                    onClick={() => setOpenModalFotos(true)}
+                                    className="org-btn-edit-media"
+                                    title="Personalizar portada o foto"
                                 >
-                                    <img
-                                        src={afiliaciones?.length <= 0 ? verifiedImg : notVerifiedImg}
-                                        style={{
-                                            backgroundColor: `${afiliaciones?.length <= 0 ? '#AEB784' : '#41431B'}`,
-                                            width: '100%', height: '100%', flexShrink: 0, borderRadius: '100%'
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                        )
-                    }
-                    <div className='contenedor-informacion-botones' >
-                        <div className='informacion-contenedor'>
-                            <h1 style={{ textAlign: isMediumDevice ? 'center' : null }}>{organizacion?.nombre_comercial || (loading ? 'Cargando información...' : 'Organización no disponible')}</h1>
-                            <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'center', marginTop: '4px' }}>
-                                <p style={{ maxWidth: '85%', textAlign: 'center', margin: '0 auto', color: '#555', fontSize: '15px', lineHeight: '1.4' }}>{organizacion?.descripcion || (!loading && !organizacion ? 'No se pudo obtener la información de esta organización.' : '')}</p>
-                            </div>
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                        <circle cx="12" cy="13" r="4"></circle>
+                                    </svg>
+                                    Cambiar Portada
+                                </button>
+                            )
+                        }
+                    </div>
+
+                    {/* Avatar sobrepuesto con anillo y badge */}
+                    <div className='org-avatar-container'>
+                        <div className='org-avatar-ring'>
+                            <input
+                                id="logo"
+                                style={{ display: 'none' }}
+                                type="file"
+                                accept="image/*"
+                                onChange={handleChangeLogo}
+                            />
+                            <img
+                                src={organizacion?.logo || defaultLogo}
+                                alt={organizacion?.nombre_comercial ? `Logo ${organizacion.nombre_comercial}` : "Logo"}
+                                className="org-avatar-img"
+                                onError={(e) => {
+                                    e.currentTarget.onerror = null;
+                                    e.currentTarget.src = defaultLogo;
+                                }}
+                            />
+                            {
+                                user?.organizacion === organizacion?.id && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setOpenModalFotos(true)}
+                                        className="org-avatar-badge-btn"
+                                        title="Personalizar logo de la organización"
+                                    >
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#41431B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M12 20h9"></path>
+                                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                        </svg>
+                                    </button>
+                                )
+                            }
                         </div>
                     </div>
+
+                    {/* Título, Badges y Resumen */}
+                    <div className='org-header-body'>
+                        <div className='org-header-top-row'>
+                            <div className='org-header-titles'>
+                                <h1>{organizacion?.nombre_comercial || (loading ? 'Cargando información...' : 'Organización')}</h1>
+                                <div className='org-badges-row'>
+                                    {organizacion?.tipo && (
+                                        <span className='org-badge-pill org-badge-tipo'>
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M3 21h18M3 7v1a3 3 0 0 0 6 0V7m0 1a3 3 0 0 0 6 0V7m0 1a3 3 0 0 0 6 0V7H3l2-4h14l2 4"></path>
+                                            </svg>
+                                            {organizacion.tipo}
+                                        </span>
+                                    )}
+                                    {organizacion?.sector && (
+                                        <span className='org-badge-pill org-badge-sector'>
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <polyline points="12 6 12 12 16 14"></polyline>
+                                            </svg>
+                                            {organizacion.sector}
+                                        </span>
+                                    )}
+                                    {organizacion?.tipo === 'Empresa' && (
+                                        <span
+                                            className='org-badge-pill org-badge-afiliacion'
+                                            onClick={() => setOpenAfiliaciones(true)}
+                                            title="Ver estado de afiliación con Cámaras de Comercio"
+                                        >
+                                            <img
+                                                src={afiliaciones?.length > 0 ? verifiedImg : notVerifiedImg}
+                                                alt="Afiliación"
+                                                style={{ width: '14px', height: '14px' }}
+                                            />
+                                            {afiliaciones?.length > 0 ? 'Afiliada a Cámara' : 'Sin Afiliación'}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {organizacion?.descripcion && (
+                            <p className='org-header-description'>{organizacion.descripcion}</p>
+                        )}
+                    </div>
                 </div>
+
+                {/* Caso de error / Organización no encontrada */}
                 {
                     !organizacion && !loading ? (
-                        <div className="seccion1-contenedor" style={{ display: 'flex', flexDirection: 'column', width: isLargeDevice ? '70%' : '100%', marginTop: '1rem', justifyContent: 'center', alignItems: 'center', padding: '3rem 1.5rem', marginRight: isLargeDevice ? '1rem' : null, textAlign: 'center', backgroundColor: '#FFFFFF', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.06)' }}>
-                            <div style={{ width: '60px', height: '60px', borderRadius: '50%', backgroundColor: '#F4F5F0', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+                        <div className="org-card-seccion" style={{ display: 'flex', flexDirection: 'column', width: isLargeDevice ? '70%' : '100%', marginTop: '1.5rem', justifyContent: 'center', alignItems: 'center', padding: '3.5rem 1.5rem', marginRight: isLargeDevice ? '1rem' : null, textAlign: 'center' }}>
+                            <div style={{ width: '64px', height: '64px', borderRadius: '50%', backgroundColor: '#F4F5F0', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
                                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#41431B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="12" y1="8" x2="12" y2="12"></line>
                                     <line x1="12" y1="16" x2="12.01" y2="16"></line>
                                 </svg>
                             </div>
-                            <h3 style={{ color: '#41431B', marginBottom: '0.5rem', fontFamily: 'Poppins' }}>Organización no encontrada</h3>
-                            <p style={{ color: '#666', maxWidth: '480px', marginBottom: '1.5rem', fontSize: '14px' }}>
+                            <h3 style={{ color: '#41431B', marginBottom: '0.5rem', fontFamily: 'Poppins', fontWeight: 700 }}>Organización no encontrada</h3>
+                            <p style={{ color: '#666', maxWidth: '480px', marginBottom: '1.5rem', fontSize: '14px', lineHeight: 1.5 }}>
                                 No pudimos localizar la organización solicitada o el enlace es incorrecto. Por favor verifica la dirección web o vuelve a la página anterior.
                             </p>
                             <button
                                 type="button"
                                 className="btn-accion-2"
-                                style={{ padding: '8px 28px' }}
+                                style={{ padding: '9px 30px' }}
                                 onClick={() => {
                                     if (window.history.length > 1) {
                                         navigate(-1)
@@ -610,676 +651,720 @@ export default function Organizacion() {
                         </div>
                     ) : null
                 }
+
+                {/* =========================================================
+                    SECCIÓN: INFORMACIÓN INSTITUCIONAL (MODO LECTURA)
+                    ========================================================= */}
                 {
                     organizacion && openDatos && (
-                        <div className="seccion1-contenedor" style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', width: isLargeDevice ? '70%' : '100%', marginTop: '1rem', justifyContent: 'center', alignItems: 'center', marginRight: isLargeDevice ? '1rem' : null }}>
-                            <div className="datos" style={{ backgroundColor: '#41431B', width: '100%', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <h1 style={{ color: 'white' }}>INFORMACIÓN</h1>
+                        <div className="org-card-seccion" style={{ width: isLargeDevice ? '70%' : '100%', marginTop: '1.5rem', marginRight: isLargeDevice ? '1rem' : null }}>
+                            {/* Cabecera de la sección con degradado y acción */}
+                            <div className="org-section-header">
+                                <div className="org-section-title-wrapper">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD400" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                    </svg>
+                                    <h2>INFORMACIÓN INSTITUCIONAL</h2>
+                                </div>
+                                {
+                                    user.organizacion === organizacion?.id && (
+                                        <button
+                                            type="button"
+                                            className="org-btn-edit-seccion"
+                                            onClick={() => setOpenDatos(false)}
+                                        >
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                            </svg>
+                                            EDITAR INFORMACIÓN
+                                        </button>
+                                    )
+                                }
                             </div>
-                            <div style={{ padding: '1rem', display: 'flex', gap: '1.2rem', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
-                                <div style={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
-                                    {
-                                        openDatos && user.organizacion === organizacion?.id && (
-                                            <button
-                                                className="btn-accion-2"
-                                                style={{ width: '100px', height: '25px' }}
-                                                onClick={() => {
-                                                    setOpenDatos(false)
-                                                }}
-                                            ><strong>EDITAR</strong></button>
-                                        )
-                                    }
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Tipo: </strong>
-                                        {
-                                            organizacion?.tipo
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Sector: </strong>
-                                        {
-                                            organizacion?.sector
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Tamaño: </strong>
-                                        {
-                                            organizacion?.tamaño
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Giro: </strong>
-                                        {
-                                            organizacion?.giro
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>RFC: </strong>
-                                        {
-                                            organizacion?.rfc
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Correo: </strong>
-                                        {
-                                            contacto?.correo
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Telefono: </strong>
-                                        {
-                                            contacto?.telefono
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Calle: </strong>
-                                        {
-                                            direccion?.calle
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Numero: </strong>
-                                        {
-                                            direccion?.numero
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Colonia: </strong>
-                                        {
-                                            direccion?.colonia
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Codigo Postal: </strong>
-                                        {
-                                            direccion?.codigo_postal
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Ciudad: </strong>
-                                        {
-                                            direccion?.ciudad
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Estado: </strong>
-                                        {
-                                            direccion?.estado
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="tarjeta-dato">
-                                    <h6>
-                                        <strong>Pais: </strong>
-                                        {
-                                            direccion?.pais
-                                        }
-                                    </h6>
-                                </div>
-                                {
-                                    camara && (
-                                        <div className="tarjeta-dato">
-                                            <h6>
-                                                <strong>Nombre: </strong>
-                                                {
-                                                    camara?.nombre
-                                                }
-                                            </h6>
+
+                            {/* Contenido agrupado semánticamente */}
+                            <div className="org-info-container">
+                                {/* Bloque 1: Datos Generales e Identidad */}
+                                <div className="org-category-block">
+                                    <div className="org-category-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                        Identidad y Operación
+                                    </div>
+                                    <div className="org-category-grid">
+                                        <div className="org-dato-card">
+                                            <div className="org-dato-icon">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <rect x="3" y="3" width="7" height="7"></rect>
+                                                    <rect x="14" y="3" width="7" height="7"></rect>
+                                                    <rect x="14" y="14" width="7" height="7"></rect>
+                                                    <rect x="3" y="14" width="7" height="7"></rect>
+                                                </svg>
+                                            </div>
+                                            <div className="org-dato-content">
+                                                <span className="org-dato-label">Tipo de Entidad</span>
+                                                <span className="org-dato-val">{organizacion?.tipo || 'No especificado'}</span>
+                                            </div>
                                         </div>
 
-                                    )
-                                }
-                                {
-                                    camara && (
-                                        <div className="tarjeta-dato">
-                                            <h6>
-                                                <strong>Presidente: </strong>
-                                                {
-                                                    camara?.presidente
-                                                }
-                                            </h6>
+                                        <div className="org-dato-card">
+                                            <div className="org-dato-icon">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                                </svg>
+                                            </div>
+                                            <div className="org-dato-content">
+                                                <span className="org-dato-label">Sector Productivo</span>
+                                                <span className="org-dato-val">{organizacion?.sector || 'No especificado'}</span>
+                                            </div>
                                         </div>
 
-                                    )
-                                }
-                                {
-                                    empresa && (
-                                        <div className="tarjeta-dato">
-                                            <h6>
-                                                <strong>Razon Social: </strong>
-                                                {
-                                                    empresa?.razon_social
-                                                }
-                                            </h6>
+                                        <div className="org-dato-card">
+                                            <div className="org-dato-icon">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                                </svg>
+                                            </div>
+                                            <div className="org-dato-content">
+                                                <span className="org-dato-label">Giro de Actividad</span>
+                                                <span className="org-dato-val">{organizacion?.giro || 'No especificado'}</span>
+                                            </div>
                                         </div>
 
-                                    )
-                                }
-                                {
-                                    empresa && (
-                                        <div className="tarjeta-dato">
-                                            <h6>
-                                                <strong>Regimen Fiscal: </strong>
-                                                {
-                                                    empresa?.regimen_fiscal
-                                                }
-                                            </h6>
+                                        <div className="org-dato-card">
+                                            <div className="org-dato-icon">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                                    <circle cx="9" cy="7" r="4"></circle>
+                                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                                </svg>
+                                            </div>
+                                            <div className="org-dato-content">
+                                                <span className="org-dato-label">Tamaño / Personal</span>
+                                                <span className="org-dato-val">{organizacion?.tamaño ? `${organizacion.tamaño} integrantes` : 'No especificado'}</span>
+                                            </div>
                                         </div>
 
-                                    )
-                                }
-                                {
-                                    empresa && (
-                                        <div className="tarjeta-dato">
-                                            <h6>
-                                                <strong>Direccion Fiscal: </strong>
-                                                {
-                                                    empresa?.direccion_fiscal
-                                                }
-                                            </h6>
+                                        <div className="org-dato-card">
+                                            <div className="org-dato-icon">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                                </svg>
+                                            </div>
+                                            <div className="org-dato-content">
+                                                <span className="org-dato-label">RFC Institucional</span>
+                                                <span className="org-dato-val" style={{ letterSpacing: '0.5px' }}>{organizacion?.rfc || 'No registrado'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Bloque 2: Contacto y Comunicación Oficial */}
+                                <div className="org-category-block">
+                                    <div className="org-category-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                        </svg>
+                                        Contacto y Canales Oficiales
+                                    </div>
+                                    <div className="org-category-grid">
+                                        <div className="org-dato-card">
+                                            <div className="org-dato-icon">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                                </svg>
+                                            </div>
+                                            <div className="org-dato-content">
+                                                <span className="org-dato-label">Correo Electrónico</span>
+                                                {contacto?.correo ? (
+                                                    <a href={`mailto:${contacto.correo}`} className="org-dato-val org-dato-link" title="Enviar correo">
+                                                        {contacto.correo}
+                                                    </a>
+                                                ) : (
+                                                    <span className="org-dato-val">No registrado</span>
+                                                )}
+                                            </div>
                                         </div>
 
-                                    )
-                                }
-                                {
-                                    escuela && (
-                                        <div className="tarjeta-dato">
-                                            <h6>
-                                                <strong>Tipo Institucion: </strong>
-                                                {
-                                                    escuela?.tipo_institucion
-                                                }
-                                            </h6>
+                                        <div className="org-dato-card">
+                                            <div className="org-dato-icon">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                                </svg>
+                                            </div>
+                                            <div className="org-dato-content">
+                                                <span className="org-dato-label">Teléfono Directo</span>
+                                                {contacto?.telefono ? (
+                                                    <a href={`tel:${contacto.telefono}`} className="org-dato-val org-dato-link" title="Llamar">
+                                                        {contacto.telefono}
+                                                    </a>
+                                                ) : (
+                                                    <span className="org-dato-val">No registrado</span>
+                                                )}
+                                            </div>
                                         </div>
 
-                                    )
-                                }
-                                {
-                                    escuela && (
-                                        <div className="tarjeta-dato">
-                                            <h6>
-                                                <strong>Sitio Web: </strong>
-                                                <a href={
-                                                    escuela?.url_sitio
-                                                }>IR</a>
-                                            </h6>
-                                        </div>
+                                        {escuela?.url_sitio && (
+                                            <div className="org-dato-card">
+                                                <div className="org-dato-icon">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <circle cx="12" cy="12" r="10"></circle>
+                                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                                    </svg>
+                                                </div>
+                                                <div className="org-dato-content">
+                                                    <span className="org-dato-label">Portal Web Oficial</span>
+                                                    <a href={escuela.url_sitio.startsWith('http') ? escuela.url_sitio : `https://${escuela.url_sitio}`} target="_blank" rel="noopener noreferrer" className="org-dato-val org-dato-link">
+                                                        Visitar Sitio
+                                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                                            <polyline points="15 3 21 3 21 9"></polyline>
+                                                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
 
-                                    )
-                                }
+                                {/* Bloque 3: Ubicación y Domicilio Geográfico */}
+                                <div className="org-category-block">
+                                    <div className="org-category-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                            <circle cx="12" cy="10" r="3"></circle>
+                                        </svg>
+                                        Ubicación Geográfica
+                                    </div>
+                                    <div className="org-address-box">
+                                        <div className="org-dato-icon" style={{ backgroundColor: '#ECEFD9', color: '#41431B' }}>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                                <circle cx="12" cy="10" r="3"></circle>
+                                            </svg>
+                                        </div>
+                                        <div style={{ flex: 1 }}>
+                                            <span className="org-dato-label">Dirección Fiscal / Sede Operativa</span>
+                                            <p className="org-address-text">
+                                                {direccionCompleta}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Bloque 4: Datos Específicos por Tipo de Entidad */}
+                                {(escuela || empresa || camara) && (
+                                    <div className="org-category-block">
+                                        <div className="org-category-title">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                            </svg>
+                                            Datos de {organizacion?.tipo || 'Entidad'}
+                                        </div>
+                                        <div className="org-category-grid">
+                                            {escuela && (
+                                                <div className="org-dato-card">
+                                                    <div className="org-dato-icon">
+                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                                            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div className="org-dato-content">
+                                                        <span className="org-dato-label">Tipo de Institución</span>
+                                                        <span className="org-dato-val">{escuela?.tipo_institucion || 'No especificado'}</span>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {empresa && (
+                                                <>
+                                                    <div className="org-dato-card">
+                                                        <div className="org-dato-icon">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                                                <circle cx="8.5" cy="7" r="4"></circle>
+                                                                <polyline points="17 11 19 13 23 9"></polyline>
+                                                            </svg>
+                                                        </div>
+                                                        <div className="org-dato-content">
+                                                            <span className="org-dato-label">Razón Social</span>
+                                                            <span className="org-dato-val">{empresa?.razon_social || 'No registrada'}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="org-dato-card">
+                                                        <div className="org-dato-icon">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                                                            </svg>
+                                                        </div>
+                                                        <div className="org-dato-content">
+                                                            <span className="org-dato-label">Régimen Fiscal</span>
+                                                            <span className="org-dato-val">{empresa?.regimen_fiscal || 'No registrado'}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="org-dato-card" style={{ gridColumn: 'span 2' }}>
+                                                        <div className="org-dato-icon">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                                                <circle cx="12" cy="10" r="3"></circle>
+                                                            </svg>
+                                                        </div>
+                                                        <div className="org-dato-content">
+                                                            <span className="org-dato-label">Dirección Fiscal Registrada</span>
+                                                            <span className="org-dato-val">{empresa?.direccion_fiscal || 'No registrada'}</span>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
+
+                                            {camara && (
+                                                <>
+                                                    <div className="org-dato-card">
+                                                        <div className="org-dato-icon">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                            </svg>
+                                                        </div>
+                                                        <div className="org-dato-content">
+                                                            <span className="org-dato-label">Nombre Oficial de Cámara</span>
+                                                            <span className="org-dato-val">{camara?.nombre || 'No registrado'}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="org-dato-card">
+                                                        <div className="org-dato-icon">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                                <circle cx="12" cy="7" r="4"></circle>
+                                                            </svg>
+                                                        </div>
+                                                        <div className="org-dato-content">
+                                                            <span className="org-dato-label">Presidente / Representante</span>
+                                                            <span className="org-dato-val">{camara?.presidente || 'No registrado'}</span>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )
                 }
+
+                {/* =========================================================
+                    SECCIÓN: INFORMACIÓN INSTITUCIONAL (MODO EDICIÓN)
+                    ========================================================= */}
                 {
                     !openDatos && organizacion && (
-                        <div className="seccion1-contenedor" style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', width: isLargeDevice ? '70%' : '100%', marginTop: '1rem', justifyContent: 'center', alignItems: 'start', marginRight: isLargeDevice ? '1rem' : null }}>
-                            <div className="datos" style={{ backgroundColor: '#41431B', width: '100%', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <h1 style={{ color: 'white' }}>DATOS</h1>
-                            </div>
-                            <div
-                                className="contenedor-datos-g"
-                            >
-                                <div
-                                    className="titulo-datos"
-                                >
-                                    <h1>Organización</h1>
-                                    <img src={url_icon} onClick={() => { handleClicUpdateOpen("organización") }} />
+                        <div className="org-card-seccion" style={{ width: isLargeDevice ? '70%' : '100%', marginTop: '1.5rem', marginRight: isLargeDevice ? '1rem' : null }}>
+                            <div className="org-section-header">
+                                <div className="org-section-title-wrapper">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD400" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    <h2>MODIFICAR DATOS DEL PERFIL</h2>
                                 </div>
-                                {
-                                    openDatosOrganizacion && (
-                                        <div
-                                            className="contenedor-datos-i"
-                                        >
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Nombre comercial: </h6>
-                                                <input type="text" placeholder="Nombre comercial" defaultValue={organizacion?.nombre_comercial} onChange={(e) => { setOrganizacion({ ...organizacion, nombre_comercial: e.target.value }) }} />
+                            </div>
+
+                            <div className="org-edit-panel">
+                                {/* Acordeón 1: Organización */}
+                                <div className="org-edit-accordion">
+                                    <div className="org-edit-accordion-header" onClick={() => handleClicUpdateOpen("organización")}>
+                                        <h3>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                            </svg>
+                                            Datos de la Organización
+                                        </h3>
+                                        <img src={url_icon} alt="toggle" style={{ transform: openDatosOrganizacion ? 'rotate(180deg)' : 'none', width: '20px' }} />
+                                    </div>
+                                    {openDatosOrganizacion && (
+                                        <div className="org-edit-accordion-body">
+                                            <div className="org-field-group">
+                                                <label>Nombre comercial:</label>
+                                                <input type="text" placeholder="Ej. Instituto Tecnológico" defaultValue={organizacion?.nombre_comercial} onChange={(e) => { setOrganizacion({ ...organizacion, nombre_comercial: e.target.value }) }} />
                                             </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Descripción: </h6>
-                                                <textarea type="text" placeholder="Descripcion" defaultValue={organizacion?.descripcion} onChange={(e) => { setOrganizacion({ ...organizacion, descripcion: e.target.value }) }} />
-                                            </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Tipo: </h6>
+                                            <div className="org-field-group">
+                                                <label>Tipo de entidad:</label>
                                                 <select onChange={(e) => { setSelectTipo(e.target.value); setSelectSector('SECTOR') }}>
-                                                    <option selected={organizacion?.tipo === 'Escuela'} disabled={organizacion?.tipo != 'Escuela'}>
+                                                    <option selected={organizacion?.tipo === 'Escuela'} disabled={organizacion?.tipo !== 'Escuela'}>
                                                         Escuela
                                                     </option>
-                                                    <option selected={organizacion?.tipo === 'Empresa'} disabled={organizacion?.tipo != 'Empresa'}>
+                                                    <option selected={organizacion?.tipo === 'Empresa'} disabled={organizacion?.tipo !== 'Empresa'}>
                                                         Empresa
                                                     </option>
-                                                    <option selected={organizacion?.tipo === 'Cámara de Comercio'} disabled={organizacion?.tipo != 'Cámara de Comercio'}>
+                                                    <option selected={organizacion?.tipo === 'Cámara de Comercio'} disabled={organizacion?.tipo !== 'Cámara de Comercio'}>
                                                         Cámara de Comercio
                                                     </option>
-                                                    {
-                                                        user.tipo === 'Comité' && (
-                                                            <option selected={organizacion?.tipo === 'Comité'}>
-                                                                Comité (ADMINISTRADOR)
-                                                            </option>
-                                                        )
-                                                    }
+                                                    {user.tipo === 'Comité' && (
+                                                        <option selected={organizacion?.tipo === 'Comité'}>
+                                                            Comité (ADMINISTRADOR)
+                                                        </option>
+                                                    )}
                                                 </select>
                                             </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                {
-                                                    user.tipo != 'Comité' && (
-                                                        <h6 style={{ margin: 0, padding: 0 }}>Sector: </h6>
-                                                    )
-                                                }
-                                                {
-                                                    user.tipo != 'Comité' && (
-                                                        <select onChange={(e) => { setSelectSector(e.target.value); setOrganizacion({ ...organizacion, sector: e.target.value }) }}>
-                                                            <option selected>
-                                                                SECTOR
+                                            {user.tipo !== 'Comité' && (
+                                                <div className="org-field-group">
+                                                    <label>Sector:</label>
+                                                    <select onChange={(e) => { setSelectSector(e.target.value); setOrganizacion({ ...organizacion, sector: e.target.value }) }}>
+                                                        <option>SECTOR</option>
+                                                        {selectTipo !== 'TIPO' && sectores.filter(s => s.tipo === selectTipo).map(s => (
+                                                            <option key={s.id} selected={organizacion?.sector === s.nombre}>
+                                                                {s.nombre}
                                                             </option>
-                                                            {
-                                                                selectTipo != 'TIPO' && sectores.filter(seleccionado => seleccionado.tipo === selectTipo).map(
-                                                                    s => <option key={s.id} selected={organizacion?.sector === s.nombre}>
-                                                                        {s.nombre}
-                                                                    </option>
-                                                                )
-                                                            }
-                                                        </select>
-                                                    )
-                                                }
-                                            </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                {
-                                                    user.tipo != 'Comité' && (
-                                                        <h6 style={{ margin: 0, padding: 0 }}>Giro: </h6>
-                                                    )
-                                                }
-                                                {
-                                                    user.tipo != 'Comité' && (
-                                                        <select onChange={(e) => { setOrganizacion({ ...organizacion, giro: e.target.value }) }}>
-                                                            <option>
-                                                                GIRO
-                                                            </option>
-                                                            {
-                                                                selectTipo && selectSector && sectores.filter(
-                                                                    s => s.tipo === selectTipo && s.nombre === selectSector
-                                                                ).map(
-                                                                    s => {
-                                                                        const giros = s.giros
-                                                                        return giros.map(
-                                                                            g => <option selected={organizacion?.giro === g.nombre}>{g.nombre}</option>
-                                                                        )
-                                                                    }
-                                                                )
-                                                            }
-                                                        </select>
-                                                    )
-                                                }
-                                            </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Tamaño: </h6>
-                                                <input type="number" placeholder="Tamaño" defaultValue={organizacion?.tamaño} onChange={(e) => { setOrganizacion({ ...organizacion, tamaño: e.target.value }) }} />
-                                            </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>RFC: </h6>
-                                                <input type="text" placeholder="RFC" defaultValue={organizacion?.rfc} onChange={(e) => { setOrganizacion({ ...organizacion, rfc: e.target.value }) }} />
-                                            </div>
-                                        </div>
-                                    )
-                                }
-                            </div>
-                            {
-                                user.tipo != 'Comité' && (
-                                    <div
-                                        className="contenedor-datos-g"
-                                    >
-                                        <div
-                                            className="titulo-datos"
-                                        >
-                                            <h1>Extra</h1>
-                                            <img src={url_icon} onClick={() => { handleClicUpdateOpen("extra") }} />
-                                        </div>
-                                        {
-                                            openDatosExtra && (
-                                                <div
-                                                    className="contenedor-datos-i"
-                                                >
-                                                    {
-                                                        selectTipo === 'Empresa' && (
-                                                            <div
-                                                                className="cuerpo-datos"
-                                                            >
-                                                                <h6 style={{ margin: 0, padding: 0 }}>Razón social: </h6>
-                                                                <input placeholder="Razón social" defaultValue={empresa?.razon_social} onChange={(e) => { setEmpresa({ ...empresa, razon_social: e.target.value }) }} />
-                                                            </div>
-                                                        )
-                                                    }
-                                                    {
-                                                        selectTipo === 'Empresa' && (
-                                                            <div
-                                                                className="cuerpo-datos"
-                                                            >
-                                                                <h6 style={{ margin: 0, padding: 0 }}>Regimen fiscal: </h6>
-                                                                <input placeholder="Regimen fiscal" defaultValue={empresa?.regimen_fiscal} onChange={(e) => { setEmpresa({ ...empresa, regimen_fiscal: e.target.value }) }} />
-                                                            </div>
-                                                        )
-                                                    }
-                                                    {
-                                                        selectTipo === 'Empresa' && (
-                                                            <div
-                                                                className="cuerpo-datos"
-                                                            >
-                                                                <h6 style={{ margin: 0, padding: 0 }}>Dirección fiscal: </h6>
-                                                                <input placeholder="Dirección fiscal" defaultValue={empresa?.direccion_fiscal} onChange={(e) => { setEmpresa({ ...empresa, direccion_fiscal: e.target.value }) }} />
-                                                            </div>
-                                                        )
-                                                    }
-                                                    {
-                                                        selectTipo === 'Escuela' && (
-                                                            <div
-                                                                className="cuerpo-datos"
-                                                            >
-                                                                <h6 style={{ margin: 0, padding: 0 }}>Tipo de Institución: </h6>
-                                                                <select onChange={(e) => { setEscuela({ ...escuela, tipo_institucion: e.target.value }) }}>
-                                                                    <option>TIPO</option>
-                                                                    <option selected={escuela?.tipo_institucion === 'Pública'}>Publica</option>
-                                                                    <option selected={escuela?.tipo_institucion === 'Privada'}>Privada</option>
-                                                                </select>
-                                                            </div>
-                                                        )
-                                                    }
-                                                    {
-                                                        selectTipo === 'Escuela' && (
-                                                            <div
-                                                                className="cuerpo-datos"
-                                                            >
-                                                                <h6 style={{ margin: 0, padding: 0 }}>URL de Sitio Oficial: </h6>
-                                                                <input placeholder="Sitio web" defaultValue={escuela?.url_sitio} onChange={(e) => { setEscuela({ ...escuela, url_sitio: e.target.value }) }} />
-                                                            </div>
-                                                        )
-                                                    }
-
-                                                    {
-                                                        selectTipo === 'Cámara de Comercio' && (
-                                                            <div
-                                                                className="cuerpo-datos"
-                                                            >
-                                                                <h6 style={{ margin: 0, padding: 0 }}>Nombre: </h6>
-                                                                <input placeholder="Nombre" defaultValue={camara?.nombre} onChange={(e) => { setCarama({ ...camara, nombre: e.target.value }) }} />
-                                                            </div>
-                                                        )
-                                                    }
-                                                    {
-                                                        selectTipo === 'Cámara de Comercio' && (
-                                                            <div
-                                                                className="cuerpo-datos"
-                                                            >
-                                                                <h6 style={{ margin: 0, padding: 0 }}>Nombre del presidente: </h6>
-                                                                <input placeholder="Presidente" defaultValue={camara?.presidente} onChange={(e) => { setCarama({ ...camara, presidente: e.target.value }) }} />
-                                                            </div>
-                                                        )
-                                                    }
-
+                                                        ))}
+                                                    </select>
                                                 </div>
-                                            )
-                                        }
-                                    </div>
-                                )
-                            }
-                            <div
-                                className="contenedor-datos-g"
-                            >
-                                <div
-                                    className="titulo-datos"
-                                >
-                                    <h1>Contacto</h1>
-                                    <img src={url_icon} onClick={() => { handleClicUpdateOpen("contacto") }} />
-                                </div>
-                                {
-                                    openDatosContacto && (
-                                        <div
-                                            className="contenedor-datos-i"
-                                        >
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Correo: </h6>
-                                                <input type="email" placeholder="Corre" defaultValue={contacto?.correo} onChange={(e) => { setContacto({ ...contacto, correo: e.target.value }) }} />
+                                            )}
+                                            {user.tipo !== 'Comité' && (
+                                                <div className="org-field-group">
+                                                    <label>Giro:</label>
+                                                    <select onChange={(e) => { setOrganizacion({ ...organizacion, giro: e.target.value }) }}>
+                                                        <option>GIRO</option>
+                                                        {selectTipo && selectSector && sectores.filter(s => s.tipo === selectTipo && s.nombre === selectSector).map(s => (
+                                                            s.giros.map(g => (
+                                                                <option key={g.id} selected={organizacion?.giro === g.nombre}>{g.nombre}</option>
+                                                            ))
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            )}
+                                            <div className="org-field-group">
+                                                <label>Tamaño (Nº empleados/integrantes):</label>
+                                                <input type="number" placeholder="Ej. 50" defaultValue={organizacion?.tamaño} onChange={(e) => { setOrganizacion({ ...organizacion, tamaño: e.target.value }) }} />
                                             </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Telefono: </h6>
-                                                <input type="text" placeholder="Telefono" defaultValue={contacto?.telefono} onChange={(e) => { setContacto({ ...contacto, telefono: e.target.value }) }} />
+                                            <div className="org-field-group">
+                                                <label>RFC:</label>
+                                                <input type="text" placeholder="Registro Federal de Contribuyentes" defaultValue={organizacion?.rfc} onChange={(e) => { setOrganizacion({ ...organizacion, rfc: e.target.value }) }} />
+                                            </div>
+                                            <div className="org-field-group full-width">
+                                                <label>Descripción institucional:</label>
+                                                <textarea placeholder="Describe brevemente la misión y actividades de tu organización..." defaultValue={organizacion?.descripcion} onChange={(e) => { setOrganizacion({ ...organizacion, descripcion: e.target.value }) }} />
                                             </div>
                                         </div>
-                                    )
-                                }
-                            </div>
-                            <div
-                                className="contenedor-datos-g"
-                            >
-                                <div
-                                    className="titulo-datos"
-                                >
-                                    <h1>Seguridad</h1>
-                                    <img src={url_icon} onClick={() => { handleClicUpdateOpen("seguridad") }} />
+                                    )}
+                                </div>
 
-                                </div>
-                                {
-                                    openDatosSeguridad && (
-                                        <div
-                                            className="contenedor-datos-i"
-                                        >
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Contraseña:</h6>
-                                                <input type="password" placeholder="Nueva contraseña" id="contrasenia" />
+                                {/* Acordeón 2: Datos Específicos (Extra) */}
+                                {user.tipo !== 'Comité' && (
+                                    <div className="org-edit-accordion">
+                                        <div className="org-edit-accordion-header" onClick={() => handleClicUpdateOpen("extra")}>
+                                            <h3>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                </svg>
+                                                Datos Específicos ({selectTipo})
+                                            </h3>
+                                            <img src={url_icon} alt="toggle" style={{ transform: openDatosExtra ? 'rotate(180deg)' : 'none', width: '20px' }} />
+                                        </div>
+                                        {openDatosExtra && (
+                                            <div className="org-edit-accordion-body">
+                                                {selectTipo === 'Empresa' && (
+                                                    <>
+                                                        <div className="org-field-group">
+                                                            <label>Razón social:</label>
+                                                            <input placeholder="Razón social oficial" defaultValue={empresa?.razon_social} onChange={(e) => { setEmpresa({ ...empresa, razon_social: e.target.value }) }} />
+                                                        </div>
+                                                        <div className="org-field-group">
+                                                            <label>Régimen fiscal:</label>
+                                                            <input placeholder="Régimen fiscal" defaultValue={empresa?.regimen_fiscal} onChange={(e) => { setEmpresa({ ...empresa, regimen_fiscal: e.target.value }) }} />
+                                                        </div>
+                                                        <div className="org-field-group full-width">
+                                                            <label>Dirección fiscal:</label>
+                                                            <input placeholder="Dirección fiscal completa" defaultValue={empresa?.direccion_fiscal} onChange={(e) => { setEmpresa({ ...empresa, direccion_fiscal: e.target.value }) }} />
+                                                        </div>
+                                                    </>
+                                                )}
+                                                {selectTipo === 'Escuela' && (
+                                                    <>
+                                                        <div className="org-field-group">
+                                                            <label>Tipo de Institución:</label>
+                                                            <select onChange={(e) => { setEscuela({ ...escuela, tipo_institucion: e.target.value }) }}>
+                                                                <option>TIPO</option>
+                                                                <option selected={escuela?.tipo_institucion === 'Pública'}>Pública</option>
+                                                                <option selected={escuela?.tipo_institucion === 'Privada'}>Privada</option>
+                                                            </select>
+                                                        </div>
+                                                        <div className="org-field-group">
+                                                            <label>URL de Sitio Web Oficial:</label>
+                                                            <input placeholder="https://ejemplo.edu.mx" defaultValue={escuela?.url_sitio} onChange={(e) => { setEscuela({ ...escuela, url_sitio: e.target.value }) }} />
+                                                        </div>
+                                                    </>
+                                                )}
+                                                {selectTipo === 'Cámara de Comercio' && (
+                                                    <>
+                                                        <div className="org-field-group">
+                                                            <label>Nombre de la Cámara:</label>
+                                                            <input placeholder="Nombre oficial" defaultValue={camara?.nombre} onChange={(e) => { setCarama({ ...camara, nombre: e.target.value }) }} />
+                                                        </div>
+                                                        <div className="org-field-group">
+                                                            <label>Nombre del presidente en turno:</label>
+                                                            <input placeholder="Nombre completo" defaultValue={camara?.presidente} onChange={(e) => { setCarama({ ...camara, presidente: e.target.value }) }} />
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Acordeón 3: Contacto */}
+                                <div className="org-edit-accordion">
+                                    <div className="org-edit-accordion-header" onClick={() => handleClicUpdateOpen("contacto")}>
+                                        <h3>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                            </svg>
+                                            Información de Contacto
+                                        </h3>
+                                        <img src={url_icon} alt="toggle" style={{ transform: openDatosContacto ? 'rotate(180deg)' : 'none', width: '20px' }} />
+                                    </div>
+                                    {openDatosContacto && (
+                                        <div className="org-edit-accordion-body">
+                                            <div className="org-field-group">
+                                                <label>Correo Electrónico:</label>
+                                                <input type="email" placeholder="correo@ejemplo.com" defaultValue={contacto?.correo} onChange={(e) => { setContacto({ ...contacto, correo: e.target.value }) }} />
+                                            </div>
+                                            <div className="org-field-group">
+                                                <label>Teléfono Institucional:</label>
+                                                <input type="text" placeholder="(Lada) Teléfono" defaultValue={contacto?.telefono} onChange={(e) => { setContacto({ ...contacto, telefono: e.target.value }) }} />
                                             </div>
                                         </div>
-                                    )
-                                }
-                            </div>
-                            <div
-                                className="contenedor-datos-g"
-                            >
-                                <div
-                                    className="titulo-datos"
-                                >
-                                    <h1>Ubicación</h1>
-                                    <img src={url_icon} onClick={() => { handleClicUpdateOpen("ubicación") }} />
+                                    )}
                                 </div>
-                                {
-                                    openDatosUbicación && (
-                                        <div
-                                            className="contenedor-datos-i"
-                                        >
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Calle: </h6>
-                                                <input type="text" placeholder="Calle" defaultValue={direccion?.calle} onChange={(e) => { setDireccion({ ...direccion, calle: e.target.value }) }} />
+
+                                {/* Acordeón 4: Ubicación */}
+                                <div className="org-edit-accordion">
+                                    <div className="org-edit-accordion-header" onClick={() => handleClicUpdateOpen("ubicación")}>
+                                        <h3>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                                <circle cx="12" cy="10" r="3"></circle>
+                                            </svg>
+                                            Domicilio y Ubicación
+                                        </h3>
+                                        <img src={url_icon} alt="toggle" style={{ transform: openDatosUbicación ? 'rotate(180deg)' : 'none', width: '20px' }} />
+                                    </div>
+                                    {openDatosUbicación && (
+                                        <div className="org-edit-accordion-body">
+                                            <div className="org-field-group">
+                                                <label>Calle:</label>
+                                                <input type="text" placeholder="Calle o Avenida" defaultValue={direccion?.calle} onChange={(e) => { setDireccion({ ...direccion, calle: e.target.value }) }} />
                                             </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Numero: </h6>
-                                                <input type="number" placeholder="Numero" defaultValue={direccion?.numero} onChange={(e) => { setDireccion({ ...direccion, numero: e.target.value }) }} />
+                                            <div className="org-field-group">
+                                                <label>Número exterior / interior:</label>
+                                                <input type="number" placeholder="Ej. 123" defaultValue={direccion?.numero} onChange={(e) => { setDireccion({ ...direccion, numero: e.target.value }) }} />
                                             </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Colonia: </h6>
-                                                <input type="text" placeholder="Colonia" defaultValue={direccion?.colonia} onChange={(e) => { setDireccion({ ...direccion, colonia: e.target.value }) }} />
+                                            <div className="org-field-group">
+                                                <label>Colonia:</label>
+                                                <input type="text" placeholder="Colonia o Fracc." defaultValue={direccion?.colonia} onChange={(e) => { setDireccion({ ...direccion, colonia: e.target.value }) }} />
                                             </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Ciudad: </h6>
+                                            <div className="org-field-group">
+                                                <label>Código Postal:</label>
+                                                <input type="number" placeholder="C.P." defaultValue={direccion?.codigo_postal} onChange={(e) => { setDireccion({ ...direccion, codigo_postal: e.target.value }) }} />
+                                            </div>
+                                            <div className="org-field-group">
+                                                <label>Ciudad / Municipio:</label>
                                                 <input type="text" placeholder="Ciudad" defaultValue={direccion?.ciudad} onChange={(e) => { setDireccion({ ...direccion, ciudad: e.target.value }) }} />
                                             </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>CP: </h6>
-                                                <input type="number" placeholder="CP" defaultValue={direccion?.codigo_postal} onChange={(e) => { setDireccion({ ...direccion, codigo_postal: e.target.value }) }} />
+                                            <div className="org-field-group">
+                                                <label>Estado:</label>
+                                                <input type="text" placeholder="Estado" defaultValue={direccion?.estado} onChange={(e) => { setDireccion({ ...direccion, estado: e.target.value }) }} />
                                             </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Estado: </h6>
-                                                <input type="Text" placeholder="Estado" defaultValue={direccion?.estado} onChange={(e) => { setDireccion({ ...direccion, estado: e.target.value }) }} />
-                                            </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Pais: </h6>
-                                                <input type="text" placeholder="Pais" defaultValue={direccion?.pais} onChange={(e) => { setDireccion({ ...direccion, pais: e.target.value }) }} />
+                                            <div className="org-field-group">
+                                                <label>País:</label>
+                                                <input type="text" placeholder="País" defaultValue={direccion?.pais} onChange={(e) => { setDireccion({ ...direccion, pais: e.target.value }) }} />
                                             </div>
                                         </div>
-                                    )
-                                }
-                            </div>
-                            <div
-                                className="contenedor-datos-g"
-                            >
-                                <div
-                                    className="titulo-datos"
-                                >
-                                    <h1>Cloudinary - Hosting</h1>
-                                    <img src={url_icon} onClick={() => { handleClicUpdateOpen("cloudinary") }} />
+                                    )}
                                 </div>
-                                {
-                                    openDatosCloudinary && (
-                                        <div
-                                            className="contenedor-datos-i"
-                                        >
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Nombre: </h6>
+
+                                {/* Acordeón 5: Seguridad */}
+                                <div className="org-edit-accordion">
+                                    <div className="org-edit-accordion-header" onClick={() => handleClicUpdateOpen("seguridad")}>
+                                        <h3>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                            </svg>
+                                            Seguridad y Contraseña
+                                        </h3>
+                                        <img src={url_icon} alt="toggle" style={{ transform: openDatosSeguridad ? 'rotate(180deg)' : 'none', width: '20px' }} />
+                                    </div>
+                                    {openDatosSeguridad && (
+                                        <div className="org-edit-accordion-body">
+                                            <div className="org-field-group full-width">
+                                                <label>Nueva contraseña (dejar vacío si no deseas modificarla):</label>
+                                                <input type="password" placeholder="Nueva contraseña segura" id="contrasenia" />
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Acordeón 6: Cloudinary - Hosting */}
+                                <div className="org-edit-accordion">
+                                    <div className="org-edit-accordion-header" onClick={() => handleClicUpdateOpen("cloudinary")}>
+                                        <h3>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+                                            </svg>
+                                            Cloudinary - Hosting Multimedia
+                                        </h3>
+                                        <img src={url_icon} alt="toggle" style={{ transform: openDatosCloudinary ? 'rotate(180deg)' : 'none', width: '20px' }} />
+                                    </div>
+                                    {openDatosCloudinary && (
+                                        <div className="org-edit-accordion-body">
+                                            <div className="org-field-group">
+                                                <label>Cloud Name:</label>
                                                 <input type="password" placeholder="Cloud name" defaultValue={cloudinary?.nombre} onChange={(e) => { setCloudinary({ ...cloudinary, nombre: e.target.value }) }} />
                                             </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Clave: </h6>
+                                            <div className="org-field-group">
+                                                <label>API Key:</label>
                                                 <input type="password" placeholder="API Key" defaultValue={cloudinary?.clave} onChange={(e) => { setCloudinary({ ...cloudinary, clave: e.target.value }) }} />
                                             </div>
-                                            <div
-                                                className="cuerpo-datos"
-                                            >
-                                                <h6 style={{ margin: 0, padding: 0 }}>Clave secreta: </h6>
+                                            <div className="org-field-group full-width">
+                                                <label>API Secret:</label>
                                                 <input type="password" placeholder="API Secret" defaultValue={cloudinary?.clave_secreta} onChange={(e) => { setCloudinary({ ...cloudinary, clave_secreta: e.target.value }) }} />
                                             </div>
                                         </div>
-                                    )
-                                }
-                            </div>
-                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                                <button className="btn-accion-cancelar-1"
-                                    onClick={() => { handleClicUpdateOpen("cancelar"); setOpenDatos(true) }}
-                                >
-                                    <strong>CANCELAR</strong>
-                                </button>
-                                <button className="btn-accion-2"
-                                    onClick={() => { handleUpdateOrganizacionData() }}
-                                >
-                                    <strong>GUARDAR</strong>
-                                </button>
+                                    )}
+                                </div>
+
+                                {/* Barra de acciones de Guardar / Cancelar */}
+                                <div className="org-edit-actions-bar">
+                                    <button
+                                        type="button"
+                                        className="btn-accion-cancelar-1"
+                                        style={{ padding: '8px 24px', borderRadius: '8px' }}
+                                        onClick={() => { handleClicUpdateOpen("cancelar"); setOpenDatos(true) }}
+                                    >
+                                        <strong>CANCELAR</strong>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn-accion-2"
+                                        style={{ padding: '8px 28px', borderRadius: '8px' }}
+                                        onClick={() => { handleUpdateOrganizacionData() }}
+                                    >
+                                        <strong>GUARDAR CAMBIOS</strong>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )
                 }
+
+                {/* =========================================================
+                    SECCIÓN: OFERTA EDUCATIVA (SOLO ESCUELAS)
+                    ========================================================= */}
                 {
                     organizacion?.tipo === 'Escuela' && (
-                        <div className="seccion1-contenedor" style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '1.2rem', flexWrap: 'wrap', width: isLargeDevice ? '70%' : '100%', marginTop: '1rem', alignItems: 'start', marginRight: isLargeDevice ? '1rem' : null }}>
-                            <div className="datos" style={{ backgroundColor: '#41431B', width: '100%', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <h1 style={{ color: 'white' }}>OFERTA EDUCATIVA</h1>
-                            </div>
-                            <div style={{ display: 'flex', gap: '1rem', height: 'auto', padding: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        <div className="org-card-seccion" style={{ width: isLargeDevice ? '70%' : '100%', marginTop: '1.5rem', marginRight: isLargeDevice ? '1rem' : null }}>
+                            <div className="org-section-header">
+                                <div className="org-section-title-wrapper">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD400" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                        <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                                    </svg>
+                                    <h2>OFERTA EDUCATIVA Y PLANES DE ESTUDIO</h2>
+                                </div>
                                 {
                                     user.tipo === 'Escuela' && organizacion?.id === user.organizacion && (
-                                        <div style={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
-                                            <button className="btn-accion-2"
-                                                onClick={() => {
-                                                    setOpenCreateOfertaEducativa(true)
-                                                }}
-                                            ><strong>AGREGAR</strong></button>
+                                        <button
+                                            type="button"
+                                            className="org-btn-edit-seccion"
+                                            onClick={() => setOpenCreateOfertaEducativa(true)}
+                                        >
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            </svg>
+                                            AGREGAR CARRERA
+                                        </button>
+                                    )
+                                }
+                            </div>
+
+                            <div className="org-ofertas-container">
+                                {
+                                    (!ofertasEducativas || ofertasEducativas.length === 0) && (
+                                        <div className="org-empty-state">
+                                            <div className="org-empty-state-icon">
+                                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#848A69" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                                </svg>
+                                            </div>
+                                            <h4>Sin ofertas educativas registradas</h4>
+                                            <p>Esta institución aún no ha publicado carreras, diplomados o programas de formación técnica.</p>
                                         </div>
                                     )
                                 }
-                                {
-                                    ofertasEducativas?.length === 0 && (
-                                        <p
-                                            style={{ width: '100%', textAlign: 'center', fontFamily: 'emoji', fontSize: '18px' }}
-                                        >SIN OFERTAS EDUCATIVAS DISPONIBLES...</p>
-                                    )
-                                }
-                                {
-                                    ofertasEducativas?.map(
-                                        oferta =>
-                                            <div style={{ width: '200px', backgroundColor: 'white', borderRadius: '0px 0px 10px 10px' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <div style={{ width: '50px', height: '50px' }}>
-                                                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1ncmFkdWF0aW9uLWNhcC1pY29uIGx1Y2lkZS1ncmFkdWF0aW9uLWNhcCI+PHBhdGggZD0iTTIxLjQyIDEwLjkyMmExIDEgMCAwIDAtLjAxOS0xLjgzOEwxMi44MyA1LjE4YTIgMiAwIDAgMC0xLjY2IDBMMi42IDkuMDhhMSAxIDAgMCAwIDAgMS44MzJsOC41NyAzLjkwOGEyIDIgMCAwIDAgMS42NiAweiIvPjxwYXRoIGQ9Ik0yMiAxMHY2Ii8+PHBhdGggZD0iTTYgMTIuNVYxNmE2IDMgMCAwIDAgMTIgMHYtMy41Ii8+PC9zdmc+"
-                                                            style={{ backgroundColor: '#41431B', width: '100%', height: '100%' }}
-                                                        />
-                                                    </div>
-                                                    <div style={{ width: '150px', height: '50px', backgroundColor: '#AEB784', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                                        <h6 style={{ color: '#41431B', textAlign: 'center', margin: 0 }}>{oferta?.nombre}</h6>
-                                                    </div>
-                                                </div>
 
-                                                <div style={{ padding: '0.3rem' }}>
-                                                    <div>
-                                                        <h6 style={{ margin: 0 }}>Descripción:</h6>
-                                                        <textarea value={oferta?.descripcion} style={{ width: '97%', minWidth: '97%', maxWidth: '97%', height: '50px', minHeight: '50px', maxHeight: '50px', border: 'none' }} />
-                                                        <h6 style={{ margin: 0 }}>Duración:</h6>
-                                                        <p>{`${oferta?.duracion} años`}</p>
+                                {
+                                    ofertasEducativas && ofertasEducativas.length > 0 && (
+                                        <div className="org-ofertas-grid">
+                                            {ofertasEducativas.map((item, idx) => (
+                                                <div key={idx} className="org-oferta-card">
+                                                    <div className="org-oferta-card-header">
+                                                        <div className="org-oferta-icon">
+                                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                                                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                                                            </svg>
+                                                        </div>
+                                                        <h3>{item?.nombre}</h3>
                                                     </div>
-                                                    <div>
-                                                        <h6 style={{ margin: 0 }}>Perfil egresado:</h6>
-                                                        <textarea value={oferta?.perfil} style={{ width: '97%', minWidth: '97%', maxWidth: '97%', height: '50px', minHeight: '50px', maxHeight: '50px', border: 'none' }} />
+                                                    <div className="org-oferta-card-body">
+                                                        <div className="org-oferta-meta-row">
+                                                            <span className="org-oferta-duracion-badge">
+                                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                                                </svg>
+                                                                {item?.duracion ? `${item.duracion} años` : 'Duración no especificada'}
+                                                            </span>
+                                                        </div>
+
+                                                        {item?.descripcion && (
+                                                            <div className="org-oferta-text-block">
+                                                                <strong>Descripción del programa:</strong>
+                                                                <p>{item.descripcion}</p>
+                                                            </div>
+                                                        )}
+
+                                                        {item?.perfil && (
+                                                            <div className="org-oferta-text-block">
+                                                                <strong>Perfil del egresado:</strong>
+                                                                <p>{item.perfil}</p>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
-                                            </div>
+                                            ))}
+                                        </div>
                                     )
                                 }
                             </div>
@@ -1287,54 +1372,57 @@ export default function Organizacion() {
                     )
                 }
             </div>
+
+            {/* Modal: Registro de Nueva Oferta Educativa */}
             {
                 openCreateOfertaEducativa && (
                     <div>
-                        <div className="overllay"></div>
+                        <div className="overllay" onClick={() => setOpenCreateOfertaEducativa(false)}></div>
                         <div className="overllay-contenedor">
                             <div className="formulario-contenedor" style={{ height: isSmallDevice ? '100%' : null }}>
                                 <div className="titulo-formulario"><h1>NUEVA OFERTA EDUCATIVA</h1></div>
                                 <div className="formulario" style={{ width: isSmallDevice ? '100%' : null }}>
                                     <div className="contenedor-datos-formulario" style={{ width: isSmallDevice ? '100%' : null }}>
                                         <div className="contenedor-datos-interno">
-                                            <h6>Nombre:</h6>
-                                            <input placeholder="Nombre de la carrera o oferta educativa" id="nombre_oferta" />
+                                            <h6>Nombre de la carrera o programa:</h6>
+                                            <input placeholder="Ej. Ingeniería en Sistemas Computacionales" id="nombre_oferta" />
 
-                                            <h6>Duración:</h6>
-                                            <input type="number" placeholder="Duración de la carrera o oferta educativa (años - Ejemplo: 4.5)" id="duracion_oferta" />
+                                            <h6>Duración estimada (años):</h6>
+                                            <input type="number" step="0.5" placeholder="Ej. 4.5" id="duracion_oferta" />
 
-                                            <h6>Descripción:</h6>
-                                            <textarea placeholder="Descripción de la carrera o oferta educativa" id="descripcion_oferta" />
+                                            <h6>Descripción general del programa:</h6>
+                                            <textarea placeholder="Describe el objetivo y competencias que desarrollará el estudiante..." id="descripcion_oferta" />
 
-                                            <h6>Perfil del egresado:</h6>
-                                            <textarea placeholder="Perfil deñ egresado de la carrera o oferta educativa - Separados por ," id="perfil_oferta" />
+                                            <h6>Perfil de egreso (competencias separadas por coma):</h6>
+                                            <textarea placeholder="Ej. Liderazgo, Desarrollo de software, Análisis de datos..." id="perfil_oferta" />
                                         </div>
                                     </div>
                                     {
                                         isMediumDevice && (
                                             <div style={{ width: '250px', height: '100%' }}>
-                                                <p style={{ textAlign: 'justify' }}><strong>Nota: </strong>
-                                                    Una vez realizada publicada la oferta educativa, no se podran realizar modificaciones por el momento. Se recomienda revisar dicha oferta educativa antes de ser publicada.<br></br>
-                                                    En caso de presentar algún problema con el sistema o tener dudas, puedes reportarlo a <kbd><strong>cgtham@gmail.com</strong></kbd></p>
+                                                <p style={{ textAlign: 'justify', fontSize: '12px', color: '#555' }}>
+                                                    <strong>Nota: </strong>
+                                                    Una vez publicada la oferta educativa, los aspirantes y empresas vinculadas podrán consultarla directamente desde tu perfil público.
+                                                    En caso de dudas, contacta a <kbd><strong>cgtham@gmail.com</strong></kbd>
+                                                </p>
                                             </div>
                                         )
                                     }
                                 </div>
-                                <div style={{ width: '100%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem' }}>
-                                    <button className="btn-accion-cancelar-1"
+                                <div style={{ width: '100%', height: '10vh', justifyContent: 'flex-end', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                    <button
+                                        type="button"
+                                        className="btn-accion-cancelar-1"
                                         onClick={() => { setOpenCreateOfertaEducativa(false) }}
                                     >
-                                        <strong>
-                                            CERRAR
-                                        </strong>
+                                        <strong>CERRAR</strong>
                                     </button>
                                     <button
+                                        type="button"
                                         className="btn-accion-2"
                                         onClick={() => { handleCreateOfertaEducativa() }}
                                     >
-                                        <strong>
-                                            PUBLICAR
-                                        </strong>
+                                        <strong>PUBLICAR OFERTA</strong>
                                     </button>
                                 </div>
                             </div>
@@ -1342,100 +1430,75 @@ export default function Organizacion() {
                     </div>
                 )
             }
+
+            {/* Modal: Afiliaciones a Cámaras */}
             {
                 openAfiliaciones && (
                     <div>
-                        <div className="overllay">
-                        </div>
+                        <div className="overllay" onClick={() => setOpenAfiliaciones(false)}></div>
                         <div className="overllay-contenedor">
-                            <div style={{ minWidth: isLargeDevice ? '500px' : '100%', maxWidth: isLargeDevice ? '500px' : '100%', minHeight: '80vh', maxHeight: '80vh', backgroundColor: '#ffff', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '40px', width: '100%' }}>
-                                    <h1 style={{ margin: '0', fontFamily: 'Poppins', fontSize: '20px', textAlign: 'center' }}>AFILIACIONES</h1>
-                                    <div style={{ width: '25px', height: '25px', cursor: 'pointer' }}
+                            <div style={{ minWidth: isLargeDevice ? '520px' : '95vw', maxWidth: isLargeDevice ? '520px' : '95vw', minHeight: '75vh', maxHeight: '80vh', backgroundColor: '#FFFFFF', borderRadius: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '24px', boxSizing: 'border-box', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E2E8CE', paddingBottom: '12px' }}>
+                                    <h1 style={{ margin: '0', fontFamily: 'Poppins', fontSize: '18px', fontWeight: 700, color: '#41431B' }}>AFILIACIONES A CÁMARAS</h1>
+                                    <div
+                                        style={{ width: '28px', height: '28px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                         onClick={() => { setOpenInformacionAfiliaciones(true) }}
+                                        title="Conocer estados de afiliación"
                                     >
-                                        <img
-                                            style={{ width: '100%', height: '100%' }}
-                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0MTQzMUIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1zaGllbGQtcXVlc3Rpb24tbWFyayI+PHBhdGggZD0iTTIwIDEzYzAgNS0zLjUgNy41LTcuNjYgOC45NWExIDEgMCAwIDEtLjY3LS4wMUM3LjUgMjAuNSA0IDE4IDQgMTNWNmExIDEgMCAwIDEgMS0xYzIgMCA0LjUtMS4yIDYuMjQtMi43MmExLjE3IDEuMTcgMCAwIDEgMS41MiAwQzE0LjUxIDMuODEgMTcgNSAxOSA1YTEgMSAwIDAgMSAxIDF6Ii8+PHBhdGggZD0iTTkuMSA5YTMgMyAwIDAgMSA1LjgyIDFjMCAyLTMgMy0zIDMiLz48cGF0aCBkPSJNMTIgMTdoLjAxIi8+PC9zdmc+"
-                                        />
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#41431B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                        </svg>
                                     </div>
                                 </div>
-                                <div style={{ width: '100%', minHeight: '60vh', maxHeight: '60vh', overflowY: 'scroll', scrollbarWidth: 'none', justifyContent: 'start', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <div style={{ width: '100%', flex: 1, overflowY: 'auto', padding: '12px 0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                     {
-                                        afiliaciones?.map(
-                                            a => <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', width: '90%', height: '50px', justifyContent: 'space-between', backgroundColor: '#E3DBBB', padding: '0.5rem' }}>
-                                                <div style={{ width: '50px', height: '50px' }}>
-                                                    <img src={a.logo} style={{ width: '100%', height: '100%', flexShrink: 0, backgroundColor: '#41431B', borderRadius: '100%' }} />
-                                                </div>
-                                                <div style={{ width: '200px' }}>
-                                                    <h6 style={{ margin: '0', fontSize: '18px', cursor: 'pointer' }}
-                                                        onClick={() => { navigate(`/organizacion/${a.id}`); navigate(0) }}
-                                                    >{a.nombre}</h6>
-                                                    <p style={{ margin: '0', fontSize: '12px' }}><strong>{a.fecha.split('T')[0]}</strong></p>
-                                                </div>
-                                                <div style={{ width: '35px', height: '35px' }}>
-                                                    <img src=
-                                                        {
-                                                            a.estado === 'ACTIVA' ? activaAUrl
-                                                                : a.estado === 'INACTIVA' ? inactivaAUrl
-                                                                    : suspendidaAUrl
-                                                        }
-                                                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '100%' }} />
-                                                </div>
+                                        (!afiliaciones || afiliaciones.length === 0) && (
+                                            <div style={{ textAlign: 'center', padding: '40px 10px', color: '#777' }}>
+                                                <p style={{ margin: 0, fontSize: '14px', fontFamily: 'Poppins' }}>No se registran afiliaciones activas con cámaras de comercio.</p>
                                             </div>
                                         )
                                     }
+                                    {
+                                        afiliaciones?.map(
+                                            (a, idx) => (
+                                                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem', width: '100%', minHeight: '60px', justifyContent: 'space-between', backgroundColor: '#F8F9F3', border: '1px solid #CCD5AE', borderRadius: '10px', padding: '8px 14px', boxSizing: 'border-box' }}>
+                                                    <div style={{ width: '44px', height: '44px', flexShrink: 0 }}>
+                                                        <img src={a.logo || defaultLogo} alt="Logo Cámara" style={{ width: '100%', height: '100%', objectFit: 'cover', backgroundColor: '#FFFFFF', borderRadius: '50%', border: '1px solid #CCD5AE' }} />
+                                                    </div>
+                                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                                        <h6
+                                                            style={{ margin: '0', fontSize: '14px', fontWeight: 600, color: '#353816', cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                                                            onClick={() => { navigate(`/organizacion/${a.id}`); navigate(0) }}
+                                                        >
+                                                            {a.nombre}
+                                                        </h6>
+                                                        <p style={{ margin: '2px 0 0 0', fontSize: '11px', color: '#777' }}>Fecha: <strong>{a.fecha ? a.fecha.split('T')[0] : 'N/D'}</strong></p>
+                                                    </div>
+                                                    <div style={{ width: '28px', height: '28px', flexShrink: 0 }}>
+                                                        <img
+                                                            src={
+                                                                a.estado === 'ACTIVA' ? activaAUrl
+                                                                    : a.estado === 'INACTIVA' ? inactivaAUrl
+                                                                        : suspendidaAUrl
+                                                            }
+                                                            alt={a.estado}
+                                                            title={`Estado: ${a.estado}`}
+                                                            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )
+                                        )
+                                    }
                                 </div>
-                                <div style={{ display: 'flex', justifyContent: 'end', width: '100%', height: '30px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', borderTop: '1px solid #E2E8CE', paddingTop: '12px' }}>
                                     <button
+                                        type="button"
                                         className="btn-accion-2"
                                         onClick={() => { setOpenAfiliaciones(false) }}
-                                    ><strong>CERRAR</strong></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )
-            }
-            {
-                openInformacionAfiliaciones && (
-                    <div>
-                        <div className="overllay"></div>
-                        <div className="overllay-contenedor">
-                            <div style={{ width: isLargeDevice ? '500px' : '100%', height: 'auto', backgroundColor: 'white', display: 'flex', gap: '1rem', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <div><h1 style={{ margin: 0, fontFamily: 'Poppins', fontSize: '18px', textAlign: 'center' }}>INFORMACIÓN</h1></div>
-                                <div style={{ width: '90%', display: 'flex', gap: '1rem' }}>
-                                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                        <h1 style={{ margin: 0, fontFamily: 'Poppins', fontSize: '16px', textAlign: 'center' }}>ACTIVA</h1>
-                                        <p style={{ margin: 0, fontFamily: 'Poppins', fontSize: '12px', textAlign: 'justify' }}>
-                                            La Organización esta afiliada a la Camara de Comercio.
-                                        </p>
-                                        <div style={{ width: '50px', height: '50px' }}>
-                                            <img src={activaAUrl} style={{ width: '100%', height: '100%' }} />
-                                        </div>
-                                    </div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                        <h1 style={{ margin: 0, fontFamily: 'Poppins', fontSize: '16px', textAlign: 'center' }}>INACTIVA</h1>
-                                        <p style={{ margin: 0, fontFamily: 'Poppins', fontSize: '12px', textAlign: 'justify' }}>
-                                            La Organización se encuentra en modo de espera para tener la afiliación.
-                                        </p>
-                                        <div style={{ width: '50px', height: '50px' }}>
-                                            <img src={inactivaAUrl} style={{ width: '100%', height: '100%' }} />
-                                        </div>
-                                    </div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                        <h1 style={{ margin: 0, fontFamily: 'Poppins', fontSize: '16px', textAlign: 'center' }}>SUSPENDIDA</h1>
-                                        <p style={{ margin: 0, fontFamily: 'Poppins', fontSize: '12px', textAlign: 'justify' }}>
-                                            La Organización ya no tiene la afiliación por parte de esa Camara de Comercio.
-                                        </p>
-                                        <div style={{ width: '50px', height: '50px' }}>
-                                            <img src={suspendidaAUrl} style={{ width: '100%', height: '100%' }} />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'end' }}>
-                                    <button className="btn-accion-2"
-                                        onClick={() => { setOpenInformacionAfiliaciones(false) }}
+                                        style={{ padding: '8px 24px' }}
                                     >
                                         <strong>CERRAR</strong>
                                     </button>
@@ -1445,7 +1508,64 @@ export default function Organizacion() {
                     </div>
                 )
             }
-            
+
+            {/* Modal: Glosario de Estados de Afiliación */}
+            {
+                openInformacionAfiliaciones && (
+                    <div>
+                        <div className="overllay" onClick={() => setOpenInformacionAfiliaciones(false)}></div>
+                        <div className="overllay-contenedor">
+                            <div style={{ width: isLargeDevice ? '520px' : '95vw', backgroundColor: 'white', borderRadius: '16px', padding: '24px', display: 'flex', gap: '1.2rem', flexDirection: 'column', boxSizing: 'border-box', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}>
+                                <h2 style={{ margin: 0, fontFamily: 'Poppins', fontSize: '18px', fontWeight: 700, color: '#41431B', textAlign: 'center' }}>ESTADOS DE AFILIACIÓN GREMIAL</h2>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', backgroundColor: '#F8F9F3', padding: '12px', borderRadius: '10px', border: '1px solid #CCD5AE' }}>
+                                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#E8F5E9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                            <img src={activaAUrl} alt="Activa" style={{ width: '22px', height: '22px' }} />
+                                        </div>
+                                        <div>
+                                            <strong style={{ display: 'block', fontSize: '14px', color: '#2E7D32', fontFamily: 'Poppins' }}>ACTIVA</strong>
+                                            <p style={{ margin: 0, fontSize: '12px', color: '#555', lineHeight: 1.4 }}>La organización cuenta con acreditación y vinculación vigente ante la Cámara de Comercio correspondiente.</p>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', backgroundColor: '#F8F9F3', padding: '12px', borderRadius: '10px', border: '1px solid #CCD5AE' }}>
+                                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#FFF9C4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                            <img src={inactivaAUrl} alt="Inactiva" style={{ width: '22px', height: '22px' }} />
+                                        </div>
+                                        <div>
+                                            <strong style={{ display: 'block', fontSize: '14px', color: '#F57F17', fontFamily: 'Poppins' }}>INACTIVA (EN REVISIÓN)</strong>
+                                            <p style={{ margin: 0, fontSize: '12px', color: '#555', lineHeight: 1.4 }}>La solicitud de afiliación ha sido ingresada y se encuentra en proceso de validación documental.</p>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', backgroundColor: '#F8F9F3', padding: '12px', borderRadius: '10px', border: '1px solid #CCD5AE' }}>
+                                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#FFEBEE', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                            <img src={suspendidaAUrl} alt="Suspendida" style={{ width: '22px', height: '22px' }} />
+                                        </div>
+                                        <div>
+                                            <strong style={{ display: 'block', fontSize: '14px', color: '#C62828', fontFamily: 'Poppins' }}>SUSPENDIDA</strong>
+                                            <p style={{ margin: 0, fontSize: '12px', color: '#555', lineHeight: 1.4 }}>La vigencia de la afiliación ha vencido o fue pausada temporalmente por la Cámara de Comercio.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '6px' }}>
+                                    <button
+                                        type="button"
+                                        className="btn-accion-2"
+                                        onClick={() => { setOpenInformacionAfiliaciones(false) }}
+                                        style={{ padding: '8px 24px' }}
+                                    >
+                                        <strong>ENTENDIDO</strong>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            {/* Modal: Personalización de Imágenes (Logo y Banner) */}
             {
                 openModalFotos && (
                     <div>
@@ -1453,19 +1573,19 @@ export default function Organizacion() {
                         <div className="overllay-contenedor">
                             <div style={{
                                 backgroundColor: 'white',
-                                borderRadius: '12px',
+                                borderRadius: '16px',
                                 padding: '24px',
                                 width: '380px',
                                 maxWidth: '90vw',
-                                boxShadow: '0 10px 25px rgba(0,0,0,0.25)',
+                                boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
                                 textAlign: 'center',
                                 boxSizing: 'border-box'
                             }}>
                                 <h3 style={{ fontFamily: 'Poppins', fontSize: '18px', color: '#41431B', margin: '0 0 6px 0', fontWeight: 700 }}>
-                                    Personalizar Imágenes
+                                    Personalizar Fotografías
                                 </h3>
                                 <p style={{ fontFamily: 'Poppins', fontSize: '12px', color: '#666', margin: '0 0 18px 0' }}>
-                                    Selecciona la imagen que deseas actualizar:
+                                    Selecciona el elemento institucional que deseas actualizar:
                                 </p>
 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -1476,21 +1596,23 @@ export default function Organizacion() {
                                             alignItems: 'center',
                                             gap: '12px',
                                             padding: '12px 14px',
-                                            borderRadius: '8px',
-                                            border: '1.5px solid #AEB784',
-                                            backgroundColor: '#F9FAF6',
+                                            borderRadius: '10px',
+                                            border: '1.5px solid #CCD5AE',
+                                            backgroundColor: '#F8F9F3',
                                             cursor: 'pointer',
                                             textAlign: 'left',
                                             transition: 'all 0.2s'
                                         }}
                                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#ECEFD9'}
-                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#F9FAF6'}
+                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#F8F9F3'}
                                     >
-                                        <img
-                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0MTQzMUIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1pbWFnZS11cC1pY29uIGx1Y2lkZS1pbWFnZS11cCI+PHBhdGggZD0iTTEwLjMgMjFINWEyIDIgMCAwIDEtMi0yVjVhMiAyIDAgMCAxIDItMmgxNGEyIDIgMCAwIDEgMiAydjEwbC0zLjEtMy4xYTIgMiAwIDAgMC0yLjgxNC4wMTRMNiAyMSIvPjxwYXRoIGQ9Im0xNCAxOS41IDMtMyAzIDMiLz48cGF0aCBkPSJNMTcgMjJ2LTUuNSIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PC9zdmc+"
-                                            alt="logo"
-                                            style={{ width: '26px', height: '26px' }}
-                                        />
+                                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#FFFFFF', border: '1px solid #CCD5AE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#41431B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                                <polyline points="21 15 16 10 5 21"></polyline>
+                                            </svg>
+                                        </div>
                                         <div>
                                             <strong style={{ display: 'block', fontSize: '13px', color: '#41431B', fontFamily: 'Poppins' }}>Cambiar Foto de Perfil (Logo)</strong>
                                             <span style={{ fontSize: '11px', color: '#777' }}>Formatos permitidos: PNG, JPG o WEBP</span>
@@ -1504,21 +1626,22 @@ export default function Organizacion() {
                                             alignItems: 'center',
                                             gap: '12px',
                                             padding: '12px 14px',
-                                            borderRadius: '8px',
-                                            border: '1.5px solid #AEB784',
-                                            backgroundColor: '#F9FAF6',
+                                            borderRadius: '10px',
+                                            border: '1.5px solid #CCD5AE',
+                                            backgroundColor: '#F8F9F3',
                                             cursor: 'pointer',
                                             textAlign: 'left',
                                             transition: 'all 0.2s'
                                         }}
                                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#ECEFD9'}
-                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#F9FAF6'}
+                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#F8F9F3'}
                                     >
-                                        <img
-                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0MTQzMUIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1pbWFnZS11cC1pY29uIGx1Y2lkZS1pbWFnZS11cCI+PHBhdGggZD0iTTEwLjMgMjFINWEyIDIgMCAwIDEtMi0yVjVhMiAyIDAgMCAxIDItMmgxNGEyIDIgMCAwIDEgMiAydjEwbC0zLjEtMy4xYTIgMiAwIDAgMC0yLjgxNC4wMTRMNiAyMSIvPjxwYXRoIGQ9Im0xNCAxOS41IDMtMyAzIDMiLz48cGF0aCBkPSJNMTcgMjJ2LTUuNSIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PC9zdmc+"
-                                            alt="banner"
-                                            style={{ width: '26px', height: '26px' }}
-                                        />
+                                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#FFFFFF', border: '1px solid #CCD5AE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#41431B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                                <circle cx="12" cy="13" r="4"></circle>
+                                            </svg>
+                                        </div>
                                         <div>
                                             <strong style={{ display: 'block', fontSize: '13px', color: '#41431B', fontFamily: 'Poppins' }}>Cambiar Portada (Banner)</strong>
                                             <span style={{ fontSize: '11px', color: '#777' }}>Formatos permitidos: PNG, JPG o WEBP</span>
@@ -1530,7 +1653,7 @@ export default function Organizacion() {
                                     type="button"
                                     onClick={() => setOpenModalFotos(false)}
                                     className="btn-accion-2"
-                                    style={{ marginTop: '16px', width: '100%', padding: '8px' }}
+                                    style={{ marginTop: '16px', width: '100%', padding: '9px', borderRadius: '8px' }}
                                 >
                                     <strong>CANCELAR</strong>
                                 </button>

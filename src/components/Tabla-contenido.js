@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import '../styles/contenedor-tablas.css'
+import '../styles/eventos-grid.css'
 import { useNavigate } from 'react-router-dom'
 import { deleteComentarioById, getComentarioById, updateById, updateComentarioByEstado } from '../services/Comentario'
 import { useAuth } from '../hooks/useAuth'
@@ -237,6 +238,253 @@ export default function TablaContenido(props) {
             getComentario()
         }
     }, [idComentario])
+
+    const formatearFecha = (fechaStr) => {
+        if (!fechaStr) return '';
+        const partes = fechaStr.split('T')[0].split('-');
+        if (partes.length === 3) {
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+        return fechaStr;
+    };
+
+    const formatearHora = (horaStr) => {
+        if (!horaStr) return '';
+        return horaStr.substring(0, 5);
+    };
+
+    if (props.eventosTabla) {
+        const eventosFiltrados = props.eventosTabla
+            .filter(f => !props.filtro || props.filtro.length === 0 || f.titulo.toLowerCase().includes(props.filtro.toLowerCase()))
+            .filter(opciones => (opciones.tipo === props.tipoEventoSeleccionado || props.tipoEventoSeleccionado === 'Tipo'));
+
+        return (
+            <div className="eventos-vista-contenedor">
+                <div className="eventos-vista-toolbar">
+                    <span className="eventos-contador-badge">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        {eventosFiltrados.length} {eventosFiltrados.length === 1 ? 'evento registrado' : 'eventos registrados'}
+                    </span>
+                </div>
+
+                {eventosFiltrados.length === 0 ? (
+                    <div className="eventos-empty-state">
+                        <div className="eventos-empty-icon">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </div>
+                        <h3 className="eventos-empty-titulo">No se encontraron eventos institucionales</h3>
+                        <p className="eventos-empty-desc">
+                            No hay registros que coincidan con la búsqueda o el tipo de evento seleccionado. Intenta ajustar los filtros de la barra superior.
+                        </p>
+                    </div>
+                ) : (
+                    <div className="eventos-cards-grid">
+                        {eventosFiltrados.map((evento) => {
+                            const esPropietario = evento?.id_organizacion === user.organizacion || user?.rol?.includes('ADMIN_SYS');
+                            const nombreOrg = evento?.organizacion?.nombre || evento?.organizacion?.nombre_comercial;
+
+                            return (
+                                <div key={evento?.id || evento?.id_evento} className="evento-card-item">
+                                    {/* Cabecera de la Tarjeta */}
+                                    <div className="evento-card-header">
+                                        <span className="evento-card-tipo-badge">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                            </svg>
+                                            {evento?.tipo || 'Institucional'}
+                                        </span>
+                                        <span className="evento-card-estado-badge">
+                                            <span className="evento-card-estado-dot"></span>
+                                            {evento?.estado || 'ACTIVO'}
+                                        </span>
+                                    </div>
+
+                                    {/* Cuerpo de la Tarjeta */}
+                                    <div className="evento-card-body">
+                                        {nombreOrg && user.tipo !== 'Escuela' && (
+                                            <span className="evento-card-org">
+                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                                                    <line x1="9" y1="22" x2="9" y2="22.01"></line>
+                                                    <line x1="15" y1="22" x2="15" y2="22.01"></line>
+                                                    <line x1="9" y1="6" x2="9" y2="6.01"></line>
+                                                    <line x1="15" y1="6" x2="15" y2="6.01"></line>
+                                                    <line x1="9" y1="10" x2="9" y2="10.01"></line>
+                                                    <line x1="15" y1="10" x2="15" y2="10.01"></line>
+                                                    <line x1="9" y1="14" x2="9" y2="14.01"></line>
+                                                    <line x1="15" y1="14" x2="15" y2="14.01"></line>
+                                                </svg>
+                                                {nombreOrg}
+                                            </span>
+                                        )}
+
+                                        <h3 className="evento-card-titulo" title={evento?.titulo}>
+                                            {evento?.titulo}
+                                        </h3>
+
+                                        <p className="evento-card-descripcion">
+                                            {evento?.descripcion || 'Sin descripción detallada.'}
+                                        </p>
+
+                                        {/* Caja de Fechas y Metadatos */}
+                                        <div className="evento-card-info-box">
+                                            <div className="evento-card-info-fila">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                                </svg>
+                                                <span>
+                                                    {formatearFecha(evento?.fecha_inicio)} al {formatearFecha(evento?.fecha_final)}
+                                                </span>
+                                            </div>
+
+                                            {(evento?.hora_inicio || evento?.hora_final) && (
+                                                <div className="evento-card-info-fila">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <circle cx="12" cy="12" r="10"></circle>
+                                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                                    </svg>
+                                                    <span>
+                                                        {formatearHora(evento?.hora_inicio)} - {formatearHora(evento?.hora_final)} hrs
+                                                    </span>
+                                                </div>
+                                            )}
+
+                                            <div className="evento-card-meta-pills">
+                                                <span className="evento-card-pill">
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                                        <circle cx="9" cy="7" r="4"></circle>
+                                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                                    </svg>
+                                                    {evento?.limite_participantes ? `Cupo: ${evento.limite_participantes} participantes` : 'Cupo Ilimitado'}
+                                                </span>
+
+                                                {evento?.modalidad && (
+                                                    <span className="evento-card-pill">
+                                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <circle cx="12" cy="12" r="10"></circle>
+                                                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                                                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                                        </svg>
+                                                        {evento.modalidad}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Pie de la Tarjeta con Acciones */}
+                                    <div className="evento-card-footer">
+                                        <span className="evento-card-publicado">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <polyline points="12 6 12 12 16 14"></polyline>
+                                            </svg>
+                                            {formatearFecha(evento?.fecha_publicacion)}
+                                        </span>
+
+                                        <div className="evento-card-acciones">
+                                            <button
+                                                type="button"
+                                                className="evento-btn-ver"
+                                                onClick={() => {
+                                                    setIdEvento(evento?.id);
+                                                    setOpenVerEvento(true);
+                                                }}
+                                                title="Visualizar detalles completos del evento"
+                                            >
+                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                </svg>
+                                                VER
+                                            </button>
+
+                                            {esPropietario && (
+                                                <button
+                                                    type="button"
+                                                    className="evento-btn-editar"
+                                                    onClick={() => {
+                                                        setIdEvento(evento?.id);
+                                                        setOpenEditarEvento(true);
+                                                    }}
+                                                    title="Editar información del evento"
+                                                >
+                                                    EDITAR
+                                                </button>
+                                            )}
+
+                                            {esPropietario && (
+                                                <button
+                                                    type="button"
+                                                    className="evento-btn-eliminar"
+                                                    onClick={() => handleConfirmarEliminarEvento(evento)}
+                                                    title="Eliminar evento institucional"
+                                                >
+                                                    ELIMINAR
+                                                </button>
+                                            )}
+
+                                            {!esPropietario && (
+                                                <button
+                                                    type="button"
+                                                    className="evento-btn-participar"
+                                                    onClick={() => handleSolicitarParticipacion(evento)}
+                                                    title="Solicitar participación institucional"
+                                                >
+                                                    PARTICIPAR
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+
+                {/* Modales Compartidos */}
+                {openVerEvento && (
+                    <VisualizarEvento id_evento={idEvento} accion={setOpenVerEvento} modo="ver" />
+                )}
+                {openEditarEvento && (
+                    <VisualizarEvento id_evento={idEvento} accion={setOpenEditarEvento} modo="editar" />
+                )}
+                {openInscripcion && (
+                    <VisualizarEvento id_evento={idEvento} accion={setOpenInscripcion} />
+                )}
+
+                <ModalAlerta
+                    abierto={alerta.abierto}
+                    tipo={alerta.tipo}
+                    titulo={alerta.titulo}
+                    mensaje={alerta.mensaje}
+                    textoBoton={alerta.textoBoton}
+                    textoCancelar={alerta.textoCancelar}
+                    mostrarCancelar={alerta.mostrarCancelar}
+                    onAceptar={cerrarAlerta}
+                    onCancelar={() => {
+                        const cb = alerta.onCancelar;
+                        setAlerta(prev => ({ ...prev, abierto: false }));
+                        if (cb) cb();
+                    }}
+                />
+            </div>
+        );
+    }
+
     return (
         <div className="contenedor-tablas">
             <div className="contenedor-tablas-interno">
@@ -394,88 +642,6 @@ export default function TablaContenido(props) {
                                         >
                                             <strong>ACEPTAR</strong>
                                         </button>
-                                    </td>
-                                </tr>
-                            )
-                        }
-
-                        {
-                            props?.eventosTabla?.filter(f => f.titulo.toLowerCase().includes(props?.filtro.toLowerCase()) || props?.filtro.length === 0).filter(opciones => (opciones.tipo === props?.tipoEventoSeleccionado || props?.tipoEventoSeleccionado === 'Tipo')).map(
-                                evento => <tr>
-                                    <td>
-                                        {evento?.titulo}
-                                    </td>
-                                    <td>
-                                        {
-                                            user.tipo != 'Escuela' ? evento?.organizacion?.nombre?.substring(0, 20) : evento?.descripcion?.substring(0, 20)
-                                        } ...
-                                    </td>
-                                    <td>
-                                        {
-                                            evento?.tipo
-                                        }
-                                    </td>
-                                    <td>
-                                        {
-                                            evento?.estado
-                                        }
-                                    </td>
-                                    <td>
-                                        {
-                                            evento?.fecha_inicio?.split('T')[0]
-                                        }
-                                    </td>
-                                    <td>
-                                        {
-                                            evento?.fecha_final?.split('T')[0]
-                                        }
-                                    </td>
-                                    <td>
-                                        {
-                                            evento?.fecha_publicacion?.split('T')[0]
-                                        }
-                                    </td>
-                                    <td>
-                                        <div className='tabla-acciones'>
-                                            <button
-                                                className='btn-accion-2'
-                                                style={{ backgroundColor: '#41431B', color: '#FFFFFF' }}
-                                                onClick={() => {
-                                                    setIdEvento(evento?.id)
-                                                    setOpenVerEvento(true)
-                                                }}
-                                                title="Visualizar detalles completos del evento"
-                                            >
-                                                <strong>VER</strong>
-                                            </button>
-                                            {(evento?.id_organizacion === user.organizacion || user?.rol?.includes('ADMIN_SYS')) && (
-                                                <button
-                                                    onClick={() => {
-                                                        setIdEvento(evento?.id)
-                                                        setOpenEditarEvento(true)
-                                                    }}
-                                                    className='btn-accion-2'
-                                                >
-                                                    <strong>EDITAR</strong>
-                                                </button>
-                                            )}
-                                            {(evento?.id_organizacion === user.organizacion || user?.rol?.includes('ADMIN_SYS')) && (
-                                                <button
-                                                    onClick={() => handleConfirmarEliminarEvento(evento)}
-                                                    className='btn-accion-cancelar-1'
-                                                >
-                                                    <strong>ELIMINAR</strong>
-                                                </button>
-                                            )}
-                                            {evento?.id_organizacion !== user.organizacion && !user?.rol?.includes('ADMIN_SYS') && (
-                                                <button
-                                                    className='btn-accion-2'
-                                                    onClick={() => handleSolicitarParticipacion(evento)}
-                                                >
-                                                    <strong>PARTICIPAR</strong>
-                                                </button>
-                                            )}
-                                        </div>
                                     </td>
                                 </tr>
                             )

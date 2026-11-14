@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import '../styles/autenticacion.css'
 import { useEffect, useRef, useState } from "react";
-import { createCuenta, login } from "../services/Cuenta";
+import { createCuenta, login, solicitarCodigoRecuperacion, verificarCodigoRecuperacion, restablecerContraseniaConCodigo } from "../services/Cuenta";
 import { useAuth } from "../hooks/useAuth";
 import { createOrganizaion, deleteOrganizacionById, getAllOrganizaciones } from "../services/Organizacion";
 import { createContacto, deleteContactoById } from "../services/Contacto";
@@ -16,11 +16,20 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import Loader from '../components/Loader'
 import AlertaValidacion, { FORMATOS_IMAGEN, EXTENSIONES_IMAGEN, TAMANIO_MAX_IMAGEN_MB } from '../components/AlertaValidacion'
 import ModalAlerta from '../components/ModalAlerta'
+import ModalRecuperarContrasenia from '../components/ModalRecuperarContrasenia'
 import imageCompression from 'browser-image-compression'
 
 export default function AutenticacionPage() {
     const [openCambiarContraseña, setOpenCambiarContraseña] = useState(false)
     const [openAlertaCambiarContraseña, setOpenAlertaCambiarContraseña] = useState(false)
+    const [pasoRecuperar, setPasoRecuperar] = useState(1)
+    const [correoRecuperar, setCorreoRecuperar] = useState('')
+    const [codigoRecuperar, setCodigoRecuperar] = useState('')
+    const [nuevaContraseniaRecuperar, setNuevaContraseniaRecuperar] = useState('')
+    const [confirmarContraseniaRecuperar, setConfirmarContraseniaRecuperar] = useState('')
+    const [mostrarContraseniaRecuperar, setMostrarContraseniaRecuperar] = useState(false)
+    const [cargandoRecuperar, setCargandoRecuperar] = useState(false)
+    const [errorLocalRecuperar, setErrorLocalRecuperar] = useState('')
     const [alerta, setAlerta] = useState({
         abierto: false,
         tipo: 'info',
@@ -166,6 +175,7 @@ export default function AutenticacionPage() {
     const [openDatosSeguridad, setOpenDatosSeguridad] = useState(true)
     const [correoLogin, setCorreoLogin] = useState('')
     const [contraseniaLogin, setContraseniaLogin] = useState('')
+    const [mostrarContraseniaLogin, setMostrarContraseniaLogin] = useState(false)
     const [banner, setBanner] = useState(null)
     const [foto, setFoto] = useState(null)
     const { setUser } = useAuth()
@@ -192,6 +202,109 @@ export default function AutenticacionPage() {
         } catch (error) {
             mostrarAlerta('El correo electrónico o la contraseña son incorrectos.', 'error', 'Error de Autenticación')
             setOpenCambiarContraseña(true)
+        }
+    }
+
+    const handleSubmitLogin = (e) => {
+        if (e && e.preventDefault) e.preventDefault()
+        const correoLimpio = correoLogin ? correoLogin.trim() : ''
+        if (!correoLimpio || !contraseniaLogin) {
+            mostrarAlerta('Por favor ingresa tanto tu correo electrónico como tu contraseña.', 'advertencia', 'Campos Incompletos')
+            return
+        }
+        postCuenta(correoLimpio, contraseniaLogin)
+    }
+
+    const abrirModalRecuperacion = () => {
+        setCorreoRecuperar(correoLogin ? correoLogin.trim() : '')
+        setCodigoRecuperar('')
+        setNuevaContraseniaRecuperar('')
+        setConfirmarContraseniaRecuperar('')
+        setPasoRecuperar(1)
+        setErrorLocalRecuperar('')
+        setOpenAlertaCambiarContraseña(true)
+    }
+
+    const handleSolicitarCodigo = async () => {
+        const correoLimpio = correoRecuperar.trim()
+        if (!correoLimpio || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoLimpio)) {
+            setErrorLocalRecuperar('Ingresa un correo electrónico válido.')
+            return
+        }
+        setErrorLocalRecuperar('')
+        setCargandoRecuperar(true)
+        try {
+            const respuesta = await solicitarCodigoRecuperacion(correoLimpio)
+            if (respuesta.ok) {
+                setPasoRecuperar(2)
+                setErrorLocalRecuperar('')
+            } else {
+                setErrorLocalRecuperar(respuesta.message || 'No se pudo enviar el código. Verifica el correo e intenta nuevamente.')
+            }
+        } catch (err) {
+            setErrorLocalRecuperar('Error de comunicación con el servidor. Intenta más tarde.')
+        } finally {
+            setCargandoRecuperar(false)
+        }
+    }
+
+    const handleVerificarCodigo = async () => {
+        const correoLimpio = correoRecuperar.trim()
+        const codigoLimpio = codigoRecuperar.trim()
+        if (!codigoLimpio || codigoLimpio.length !== 6) {
+            setErrorLocalRecuperar('El código de verificación debe contener 6 dígitos.')
+            return
+        }
+        setErrorLocalRecuperar('')
+        setCargandoRecuperar(true)
+        try {
+            const respuesta = await verificarCodigoRecuperacion(correoLimpio, codigoLimpio)
+            if (respuesta.ok) {
+                setPasoRecuperar(3)
+                setErrorLocalRecuperar('')
+            } else {
+                setErrorLocalRecuperar(respuesta.message || 'El código es inválido o ha expirado.')
+            }
+        } catch (err) {
+            setErrorLocalRecuperar('Error al verificar el código con el servidor. Intenta de nuevo.')
+        } finally {
+            setCargandoRecuperar(false)
+        }
+    }
+
+    const handleRestablecerContrasenia = async () => {
+        const correoLimpio = correoRecuperar.trim()
+        if (!nuevaContraseniaRecuperar || nuevaContraseniaRecuperar.length < 6) {
+            setErrorLocalRecuperar('La nueva contraseña debe tener al menos 6 caracteres.')
+            return
+        }
+        if (nuevaContraseniaRecuperar !== confirmarContraseniaRecuperar) {
+            setErrorLocalRecuperar('Las contraseñas ingresadas no coinciden.')
+            return
+        }
+        setErrorLocalRecuperar('')
+        setCargandoRecuperar(true)
+        try {
+            const respuesta = await restablecerContraseniaConCodigo(correoLimpio, nuevaContraseniaRecuperar)
+            if (respuesta.ok) {
+                setOpenAlertaCambiarContraseña(false)
+                setContraseniaLogin(nuevaContraseniaRecuperar)
+                mostrarAlerta(
+                    'Tu contraseña ha sido actualizada con éxito. Ya puedes iniciar sesión con tu nueva clave.',
+                    'exito',
+                    '¡Contraseña Actualizada!'
+                )
+                setCodigoRecuperar('')
+                setNuevaContraseniaRecuperar('')
+                setConfirmarContraseniaRecuperar('')
+                setPasoRecuperar(1)
+            } else {
+                setErrorLocalRecuperar(respuesta.message || 'No fue posible actualizar la contraseña. Solicita un nuevo código.')
+            }
+        } catch (err) {
+            setErrorLocalRecuperar('Error inesperado al conectar con el servidor. Intenta más tarde.')
+        } finally {
+            setCargandoRecuperar(false)
         }
     }
     const handleNextData = () => {
@@ -449,53 +562,141 @@ export default function AutenticacionPage() {
             {
                 openLogin && (
                     <div className="contenedor-autenticacion">
+                        {/* Columna Lateral Izquierda (Imagen + Overlay Institucional) */}
                         <div className="autenticacion-seccion1">
-                            <img src={imagen} alt="imagen" />
+                            <img src={imagen} alt="Estudiantes y profesionistas en colaboración" className="login-banner-img" />
+                            <div className="login-banner-overlay">
+                                <span className="login-banner-tag">CGTHAM • Residencias</span>
+                                <h2 className="login-banner-title">Vinculación Profesional</h2>
+                                <p className="login-banner-desc">Plataforma centralizada para estudiantes, empresas e instituciones educativas.</p>
+                            </div>
                         </div>
+
+                        {/* Columna Derecha (Formulario de Login Moderno) */}
                         <div className="autenticacion-seccion2">
-                            <div className="a-titulo">
-                                <h1>LOGIN</h1>
+                            <div className="login-card-header">
+                                <span className="login-badge">Acceso al Sistema</span>
+                                <h1 className="login-titulo-principal">Iniciar Sesión</h1>
+                                <p className="login-subtitulo">Ingresa tus credenciales para acceder a tu panel de control.</p>
                             </div>
-                            <div className="a-inputs">
-                                <input placeholder="Correo electronico" required type="email" onChange={(e) => { setCorreoLogin(e.target.value) }} />
-                                <input placeholder="Contraseña" required type="password" onChange={(e) => { setContraseniaLogin(e.target.value) }} />
-                            </div>
-                            {
-                                openCambiarContraseña && (
-                                    <div className="a-registros">
-                                        <p
 
-                                            style={{ cursor: 'pointer', color: 'red' }}
-
-                                            onClick={() => {
-                                                //setOpenAlertaCambiarContraseña(true)
-                                                mostrarAlerta('Esta función aún no se encuentra disponible.', 'info')
-                                            }}
-                                        >Recuperar contraseña</p>
+                            <form onSubmit={handleSubmitLogin} className="login-form-moderno" noValidate>
+                                <div className="login-field-group">
+                                    <label htmlFor="login-correo" className="login-field-label">Correo electrónico</label>
+                                    <div className="login-input-wrapper">
+                                        <svg className="login-input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                            <rect width="20" height="16" x="2" y="4" rx="2" />
+                                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                                        </svg>
+                                        <input
+                                            id="login-correo"
+                                            type="email"
+                                            className="login-input"
+                                            placeholder="ejemplo@organizacion.com"
+                                            value={correoLogin}
+                                            onChange={(e) => setCorreoLogin(e.target.value)}
+                                            required
+                                            autoComplete="email"
+                                        />
                                     </div>
-                                )
-                            }
-                            <div className="a-registros">
-                                <p
-                                    style={{ cursor: 'pointer' }}
+                                </div>
 
-                                    onClick={() => { setOpenLogin(false); setOpenRegisterOrg(true) }}
+                                <div className="login-field-group">
+                                    <label htmlFor="login-contrasenia" className="login-field-label">Contraseña</label>
+                                    <div className="login-input-wrapper">
+                                        <svg className="login-input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                        </svg>
+                                        <input
+                                            id="login-contrasenia"
+                                            type={mostrarContraseniaLogin ? 'text' : 'password'}
+                                            className="login-input login-input-password"
+                                            placeholder="••••••••"
+                                            value={contraseniaLogin}
+                                            onChange={(e) => setContraseniaLogin(e.target.value)}
+                                            required
+                                            autoComplete="current-password"
+                                        />
+                                        <button
+                                            type="button"
+                                            className="login-toggle-password-btn"
+                                            onClick={() => setMostrarContraseniaLogin(!mostrarContraseniaLogin)}
+                                            aria-label={mostrarContraseniaLogin ? 'Ocultar contraseña' : 'Ver contraseña'}
+                                            title={mostrarContraseniaLogin ? 'Ocultar contraseña' : 'Ver contraseña'}
+                                        >
+                                            {mostrarContraseniaLogin ? (
+                                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                                                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+                                                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+                                                    <line x1="2" x2="22" y1="2" y2="22" />
+                                                </svg>
+                                            ) : (
+                                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                                                    <circle cx="12" cy="12" r="3" />
+                                                </svg>
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
 
-                                >¿No tienes cuenta? Haz clic para registrarte</p>
-                            </div>
-                            <div className="a-botones">
-                                <button
-                                    className="btn1"
-                                    onClick={(e) => { navigate(-1) }}
+                                <div className="login-forgot-row">
+                                    <button
+                                        type="button"
+                                        className={`login-link-recuperar ${openCambiarContraseña ? 'login-link-destacado' : ''}`}
+                                        onClick={abrirModalRecuperacion}
+                                    >
+                                        {openCambiarContraseña ? (
+                                            <>
+                                                <span className="login-alerta-dot" aria-hidden="true">●</span>
+                                                ¿Olvidaste tu contraseña? Recupérala aquí
+                                            </>
+                                        ) : (
+                                            '¿Olvidaste tu contraseña?'
+                                        )}
+                                    </button>
+                                </div>
 
-                                >Regresar</button>
-                                <button
-                                    className="btn2"
-                                    onClick={(e) => {
-                                        postCuenta(correoLogin, contraseniaLogin);
-                                    }}
-                                >Ingresar</button>
-                            </div>
+                                <div className="login-acciones-principales">
+                                    <button type="submit" className="login-btn-ingresar">
+                                        <span>Ingresar</span>
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                                            <polyline points="10 17 15 12 10 7" />
+                                            <line x1="15" x2="3" y1="12" y2="12" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div className="login-divider">
+                                    <span>o bien</span>
+                                </div>
+
+                                <div className="login-footer-actions">
+                                    <p className="login-register-prompt">
+                                        ¿No tienes una cuenta aún?{' '}
+                                        <button
+                                            type="button"
+                                            className="login-link-registro"
+                                            onClick={() => { setOpenLogin(false); setOpenRegisterOrg(true); }}
+                                        >
+                                            Registrar organización
+                                        </button>
+                                    </p>
+                                    <button
+                                        type="button"
+                                        className="login-btn-regresar"
+                                        onClick={() => navigate(-1)}
+                                    >
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                            <polyline points="15 18 9 12 15 6" />
+                                        </svg>
+                                        <span>Volver a la página anterior</span>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 )
@@ -503,319 +704,455 @@ export default function AutenticacionPage() {
             {
 
                 openRegisterOrg && (
-                    <div className="contenedor-autenticacion" style={{ flexDirection: 'column', height: 'auto', flexWrap: 'wrap' }}>
-                        <div className="contenedor-seccion1" id="contenedor-banner" title={`Banner: solo PNG (${EXTENSIONES_IMAGEN}), máx. ${TAMANIO_MAX_IMAGEN_MB} MB`}>
-                            <input type="file" accept="image/*"
+                    <div className="registro-card-institucional">
+                        {/* Banner Institucional con Overlay Interactivo */}
+                        <div
+                            className="registro-banner-wrap"
+                            id="contenedor-banner"
+                            title={`Banner institucional: formatos ${EXTENSIONES_IMAGEN}, máx. ${TAMANIO_MAX_IMAGEN_MB} MB`}
+                        >
+                            <input
+                                type="file"
+                                accept="image/*"
                                 id="upload-banner"
                                 onChange={handleChangeBanner}
                                 style={{ display: 'none' }}
                             />
-                            {
-                                !banner && (
-                                    <label
-                                        htmlFor="upload-banner"
-                                    >
-                                        <img src={imgBannerDefault} />
-                                    </label>
-                                )
-                            }
-                            {
-                                banner && (
-                                    <label
-                                        htmlFor="upload-banner"
-                                    >
-                                        <img
-                                            src={banner} />
-                                    </label>
-                                )
-                            }
+                            <label htmlFor="upload-banner" style={{ cursor: 'pointer', display: 'block', width: '100%', height: '100%' }}>
+                                <img
+                                    src={banner || imgBannerDefault}
+                                    alt="Banner de la organización"
+                                    className="registro-banner-img"
+                                />
+                                <span className="registro-banner-badge">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                        <circle cx="12" cy="13" r="4"></circle>
+                                    </svg>
+                                    {banner ? 'Cambiar banner' : 'Subir banner institucional'}
+                                </span>
+                            </label>
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                            <div className="contenedor-seccion2" style={{ flexWrap: 'wrap' }}>
-                                <div id="contenedor-logo" style={{ width: isSmallDevice ? '100%' : '20%', display: 'flex', justifyContent: 'center', marginTop: '1rem', flexWrap: 'wrap' }}>
-                                    <p className="texto-formato-imagen" style={{ order: 2 }}>
-                                        Logo y banner: Formatos {EXTENSIONES_IMAGEN}
-                                    </p>
-                                    <input type="file" accept="image/*"
-                                        id="upload-foto"
-                                        style={{ display: 'none' }}
-                                        onChange={handleChangeFoto}
-                                    />
-                                    {
-                                        foto === null && (
-                                            <label
-                                                htmlFor="upload-foto"
-                                            >
-                                                <img src={imgLogoDefault} />
-                                            </label>
-                                        )
-                                    }
-                                    {
-                                        foto && (
-                                            <label
-                                                htmlFor="upload-foto"
-                                            >
-                                                <img src={foto}
-                                                    alt="foto" />
-                                            </label>
-                                        )
-                                    }
-                                </div>
-                                <div style={{ width: isSmallDevice ? '100%' : '80%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
-                                    <div style={{ display: 'flex', width: '100%', justifyContent: isSmallDevice ? 'center' : 'space-around', alignItems: isSmallDevice ? 'center' : '', marginTop: '2rem', flexWrap: 'wrap', flexDirection: isSmallDevice ? 'column' : 'row' }}>
-                                        <div className="datos">
-                                            <h1>Datos Organización</h1>
-                                            <div className="contenedor-input">
-                                                <input id="r_nombre" placeholder="Nombre comercial" onChange={(e) => { setDatosPersonales({ ...datosPersonales, nombre: e.target.value }) }} type="text" />
-                                                <input id="r_descripcion" placeholder="Descripcion" onChange={(e) => { setDatosPersonales({ ...datosPersonales, descripcion: e.target.value }) }} type="text" />
-                                                <input id="r_rfc" placeholder="RFC" onChange={(e) => { setDatosPersonales({ ...datosPersonales, rfc: e.target.value }) }} />
-                                                <select id="r_tipo_org" onChange={(e) => setSelectTipo(e.target.value)}>
-                                                    <option selected>
-                                                        TIPO
+
+                        {/* Layout Principal: Columna Lateral (Logo) y Columna Central (Formulario) */}
+                        <div className="registro-layout-cuerpo">
+                            {/* Columna Lateral Izquierda: Identidad y Logotipo */}
+                            <div className="registro-columna-lateral" id="contenedor-logo">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    id="upload-foto"
+                                    style={{ display: 'none' }}
+                                    onChange={handleChangeFoto}
+                                />
+                                <label
+                                    htmlFor="upload-foto"
+                                    className="registro-logo-uploader"
+                                    title={`Logotipo: formatos ${EXTENSIONES_IMAGEN}, máx. ${TAMANIO_MAX_IMAGEN_MB} MB`}
+                                >
+                                    {foto ? (
+                                        <img src={foto} alt="Logotipo seleccionado" className="registro-logo-img" />
+                                    ) : (
+                                        <img src={imgLogoDefault} alt="Subir logotipo" className="registro-logo-placeholder" />
+                                    )}
+                                </label>
+                                <label htmlFor="upload-foto" className="registro-logo-btn-texto">
+                                    {foto ? 'Cambiar logotipo' : 'Seleccionar logo'}
+                                </label>
+                                <p className="texto-formato-imagen" style={{ fontSize: '11px', color: '#666', margin: 0, lineHeight: 1.4 }}>
+                                    Formatos permitidos: {EXTENSIONES_IMAGEN}
+                                </p>
+                            </div>
+
+                            {/* Columna Central: Secciones del Formulario Estructuradas */}
+                            <div className="registro-columna-formulario">
+                                <div className="registro-secciones-grid">
+                                    {/* 1. Datos de la Organización */}
+                                    <div className="registro-bloque">
+                                        <h2 className="registro-bloque-titulo">Datos de la Organización</h2>
+                                        <input
+                                            id="r_nombre"
+                                            className="registro-input-item"
+                                            placeholder="Nombre comercial"
+                                            onChange={(e) => { setDatosPersonales({ ...datosPersonales, nombre: e.target.value }) }}
+                                            type="text"
+                                        />
+                                        <input
+                                            id="r_descripcion"
+                                            className="registro-input-item"
+                                            placeholder="Descripción institucional"
+                                            onChange={(e) => { setDatosPersonales({ ...datosPersonales, descripcion: e.target.value }) }}
+                                            type="text"
+                                        />
+                                        <input
+                                            id="r_rfc"
+                                            className="registro-input-item"
+                                            placeholder="RFC"
+                                            onChange={(e) => { setDatosPersonales({ ...datosPersonales, rfc: e.target.value }) }}
+                                        />
+                                        <select
+                                            id="r_tipo_org"
+                                            className="registro-select-item"
+                                            onChange={(e) => setSelectTipo(e.target.value)}
+                                        >
+                                            <option value="">TIPO DE ORGANIZACIÓN</option>
+                                            <option value="Escuela">Escuela</option>
+                                            <option value="Empresa">Empresa</option>
+                                            <option value="Cámara de Comercio">Cámara de Comercio</option>
+                                        </select>
+                                        <select
+                                            id="r_sector_org"
+                                            className="registro-select-item"
+                                            onChange={(e) => setSelectSector(e.target.value)}
+                                        >
+                                            <option value="">SECTOR</option>
+                                            {selectTipo && selectTipo !== 'TIPO' && sectores
+                                                .filter(seleccionado => seleccionado.tipo === selectTipo)
+                                                .map(s => (
+                                                    <option key={s.id} value={s.nombre}>
+                                                        {s.nombre}
                                                     </option>
-                                                    <option>
-                                                        Escuela
+                                                ))
+                                            }
+                                        </select>
+                                        <select
+                                            id="r_giro_org"
+                                            className="registro-select-item"
+                                            onChange={(e) => { setSelectGiro(e.target.value) }}
+                                        >
+                                            <option value="">GIRO</option>
+                                            {selectTipo && selectSector && sectores
+                                                .filter(s => s.tipo === selectTipo && s.nombre === selectSector)
+                                                .map(s => s.giros.map(g => (
+                                                    <option key={g.id} value={g.nombre}>
+                                                        {g.nombre}
                                                     </option>
-                                                    <option>
-                                                        Empresa
-                                                    </option>
-                                                    <option>
-                                                        Cámara de Comercio
-                                                    </option>
+                                                )))
+                                            }
+                                        </select>
+                                        <input
+                                            id="r_tamaño"
+                                            className="registro-input-item"
+                                            placeholder="Tamaño (Número de integrantes)"
+                                            type="number"
+                                            onChange={(e) => { setDatosPersonales({ ...datosPersonales, tamaño: e.target.value }) }}
+                                        />
+
+                                        {/* Campos condicionales para Empresa */}
+                                        {selectTipo === 'Empresa' && (
+                                            <>
+                                                <input
+                                                    id="r_razon_social"
+                                                    className="registro-input-item"
+                                                    placeholder="Razón social"
+                                                    onChange={(e) => { setEmpresa({ ...empresa, razon_social: e.target.value }) }}
+                                                />
+                                                <input
+                                                    id="r_regimen_fiscal"
+                                                    className="registro-input-item"
+                                                    placeholder="Régimen fiscal"
+                                                    onChange={(e) => { setEmpresa({ ...empresa, regimen_fiscal: e.target.value }) }}
+                                                />
+                                                <input
+                                                    id="r_direccion_fiscal"
+                                                    className="registro-input-item"
+                                                    placeholder="Dirección fiscal"
+                                                    onChange={(e) => { setEmpresa({ ...empresa, direccion_fiscal: e.target.value }) }}
+                                                />
+                                            </>
+                                        )}
+
+                                        {/* Campos condicionales para Escuela */}
+                                        {selectTipo === 'Escuela' && (
+                                            <>
+                                                <select
+                                                    id="r_tipo_escuela"
+                                                    className="registro-select-item"
+                                                    onChange={(e) => { setEscuela({ ...escuela, tipo: e.target.value }) }}
+                                                >
+                                                    <option value="">Régimen Educativo</option>
+                                                    <option value="Pública">Pública</option>
+                                                    <option value="Privada">Privada</option>
                                                 </select>
-                                                <select id="r_sector_org" onChange={(e) => setSelectSector(e.target.value)}>
-                                                    <option selected>
-                                                        SECTOR
-                                                    </option>
-                                                    {
-                                                        selectTipo != 'TIPO' && sectores.filter(seleccionado => seleccionado.tipo === selectTipo).map(
-                                                            s => <option key={s.id}>
-                                                                {s.nombre}
-                                                            </option>
-                                                        )
-                                                    }
-                                                </select>
-                                                <select id="r_giro_org" onChange={(e) => { setSelectGiro(e.target.value) }}>
-                                                    <option>
-                                                        GIRO
-                                                    </option>
-                                                    {
-                                                        selectTipo && selectSector && sectores.filter(
-                                                            s => s.tipo === selectTipo && s.nombre === selectSector
-                                                        ).map(
-                                                            s => {
-                                                                const giros = s.giros
-                                                                return giros.map(
-                                                                    g => <option>{g.nombre}</option>
-                                                                )
-                                                            }
-                                                        )
-                                                    }
-                                                </select>
-                                                <input id="r_tamaño" placeholder="Tamaño" type="number" onChange={(e) => { setDatosPersonales({ ...datosPersonales, tamaño: e.target.value }) }} />
-                                                {
-                                                    selectTipo === 'Empresa' && (
-                                                        <div className="datos">
-                                                            <input id="r_razon_social" placeholder="Razón social" onChange={(e) => { setEmpresa({ ...empresa, razon_social: e.target.value }) }} />
-                                                            <input id="r_regimen_fiscal" placeholder="Regimen fiscal" onChange={(e) => { setEmpresa({ ...empresa, regimen_fiscal: e.target.value }) }} />
-                                                            <input id="r_direccion_fiscal" placeholder="Dirección fiscal" onChange={(e) => { setEmpresa({ ...empresa, direccion_fiscal: e.target.value }) }} />
-                                                        </div>
-                                                    )
-                                                }
-                                                {
-                                                    selectTipo === 'Escuela' && (
-                                                        <div className="datos">
-                                                            <select id="r_tipo_escuela" onChange={(e) => { setEscuela({ ...escuela, tipo: e.target.value }) }}>
-                                                                <option>TIPO</option>
-                                                                <option>Pública</option>
-                                                                <option>Privada</option>
-                                                            </select>
-                                                            <input id="r_sitio" placeholder="Sitio web" onChange={(e) => { setEscuela({ ...escuela, url: e.target.value }) }} />
-                                                        </div>
-                                                    )
-                                                }
-                                                {
-                                                    selectTipo === 'Cámara de Comercio' && (
-                                                        <div className="datos">
-                                                            <input id="r_nombre_camara" placeholder="Nombre" onChange={(e) => { setCamara({ ...camara, nombre: e.target.value }) }} />
-                                                            <input id="r_presidente" placeholder="Presidente" onChange={(e) => { setCamara({ ...camara, presidente: e.target.value }) }} />
-                                                        </div>
-                                                    )
-                                                }
-                                            </div>
+                                                <input
+                                                    id="r_sitio"
+                                                    className="registro-input-item"
+                                                    placeholder="Sitio web institucional"
+                                                    onChange={(e) => { setEscuela({ ...escuela, url: e.target.value }) }}
+                                                />
+                                            </>
+                                        )}
+
+                                        {/* Campos condicionales para Cámara de Comercio */}
+                                        {selectTipo === 'Cámara de Comercio' && (
+                                            <>
+                                                <input
+                                                    id="r_nombre_camara"
+                                                    className="registro-input-item"
+                                                    placeholder="Nombre de la cámara"
+                                                    onChange={(e) => { setCamara({ ...camara, nombre: e.target.value }) }}
+                                                />
+                                                <input
+                                                    id="r_presidente"
+                                                    className="registro-input-item"
+                                                    placeholder="Presidente actual"
+                                                    onChange={(e) => { setCamara({ ...camara, presidente: e.target.value }) }}
+                                                />
+                                            </>
+                                        )}
+                                    </div>
+
+                                    {/* 2. Datos de Ubicación Domiciliaria */}
+                                    <div className="registro-bloque">
+                                        <h2 className="registro-bloque-titulo">Datos de Ubicación</h2>
+                                        <input
+                                            id="r_calle"
+                                            className="registro-input-item"
+                                            placeholder="Calle y número exterior"
+                                            onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, calle: e.target.value }) }}
+                                            type="text"
+                                        />
+                                        <div className="registro-grid-numero-colonia">
+                                            <input
+                                                id="r_numero"
+                                                className="registro-input-item"
+                                                placeholder="Número"
+                                                onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, numero: e.target.value }) }}
+                                                type="number"
+                                            />
+                                            <input
+                                                id="r_colonia"
+                                                className="registro-input-item"
+                                                placeholder="Colonia"
+                                                onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, colonia: e.target.value }) }}
+                                                type="text"
+                                            />
                                         </div>
-                                        <div className="datos">
-                                            <h1>Datos Ubicación</h1>
-                                            <div className="contenedor-input">
-                                                <input id="r_calle" placeholder="Calle" onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, calle: e.target.value }) }} type="text" />
-                                                <div className="contenedor-input-doble">
-                                                    <input id="r_numero" placeholder="Numero" style={{ width: '80px' }} onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, numero: e.target.value }) }} type="number" />
-                                                    <input id="r_colonia" placeholder="Colonia" style={{ width: '100px' }} onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, colonia: e.target.value }) }} type="text" />
-                                                </div>
-                                                <div className="contenedor-input-doble">
-                                                    <input id="r_ciudad" placeholder="Ciudad" style={{ width: '110px' }} onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, ciudad: e.target.value }) }} type="text" />
-                                                    <input id="r_cp" placeholder="CP" style={{ width: '70px' }} onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, codigo_postal: e.target.value }) }} type="number" />
-                                                </div>
-                                                <div className="contenedor-input-doble">
-                                                    <input id="r_estado" placeholder="Estado" style={{ width: '85px' }} onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, estado: e.target.value }) }} type="text" />
-                                                    <input id="r_pais" placeholder="Pais" style={{ width: '90px' }} onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, pais: e.target.value }) }} type="text" />
-                                                </div>
-                                            </div>
+                                        <div className="registro-grid-ciudad-cp">
+                                            <input
+                                                id="r_ciudad"
+                                                className="registro-input-item"
+                                                placeholder="Ciudad / Municipio"
+                                                onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, ciudad: e.target.value }) }}
+                                                type="text"
+                                            />
+                                            <input
+                                                id="r_cp"
+                                                className="registro-input-item"
+                                                placeholder="C.P."
+                                                onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, codigo_postal: e.target.value }) }}
+                                                type="number"
+                                            />
                                         </div>
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <div className="datos">
-                                                <h1>Datos Contacto</h1>
-                                                <div className="contenedor-input">
-                                                    <input id="r_correo" placeholder="Correo" onChange={(e) => { setDatosContacto({ ...datosContacto, correo: e.target.value }) }} type="email" />
-                                                    <input id="r_telefono" placeholder="Telefono" onChange={(e) => { setDatosContacto({ ...datosContacto, telefono: e.target.value }) }} type="text" />
-                                                </div>
-                                            </div>
-                                            <div className="datos">
-                                                <h1>Datos Seguridad</h1>
-                                                <input id="r_contrasenia" placeholder="Contraseña" onChange={(e) => { setDatosSeguridad({ ...datosSeguridad, contrasenia: e.target.value }) }} type="password" />
-                                            </div>
+                                        <div className="registro-grid-doble">
+                                            <input
+                                                id="r_estado"
+                                                className="registro-input-item"
+                                                placeholder="Estado"
+                                                onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, estado: e.target.value }) }}
+                                                type="text"
+                                            />
+                                            <input
+                                                id="r_pais"
+                                                className="registro-input-item"
+                                                placeholder="País"
+                                                onChange={(e) => { setDatosUbicacion({ ...datosUbicacion, pais: e.target.value }) }}
+                                                type="text"
+                                            />
                                         </div>
-                                        <div className="datos" style={{ width: '200px' }}>
-                                            <h1>Cloudinary</h1>
-                                            <div style={{ display: 'flex', justifyContent: 'space-around', gap: '1rem', flexWrap: 'wrap' }}>
-                                                <input id="cloud_name" placeholder="CLOUD NAME" type="text" onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, cloud_name: e.target.value }) }} defaultValue={datosCloudinary.cloud_name} />
-                                                <input id="api_key" placeholder="API KEY" type="password" onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, api_key: e.target.value }) }} defaultValue={datosCloudinary.api_key} />
-                                                <input id="api_secret" placeholder="API SECRET" type="password" onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, api_secret: e.target.value }) }} defaultValue={datosCloudinary.api_secret} />
-                                            </div>
-                                            <p
-                                                style={{ fontSize: '11px' }}
-                                            >Esta informacion se obtiene del sitio: <a href="https://cloudinary.com/">CLOUDINARY</a></p>
+                                    </div>
+
+                                    {/* 3. Contacto, Seguridad y Multimedia */}
+                                    <div className="registro-bloque">
+                                        <h2 className="registro-bloque-titulo">Contacto y Seguridad</h2>
+                                        <input
+                                            id="r_correo"
+                                            className="registro-input-item"
+                                            placeholder="Correo electrónico oficial"
+                                            onChange={(e) => { setDatosContacto({ ...datosContacto, correo: e.target.value }) }}
+                                            type="email"
+                                        />
+                                        <input
+                                            id="r_telefono"
+                                            className="registro-input-item"
+                                            placeholder="Teléfono de contacto"
+                                            onChange={(e) => { setDatosContacto({ ...datosContacto, telefono: e.target.value }) }}
+                                            type="text"
+                                        />
+                                        <input
+                                            id="r_contrasenia"
+                                            className="registro-input-item"
+                                            placeholder="Contraseña de acceso"
+                                            onChange={(e) => { setDatosSeguridad({ ...datosSeguridad, contrasenia: e.target.value }) }}
+                                            type="password"
+                                        />
+
+                                        {/* Bloque Cloudinary */}
+                                        <div className="registro-seccion-cloudinary">
+                                            <span style={{ fontSize: '11.5px', fontWeight: '700', color: '#41431B', textTransform: 'uppercase' }}>
+                                                Almacenamiento Cloudinary
+                                            </span>
+                                            <input
+                                                id="cloud_name"
+                                                className="registro-input-item"
+                                                placeholder="Cloud Name"
+                                                type="text"
+                                                onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, cloud_name: e.target.value }) }}
+                                                defaultValue={datosCloudinary.cloud_name}
+                                            />
+                                            <input
+                                                id="api_key"
+                                                className="registro-input-item"
+                                                placeholder="API Key"
+                                                type="password"
+                                                onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, api_key: e.target.value }) }}
+                                                defaultValue={datosCloudinary.api_key}
+                                            />
+                                            <input
+                                                id="api_secret"
+                                                className="registro-input-item"
+                                                placeholder="API Secret"
+                                                type="password"
+                                                onChange={(e) => { setDatosCloudinary({ ...datosCloudinary, api_secret: e.target.value }) }}
+                                                defaultValue={datosCloudinary.api_secret}
+                                            />
+                                            <p className="registro-cloudinary-nota">
+                                                Credenciales requeridas para fotografías. Obtenlas en <a href="https://cloudinary.com/" target="_blank" rel="noopener noreferrer">Cloudinary</a>.
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="contenedor-botones-accion" style={{ display: 'flex', flexDirection: isSmallDevice ? 'column' : 'row' }}>
-                                    <button className="btn-regresar"
-                                        onClick={() => { navigate(-1) }}
-                                    >
-                                        REGRESAR
-                                    </button>
-                                    <button className="btn-limpiar"
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            setFoto(null)
-                                            setBanner(null)
-                                            document.getElementById('r_nombre').value = ''
-                                            document.getElementById('r_descripcion').value = ''
-                                            document.getElementById('r_rfc').value = ''
-                                            if (selectTipo === 'Escuela') {
-                                                document.getElementById('r_sitio').value = ''
-                                            } else if (selectTipo === 'Empresa') {
-                                                document.getElementById('r_razon_social').value = ''
-                                                document.getElementById('r_regimen_fiscal').value = ''
-                                                document.getElementById('r_direccion_fiscal').value = ''
-                                            } else if (selectTipo === 'Cámara de Comercio') {
-                                                document.getElementById('r_nombre_camara').value = ''
-                                                document.getElementById('r_presidente').value = ''
-                                            }
-                                            document.getElementById('r_tipo_org').selectedIndex = 0
-                                            document.getElementById('r_sector_org').selectedIndex = 0
-                                            document.getElementById('r_giro_org').selectedIndex = 0
-                                            setSelectTipo('')
-                                            document.getElementById('r_tamaño').value = ''
-                                            document.getElementById('r_calle').value = ''
-                                            document.getElementById('r_numero').value = ''
-                                            document.getElementById('r_colonia').value = ''
-                                            document.getElementById('r_ciudad').value = ''
-                                            document.getElementById('r_cp').value = ''
-                                            document.getElementById('r_estado').value = ''
-                                            document.getElementById('r_pais').value = ''
-                                            document.getElementById('r_correo').value = ''
-                                            document.getElementById('r_telefono').value = ''
-                                            document.getElementById('r_contrasenia').value = ''
-                                            document.getElementById('cloud_name').value = ''
-                                            document.getElementById('api_key').value = ''
-                                            document.getElementById('api_secret').value = ''
-                                            setDatosPersonales(
-                                                {
-                                                    nombre: '',
-                                                    descripcion: '',
-                                                    apellido_materno: '',
-                                                    rfc: '',
-                                                    tamaño: ''
-                                                }
-                                            )
-                                            setDatosUbicacion(
-                                                {
-                                                    calle: '',
-                                                    numero: '',
-                                                    colonia: '',
-                                                    codigo_postal: '',
-                                                    ciudad: '',
-                                                    estado: '',
-                                                    pais: ''
-                                                }
-                                            )
-                                            setDatosContacto(
-                                                {
-                                                    correo: '',
-                                                    telefono: ''
-                                                }
-                                            )
-                                            setDatosSeguridad(
-                                                {
-                                                    contrasenia: ''
-                                                }
-                                            )
-                                            setDatosCloudinary(
-                                                {
-                                                    cloud_name: '',
-                                                    api_key: '',
-                                                    api_secret: ''
-                                                }
-                                            )
-                                        }}
-                                    >
-                                        LIMPIAR
-                                    </button>
-                                    <button className="btn-accion"
-                                        onClick={() => {
-                                            handeCreateOrganizacion()
-                                        }}
-                                    >
-                                        REGISTRARME
-                                    </button>
-                                </div>
                             </div>
+                        </div>
+
+                        {/* Barra Inferior con Acciones */}
+                        <div className="registro-barra-inferior">
+                            <button
+                                type="button"
+                                className="registro-btn-regresar"
+                                onClick={() => { navigate(-1) }}
+                            >
+                                Regresar
+                            </button>
+                            <button
+                                type="button"
+                                className="registro-btn-limpiar"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    setFoto(null)
+                                    setBanner(null)
+                                    if (document.getElementById('r_nombre')) document.getElementById('r_nombre').value = ''
+                                    if (document.getElementById('r_descripcion')) document.getElementById('r_descripcion').value = ''
+                                    if (document.getElementById('r_rfc')) document.getElementById('r_rfc').value = ''
+                                    if (selectTipo === 'Escuela') {
+                                        if (document.getElementById('r_sitio')) document.getElementById('r_sitio').value = ''
+                                    } else if (selectTipo === 'Empresa') {
+                                        if (document.getElementById('r_razon_social')) document.getElementById('r_razon_social').value = ''
+                                        if (document.getElementById('r_regimen_fiscal')) document.getElementById('r_regimen_fiscal').value = ''
+                                        if (document.getElementById('r_direccion_fiscal')) document.getElementById('r_direccion_fiscal').value = ''
+                                    } else if (selectTipo === 'Cámara de Comercio') {
+                                        if (document.getElementById('r_nombre_camara')) document.getElementById('r_nombre_camara').value = ''
+                                        if (document.getElementById('r_presidente')) document.getElementById('r_presidente').value = ''
+                                    }
+                                    if (document.getElementById('r_tipo_org')) document.getElementById('r_tipo_org').selectedIndex = 0
+                                    if (document.getElementById('r_sector_org')) document.getElementById('r_sector_org').selectedIndex = 0
+                                    if (document.getElementById('r_giro_org')) document.getElementById('r_giro_org').selectedIndex = 0
+                                    setSelectTipo('')
+                                    if (document.getElementById('r_tamaño')) document.getElementById('r_tamaño').value = ''
+                                    if (document.getElementById('r_calle')) document.getElementById('r_calle').value = ''
+                                    if (document.getElementById('r_numero')) document.getElementById('r_numero').value = ''
+                                    if (document.getElementById('r_colonia')) document.getElementById('r_colonia').value = ''
+                                    if (document.getElementById('r_ciudad')) document.getElementById('r_ciudad').value = ''
+                                    if (document.getElementById('r_cp')) document.getElementById('r_cp').value = ''
+                                    if (document.getElementById('r_estado')) document.getElementById('r_estado').value = ''
+                                    if (document.getElementById('r_pais')) document.getElementById('r_pais').value = ''
+                                    if (document.getElementById('r_correo')) document.getElementById('r_correo').value = ''
+                                    if (document.getElementById('r_telefono')) document.getElementById('r_telefono').value = ''
+                                    if (document.getElementById('r_contrasenia')) document.getElementById('r_contrasenia').value = ''
+                                    if (document.getElementById('cloud_name')) document.getElementById('cloud_name').value = ''
+                                    if (document.getElementById('api_key')) document.getElementById('api_key').value = ''
+                                    if (document.getElementById('api_secret')) document.getElementById('api_secret').value = ''
+                                    setDatosPersonales({
+                                        nombre: '',
+                                        descripcion: '',
+                                        apellido_materno: '',
+                                        rfc: '',
+                                        tamaño: ''
+                                    })
+                                    setDatosUbicacion({
+                                        calle: '',
+                                        numero: '',
+                                        colonia: '',
+                                        codigo_postal: '',
+                                        ciudad: '',
+                                        estado: '',
+                                        pais: ''
+                                    })
+                                    setDatosContacto({
+                                        correo: '',
+                                        telefono: ''
+                                    })
+                                    setDatosSeguridad({
+                                        contrasenia: ''
+                                    })
+                                    setDatosCloudinary({
+                                        cloud_name: '',
+                                        api_key: '',
+                                        api_secret: ''
+                                    })
+                                }}
+                            >
+                                Limpiar
+                            </button>
+                            <button
+                                type="button"
+                                className="registro-btn-submit"
+                                onClick={() => {
+                                    handeCreateOrganizacion()
+                                }}
+                            >
+                                Registrarme
+                            </button>
                         </div>
                     </div>
                 )
             }
-            {
-                openAlertaCambiarContraseña && (
-                    <div>
-                        <div className="overllay"></div>
-                        <div className="overllay-contenedor">
-                            <div className="a-inputs">
-                                <input placeholder="Ingrese el correo de la cuenta" />
-                            </div>
-                            <div className="a-inputs">
-                                <input placeholder="Ingrese el correo de la cuenta" />
-                            </div>
-                            <div>
-                                <button className=""
-                                    onClick={() => {
-                                        setOpenAlertaCambiarContraseña(false)
-                                    }}
-                                >
-                                    <strong>
-                                        CANCELAR
-                                    </strong>
-                                </button>
-                                <button className="btn-accion-2">
-                                    <strong>
-                                        RECUPERAR
-                                    </strong>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )
-            }
+            <ModalRecuperarContrasenia
+                abierto={openAlertaCambiarContraseña}
+                paso={pasoRecuperar}
+                correo={correoRecuperar}
+                codigo={codigoRecuperar}
+                nuevaContrasenia={nuevaContraseniaRecuperar}
+                confirmarContrasenia={confirmarContraseniaRecuperar}
+                mostrarContrasenia={mostrarContraseniaRecuperar}
+                cargando={cargandoRecuperar}
+                errorLocal={errorLocalRecuperar}
+                onCerrar={() => setOpenAlertaCambiarContraseña(false)}
+                onCorreoChange={(val) => {
+                    setCorreoRecuperar(val)
+                    if (errorLocalRecuperar) setErrorLocalRecuperar('')
+                }}
+                onCodigoChange={(val) => {
+                    setCodigoRecuperar(val)
+                    if (errorLocalRecuperar) setErrorLocalRecuperar('')
+                }}
+                onNuevaContraseniaChange={(val) => {
+                    setNuevaContraseniaRecuperar(val)
+                    if (errorLocalRecuperar) setErrorLocalRecuperar('')
+                }}
+                onConfirmarContraseniaChange={(val) => {
+                    setConfirmarContraseniaRecuperar(val)
+                    if (errorLocalRecuperar) setErrorLocalRecuperar('')
+                }}
+                onToggleMostrarContrasenia={() => setMostrarContraseniaRecuperar((prev) => !prev)}
+                onSolicitarCodigo={handleSolicitarCodigo}
+                onVerificarCodigo={handleVerificarCodigo}
+                onRestablecerContrasenia={handleRestablecerContrasenia}
+                onVolverPaso1={() => {
+                    setPasoRecuperar(1)
+                    setErrorLocalRecuperar('')
+                }}
+            />
             <ModalAlerta
                 abierto={alerta.abierto}
                 tipo={alerta.tipo}

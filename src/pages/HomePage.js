@@ -116,7 +116,7 @@ export default function HomePage() {
             )}
 
             {((!esAdminSys && esAdminOrg) || (esAdminSys && esAdminOrg && vistaAdmin === 'muro')) && (
-                <div style={{ marginTop: esAdminSys ? '1.5rem' : '8rem' }}>
+                <div style={{ marginTop: esAdminSys ? '1.5rem' : '0' }}>
                     {esAdminSys && (
                         <div style={{
                             maxWidth: '1100px',

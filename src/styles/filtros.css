@@ -1,49 +1,151 @@
-.filtro-contenedor{
-    margin-top: 100px;
+/* ==========================================================================
+   ESTILOS DE BARRA DE FILTROS Y ACCIONES INSTITUCIONALES (CGTHAM)
+   ========================================================================== */
+
+.filtro-contenedor {
+    margin-top: 95px;
+    margin-bottom: 1.5rem;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    font-family: 'Poppins';
+    font-family: 'Poppins', sans-serif;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-bottom: 1rem;
+    width: 90%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 4px;
+    box-sizing: border-box;
 }
 
-.filtro-contenedor h1{
-    font-size: 40px;
+.filtro-contenedor .subtitulo {
+    font-size: 28px;
+    font-weight: 700;
+    color: #41431B;
     margin: 0;
-    padding: 0;
+    letter-spacing: -0.5px;
 }
 
-.filtro-contenedor input{
-    width: 450px;
-    height: 50px;
+.filtro-controles {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-.filtro-contenedor select{
-    width: 152px;
-    height: 50px;
+.filtro-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.filtro-search-icon {
+    position: absolute;
+    left: 14px;
+    color: #7A8065;
+    pointer-events: none;
+}
+
+.filtro-contenedor input {
+    width: 360px;
+    height: 44px;
+    border-radius: 25px;
+    border: 1.5px solid #CCD5AE;
+    background-color: #FFFFFF;
+    padding: 0 16px 0 38px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13.5px;
+    color: #2B2D11;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.filtro-contenedor input:focus {
+    outline: none;
+    border-color: #41431B;
+    box-shadow: 0 0 0 3px rgba(65, 67, 27, 0.12);
+}
+
+.filtro-contenedor select {
+    min-width: 150px;
+    height: 44px;
+    border-radius: 25px;
+    border: 1.5px solid #41431B;
     background-color: #41431B;
-    color: white;
-}
-
-.filtro-contenedor .accion{
-    width: 152px;
-    height: 50px;
+    color: #FFFFFF;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0 16px;
     cursor: pointer;
-    background-color: #F5F3E7;
-}
-
-.filtro-contenedor input, select, .accion{
-    border-radius: 10px;
-    border: none;
-    font-family: 'Poppins';
-    font-size: 12px;
+    transition: all 0.2s ease;
     text-align: center;
+    box-sizing: border-box;
+    outline: none;
 }
 
-.filtro-contenedor .accion:hover{
-    background-color: transparent;
-    border: 1px solid #41431B;
-    color: #41431B
+.filtro-contenedor select:hover {
+    background-color: #2F3112;
+}
+
+.filtro-contenedor .accion {
+    min-width: 140px;
+    height: 44px;
+    padding: 0 22px;
+    cursor: pointer;
+    background-color: #FFD400;
+    color: #41431B;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 25px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(255, 212, 0, 0.35);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    letter-spacing: 0.3px;
+}
+
+.filtro-contenedor .accion:hover {
+    background-color: #ECC400;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 212, 0, 0.45);
+    color: #41431B;
+    border: none;
+}
+
+.filtro-contenedor .accion-solicitudes {
+    background-color: #41431B;
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(65, 67, 27, 0.3);
+}
+
+.filtro-contenedor .accion-solicitudes:hover {
+    background-color: #2F3112;
+    color: #FFFFFF;
+    box-shadow: 0 6px 16px rgba(65, 67, 27, 0.4);
+}
+
+@media (max-width: 768px) {
+    .filtro-contenedor {
+        flex-direction: column;
+        align-items: stretch;
+        margin-top: 80px;
+    }
+    .filtro-controles {
+        flex-direction: column;
+        width: 100%;
+    }
+    .filtro-search-box,
+    .filtro-contenedor input,
+    .filtro-contenedor select,
+    .filtro-contenedor .accion {
+        width: 100%;
+    }
 }

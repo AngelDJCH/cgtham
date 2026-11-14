@@ -1,9 +1,18 @@
-.home{
-    margin-top: 100px;
+/* ==========================================================================
+   ESTILOS DE LA PÁGINA DE INICIO (HOME / MURO INSTITUCIONAL) - CGTHAM
+   ========================================================================== */
+
+.home {
+    margin-top: 0;
+    padding-top: 95px;
+    box-sizing: border-box;
+    width: 100%;
 }
 
-.divisiones-contenedor-global{
+.divisiones-contenedor-global {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    position: relative;
+    width: 100%;
 }

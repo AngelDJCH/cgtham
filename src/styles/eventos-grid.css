@@ -1,0 +1,355 @@
+/* ==========================================================================
+   ESTILOS DE VISTA DE EVENTOS INSTITUCIONALES (CGTHAM)
+   Diseño de Cartelera / Tarjetas Modernas (Evita formato tabla de Excel)
+   ========================================================================== */
+
+.eventos-vista-contenedor {
+    width: 90%;
+    max-width: 1200px;
+    margin: 1rem auto 2rem auto;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+.eventos-vista-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    padding: 0 4px;
+}
+
+.eventos-contador-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #FFFFFF;
+    border: 1px solid #CCD5AE;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #41431B;
+    box-shadow: 0 2px 6px rgba(65, 67, 27, 0.05);
+}
+
+.eventos-contador-badge svg {
+    color: #41431B;
+}
+
+.eventos-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.evento-card-item {
+    background: #FFFFFF;
+    border-radius: 16px;
+    border: 1.5px solid #CCD5AE;
+    box-shadow: 0 4px 16px rgba(65, 67, 27, 0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.evento-card-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 26px rgba(65, 67, 27, 0.12);
+    border-color: #41431B;
+}
+
+.evento-card-header {
+    background: #FAFAF7;
+    padding: 12px 16px;
+    border-bottom: 1px solid #EBECE6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.evento-card-tipo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background-color: #E9EDC9;
+    color: #41431B;
+    font-weight: 700;
+    font-size: 11.5px;
+    border-radius: 20px;
+    border: 1px solid rgba(65, 67, 27, 0.12);
+}
+
+.evento-card-estado-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    background-color: rgba(45, 90, 39, 0.10);
+    color: #2B580C;
+    font-weight: 700;
+    font-size: 11px;
+    border-radius: 20px;
+    border: 1px solid rgba(45, 90, 39, 0.2);
+}
+
+.evento-card-estado-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #2B580C;
+}
+
+.evento-card-body {
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+.evento-card-org {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: #717744;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.evento-card-titulo {
+    font-size: 16px;
+    font-weight: 700;
+    color: #41431B;
+    margin: 0;
+    line-height: 1.35;
+}
+
+.evento-card-descripcion {
+    font-size: 13px;
+    color: #555555;
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.evento-card-info-box {
+    background-color: #F8FAF4;
+    border: 1px solid #E6EAE0;
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.evento-card-info-fila {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #41431B;
+    font-weight: 600;
+}
+
+.evento-card-info-fila svg {
+    color: #717744;
+    flex-shrink: 0;
+}
+
+.evento-card-meta-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.evento-card-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #41431B;
+    background: #FFFFFF;
+    border: 1px solid #CCD5AE;
+    padding: 3px 8px;
+    border-radius: 10px;
+}
+
+.evento-card-pill svg {
+    color: #717744;
+}
+
+.evento-card-footer {
+    padding: 12px 16px;
+    background-color: #FAFAF7;
+    border-top: 1px solid #EBECE6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.evento-card-publicado {
+    font-size: 11px;
+    color: #888888;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.evento-card-acciones {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.evento-btn-ver {
+    background-color: #41431B;
+    color: #FFFFFF;
+    border: none;
+    padding: 7px 15px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: inherit;
+}
+
+.evento-btn-ver:hover {
+    background-color: #2F3113;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.evento-btn-editar {
+    background-color: #FFFFFF;
+    color: #41431B;
+    border: 1.5px solid #CCD5AE;
+    padding: 6px 13px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.evento-btn-editar:hover {
+    background-color: #F8FAF4;
+    border-color: #41431B;
+}
+
+.evento-btn-eliminar {
+    background-color: #FFF5F5;
+    color: #C94A4A;
+    border: 1.5px solid #F5C2C7;
+    padding: 6px 13px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.evento-btn-eliminar:hover {
+    background-color: #FDE8E8;
+    border-color: #C94A4A;
+}
+
+.evento-btn-participar {
+    background-color: #E9C46A;
+    color: #333333;
+    border: none;
+    padding: 7px 15px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-family: inherit;
+}
+
+.evento-btn-participar:hover {
+    background-color: #E0B554;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Estado Vacío (Empty State) */
+.eventos-empty-state {
+    background: #FFFFFF;
+    border-radius: 16px;
+    border: 1.5px dashed #CCD5AE;
+    padding: 3.5rem 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.eventos-empty-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background-color: #F0F2EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #717744;
+}
+
+.eventos-empty-titulo {
+    color: #41431B;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.eventos-empty-desc {
+    color: #777777;
+    font-size: 13px;
+    max-width: 440px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .eventos-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .evento-card-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .evento-card-acciones {
+        justify-content: flex-end;
+    }
+}

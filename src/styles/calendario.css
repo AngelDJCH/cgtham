@@ -1,30 +1,476 @@
-.input-select {
-    width: 350px;
-    height: 30px;
-    font-family: 'Poppins';
-    font-size: 16px;
-}
+/* ==========================================================================
+   ESTILOS INSTITUCIONALES DEL CALENDARIO CGTHAM
+   ========================================================================== */
 
-.contenedor-input-select {
-    width: 100%;
+.calendario-modal-overlay {
+    position: fixed;
+    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(18, 20, 10, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
     display: flex;
-    justify-content: end;
-    padding-right: 2rem;
-    margin-bottom: 5px;
+    justify-content: center;
+    align-items: center;
+    animation: modalCalendarioBackdropFade 0.2s ease-out;
 }
 
-.calendar {
-    width: 80%;
-    height: 80%;
-    background-color: white;
-    border-radius: 10px;
+@keyframes modalCalendarioBackdropFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.calendario-modal-contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Tarjeta Principal Unificada */
+.calendario-card {
+    background-color: #FFFFFF;
+    width: 95%;
+    max-width: 1120px;
+    height: 88vh;
+    max-height: 840px;
+    border-radius: 16px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    animation: modalCalendarioCardFade 0.25s ease-out;
+}
+
+@keyframes modalCalendarioCardFade {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Cabecera Corporativa */
+.calendario-header {
+    background: linear-gradient(135deg, #383a17 0%, #41431B 60%, #525624 100%);
+    color: #FFFFFF;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #AEB784;
+    flex-shrink: 0;
+    gap: 16px;
+}
+
+.calendario-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.calendario-badge {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #FFD400;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.calendario-titulo {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    color: #FFFFFF;
+    line-height: 1.3;
+}
+
+.calendario-header-acciones {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.calendario-filtro-box {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 8px;
+    padding: 4px 10px;
+    gap: 8px;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s ease;
+}
+
+.calendario-filtro-box:focus-within {
+    border-color: #FFD400;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 0 2px rgba(255, 212, 0, 0.3);
+}
+
+.calendario-filtro-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #E2E8D8;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.calendario-select-institucional {
+    background: transparent;
     border: none;
-    margin-bottom: 5px;
+    color: #FFFFFF;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    padding-right: 4px;
 }
 
-@media(max-width:768px) {
-    .contenedor-input-select {
-        justify-content: center;
-        padding-right: 0rem;
+.calendario-select-institucional option {
+    background-color: #2F3112;
+    color: #FFFFFF;
+    font-weight: normal;
+}
+
+.calendario-btn-cerrar-x {
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    font-size: 26px;
+    line-height: 1;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.85;
+    flex-shrink: 0;
+}
+
+.calendario-btn-cerrar-x:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.18);
+    transform: rotate(90deg);
+}
+
+/* Cuerpo del Calendario */
+.calendario-body {
+    flex: 1;
+    min-height: 0;
+    padding: 16px 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: #FAFBF9;
+}
+
+.calendario-big-calendar {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* React Big Calendar Overrides */
+.calendario-big-calendar .rbc-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 0 4px;
+    flex-shrink: 0;
+}
+
+.calendario-big-calendar .rbc-toolbar-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #41431B;
+    text-transform: capitalize;
+}
+
+.calendario-big-calendar .rbc-btn-group button {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #41431B;
+    background-color: #FFFFFF;
+    border: 1.5px solid #CCD5AE;
+    padding: 6px 14px;
+    border-radius: 6px;
+    margin-right: -1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    box-shadow: none;
+}
+
+.calendario-big-calendar .rbc-btn-group button:hover {
+    background-color: #F0F2EB;
+    border-color: #41431B;
+    color: #41431B;
+    z-index: 1;
+}
+
+.calendario-big-calendar .rbc-btn-group button:active,
+.calendario-big-calendar .rbc-btn-group button.rbc-active {
+    background-color: #41431B !important;
+    border-color: #41431B !important;
+    color: #FFFFFF !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.calendario-big-calendar .rbc-btn-group button:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.calendario-big-calendar .rbc-btn-group button:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Contenedor de la Vista del Mes */
+.calendario-big-calendar .rbc-month-view {
+    flex: 1;
+    min-height: 0;
+    border: 1.5px solid #CCD5AE;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(65, 67, 27, 0.05);
+}
+
+/* Cabecera de los Días (Lunes, Martes...) */
+.calendario-big-calendar .rbc-header {
+    background-color: #F4F6EE;
+    color: #41431B;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 9px 4px;
+    border-bottom: 2px solid #AEB784;
+    border-left: 1px solid #EBECE6;
+}
+
+.calendario-big-calendar .rbc-header:first-child {
+    border-left: none;
+}
+
+.calendario-big-calendar .rbc-month-row {
+    border-top: 1px solid #EAECE4;
+}
+
+.calendario-big-calendar .rbc-day-bg + .rbc-day-bg {
+    border-left: 1px solid #EAECE4;
+}
+
+.calendario-big-calendar .rbc-today {
+    background-color: #F8FAF2 !important;
+}
+
+.calendario-big-calendar .rbc-off-range-bg {
+    background-color: #FAFAFA;
+}
+
+.calendario-big-calendar .rbc-date-cell {
+    padding: 4px 8px;
+    text-align: right;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #41431B;
+}
+
+.calendario-big-calendar .rbc-date-cell.rbc-off-range {
+    color: #C0C5B5;
+    opacity: 0.65;
+}
+
+.calendario-big-calendar .rbc-date-cell.rbc-now {
+    font-weight: 800;
+    color: #2F3112;
+}
+
+.calendario-big-calendar .rbc-date-cell > a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Barras de Eventos Estilo Ribbon Translúcido */
+.calendario-big-calendar .rbc-event {
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1.4;
+    transition: all 0.15s ease;
+}
+
+.calendario-big-calendar .rbc-event:hover {
+    filter: brightness(0.96);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.calendario-big-calendar .rbc-event-continues-after {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-right-style: dashed !important;
+}
+
+.calendario-big-calendar .rbc-event-continues-earlier,
+.calendario-big-calendar .rbc-event-continues-prior {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-left-style: dashed !important;
+}
+
+.calendario-big-calendar .rbc-event-content {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+}
+
+.calendario-big-calendar .rbc-show-more {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #41431B;
+    background: transparent;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background-color 0.15s;
+}
+
+.calendario-big-calendar .rbc-show-more:hover {
+    background-color: #E7EBD8;
+    text-decoration: none;
+}
+
+/* Pie de Página */
+.calendario-footer {
+    background: #F8F9F5;
+    border-top: 1px solid #EBECE6;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.calendario-footer-resumen {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.calendario-indicador-punto {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 0 2px rgba(65, 67, 27, 0.15);
+}
+
+.calendario-footer-texto {
+    font-size: 12.5px;
+    color: #555555;
+    font-family: 'Poppins', sans-serif;
+}
+
+.calendario-footer-texto strong {
+    color: #41431B;
+}
+
+.calendario-btn-cerrar {
+    padding: 7px 22px;
+    border-radius: 8px;
+    border: 1.5px solid #CCD5AE;
+    background-color: #FFFFFF;
+    color: #41431B;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.calendario-btn-cerrar:hover {
+    background-color: #F4F5F0;
+    border-color: #41431B;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .calendario-card {
+        width: 98%;
+        height: 94vh;
+        max-height: 94vh;
+        border-radius: 12px;
+    }
+
+    .calendario-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 16px;
+        gap: 10px;
+    }
+
+    .calendario-header-acciones {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .calendario-filtro-box {
+        flex: 1;
+    }
+
+    .calendario-select-institucional {
+        width: 100%;
+    }
+
+    .calendario-body {
+        padding: 10px;
+    }
+
+    .calendario-footer {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+        padding: 10px 16px;
+    }
+
+    .calendario-btn-cerrar {
+        width: 100%;
+        text-align: center;
     }
 }

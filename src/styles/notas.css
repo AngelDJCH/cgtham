@@ -1,139 +1,376 @@
+/* ==========================================================================
+   ESTILOS INSTITUCIONALES DEL MURO DE NOTICIAS / COMUNICADOS (CGTHAM)
+   ========================================================================== */
+
 .notas {
     width: 100%;
-    height: 100%;
+    max-width: 600px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 1.8rem;
+    padding: 0 16px 2rem 16px;
+    box-sizing: border-box;
 }
 
-.nota {
-    width: 400px;
-    height: 260px;
-    background-color: white;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-}
-
-.nota:hover{
-    transform: translateX(10px);
-    transition: all 0.3s ease;
-}
-
-.nota .logo {
-    width: 32px;
-    height: 32px;
-    border-radius: 100%;
-}
-
-.nota h1 {
-    font-family: 'Poppins';
-    font-size: 16px;
-    margin: 0;
-    padding: 0;
-}
-
-.n-s1 {
-    margin-left: 5rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
+/* Tarjeta Principal de la Publicación */
+.nota-card {
     width: 100%;
-    gap: 1rem;
-}
-
-.n-s2 {
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    border: 1px solid #E6EAE0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    padding: 16px;
+    box-sizing: border-box;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    font-family: 'Poppins', -apple-system, sans-serif;
+    overflow: hidden;
 }
 
-.n-s2 p {
-    width: 80%;
-    font-size: 12px;
-    text-align: center;
+.nota-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 35px rgba(65, 67, 27, 0.12);
+    border-color: #CCD5AE;
 }
 
-.n-s3 {
+/* Cabecera del Emisor */
+.nota-card-header {
     display: flex;
-    flex-direction: row;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    border: 1px solid black;
     width: 100%;
-    border-radius: 10px;
-    padding: 0.3rem;
+    margin-bottom: 12px;
 }
 
-.n-s3-s1 {
-    width: 140px;
-    height: 176px;
+.nota-emisor-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
 }
 
-.n-s3-s1 img {
+.nota-emisor-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #FAFBF9;
+    border: 2px solid #AEB784;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+}
+
+.nota-emisor-textos {
+    display: flex;
+    flex-direction: column;
+}
+
+.nota-emisor-nombre {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #41431B;
+    margin: 0;
+    line-height: 1.2;
+    transition: color 0.15s ease;
+}
+
+.nota-emisor-nombre:hover {
+    color: #26270E;
+    text-decoration: underline;
+}
+
+.nota-emisor-sub {
+    font-size: 11px;
+    color: #888888;
+    margin: 0;
+}
+
+.nota-badge-tipo {
+    font-size: 11px;
+    font-weight: 600;
+    color: #41431B;
+    background-color: #F4F6EE;
+    border: 1px solid #CCD5AE;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+
+/* Descripción del Comunicado */
+.nota-card-descripcion {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #444444;
+    line-height: 1.5;
+    margin: 0 0 12px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Marco Multimedia */
+.nota-card-media {
+    width: 100%;
+    height: 220px;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #F0F2EB;
+    border: 1px solid #CCD5AE;
+    position: relative;
+    cursor: default;
+    margin-bottom: 14px;
+}
+
+.nota-card-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+    transition: transform 0.3s ease;
+    user-select: none;
 }
 
-.n-s3-s2-s4 {
+.nota-carusel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(65, 67, 27, 0.85);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.4);
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    padding: 0;
 }
 
-.n-s3-s2 button {
-    color: white;
-    background-color: #FFD400;
-    border: none;
-    width: 100px;
-    height: 35px;
-    font-size: 10px;
-    border-radius: 10px;
+.nota-carusel-btn:hover {
+    background-color: #41431B;
+    transform: translateY(-50%) scale(1.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-.n-s3-s2 {
-    font-family: 'Poppins';
+.nota-carusel-btn.prev {
+    left: 10px;
+}
+
+.nota-carusel-btn.next {
+    right: 10px;
+}
+
+.nota-media-overlay-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(40, 42, 16, 0.85);
+    color: #FFFFFF;
     font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 4;
 }
 
-.n-s3-s2 h1 {
-    text-align: center;
+/* Metadatos y Acciones */
+.nota-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #EBECE6;
+    padding-top: 12px;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-.n-s3-s2 {
+.nota-evento-info {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 3px;
+    flex: 1;
+    min-width: 180px;
+}
+
+.nota-evento-titulo {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2B2D11;
+    margin: 0;
+    line-height: 1.25;
+}
+
+.nota-evento-fechas {
+    font-size: 12px;
+    color: #6A6E55;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
     align-items: center;
+    gap: 5px;
 }
 
-.n-s3-s2 button:hover {
-    color: #FFD400;
-    border: 1px solid #FFD400;
-    background-color: transparent;
+.nota-card-botones {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.btn-ver-fotos{
-    width: 50px;
-    height: 20px;
-    background-color: #FFD400;
-    border: 1px solid white;
+.nota-btn-ver {
+    padding: 7px 16px;
+    border-radius: 8px;
+    border: 1.5px solid #CCD5AE;
+    background-color: #FFFFFF;
     color: #41431B;
+    font-size: 12px;
+    font-weight: 700;
     cursor: pointer;
-}
-
-.btn-ver-fotos:hover{
-    scale: 1.1;
     transition: all 0.2s ease;
+    font-family: inherit;
 }
 
+.nota-btn-ver:hover {
+    background-color: #F4F5F0;
+    border-color: #41431B;
+}
+
+.nota-btn-participar {
+    padding: 7px 20px;
+    border-radius: 8px;
+    border: none;
+    background-color: #FFD400;
+    color: #41431B;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(255, 212, 0, 0.35);
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.nota-btn-participar:hover {
+    background-color: #ECC400;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(255, 212, 0, 0.45);
+}
+
+/* Botón: Participando (Aprobado formalmente) */
+.nota-btn-participando {
+    padding: 7px 18px;
+    border-radius: 8px;
+    border: 1.5px solid #6E9B34;
+    background-color: #EEF7E2;
+    color: #2F5910;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(47, 89, 16, 0.15);
+    transition: all 0.2s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nota-btn-participando:hover {
+    background-color: #E2F1D0;
+    border-color: #2F5910;
+}
+
+/* Botón: Pendiente de aprobación */
+.nota-btn-pendiente {
+    padding: 7px 18px;
+    border-radius: 8px;
+    border: 1.5px solid #D4B038;
+    background-color: #FFFBE6;
+    color: #7A5B00;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(122, 91, 0, 0.12);
+    transition: all 0.2s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nota-btn-pendiente:hover {
+    background-color: #FFF6C8;
+}
+
+/* Botón: Cupo Lleno (Deshabilitado) */
+.nota-btn-lleno {
+    padding: 7px 18px;
+    border-radius: 8px;
+    border: 1.5px solid #D0D0D0;
+    background-color: #EFEFEF;
+    color: #888888;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: not-allowed;
+    font-family: inherit;
+}
+
+/* Badge de Cupo en Metadatos */
+.nota-evento-cupo {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #41431B;
+    background-color: #F3F5ED;
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    width: fit-content;
+}
+
+.nota-evento-cupo.agotado {
+    background-color: #FDE8E8;
+    color: #9B1C1C;
+}
+
+.nota-btn-ver-todos {
+    padding: 10px 28px;
+    border-radius: 25px;
+    border: 1.5px solid #41431B;
+    background-color: #41431B;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(65, 67, 27, 0.25);
+    transition: all 0.2s ease;
+    font-family: inherit;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nota-btn-ver-todos:hover {
+    background-color: #2F3112;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(65, 67, 27, 0.35);
+}
+
+/* Modales y utilidades */
 .overllay {
     position: fixed;
     inset: 0;
@@ -158,8 +395,4 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-.img-scale:hover{
-    scale: 1.01;
 }
